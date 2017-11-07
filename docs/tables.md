@@ -7,20 +7,20 @@
 |--------------|--------|-------------------------------|
 | task_id      | number | primary key, non-null, unique |
 | task_name    | string | non-null                      |
-| place_id     | number | non-null                      | 
+| status_id     | number | non-null                      | 
 | label_id     | number | non-null                      | 
 | finished_at  | time   | non-null                      | 
 
-* task represents tasks and its place.
+* task represents tasks and its status.
 
-## place
+## status
 
 | column     | type   | remarks                       |
 |------------|--------|-------------------------------|
-| place_id   | number | primary key, non-null, unique |
-| place_name | string | non-null, unique              |
+| status_id   | number | primary key, non-null, unique |
+| status_name | string | non-null, unique              |
 
-* place represents task's place. like "Backlog", "ToDo", "Doing" and "Done" will be inserted here.
+* status represents task's status. like "Backlog", "ToDo", "Doing" and "Done" will be inserted here.
 
 ## consume
 
