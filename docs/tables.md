@@ -7,7 +7,7 @@
 |--------------|--------|-------------------------------|
 | task_id      | number | primary key, non-null, unique |
 | task_name    | string | non-null                      |
-| status_id     | number | non-null                      | 
+| status_id    | number | non-null                      | 
 | label_id     | number | non-null                      | 
 | finished_at  | time   | non-null                      | 
 
@@ -15,8 +15,8 @@
 
 ## status
 
-| column     | type   | remarks                       |
-|------------|--------|-------------------------------|
+| column      | type   | remarks                       |
+|-------------|--------|-------------------------------|
 | status_id   | number | primary key, non-null, unique |
 | status_name | string | non-null, unique              |
 
@@ -43,3 +43,6 @@
 
 * label represents task's label. this is used to task classification.
 
+## ER diagram
+
+![er.svg](./uml/er.svg)
