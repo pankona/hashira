@@ -1,0 +1,21 @@
+@startuml
+
+package local {
+    class hashira_cli {
+    }
+    class hashira_gui {
+    }
+    class hashira_daemon {
+    }
+}
+
+package cloud {
+    class hashira_store {
+    }
+}
+
+hashira_cli --> hashira_daemon
+hashira_gui --> hashira_daemon
+hashira_daemon --> hashira_store
+
+@enduml
