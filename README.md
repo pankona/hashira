@@ -2,7 +2,7 @@
 
 Application to manage **today's** tasks. Establish a Hashira for the day.
 
-## concept
+## concepts
 
 * Makes tasks clear for the day and concentrate to eliminate them.
 * Records time consuming for each tasks to reveal differences between estimations and results.
@@ -19,7 +19,9 @@ Application to manage **today's** tasks. Establish a Hashira for the day.
   * Only one task can be placed on "Doing".
 * Finishes the task, then the task moves to "Done".
 * If the "Doing" task is interrupted by another unexpected task, then the "Doing" task moves back to "ToDo" and new task is placed on "Doing".
-* At the end of the day, "Done" field is archived automatically and new one is created for new day.
+* At the end of the day,
+  * "Done" field is archived automatically and new one is created for new day.
+  * "Doing" task moves back to "ToDo" automatically to intent to start again next day.
 
 ### calculate consumed times
 
