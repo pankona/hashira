@@ -3,13 +3,13 @@
 
 ## task
 
-| column       | type   | remarks                       |
-|--------------|--------|-------------------------------|
-| task_id      | number | primary key, non-null, unique |
-| task_name    | string | non-null                      |
-| status_id    | number | non-null                      | 
-| label_id     | number | non-null                      | 
-| finished_at  | time   | non-null                      | 
+| column    | type   | remarks                       |
+|-----------|--------|-------------------------------|
+| task_id   | number | primary key, non-null, unique |
+| task_name | string | non-null                      |
+| status_id | number | non-null                      | 
+| label_id  | number | non-null                      | 
+| done_at   | time   | non-null                      | 
 
 * task represents tasks and its status.
 

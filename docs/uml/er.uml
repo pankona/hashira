@@ -6,7 +6,7 @@ entity task {
     task_name
     status_id
     label_id
-    finished_at
+    done_at
 }
 
 entity status {
@@ -30,8 +30,8 @@ entity label {
     label_name
 }
 
-task --- status
-task --- label
+task ----{ status
+task ----{ label
 task -ri-{ consume
 
 @enduml
