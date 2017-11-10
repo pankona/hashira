@@ -28,6 +28,18 @@
 * show list of tasks on Backlog
 * show current task and how long time spent to the task
 
+## functions of daemon
+
+* it is for making hashira work even there's no network
+* daemon has database (or kvs) to cache the tasks
+* if network is available, then sync registered or changed tasks with cloud
+
+## functions of datastore
+
+* it is placed on cloud. it is for syncing data between devices
+* accept requests to add or modify tasks
+* in case some update is applied to tasks, push such information to each daemon
+
 ## modules
 
 ![modules.svg](./uml/modules.svg)
