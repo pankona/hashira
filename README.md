@@ -27,3 +27,7 @@ Application to manage **today's** tasks. Establish a Hashira for the day.
 
 * Calculates how many time is consumed for each "Doing" task.
 * Show them in graph. 
+
+## LICENSE
+
+MIT
