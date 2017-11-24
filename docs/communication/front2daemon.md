@@ -55,6 +55,10 @@
 
 ## gRPC APIs
 
-* TODO: write gRPC APIs definition overview
+* Hashira Service
+  * new
+  * changeStatus
+  * list
+  * subscribe
 
 
