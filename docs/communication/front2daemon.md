@@ -6,24 +6,55 @@
 
 ## PC
 
-### cli to daemon
+### cli and daemon
 
-* TODO: write commands
+* cli to daemon
+  * add a new task to Backlog
+  * change task's status
+  * show task list
+* daemon to cli
+  * none
 
-### gui to daemon
+### gui and daemon
+
+* assume to use Electron
+* gui to daemon
+  * add a new task to Backlog, ToDo, Doing, Done
+  * change task's status
+  * show task list on each status
+  * show consume of each task
+* daemon to gui
+  * notify any update of tasks
 
 * TODO: show GUI picture
 
 ## Android
 
-### application to daemon
+### application and daemon
+
+* gui to daemon
+  * add a new task to Backlog, ToDo, Doing, Done
+  * change task's status
+  * show task list on each status
+  * show consume of each task
+* daemon to gui
+  * notify any update of tasks
 
 * TODO: show GUI picture
 
-### widget to daemon
+### widget and daemon
+
+* widget to daemon
+  * add a new task to Backlog
+  * change task's status to Done
+  * show task list
+* daemon to widget
+  * notify any update of tasks
 
 * TODO: show GUI picture
 
 ## gRPC APIs
 
 * TODO: write gRPC APIs definition overview
+
+
