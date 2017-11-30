@@ -57,6 +57,7 @@
 
 * Hashira Service
   * new
+    * create a new task
   * changeStatus
   * list
   * subscribe
