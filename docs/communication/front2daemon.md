@@ -58,8 +58,11 @@
 * Hashira Service
   * new
     * create a new task
-  * changeStatus
+  * update
+    * update a specified task's status
   * list
-  * subscribe
+    * returns task list
+  * subscribe (stream)
+    * subscribe update of tasks
 
 
