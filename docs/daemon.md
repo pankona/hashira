@@ -28,6 +28,4 @@
   * last update of local database is newer than "synced at", then daemon performs "up sync".
   * if network is not available (or failed to do "up sync"), the syncing is postponed until the network works again.
 
-## diagrams
-
-(insert diagrams)
+![sync.svg](./uml/sync.svg)

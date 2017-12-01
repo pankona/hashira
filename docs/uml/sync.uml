@@ -1,0 +1,24 @@
+@startuml
+
+hide footbox
+
+participant daemon
+participant datastore as ds
+
+daemon -> ds : retrieved "synced at"
+daemon <- ds : "synced at"
+
+daemon -> daemon : compare retrieved "synced at" with\n local database's "updated at"
+
+alt "synced at" is newer than "updated at"
+  note right of daemon : perform "down sync"
+  daemon -> ds : retrieve chunk of updates
+  daemon <- ds : send chunk of updates as response
+  daemon -> daemon : apply updates\n and update "updated at"
+else "updated at" is newer than "synced at"
+  note right of daemon : perform "up sync"
+  daemon -> ds : send chunk of updates
+  ds -> ds : apply updates\n and update "synced at"
+end
+
+@enduml
