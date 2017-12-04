@@ -2,7 +2,7 @@
 
 ## overview
 
-* use gRPC for communication between front and daemon
+* Use gRPC for communication between front and daemon
 
 ## PC
 
@@ -52,17 +52,3 @@
   * notify any update of tasks
 
 * TODO: show GUI picture
-
-## gRPC APIs
-
-* Hashira Service
-  * new
-    * create a new task
-  * update
-    * update a specified task's status
-  * list
-    * returns task list
-  * subscribe (stream)
-    * subscribe update of tasks
-
-

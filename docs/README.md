@@ -1,6 +1,6 @@
 # index
 
-design documents of hashira project.
+Design documents of hashira project.
 
 ## table of contents
 

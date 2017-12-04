@@ -17,3 +17,12 @@
   * Daemon stores 10 weeks of data in local document store.
 
 ![sync.svg](./uml/sync.svg)
+
+
+## gRPC API
+
+* Hashira Service
+  * send(array of command)
+    * sends specified commands. 
+  * retrieve(from, to (number of weeks)) array of task
+    * returns array of task with specified term.
