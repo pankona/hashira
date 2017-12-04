@@ -1,12 +1,21 @@
 
 # database tables
 
+## user
+
+| column    | type   | remarks                       |
+|-----------|--------|-------------------------------|
+| user_id   | number | primary key, non-null, unique |
+| user_name | string | non-null, unique              |
+| password  | string | non-null                      |
+
 ## task
 
 | column    | type   | remarks                       |
 |-----------|--------|-------------------------------|
 | task_id   | number | primary key, non-null, unique |
 | task_name | string | non-null                      |
+| user_id   | number | non-null                      | 
 | status_id | number | non-null                      | 
 | label_id  | number | non-null                      | 
 | done_at   | time   | non-null                      | 
