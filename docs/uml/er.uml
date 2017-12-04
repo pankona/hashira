@@ -30,8 +30,8 @@ entity label {
     label_name
 }
 
-task ----{ status
-task ----{ label
+task }---- status
+task }---- label
 task -ri-{ consume
 
 @enduml
