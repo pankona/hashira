@@ -32,7 +32,7 @@ ds -> ds : apply command-3
 ds -> ds : apply command-4
 
 ds <- d2 : sync(nil)
-note right of ds: sync(nil) requests to retrieve all commands\n(may need paging)
+note right of ds: sync(nil) requests to retrieve all commands\n they are applied to datastore\n (may need paging)
 ds -> d2 : command-1
 ds -> d2 : command-2
 ds -> d2 : command-3
@@ -43,7 +43,8 @@ d2 -> d2 : apply command-3
 d2 -> d2 : apply command-4
 
 d1 -> ds : sync(command-2)
-note right of ds : command-2 is latest command\n which is sent by daemon 1
+note right of d1 : command-2 is latest command\n which is sent by daemon 1
+note right of ds : sync(command-2) request to retrieve all commands\n they are applied after command-2\n (may need paging)
 note right of ds : if there are commands received after command-2,\n send back them all
 d1 <- ds : command-3
 d1 <- ds : command-4
