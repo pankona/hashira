@@ -8,47 +8,34 @@ participant "datastore" as ds
 participant "daemon 2"  as d2
 participant "client 2"  as c2
 
-
 note right of d1 : assume daemon 1 is offline
 c1 -> d1 : command-1 (cached)
 c1 -> d1 : command-2 (cached)
 
 note right of d1 : assume daemon 1 is online,\n then send all cached commands to datastore
-d1 -> ds : command-1
-d1 -> ds : command-2
+d1 -> ds : command-1, 2 as JSON
 
-ds -> ds : apply command-1
-ds -> ds : apply command-2
+ds -> ds : apply command-1, 2
+
+d1 -> ds : fetch(10 weeks)
+d1 <- ds : chunk of data as JSON\n 10 weeks of data for example
+d1 -> d1 : store JSON to local document store
 
 note right of d2 : assume daemon 2 is offline
 d2 <- c2 : command-3 (cached)
 d2 <- c2 : command-4 (cached)
 
 note right of d2 : assume daemon 2 is online,\n then send all cached commands to datastore
-ds <- d2 : command-3
-ds <- d2 : command-4
+ds <- d2 : command-3, 4 as JSON
 
-ds -> ds : apply command-3
-ds -> ds : apply command-4
+ds -> ds : apply command-3, 4
 
-ds <- d2 : sync(nil)
-note right of ds: sync(nil) requests to retrieve all commands\n they are applied to datastore\n (may need paging)
-ds -> d2 : command-1
-ds -> d2 : command-2
-ds -> d2 : command-3
-ds -> d2 : command-4
-d2 -> d2 : apply command-1
-d2 -> d2 : apply command-2
-d2 -> d2 : apply command-3
-d2 -> d2 : apply command-4
+ds <- d2 : fetch(10 weeks)
+ds -> d2 : chunk of data as JSON
+d2 -> d2 : store JSON to local document store
 
-d1 -> ds : sync(command-2)
-note right of d1 : command-2 is latest command\n which is sent by daemon 1
-note right of ds : sync(command-2) request to retrieve all commands\n they are applied after command-2\n (may need paging)
-note right of ds : if there are commands received after command-2,\n send back them all
-d1 <- ds : command-3
-d1 <- ds : command-4
-d1 -> d1 : apply command-3
-d1 -> d1 : apply command-4
+d1 -> ds : fetch(10 weeks)
+d1 <- ds : chunk o data as JSON
+d1 -> d1 : store JSON to local document store
 
 @enduml
