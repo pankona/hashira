@@ -31,14 +31,17 @@
 ## functions of daemon
 
 * it is for making hashira work even there's no network
-* daemon has database (or kvs) to cache the tasks
+* daemon has database to cache the tasks and "commands"
+  * "commands" means a unit of modifications to tasks.
+  e.g) add new task, move task to ToDo, and so on
+  * "commands" are used to sync with datastore
 * if network is available, then sync registered or changed tasks with cloud
 
 ## functions of datastore
 
-* it is placed on cloud. it is for syncing data between devices
-* accept requests to add or modify tasks
-* in case some update is applied to tasks, push such information to each daemon
+* it is assumed to place on cloud. it is for syncing data between devices
+* it accepts "commands" to add or modify tasks
+* daemon can retrieve chunk of commands with from-to query to reflect datastore's update to local database
 
 ## modules
 
