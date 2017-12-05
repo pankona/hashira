@@ -37,4 +37,8 @@
 * At front end receiving notification, retrieve chunk of data from daemon.
 * When front end succeed to retrieve chunk of data, render them.
 
+* If daemon is offline, postpone to send commands to datastore.
+  * Instead, daemon applies the cached commands to local document store,
+  and send notification to front end as same as written above.
+
 ![daemon.svg](./uml/daemon.svg)
