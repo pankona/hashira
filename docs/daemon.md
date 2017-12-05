@@ -26,3 +26,15 @@
     * sends specified commands. 
   * retrieve(from, to (number of weeks)) array of task
     * returns array of task with specified term.
+
+## command handling
+
+* When daemon receives commands, cache them and return ok immediately.
+* If daemon is online, send cached commands to datastore.
+* When datastore receives commands and succeed to apply them, datastore sends notification to daemon.
+* At daemon receiving notification, retrieve chunk of data from datastore for syncing.
+* When daemon succeed to apply them, daemon sends notification to front end.
+* At front end receiving notification, retrieve chunk of data from daemon.
+* When front end succeed to retrieve chunk of data, render them.
+
+![daemon.svg](./uml/daemon.svg)
