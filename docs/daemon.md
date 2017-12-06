@@ -27,6 +27,22 @@
   * retrieve(from, to (number of weeks)) array of task
     * returns array of task with specified term.
 
+* command and related enumeration
+
+what (enum)
+
+| enum   | remarks                |
+|--------|------------------------|
+| new    | create a new task      |
+| update | update state of a task |
+
+command (structure)
+
+| field   | type         | remarks                                  |
+|---------|--------------|------------------------------------------|
+| what    | enum of what | new, update, etc.                        |
+| payload | string       | JSON formatted string how to treat what. |
+
 ## command handling
 
 * When daemon receives commands, cache them and return ok immediately.
