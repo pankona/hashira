@@ -8,3 +8,5 @@ Design documents of hashira project.
 * [communication](./communication/communication.md)
 * [daemon](./daemon.md)
 * [tables](./tables.md)
+
+* [prototype](./prototype.md)
