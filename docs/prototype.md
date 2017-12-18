@@ -11,3 +11,6 @@ Here's design memorandum of hashira prototyping, for checking usability.
 * No "Doing" time calculation
 * Daemon uses MySQL as DB
 
+## Sequence of tweaking tasks
+
+![task.svg](./uml/task.svg)
