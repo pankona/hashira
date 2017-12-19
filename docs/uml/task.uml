@@ -2,7 +2,7 @@
 
 hide footbox
 
-actor user
+actor user           as user
 participant "cui"    as cui
 participant "daemon" as d
 participant "DB"     as db
