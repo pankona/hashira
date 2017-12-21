@@ -1,0 +1,3 @@
+bind_linux_amd64.go
+output/
+vendor_astilectron_bundler/
