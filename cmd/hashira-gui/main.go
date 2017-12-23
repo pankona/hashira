@@ -1,87 +1,71 @@
 package main
 
 import (
-	"flag"
-	"time"
-
 	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
 
-	"github.com/asticode/go-astilectron"
-	"github.com/asticode/go-astilectron-bootstrap"
-	"github.com/asticode/go-astilog"
-	"github.com/pkg/errors"
-)
-
-// Constants
-const htmlAbout = `Welcome on <b>Astilectron</b> demo!<br>
-This is using the bootstrap and the bundler.`
-
-// Vars
-var (
-	AppName string
-	BuiltAt string
-	debug   = flag.Bool("d", false, "enables the debug mode")
-	w       *astilectron.Window
+	astilectron "github.com/asticode/go-astilectron"
+	"github.com/asticode/go-astilectron-bundler"
 )
 
 func main() {
-	// Init
-	flag.Parse()
-	astilog.FlagInit()
+	var a, _ = astilectron.New(astilectron.Options{
+		AppName:            "hashira",
+		AppIconDarwinPath:  "resources/icon.icns",
+		AppIconDefaultPath: "resources/icon.png",
+	})
+	defer a.Close()
 
-	// Run bootstrap
-	astilog.Debugf("Running app built at %s", BuiltAt)
-	if err := bootstrap.Run(bootstrap.Options{
-		Asset: Asset,
-		AstilectronOptions: astilectron.Options{
-			AppName:            AppName,
-			AppIconDarwinPath:  "resources/icon.icns",
-			AppIconDefaultPath: "resources/icon.png",
-		},
-		Debug:    *debug,
-		Homepage: "index.html",
-		MenuOptions: []*astilectron.MenuItemOptions{{
-			Label: astilectron.PtrStr("File"),
-			SubMenu: []*astilectron.MenuItemOptions{
-				{
-					Label: astilectron.PtrStr("About"),
-					OnClick: func(e astilectron.Event) (deleteListener bool) {
-						if err := bootstrap.SendMessage(w, "about", htmlAbout, func(m *bootstrap.MessageIn) {
-							// Unmarshal payload
-							var s string
-							if err := json.Unmarshal(m.Payload, &s); err != nil {
-								astilog.Error(errors.Wrap(err, "unmarshaling payload failed"))
-								return
-							}
-							astilog.Infof("About modal has been displayed and payload is %s!", s)
-						}); err != nil {
-							astilog.Error(errors.Wrap(err, "sending about event failed"))
-						}
-						return
-					},
-				},
-				{Role: astilectron.MenuItemRoleClose},
-			},
-		}},
-		OnWait: func(_ *astilectron.Astilectron, iw *astilectron.Window, _ *astilectron.Menu, _ *astilectron.Tray, _ *astilectron.Menu) error {
-			w = iw
-			go func() {
-				time.Sleep(5 * time.Second)
-				if err := bootstrap.SendMessage(w, "check.out.menu", "Don't forget to check out the menu!"); err != nil {
-					astilog.Error(errors.Wrap(err, "sending check.out.menu event failed"))
-				}
-			}()
-			return nil
-		},
-		MessageHandler: handleMessages,
-		RestoreAssets:  RestoreAssets,
-		WindowOptions: &astilectron.WindowOptions{
-			BackgroundColor: astilectron.PtrStr("#333"),
-			Center:          astilectron.PtrBool(true),
-			Height:          astilectron.PtrInt(700),
-			Width:           astilectron.PtrInt(700),
-		},
-	}); err != nil {
-		astilog.Fatal(errors.Wrap(err, "running bootstrap failed"))
+	// Set provisioner
+	a.SetProvisioner(astibundler.NewProvisioner(Asset))
+
+	rp := filepath.Join(a.Paths().BaseDirectory(), "resources")
+	_, err := os.Stat(rp)
+	if os.IsNotExist(err) {
+		RestoreAssets(a.Paths().BaseDirectory(), "resources")
 	}
+
+	// Start astilectron
+	a.Start()
+
+	// Create a new window
+	var w, _ = a.NewWindow(filepath.Join(a.Paths().BaseDirectory(), "resources", "app", "index.html"),
+		&astilectron.WindowOptions{
+			Center: astilectron.PtrBool(true),
+			Height: astilectron.PtrInt(600),
+			Width:  astilectron.PtrInt(600),
+		})
+	w.Create()
+	w.OnMessage(handleMessage)
+
+	// TODO: enable only for debug
+	w.OpenDevTools()
+	a.Wait()
+}
+
+type message struct {
+	Name    string          `json:"name"`
+	Payload json.RawMessage `json:"payload,omitempty"`
+}
+
+func handleMessage(m *astilectron.EventMessage) interface{} {
+	bytes, err := m.MarshalJSON()
+	if err != nil {
+		fmt.Println("MarshalJSON() error. err =", err.Error())
+		return nil
+	}
+	fmt.Println(string(bytes))
+
+	var in message
+	err = m.Unmarshal(&in)
+	if err != nil {
+		fmt.Println("UnmarshalJSON() error. err =", err.Error())
+		return nil
+	}
+	fmt.Println(in.Name)
+	fmt.Println(string(in.Payload))
+
+	return &message{Name: in.Name + ".callback", Payload: []byte("hoge")}
 }
