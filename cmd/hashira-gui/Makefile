@@ -1,7 +1,12 @@
 
+.PHONY: front
 
-all: bundler
+all: front bundler
 	astilectron-bundler -v
+	chmod +x $(CURDIR)/output/linux-amd64/hashira-gui
+
+front:
+	make -C $(CURDIR)/front
 
 bundler:
 ifeq ($(shell command -v astilectron-bundler 2> /dev/null),)
