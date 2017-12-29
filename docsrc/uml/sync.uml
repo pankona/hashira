@@ -1,0 +1,41 @@
+@startuml
+
+hide footbox
+
+participant "client 1"  as c1
+participant "daemon 1"  as d1
+participant "datastore" as ds
+participant "daemon 2"  as d2
+participant "client 2"  as c2
+
+note right of d1 : assume daemon 1 is offline
+c1 -> d1 : command-1 (cached)
+c1 -> d1 : command-2 (cached)
+
+note right of d1 : assume daemon 1 is online,\n then send all cached commands to datastore
+d1 -> ds : command-1, 2 as JSON
+
+ds -> ds : apply command-1, 2
+
+d1 -> ds : fetch(10 weeks)
+d1 <- ds : chunk of data as JSON\n 10 weeks of data for example
+d1 -> d1 : store JSON to local document store
+
+note right of d2 : assume daemon 2 is offline
+d2 <- c2 : command-3 (cached)
+d2 <- c2 : command-4 (cached)
+
+note right of d2 : assume daemon 2 is online,\n then send all cached commands to datastore
+ds <- d2 : command-3, 4 as JSON
+
+ds -> ds : apply command-3, 4
+
+ds <- d2 : fetch(10 weeks)
+ds -> d2 : chunk of data as JSON
+d2 -> d2 : store JSON to local document store
+
+d1 -> ds : fetch(10 weeks)
+d1 <- ds : chunk o data as JSON
+d1 -> d1 : store JSON to local document store
+
+@enduml

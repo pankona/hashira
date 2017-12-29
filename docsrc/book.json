@@ -1,0 +1,10 @@
+{
+    "plugins": ["uml","-search"],
+    "pluginsConfig": {
+        "uml": {
+            "format"  : "svg",
+            "charset" : "UTF-8",
+            "nailgun" : false
+        }
+    }
+}

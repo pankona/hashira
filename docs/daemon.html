@@ -1,0 +1,389 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>daemon · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="tables.html" />
+    
+    
+    <link rel="prev" href="communication/daemon2datastore.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="overview.html">
+            
+                <a href="overview.html">
+            
+                    
+                    overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="communication/communication.html">
+            
+                <a href="communication/communication.html">
+            
+                    
+                    communication
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="communication/front2daemon.html">
+            
+                <a href="communication/front2daemon.html">
+            
+                    
+                    font to daemon
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="communication/daemon2datastore.html">
+            
+                <a href="communication/daemon2datastore.html">
+            
+                    
+                    daemon to database
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4" data-path="daemon.html">
+            
+                <a href="daemon.html">
+            
+                    
+                    daemon
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="tables.html">
+            
+                <a href="tables.html">
+            
+                    
+                    tables
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="prototype.html">
+            
+                <a href="prototype.html">
+            
+                    
+                    prototype
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >daemon</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="daemon">daemon</h1>
+<h2 id="overview">overview</h2>
+<ul>
+<li>Daemon has responsibility for<ul>
+<li>Receive requests from front end.</li>
+<li>Caches commands and reflect them to local document store for working without network.</li>
+<li>Send chunk of commands to datastore for syncing.</li>
+<li>Receive chunk of data to sync with datastore.</li>
+</ul>
+</li>
+</ul>
+<h2 id="sync-with-datastore">sync with datastore</h2>
+<ul>
+<li>Daemon has a document store to cache commands from front end, and store data from datastore.</li>
+<li>Periodically, daemon tries to perform syncing local data with datastore.<ul>
+<li>Send local commands, that are &quot;not synced yet&quot;, to datastore.</li>
+<li>Retrieve chunk of data. They are JSON formatted and represent &quot;1 week of data&quot;, for example.</li>
+<li>Daemon stores 10 weeks of data in local document store.</li>
+</ul>
+</li>
+</ul>
+<p><img src="uml/sync.svg" alt="sync.svg"></p>
+<h2 id="grpc-api">gRPC API</h2>
+<ul>
+<li><p>Hashira Service</p>
+<ul>
+<li>send(array of command)<ul>
+<li>sends specified commands. </li>
+</ul>
+</li>
+<li>retrieve(from, to (number of weeks)) array of task<ul>
+<li>returns array of task with specified term.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>command and related enumeration</p>
+</li>
+</ul>
+<p>what (enum)</p>
+<table>
+<thead>
+<tr>
+<th>enum</th>
+<th>remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>new</td>
+<td>create a new task</td>
+</tr>
+<tr>
+<td>update</td>
+<td>update state of a task</td>
+</tr>
+</tbody>
+</table>
+<p>command (structure)</p>
+<table>
+<thead>
+<tr>
+<th>field</th>
+<th>type</th>
+<th>remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>what</td>
+<td>enum of what</td>
+<td>new, update, etc.</td>
+</tr>
+<tr>
+<td>payload</td>
+<td>string</td>
+<td>JSON formatted string how to treat what.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="command-handling">command handling</h2>
+<ul>
+<li>When daemon receives commands, cache them and return ok immediately.</li>
+<li>If daemon is online, send cached commands to datastore.</li>
+<li>When datastore receives commands and succeed to apply them, datastore sends notification to daemon.</li>
+<li>At daemon receiving notification, retrieve chunk of data from datastore for syncing.</li>
+<li>When daemon succeed to apply them, daemon sends notification to front end.</li>
+<li>At front end receiving notification, retrieve chunk of data from daemon.</li>
+<li><p>When front end succeed to retrieve chunk of data, render them.</p>
+</li>
+<li><p>If daemon is offline, postpone to send commands to datastore.</p>
+<ul>
+<li>Instead, daemon applies the cached commands to local document store,
+and send notification to front end as same as written above.</li>
+</ul>
+</li>
+</ul>
+<p><img src="uml/daemon.svg" alt="daemon.svg"></p>
+
+                                
+                                </section>
+                            
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="communication/daemon2datastore.html" class="navigation navigation-prev " aria-label="Previous page: daemon to database">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="tables.html" class="navigation navigation-next " aria-label="Next page: tables">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"daemon","level":"1.4","depth":1,"next":{"title":"tables","level":"1.5","depth":1,"path":"tables.md","ref":"./tables.md","articles":[]},"previous":{"title":"daemon to database","level":"1.3.2","depth":2,"path":"communication/daemon2datastore.md","ref":"./communication/daemon2datastore.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["uml","-search"],"pluginsConfig":{"uml":{"format":"svg","charset":"UTF-8","nailgun":false},"highlight":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"daemon.md","mtime":"2017-12-06T07:41:36.559Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-29T02:19:35.338Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
