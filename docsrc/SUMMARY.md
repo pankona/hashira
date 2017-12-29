@@ -1,9 +1,7 @@
-# SUMMARY
-
-* [overview](./overview.md)
-* communication
-  * [font to daemon](./communication/front2daemon.md)
-  * [daemon to database](./communication/daemon2datastore.md)
-* [daemon](./daemon.md)
-* [tables](./tables.md)
-* [prototype](./prototype.md)
+* [Overview](./overview.md)
+* Communication
+  * [Front to daemon](./communication/front2daemon.md)
+  * [Daemon to database](./communication/daemon2datastore.md)
+* [Daemon](./daemon.md)
+* [DB tables](./tables.md)
+* [Prototype](./prototype.md)

@@ -1,5 +1,7 @@
-# index
+# hashira's design document
 
-Design documents of hashira project.  
-See SUMMARY.md for table of contents.
+## Table of contents
+
+{% include "./SUMMARY.md" %}
+
 
