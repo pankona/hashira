@@ -54,4 +54,42 @@
 
 ## ER diagram
 
-![er.svg](./uml/er.svg)
+```uml
+@startuml
+
+entity task {
+    + task_id
+    --
+    task_name
+    status_id
+    label_id
+    done_at
+}
+
+entity status {
+    + status_id
+    --
+    status_name
+}
+
+entity consume {
+  + consume_id
+  --
+  task_id
+  started_at
+  finished_at
+  consumed
+}
+
+entity label {
+    + label_id
+    --
+    label_name
+}
+
+task }---- status
+task }---- label
+task -ri-{ consume
+
+@enduml
+```

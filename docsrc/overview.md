@@ -45,5 +45,38 @@
 
 ## modules
 
-![modules.svg](./uml/modules.svg)
+```uml
+@startuml
 
+package local {
+    package pc {
+        class pc_cli {
+        }
+        class pc_gui {
+        }
+        class pc_daemon {
+        }
+    }
+    
+    package android {
+        class android_gui {
+        }
+        class android_daemon {
+        }
+    }
+}
+
+package cloud {
+    class datastore {
+    }
+}
+
+pc_cli      --> pc_daemon
+pc_gui      --> pc_daemon
+android_gui --> android_daemon
+
+pc_daemon      --> datastore
+android_daemon --> datastore
+
+@enduml
+```

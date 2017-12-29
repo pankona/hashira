@@ -1,21 +1,5 @@
 # index
 
-Design documents of hashira project.
+Design documents of hashira project.  
+See SUMMARY.md for table of contents.
 
-## table of contents
-
-* [overview](./overview.md)
-* [communication](./communication/communication.md)
-* [daemon](./daemon.md)
-* [tables](./tables.md)
-
-* [prototype](./prototype.md)
-
-
-```uml
-@startuml
-
-alice -> bob: hogehoge
-
-@enduml
-```
