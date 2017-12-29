@@ -1,6 +1,7 @@
 # hashira
 
 Application to manage **today's** tasks. Establish a Hashira for the day.
+design documents are available at [here](https://pankona.github.io/hashira/)
 
 ## concepts
 
