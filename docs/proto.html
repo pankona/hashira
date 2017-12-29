@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Prototype · GitBook</title>
+        <title>Protocol Buffers · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -53,10 +53,8 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="proto.html" />
     
-    
-    <link rel="prev" href="tables.html" />
+    <link rel="prev" href="prototype.html" />
     
 
     </head>
@@ -178,7 +176,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.6" data-path="prototype.html">
+        <li class="chapter " data-level="1.6" data-path="prototype.html">
             
                 <a href="prototype.html">
             
@@ -191,7 +189,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.7" data-path="proto.html">
+        <li class="chapter active" data-level="1.7" data-path="proto.html">
             
                 <a href="proto.html">
             
@@ -234,7 +232,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Prototype</a>
+        <a href="." >Protocol Buffers</a>
     </h1>
 </div>
 
@@ -246,21 +244,31 @@
                             
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="prototype">Prototype</h1>
-<p>Here&apos;s design memorandum of hashira prototyping, for checking usability.</p>
-<h2 id="feature-notice-of-prototype-version">feature notice of prototype version</h2>
-<ul>
-<li>No performance/resource consideration</li>
-<li>front end is for linux PC only<ul>
-<li>CUI and GUI (may use astilectron)</li>
-</ul>
-</li>
-<li>No cloud syncing</li>
-<li>No &quot;Doing&quot; time calculation</li>
-<li>Daemon uses MySQL as DB</li>
-</ul>
-<h2 id="sequence-of-tweaking-tasks">Sequence of tweaking tasks</h2>
-<p><img src="assets/images/uml/c9f17668c2dcdf7c2e6cfeb26f595f5760588815.svg"></p>
+                                <h1 id="protocol-buffers">protocol buffers</h1>
+<pre><code class="lang-proto">syntax = &quot;proto3&quot;;
+
+package hashira;
+
+// hashira service definition.
+service Hashira {
+  rpc create   (CreateCommand)   returns (Result) {}
+  rpc update   (UpdateCommand)   returns (Result) {}
+  rpc delete   (DeleteCommand)   returns (Result) {}
+  rpc retrieve (RetrieveCommand) returns (Result) {}
+}
+
+message CreateCommand {
+}
+
+message UpdateCommand {
+}
+
+message DeleteCommand {
+}
+
+message RetrieveCommand {
+}
+</code></pre>
 
                                 
                                 </section>
@@ -272,14 +280,10 @@
 
             
                 
-                <a href="tables.html" class="navigation navigation-prev " aria-label="Previous page: DB tables">
+                <a href="prototype.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Prototype">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
-                
-                <a href="proto.html" class="navigation navigation-next " aria-label="Next page: Protocol Buffers">
-                    <i class="fa fa-angle-right"></i>
-                </a>
                 
             
         
@@ -288,7 +292,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Prototype","level":"1.6","depth":1,"next":{"title":"Protocol Buffers","level":"1.7","depth":1,"path":"proto.md","ref":"./proto.md","articles":[]},"previous":{"title":"DB tables","level":"1.5","depth":1,"path":"tables.md","ref":"./tables.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["uml","-search"],"pluginsConfig":{"uml":{"format":"svg","charset":"UTF-8","nailgun":false},"highlight":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"prototype.md","mtime":"2017-12-29T02:57:23.847Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-29T07:51:54.458Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Protocol Buffers","level":"1.7","depth":1,"previous":{"title":"Prototype","level":"1.6","depth":1,"path":"prototype.md","ref":"./prototype.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["uml","-search"],"pluginsConfig":{"uml":{"format":"svg","charset":"UTF-8","nailgun":false},"highlight":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"proto.md","mtime":"2017-12-29T07:51:34.636Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-29T07:51:54.458Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
