@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package = "github.com/pankona/hashira/src/hashira/service";
+
+package hashira;
+
+service Hashira {
+  rpc Create(command.Create) returns (result.Create) {}
+  rpc Update(command.Update) returns (result.Update) {}
+  rpc Delete(command.Delete) returns (result.Delete) {}
+  rpc Retrieve(command.Retrieve) returns (result.Retrieve) {}
+}
+
+
+

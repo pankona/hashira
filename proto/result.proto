@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option go_package = "github.com/pankona/hashira/src/hashira/result";
+
+package result;
+
+message Task {
+  string id        = 1;
+  string name      = 2;
+  Place  place     = 3;
+  bool   isDeleted = 4;
+}
+
+message Create {
+  Task task = 1;
+}
+
+message Update {
+  Task task = 1;
+}
+
+message Delete {
+  Task task = 1;
+}
+
+message Retrieve {
+  repeated Task;
+}
