@@ -13,9 +13,16 @@ import (
 type daemon struct {
 }
 
-func (d *daemon) Create(context.Context, *service.CommandCreate) (*service.ResultCreate, error) {
+func (d *daemon) Create(ctx context.Context, cc *service.CommandCreate) (*service.ResultCreate, error) {
 	// TODO: implement
-	return nil, nil
+	t := &service.Task{
+		Id:        "TODO: generate proper id",
+		Name:      cc.GetName(),
+		Place:     service.Place_BACKLOG,
+		IsDeleted: false,
+	}
+	result := &service.ResultCreate{t}
+	return result, nil
 }
 
 func (d *daemon) Update(context.Context, *service.CommandUpdate) (*service.ResultUpdate, error) {
