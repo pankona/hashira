@@ -46,6 +46,8 @@ func TestBoltDBFinalize(t *testing.T) {
 	}
 }
 
+// TODO: Reduce duplication among test cases of Save and Load
+
 func TestBoltDBSave(t *testing.T) {
 	db := &BoltDB{}
 	var filename string
