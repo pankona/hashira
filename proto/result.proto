@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = "github.com/pankona/hashira/src/hashira/result";
+package service;
 
-package result;
+import "place.proto";
 
 message Task {
   string id        = 1;
@@ -11,18 +11,18 @@ message Task {
   bool   isDeleted = 4;
 }
 
-message Create {
+message ResultCreate {
   Task task = 1;
 }
 
-message Update {
+message ResultUpdate {
   Task task = 1;
 }
 
-message Delete {
+message ResultDelete {
   Task task = 1;
 }
 
-message Retrieve {
-  repeated Task;
+message ResultRetrieve {
+  repeated Task tasks = 1;
 }

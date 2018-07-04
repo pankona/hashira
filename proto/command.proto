@@ -1,28 +1,22 @@
 syntax = "proto3";
 
-option go_package = "github.com/pankona/hashira/src/hashira/command";
+package service;
 
-package command;
+import "place.proto";
 
-enum Place {
-  BACKLOG = 1;
-  TODO    = 2;
-  DOING   = 3;
-  DONE    = 4;
-}
-
-message Create {
+message CommandCreate {
   string name = 1;
   Place place = 2;
 }
 
-message Update {
+message CommandUpdate {
   string id   = 1;
   Place place = 2;
 }
 
-message Delete {
+message CommandDelete {
   string id = 1;
 }
 
-message Retrieve {}
+message CommandRetrieve {
+}
