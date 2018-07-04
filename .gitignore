@@ -3,3 +3,4 @@ docsrc/assets
 docsrc/_book
 
 cmd/hashirad/hashirad
+cmd/hashira/hashira
