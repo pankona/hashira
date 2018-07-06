@@ -12,7 +12,7 @@ import (
 func withClient(f func(service.HashiraClient) error) error {
 	conn, err := grpc.Dial("localhost:50056", grpc.WithInsecure())
 	if err != nil {
-		// TODO: error handling
+		return errors.New("failed to Dial: " + err.Error())
 	}
 	defer func() {
 		_ = conn.Close()
