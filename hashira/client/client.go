@@ -15,7 +15,10 @@ func withClient(f func(service.HashiraClient) error) error {
 		return errors.New("failed to Dial: " + err.Error())
 	}
 	defer func() {
-		_ = conn.Close()
+		e := conn.Close()
+		if e != nil {
+			fmt.Printf("failed to close connection: %s\n", e.Error())
+		}
 	}()
 
 	return f(service.NewHashiraClient(conn))
