@@ -9,10 +9,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-type client struct {
-	hc service.HashiraClient
-}
-
 func withClient(f func(service.HashiraClient) error) error {
 	conn, err := grpc.Dial("localhost:50056", grpc.WithInsecure())
 	if err != nil {
