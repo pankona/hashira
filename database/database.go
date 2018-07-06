@@ -1,5 +1,6 @@
 package database
 
+// Databaser is an interface to treat databases
 type Databaser interface {
 	Initialize(dbpath string) error
 	Finalize() error
