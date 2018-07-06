@@ -47,9 +47,24 @@ func (d *daemon) Delete(context.Context, *service.CommandDelete) (*service.Resul
 	return nil, nil
 }
 
-func (d *daemon) Retrieve(context.Context, *service.CommandRetrieve) (*service.ResultRetrieve, error) {
-	// TODO: implement
-	return nil, nil
+func (d *daemon) Retrieve(ctx context.Context, cr *service.CommandRetrieve) (*service.ResultRetrieve, error) {
+	tasks := make([]*service.Task, 0)
+	err := d.db.ForEach(func(k, v []byte) error {
+		t := &service.Task{}
+		err := json.Unmarshal(v, t)
+		if err != nil {
+			return errors.New("failed to retrieve tasks: " + err.Error())
+		}
+		tasks = append(tasks, t)
+		return nil
+	})
+	if err != nil {
+		return nil, errors.New("failed to retrieve tasks: " + err.Error())
+	}
+	result := &service.ResultRetrieve{
+		Tasks: tasks,
+	}
+	return result, err
 }
 
 func Run() error {
