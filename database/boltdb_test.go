@@ -10,7 +10,7 @@ import (
 func setup(filename *string) (func(), error) {
 	f, err := ioutil.TempFile("", "")
 	if err != nil {
-		return nil, errors.New("fatal. failed create tempfile")
+		return nil, errors.New("fatal. failed to create tempfile")
 	}
 	*filename = f.Name()
 	_ = f.Close()
