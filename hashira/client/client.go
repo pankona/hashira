@@ -24,6 +24,7 @@ func withClient(f func(service.HashiraClient) error) error {
 	return f(service.NewHashiraClient(conn))
 }
 
+// Create creates new task
 func Create(ctx context.Context) error {
 	return withClient(
 		func(hc service.HashiraClient) error {
