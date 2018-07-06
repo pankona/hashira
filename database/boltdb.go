@@ -34,7 +34,7 @@ func (b *BoltDB) Initialize(dbpath string) error {
 	if err != nil {
 		return errors.New("failed to open database: " + err.Error())
 	}
-	return b.db.Close()
+	return b.close()
 }
 
 // Finalize finalizes BoltDB instance
@@ -54,7 +54,7 @@ func (b *BoltDB) withDBOpenClose(f func() error) error {
 		return errors.New("failed to save/load: " + err.Error())
 	}
 
-	return b.db.Close()
+	return b.close()
 }
 
 // Save stores specified key/value to database
