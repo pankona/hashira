@@ -4,13 +4,16 @@ import (
 	"context"
 	"errors"
 	"net"
+	"os/user"
 
+	"github.com/pankona/hashira/database"
 	"github.com/pankona/hashira/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 type daemon struct {
+	db database.Databaser
 }
 
 func (d *daemon) Create(ctx context.Context, cc *service.CommandCreate) (*service.ResultCreate, error) {
@@ -48,6 +51,12 @@ func Run() error {
 	}
 	s := grpc.NewServer()
 	reflection.Register(s)
-	service.RegisterHashiraServer(s, &daemon{})
+	db := &database.BoltDB{}
+	usr, err := user.Current()
+	if err != nil {
+		return errors.New("failed to current user: " + err.Error())
+	}
+	db.Initialize(usr.HomeDir)
+	service.RegisterHashiraServer(s, &daemon{db: db})
 	return s.Serve(listen)
 }
