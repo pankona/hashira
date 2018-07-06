@@ -7,6 +7,8 @@ import (
 	bolt "github.com/coreos/bbolt"
 )
 
+// BoltDB provides API for using BoltDB
+// This function implements Databaser interface.
 type BoltDB struct {
 	dbpath string
 	db     *bolt.DB
@@ -25,6 +27,7 @@ func (b *BoltDB) close() error {
 	return b.db.Close()
 }
 
+// Initialize initializes BoltDB instance
 func (b *BoltDB) Initialize(dbpath string) error {
 	b.dbpath = dbpath
 	err := b.open()
@@ -34,6 +37,7 @@ func (b *BoltDB) Initialize(dbpath string) error {
 	return b.db.Close()
 }
 
+// Finalize finalizes BoltDB instance
 func (b *BoltDB) Finalize() error {
 	// nop
 	return nil
@@ -53,6 +57,7 @@ func (b *BoltDB) withDBOpenClose(f func() error) error {
 	return b.db.Close()
 }
 
+// Save stores specified key/value to database
 func (b *BoltDB) Save(id string, value []byte) error {
 	return b.withDBOpenClose(
 		func() error {
@@ -76,6 +81,7 @@ func (b *BoltDB) Save(id string, value []byte) error {
 		})
 }
 
+// Load loads data by id
 func (b *BoltDB) Load(id string) ([]byte, error) {
 	var ret []byte
 	err := b.withDBOpenClose(
@@ -96,6 +102,7 @@ func (b *BoltDB) Load(id string) ([]byte, error) {
 	return ret, err
 }
 
+// ForEach loops for all items already saved and invoke specified function
 func (b *BoltDB) ForEach(f func(k, v []byte) error) error {
 	err := b.withDBOpenClose(
 		func() error {
