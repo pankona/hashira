@@ -67,6 +67,7 @@ func (d *daemon) Retrieve(ctx context.Context, cr *service.CommandRetrieve) (*se
 	return result, err
 }
 
+// Run starts hashira daemon (as gRPC server)
 func Run() error {
 	port := ":50056" // TODO: specify port number via function argument
 	listen, err := net.Listen("tcp", port)
