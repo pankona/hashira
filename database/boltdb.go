@@ -27,7 +27,10 @@ func (b *BoltDB) close() error {
 
 func (b *BoltDB) Initialize(dbpath string) error {
 	b.dbpath = dbpath
-	b.open()
+	err := b.open()
+	if err != nil {
+		return errors.New("failed to open database: " + err.Error())
+	}
 	return b.db.Close()
 }
 
