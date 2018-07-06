@@ -95,3 +95,23 @@ func (b *BoltDB) Load(id string) ([]byte, error) {
 		})
 	return ret, err
 }
+
+func (b *BoltDB) ForEach(f func(k, v []byte) error) error {
+	err := b.withDBOpenClose(
+		func() error {
+			err := b.db.View(
+				func(tx *bolt.Tx) error {
+					b := tx.Bucket([]byte("taskBucket"))
+					err := b.ForEach(f)
+					if err != nil {
+						return errors.New("for each stopped: " + err.Error())
+					}
+					return nil
+				})
+			if err != nil {
+				return errors.New("failed load: " + err.Error())
+			}
+			return nil
+		})
+	return err
+}
