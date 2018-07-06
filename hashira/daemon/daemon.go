@@ -86,7 +86,7 @@ func Run() error {
 		return errors.New("failed to current user: " + err.Error())
 	}
 	configDir := filepath.Join(usr.HomeDir, ".config", "hashira")
-	err = os.Mkdir(configDir, 0755)
+	err = os.Mkdir(configDir, 0700)
 	if err != nil {
 		return errors.New("failed to create config directory: " + err.Error())
 	}
