@@ -10,7 +10,7 @@ import (
 func main() {
 	err := daemon.Run()
 	if err != nil {
-		fmt.Printf("failed to start hashira daemon: %s", err.Error())
+		fmt.Printf("failed to start hashira daemon: %s\n", err.Error())
 		os.Exit(1)
 	}
 }
