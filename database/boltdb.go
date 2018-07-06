@@ -2,6 +2,7 @@ package database
 
 import (
 	"errors"
+	"strconv"
 
 	bolt "github.com/coreos/bbolt"
 )
@@ -58,6 +59,14 @@ func (b *BoltDB) Save(id string, value []byte) error {
 					if err != nil {
 						return errors.New("failed to create bucket: " + err.Error())
 					}
+					if id == "" {
+						n, err := b.NextSequence()
+						if err != nil {
+							return errors.New("failed to get next sequence from bucket: " + err.Error())
+						}
+						id = strconv.FormatUint(n, 10)
+					}
+
 					return b.Put([]byte(id), value)
 				})
 
