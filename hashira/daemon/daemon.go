@@ -17,8 +17,12 @@ type daemon struct {
 	db database.Databaser
 }
 
+func NewDemon() *daemon {
+	return &daemon{}
+}
+
 // Run starts hashira daemon (as gRPC server)
-func Run() error {
+func (d *daemon) Run() error {
 	port := ":50056" // TODO: specify port number via function argument
 	listen, err := net.Listen("tcp", port)
 	if err != nil {
