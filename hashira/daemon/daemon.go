@@ -13,16 +13,16 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-type daemon struct {
-	db database.Databaser
+type Daemon struct {
+	DB database.Databaser
 }
 
-func NewDemon() *daemon {
-	return &daemon{}
+func NewDemon() *Daemon {
+	return &Daemon{}
 }
 
 // Run starts hashira daemon (as gRPC server)
-func (d *daemon) Run() error {
+func (d *Daemon) Run() error {
 	port := ":50056" // TODO: specify port number via function argument
 	listen, err := net.Listen("tcp", port)
 	if err != nil {
@@ -46,6 +46,6 @@ func (d *daemon) Run() error {
 		return errors.New("failed to initialize db: " + err.Error())
 	}
 
-	service.RegisterHashiraServer(s, &daemon{db: db})
+	service.RegisterHashiraServer(s, &Daemon{DB: db})
 	return s.Serve(listen)
 }
