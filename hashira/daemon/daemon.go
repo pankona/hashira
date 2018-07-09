@@ -13,11 +13,13 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
+// Daemon is a structure that implement hashira service
 type Daemon struct {
 	DB database.Databaser
 }
 
-func NewDemon() *Daemon {
+// New returns a Daemon implementation
+func New() *Daemon {
 	return &Daemon{}
 }
 
