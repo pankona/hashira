@@ -3,9 +3,6 @@ package daemon
 import (
 	"errors"
 	"net"
-	"os"
-	"os/user"
-	"path/filepath"
 
 	"github.com/pankona/hashira/database"
 	"github.com/pankona/hashira/service"
@@ -32,22 +29,6 @@ func (d *Daemon) Run() error {
 	}
 	s := grpc.NewServer()
 	reflection.Register(s)
-	db := &database.BoltDB{}
-	usr, err := user.Current()
-	if err != nil {
-		return errors.New("failed to current user: " + err.Error())
-	}
-	configDir := filepath.Join(usr.HomeDir, ".config", "hashira")
-	err = os.Mkdir(configDir, 0700)
-	if err != nil {
-		return errors.New("failed to create config directory: " + err.Error())
-	}
-
-	err = db.Initialize(filepath.Join(configDir, "db"))
-	if err != nil {
-		return errors.New("failed to initialize db: " + err.Error())
-	}
-
-	service.RegisterHashiraServer(s, &Daemon{DB: db})
+	service.RegisterHashiraServer(s, d)
 	return s.Serve(listen)
 }
