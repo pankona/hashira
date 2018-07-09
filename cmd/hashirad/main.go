@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	err := daemon.Run()
+	d := daemon.NewDemon()
+	err := d.Run()
 	if err != nil {
 		fmt.Printf("failed to start hashira daemon: %s\n", err.Error())
 		os.Exit(1)
