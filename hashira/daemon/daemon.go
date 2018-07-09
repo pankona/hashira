@@ -3,6 +3,7 @@ package daemon
 import (
 	"errors"
 	"net"
+	"strconv"
 
 	"github.com/pankona/hashira/database"
 	"github.com/pankona/hashira/service"
@@ -12,15 +13,16 @@ import (
 
 // Daemon is a structure that implement hashira service
 type Daemon struct {
-	DB database.Databaser
+	Port int
+	DB   database.Databaser
 }
 
 // Run starts hashira daemon (as gRPC server)
 func (d *Daemon) Run() error {
-	port := ":50056" // TODO: specify port number via function argument
-	listen, err := net.Listen("tcp", port)
+	p := ":" + strconv.Itoa(d.Port)
+	listen, err := net.Listen("tcp", p)
 	if err != nil {
-		return errors.New("gRPC server failed to listen port " + port + ": " + err.Error())
+		return errors.New("gRPC server failed to listen [" + p + "]: " + err.Error())
 	}
 	s := grpc.NewServer()
 	reflection.Register(s)
