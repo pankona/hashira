@@ -15,11 +15,6 @@ type Daemon struct {
 	DB database.Databaser
 }
 
-// New returns a Daemon implementation
-func New() *Daemon {
-	return &Daemon{}
-}
-
 // Run starts hashira daemon (as gRPC server)
 func (d *Daemon) Run() error {
 	port := ":50056" // TODO: specify port number via function argument
