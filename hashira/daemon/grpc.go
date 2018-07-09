@@ -8,6 +8,7 @@ import (
 	"github.com/pankona/hashira/service"
 )
 
+// Create creates a new task
 func (d *Daemon) Create(ctx context.Context, cc *service.CommandCreate) (*service.ResultCreate, error) {
 	t := &service.Task{
 		Name:      cc.GetName(),
@@ -30,16 +31,19 @@ func (d *Daemon) Create(ctx context.Context, cc *service.CommandCreate) (*servic
 	return result, nil
 }
 
+// Update updates an existing task
 func (d *Daemon) Update(context.Context, *service.CommandUpdate) (*service.ResultUpdate, error) {
 	// TODO: implement
 	return nil, nil
 }
 
+// Delete deletes an existing task
 func (d *Daemon) Delete(context.Context, *service.CommandDelete) (*service.ResultDelete, error) {
 	// TODO: implement
 	return nil, nil
 }
 
+// Retrieve retrieves all existing tasks
 func (d *Daemon) Retrieve(ctx context.Context, cr *service.CommandRetrieve) (*service.ResultRetrieve, error) {
 	tasks := make([]*service.Task, 0)
 	err := d.DB.ForEach(func(k, v []byte) error {
