@@ -23,21 +23,34 @@ func TestEndPointCreate(t *testing.T) {
 		DB: &mockDB{data: make(map[string][]byte)},
 	}
 
-	cc := &service.CommandCreate{
-		Name:  "test",
-		Place: service.Place_BACKLOG,
+	tcs := []struct {
+		inName    string
+		inPlace   service.Place
+		wantName  string
+		wantPlace service.Place
+	}{
+		{
+			inName: "test", inPlace: service.Place_BACKLOG,
+			wantName: "test", wantPlace: service.Place_BACKLOG,
+		},
 	}
-	result, err := d.Create(context.Background(), cc)
-	if err != nil {
-		t.Fatalf("Create returned unexpected error: %s", err.Error())
-	}
+	for _, tc := range tcs {
+		cc := &service.CommandCreate{
+			Name:  tc.inName,
+			Place: tc.inPlace,
+		}
+		result, err := d.Create(context.Background(), cc)
+		if err != nil {
+			t.Fatalf("Create returned unexpected error: %s", err.Error())
+		}
 
-	if result.GetTask().GetName() != "test" {
-		t.Errorf("unexpected result. [want] %v [got] %v", result.GetTask().GetName(), "test")
-	}
+		if result.GetTask().GetName() != tc.wantName {
+			t.Errorf("unexpected result. [got] %v [want] %v", result.GetTask().GetName(), tc.wantName)
+		}
 
-	if result.GetTask().GetPlace() != service.Place_BACKLOG {
-		t.Errorf("unexpected result. [want] %v [got] %v", result.GetTask().GetPlace(), service.Place_BACKLOG)
+		if result.GetTask().GetPlace() != tc.wantPlace {
+			t.Errorf("unexpected result. [got] %v [want] %v", result.GetTask().GetPlace(), tc.wantPlace)
+		}
 	}
 }
 
