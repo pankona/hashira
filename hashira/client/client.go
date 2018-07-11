@@ -9,14 +9,9 @@ import (
 	"google.golang.org/grpc"
 )
 
+// Client is a hashira client structure
 type Client struct {
 	address string
-}
-
-func New(address string) *Client {
-	return &Client{
-		address: address,
-	}
 }
 
 func (c *Client) withClient(f func(service.HashiraClient) error) error {
