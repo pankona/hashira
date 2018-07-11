@@ -25,11 +25,11 @@ func withClient(f func(service.HashiraClient) error) error {
 }
 
 // Create creates new task
-func Create(ctx context.Context) error {
+func Create(ctx context.Context, taskName string) error {
 	return withClient(
 		func(hc service.HashiraClient) error {
 			cc := &service.CommandCreate{
-				Name:  "test",
+				Name:  taskName,
 				Place: service.Place_BACKLOG,
 			}
 			result, err := hc.Create(ctx, cc)
