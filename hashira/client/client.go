@@ -9,8 +9,18 @@ import (
 	"google.golang.org/grpc"
 )
 
-func withClient(f func(service.HashiraClient) error) error {
-	conn, err := grpc.Dial("localhost:50056", grpc.WithInsecure())
+type Client struct {
+	address string
+}
+
+func New(address string) *Client {
+	return &Client{
+		address: address,
+	}
+}
+
+func (c *Client) withClient(f func(service.HashiraClient) error) error {
+	conn, err := grpc.Dial(c.address, grpc.WithInsecure())
 	if err != nil {
 		return errors.New("failed to Dial: " + err.Error())
 	}
@@ -25,8 +35,8 @@ func withClient(f func(service.HashiraClient) error) error {
 }
 
 // Create creates new task
-func Create(ctx context.Context, taskName string) error {
-	return withClient(
+func (c *Client) Create(ctx context.Context, taskName string) error {
+	return c.withClient(
 		func(hc service.HashiraClient) error {
 			cc := &service.CommandCreate{
 				Name:  taskName,
@@ -42,9 +52,9 @@ func Create(ctx context.Context, taskName string) error {
 }
 
 // Retrieve retrieves all tasks
-func Retrieve(ctx context.Context) ([]*service.Task, error) {
+func (c *Client) Retrieve(ctx context.Context) ([]*service.Task, error) {
 	var tasks []*service.Task
-	err := withClient(
+	err := c.withClient(
 		func(hc service.HashiraClient) error {
 			cr := &service.CommandRetrieve{}
 			result, err := hc.Retrieve(ctx, cr)
