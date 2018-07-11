@@ -18,7 +18,7 @@ func initializeDB() (database.Databaser, error) {
 		return nil, errors.New("failed to current user: " + err.Error())
 	}
 	configDir := filepath.Join(usr.HomeDir, ".config", "hashira")
-	err = os.Mkdir(configDir, 0700)
+	err = os.MkdirAll(configDir, 0700)
 	if err != nil {
 		return nil, errors.New("failed to create config directory: " + err.Error())
 	}
