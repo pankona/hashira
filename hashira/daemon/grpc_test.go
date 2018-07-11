@@ -28,22 +28,19 @@ func (m *mockDB) ForEach(f func(k, v []byte) error) error {
 	return nil
 }
 
-func TestEndPointCreate(t *testing.T) {
-	d := &Daemon{
-		DB: &mockDB{data: make(map[string][]byte)},
-	}
+var tcs = []struct {
+	inName    string
+	inPlace   service.Place
+	wantName  string
+	wantPlace service.Place
+}{
+	{
+		inName: "test", inPlace: service.Place_BACKLOG,
+		wantName: "test", wantPlace: service.Place_BACKLOG,
+	},
+}
 
-	tcs := []struct {
-		inName    string
-		inPlace   service.Place
-		wantName  string
-		wantPlace service.Place
-	}{
-		{
-			inName: "test", inPlace: service.Place_BACKLOG,
-			wantName: "test", wantPlace: service.Place_BACKLOG,
-		},
-	}
+func testCreate(d *Daemon, t *testing.T) {
 	for _, tc := range tcs {
 		cc := &service.CommandCreate{
 			Name:  tc.inName,
@@ -64,39 +61,18 @@ func TestEndPointCreate(t *testing.T) {
 	}
 }
 
+func TestEndPointCreate(t *testing.T) {
+	d := &Daemon{
+		DB: &mockDB{data: make(map[string][]byte)},
+	}
+	testCreate(d, t)
+}
+
 func TestEndPointRetrieve(t *testing.T) {
 	d := &Daemon{
 		DB: &mockDB{data: make(map[string][]byte)},
 	}
-
-	tcs := []struct {
-		inName    string
-		inPlace   service.Place
-		wantName  string
-		wantPlace service.Place
-	}{
-		{
-			inName: "test", inPlace: service.Place_BACKLOG,
-			wantName: "test", wantPlace: service.Place_BACKLOG,
-		},
-	}
-	for _, tc := range tcs {
-		cc := &service.CommandCreate{
-			Name:  tc.inName,
-			Place: tc.inPlace,
-		}
-		result, err := d.Create(context.Background(), cc)
-		if err != nil {
-			t.Fatalf("Create returned unexpected error: %s", err.Error())
-		}
-		if result.GetTask().GetName() != tc.wantName {
-			t.Errorf("unexpected result. [got] %v [want] %v", result.GetTask().GetName(), tc.wantName)
-		}
-
-		if result.GetTask().GetPlace() != tc.wantPlace {
-			t.Errorf("unexpected result. [got] %v [want] %v", result.GetTask().GetPlace(), tc.wantPlace)
-		}
-	}
+	testCreate(d, t)
 
 	rc := &service.CommandRetrieve{}
 	result, err := d.Retrieve(context.Background(), rc)
