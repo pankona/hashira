@@ -37,7 +37,6 @@ func Create(ctx context.Context, taskName string) error {
 				return errors.New("Create failed: " + err.Error())
 			}
 			result.ProtoMessage()
-			fmt.Println(result.String())
 			return nil
 		})
 }
