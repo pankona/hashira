@@ -9,8 +9,11 @@ import (
 )
 
 func main() {
+	c := client.Client{
+		Address: "localhost:50056",
+	}
 	ctx := context.Background()
-	err := client.Create(ctx)
+	err := c.Create(ctx, "test")
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
