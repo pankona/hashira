@@ -11,11 +11,11 @@ import (
 
 // Client is a hashira client structure
 type Client struct {
-	address string
+	Address string
 }
 
 func (c *Client) withClient(f func(service.HashiraClient) error) error {
-	conn, err := grpc.Dial(c.address, grpc.WithInsecure())
+	conn, err := grpc.Dial(c.Address, grpc.WithInsecure())
 	if err != nil {
 		return errors.New("failed to Dial: " + err.Error())
 	}
