@@ -40,3 +40,19 @@ func Create(ctx context.Context, taskName string) error {
 			return nil
 		})
 }
+
+// Retrieve retrieves all tasks
+func Retrieve(ctx context.Context) ([]*service.Task, error) {
+	var tasks []*service.Task
+	err := withClient(
+		func(hc service.HashiraClient) error {
+			cr := &service.CommandRetrieve{}
+			result, err := hc.Retrieve(ctx, cr)
+			if err != nil {
+				return errors.New("Retrieve failed: " + err.Error())
+			}
+			tasks = result.Tasks
+			return nil
+		})
+	return tasks, err
+}
