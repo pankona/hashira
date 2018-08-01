@@ -46,29 +46,7 @@ func TestBoltDBFinalize(t *testing.T) {
 	}
 }
 
-// TODO: Reduce duplication among test cases of Save and Load
-
-func TestBoltDBSave(t *testing.T) {
-	db := &BoltDB{}
-	var filename string
-	teardown, err := setup(&filename)
-	if err != nil {
-		t.Fatalf("setup failed: " + err.Error())
-	}
-	defer teardown()
-
-	err = db.Initialize(filename)
-	if err != nil {
-		t.Fatalf("Initialized returned unexpected error: %s", err.Error())
-	}
-
-	err = db.Save("testid", []byte("testdata"))
-	if err != nil {
-		t.Fatalf("save returned unexpected error: %s", err.Error())
-	}
-}
-
-func TestBoltDBLoad(t *testing.T) {
+func TestBoltDBSaveLoad(t *testing.T) {
 	db := &BoltDB{}
 	var filename string
 	teardown, err := setup(&filename)
@@ -94,5 +72,35 @@ func TestBoltDBLoad(t *testing.T) {
 
 	if string(v) != "testdata" {
 		t.Fatalf("load returned unexpected result. [got] %s [want] %s", string(v), "testdata")
+	}
+}
+
+func TestBoltDBSaveLoadWithoutID(t *testing.T) {
+	db := &BoltDB{}
+	var filename string
+	teardown, err := setup(&filename)
+	if err != nil {
+		t.Fatalf("setup failed: " + err.Error())
+	}
+	defer teardown()
+
+	err = db.Initialize(filename)
+	if err != nil {
+		t.Fatalf("Initialized returned unexpected error: %s", err.Error())
+	}
+
+	for i := 0; i < 10; i++ {
+		err := db.Save("", []byte("testdata"))
+		if err != nil {
+			t.Fatalf("save returned unexpected error: %s", err.Error())
+		}
+	}
+
+	err = db.ForEach(func(k, v []byte) error {
+		t.Logf("[%s] %s", string(k), string(v))
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("ForEach returned unexpected error: %s", err.Error())
 	}
 }
