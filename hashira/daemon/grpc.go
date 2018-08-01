@@ -47,7 +47,7 @@ func (d *Daemon) Delete(context.Context, *service.CommandDelete) (*service.Resul
 func (d *Daemon) Retrieve(ctx context.Context, cr *service.CommandRetrieve) (*service.ResultRetrieve, error) {
 	tasks := make([]*service.Task, 0)
 	err := d.DB.ForEach(func(k, v []byte) error {
-		t := &service.Task{}
+		t := &service.Task{Id: string(k)}
 		err := json.Unmarshal(v, t)
 		if err != nil {
 			return errors.New("failed to retrieve tasks: " + err.Error())
