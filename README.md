@@ -32,3 +32,10 @@ design documents are available at [here](https://pankona.github.io/hashira/)
 ## LICENSE
 
 MIT
+
+## Author
+
+Yosuke Akatsuka (@pankona)
+* [Twitter](https://twitter.com/pankona)
+* [GitHub](https://github.com/pankona)
+* [Qiita](https://qiita.com/pankona)
