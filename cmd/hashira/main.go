@@ -13,6 +13,13 @@ func main() {
 	}
 	ctx := context.Background()
 
+	addNewCmd(ctx, c)
+	addListCmd(ctx, c)
+
+	kingpin.Parse()
+}
+
+func addNewCmd(ctx context.Context, c *client.Client) {
 	newCmd := kingpin.Command(
 		"new",
 		"add new task with specified task name")
@@ -23,13 +30,13 @@ func main() {
 	_ = newCmd.Action(func(pc *kingpin.ParseContext) error {
 		return create(ctx, c, *name)
 	})
+}
 
+func addListCmd(ctx context.Context, c *client.Client) {
 	listCmd := kingpin.Command(
 		"list",
 		"show list of tasks")
 	_ = listCmd.Action(func(pc *kingpin.ParseContext) error {
 		return list(ctx, c)
 	})
-
-	kingpin.Parse()
 }
