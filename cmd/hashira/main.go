@@ -7,6 +7,11 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
+const (
+	program = "hashira"
+	version = "v0.0.1"
+)
+
 func main() {
 	c := &client.Client{
 		Address: "localhost:50056",
@@ -16,5 +21,6 @@ func main() {
 	addNewCmd(ctx, c)
 	addListCmd(ctx, c)
 
-	kingpin.Parse()
+	kingpin.Version(program + " " + version)
+	_ = kingpin.Parse()
 }
