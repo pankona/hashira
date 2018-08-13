@@ -17,6 +17,8 @@ $(PB_GO_DIR)/%.pb.go: $(PROTO_DIR)/%.proto
 
 lint:
 	gometalinter.v2 \
+		--vendor \
+		--deadline=300s \
 		--skip=$(CURDIR)/cmd/hashira-gui \
 		--skip=$(CURDIR)/service \
 		$(CURDIR)/...
