@@ -90,7 +90,7 @@ func TestBoltDBSaveLoadWithoutID(t *testing.T) {
 	}
 
 	for i := 0; i < 10; i++ {
-		err := db.Save("", []byte("testdata"))
+		err = db.Save("", []byte("testdata"))
 		if err != nil {
 			t.Fatalf("save returned unexpected error: %s", err.Error())
 		}
