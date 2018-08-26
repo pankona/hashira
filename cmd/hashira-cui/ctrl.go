@@ -2,12 +2,21 @@ package main
 
 import (
 	"github.com/jroimartin/gocui"
+	hashirac "github.com/pankona/hashira/hashira/client"
 )
 
-func configureKeyBindnig(g *gocui.Gui) error {
-	return g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, quit)
+type Ctrl struct {
+	hashirac *hashirac.Client
 }
 
-func quit(*gocui.Gui, *gocui.View) error {
+func NewCtrl(cli *hashirac.Client) *Ctrl {
+	return &Ctrl{hashirac: cli}
+}
+
+func (c *Ctrl) ConfigureKeyBindings(g *gocui.Gui) error {
+	return g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, c.Quit)
+}
+
+func (c *Ctrl) Quit(*gocui.Gui, *gocui.View) error {
 	return gocui.ErrQuit
 }
