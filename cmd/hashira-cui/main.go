@@ -13,13 +13,15 @@ func main() {
 	}
 	defer g.Close()
 
-	g.SetManager(&layout{})
+	g.SetManager(&view{})
 
-	if err := g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
+	err = ConfigureKeyBindnig(g)
+	if err != nil {
 		log.Panicln(err)
 	}
 
-	if err := g.MainLoop(); err != nil && err != gocui.ErrQuit {
+	err = g.MainLoop()
+	if err != nil && err != gocui.ErrQuit {
 		log.Panicln(err)
 	}
 }
