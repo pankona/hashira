@@ -7,10 +7,19 @@ import (
 
 type Ctrl struct {
 	hashirac *hashirac.Client
+	pub      Publisher
 }
 
-func NewCtrl(cli *hashirac.Client) *Ctrl {
-	return &Ctrl{hashirac: cli}
+func NewCtrl() *Ctrl {
+	return &Ctrl{}
+}
+
+func (c *Ctrl) SetHashiraClient(cli *hashirac.Client) {
+	c.hashirac = cli
+}
+
+func (c *Ctrl) SetPublisher(p Publisher) {
+	c.pub = p
 }
 
 func (c *Ctrl) ConfigureKeyBindings(g *gocui.Gui) error {

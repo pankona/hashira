@@ -7,6 +7,7 @@ import (
 )
 
 type view struct {
+	ps *PubSub
 }
 
 func (v *view) Layout(g *gocui.Gui) error {

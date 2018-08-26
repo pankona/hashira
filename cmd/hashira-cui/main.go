@@ -9,23 +9,29 @@ import (
 )
 
 func main() {
-	hashirac := &hashirac.Client{
-		Address: "localhost:50056",
-	}
-	ctrl := NewCtrl(hashirac)
-
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		log.Panicln(err)
 	}
 	defer g.Close()
 
-	g.SetManager(&view{})
+	ps := &PubSub{}
+
+	g.SetManager(&view{ps})
+
+	ctrl := NewCtrl()
 
 	err = ctrl.ConfigureKeyBindings(g)
 	if err != nil {
 		panic(fmt.Sprintf("failed to configure keybindings: %s", err.Error()))
 	}
+
+	hashirac := &hashirac.Client{
+		Address: "localhost:50056",
+	}
+	ctrl.SetHashiraClient(hashirac)
+
+	ctrl.SetPublisher(ps)
 
 	err = g.MainLoop()
 	if err != nil && err != gocui.ErrQuit {

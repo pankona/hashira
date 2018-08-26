@@ -6,6 +6,10 @@ type Subscriber interface {
 	OnMessage(msg string)
 }
 
+type Publisher interface {
+	Publish(msg string)
+}
+
 type PubSub struct {
 	ss sync.Map
 }
