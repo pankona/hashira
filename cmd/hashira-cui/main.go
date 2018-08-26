@@ -15,7 +15,7 @@ func main() {
 
 	g.SetManager(&view{})
 
-	err = ConfigureKeyBindnig(g)
+	err = configureKeyBindnig(g)
 	if err != nil {
 		log.Panicln(err)
 	}
