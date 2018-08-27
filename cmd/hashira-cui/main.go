@@ -13,8 +13,6 @@ func main() {
 
 	var (
 		m  = &Model{}
-		v  = &View{}
-		c  = &Ctrl{}
 		ps = &PubSub{}
 	)
 
@@ -23,8 +21,15 @@ func main() {
 		Address: "localhost:50056",
 	}
 	m.SetHashiraClient(hashirac)
+	m.SetPublisher(ps)
 
 	// prepare view
+	v := &View{}
+	err := v.Initialize()
+	if err != nil {
+		panic(fmt.Sprintf("failed to initialize view: %s", err.Error()))
+	}
+
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		log.Panicln(err)
@@ -35,11 +40,15 @@ func main() {
 	ps.Subscribe("view", v)
 
 	// prepare controller
+	c := &Ctrl{
+		m: m,
+		g: g,
+	}
+
 	err = c.ConfigureKeyBindings(g)
 	if err != nil {
 		panic(fmt.Sprintf("failed to configure keybindings: %s", err.Error()))
 	}
-	c.SetPublisher(ps)
 
 	// retrieve tasks first for initial screen
 	err = c.Update(context.Background())
