@@ -17,7 +17,10 @@ func main() {
 
 	ps := &PubSub{}
 
-	g.SetManager(&view{ps})
+	view := &view{}
+	ps.Subscribe("view", view)
+
+	g.SetManager(view)
 
 	ctrl := NewCtrl()
 

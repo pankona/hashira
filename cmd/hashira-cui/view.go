@@ -7,7 +7,6 @@ import (
 )
 
 type view struct {
-	ps *PubSub
 }
 
 func (v *view) Layout(g *gocui.Gui) error {
@@ -22,4 +21,8 @@ func (v *view) Layout(g *gocui.Gui) error {
 		}
 	}
 	return nil
+}
+
+func (v *view) OnEvent(event string, data interface{}) {
+
 }

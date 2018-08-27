@@ -3,21 +3,21 @@ package main
 import "sync"
 
 type Subscriber interface {
-	OnMessage(msg string)
+	OnEvent(event string, data interface{})
 }
 
 type Publisher interface {
-	Publish(msg string)
+	Publish(event string, data interface{})
 }
 
 type PubSub struct {
 	ss sync.Map
 }
 
-func (ps *PubSub) Publish(msg string) {
+func (ps *PubSub) Publish(event string, data interface{}) {
 	ps.ss.Range(func(k, v interface{}) bool {
 		s := v.(Subscriber)
-		s.OnMessage(msg)
+		s.OnEvent(event, data)
 		return true
 	})
 }
