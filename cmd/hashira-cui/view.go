@@ -6,10 +6,10 @@ import (
 	"github.com/jroimartin/gocui"
 )
 
-type view struct {
+type View struct {
 }
 
-func (v *view) Layout(g *gocui.Gui) error {
+func (v *View) Layout(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 	if v, err := g.SetView("hello", maxX/2-7, maxY/2, maxX/2+7, maxY/2+2); err != nil {
 		if err != gocui.ErrUnknownView {
@@ -23,6 +23,6 @@ func (v *view) Layout(g *gocui.Gui) error {
 	return nil
 }
 
-func (v *view) OnEvent(event string, data interface{}) {
+func (v *View) OnEvent(event string, data interface{}) {
 
 }

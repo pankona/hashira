@@ -3,22 +3,20 @@ package main
 import (
 	"context"
 
+	"github.com/pankona/hashira/service"
+	"github.com/pkg/errors"
+
 	"github.com/jroimartin/gocui"
 	hashirac "github.com/pankona/hashira/hashira/client"
-	"github.com/pkg/errors"
 )
 
 type Ctrl struct {
-	hashirac *hashirac.Client
-	pub      Publisher
+	m   *Model
+	pub Publisher
 }
 
-func NewCtrl() *Ctrl {
-	return &Ctrl{}
-}
-
-func (c *Ctrl) SetHashiraClient(cli *hashirac.Client) {
-	c.hashirac = cli
+func NewCtrl(m *Model) *Ctrl {
+	return &Ctrl{m: m}
 }
 
 func (c *Ctrl) SetPublisher(p Publisher) {
@@ -33,9 +31,23 @@ func (c *Ctrl) Quit(*gocui.Gui, *gocui.View) error {
 	return gocui.ErrQuit
 }
 
-func (c *Ctrl) list(ctx context.Context) error {
-	_, err := c.hashirac.Retrieve(ctx)
+func (c *Ctrl) Update(ctx context.Context) error {
+	tasks, err := c.m.List(ctx)
 	if err != nil {
-		return errors.Wrap(err, "failed to retrieve task list")
+		return errors.Wrap(err, "failed to update tasks")
 	}
+
+	c.pub.Publish("update", tasks)
+}
+
+type Model struct {
+	hashirac *hashirac.Client
+}
+
+func (m *Model) SetHashiraClient(cli *hashirac.Client) {
+	m.hashirac = cli
+}
+
+func (m *Model) List(ctx context.Context) ([]*service.Task, error) {
+	return m.hashirac.Retrieve(ctx)
 }
