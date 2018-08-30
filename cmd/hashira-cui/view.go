@@ -12,11 +12,16 @@ type View struct {
 	pains [4]Pain
 }
 
-func (v *View) Initialize() error {
+func (v *View) Initialize(g *gocui.Gui) error {
 	v.pains[0].name = "Backlog"
 	v.pains[1].name = "To Do"
 	v.pains[2].name = "Doing"
 	v.pains[3].name = "Done"
+
+	g.Highlight = true
+	g.SelFgColor = gocui.ColorBlue
+	g.SetCurrentView(v.pains[0].name)
+
 	return nil
 }
 
@@ -34,7 +39,7 @@ func (v *View) OnEvent(event string, data interface{}) {
 	switch event {
 	case "update":
 		tasks := data.([]*service.Task)
-		for i, _ := range v.pains {
+		for i := range v.pains {
 			v.pains[i].tasks = tasks
 		}
 	default:

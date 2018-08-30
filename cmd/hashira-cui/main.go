@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/jroimartin/gocui"
 	hashirac "github.com/pankona/hashira/hashira/client"
@@ -16,6 +17,13 @@ func main() {
 		ps = &PubSub{}
 	)
 
+	// initialize gocui
+	g, err := gocui.NewGui(gocui.OutputNormal)
+	if err != nil {
+		log.Panicln(err)
+	}
+	defer g.Close()
+
 	// prepare model
 	hashirac := &hashirac.Client{
 		Address: "localhost:50056",
@@ -25,16 +33,10 @@ func main() {
 
 	// prepare view
 	v := &View{}
-	err := v.Initialize()
+	err = v.Initialize(g)
 	if err != nil {
 		panic(fmt.Sprintf("failed to initialize view: %s", err.Error()))
 	}
-
-	g, err := gocui.NewGui(gocui.OutputNormal)
-	if err != nil {
-		log.Panicln(err)
-	}
-	defer g.Close()
 	g.SetManager(v)
 
 	ps.Subscribe("view", v)
@@ -44,6 +46,8 @@ func main() {
 		m: m,
 		g: g,
 	}
+
+	c.Initialize()
 
 	err = c.ConfigureKeyBindings(g)
 	if err != nil {
@@ -57,8 +61,22 @@ func main() {
 	}
 
 	// start to run main loop
-	err = g.MainLoop()
-	if err != nil && err != gocui.ErrQuit {
-		log.Panicln(err)
+	ch := make(chan struct{})
+	go func() {
+		err = g.MainLoop()
+		if err != nil && err != gocui.ErrQuit {
+			log.Panicln(err)
+		}
+		ch <- struct{}{}
+	}()
+
+	// TODO: should be fixed
+	<-time.After(5 * time.Millisecond)
+
+	err = c.SetFocus("Backlog")
+	if err != nil {
+		panic(fmt.Sprintf("failed to set focus on initialization: %s", err.Error()))
 	}
+
+	<-ch
 }
