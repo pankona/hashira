@@ -4,4 +4,6 @@ docsrc/_book
 
 cmd/hashirad/hashirad
 cmd/hashira/hashira
+cmd/hashira-cui/hashira-cui
 .idea
+
