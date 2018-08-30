@@ -18,6 +18,16 @@ func (v *View) Initialize(g *gocui.Gui) error {
 	v.pains[2].name = "Doing"
 	v.pains[3].name = "Done"
 
+	v.pains[0].right = &v.pains[1]
+	v.pains[1].right = &v.pains[2]
+	v.pains[2].right = &v.pains[3]
+	v.pains[3].right = &v.pains[0]
+
+	v.pains[0].left = &v.pains[3]
+	v.pains[1].left = &v.pains[2]
+	v.pains[2].left = &v.pains[1]
+	v.pains[3].left = &v.pains[0]
+
 	g.Highlight = true
 	g.SelFgColor = gocui.ColorBlue
 	g.SetCurrentView(v.pains[0].name)
@@ -49,6 +59,8 @@ func (v *View) OnEvent(event string, data interface{}) {
 
 type Pain struct {
 	name  string
+	left  *Pain
+	right *Pain
 	tasks []*service.Task
 }
 

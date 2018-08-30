@@ -18,16 +18,53 @@ func (c *Ctrl) Initialize() {
 	c.g.SelFgColor = gocui.ColorBlue
 }
 
+// TODO: should place on view
 func (c *Ctrl) ConfigureKeyBindings(g *gocui.Gui) error {
+	_ = g.SetKeybinding("Backlog", 'h', gocui.ModNone, c.Left)
+	_ = g.SetKeybinding("Backlog", 'l', gocui.ModNone, c.Right)
+	_ = g.SetKeybinding("To Do", 'h', gocui.ModNone, c.Left)
+	_ = g.SetKeybinding("To Do", 'l', gocui.ModNone, c.Right)
+	_ = g.SetKeybinding("Doing", 'h', gocui.ModNone, c.Left)
+	_ = g.SetKeybinding("Doing", 'l', gocui.ModNone, c.Right)
+	_ = g.SetKeybinding("Done", 'h', gocui.ModNone, c.Left)
+	_ = g.SetKeybinding("Done", 'l', gocui.ModNone, c.Right)
 	return g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, c.Quit)
+}
+
+var p = map[string]struct {
+	left  string
+	right string
+}{
+	"Backlog": {left: "Done", right: "To Do"},
+	"To Do":   {left: "Backlog", right: "Doing"},
+	"Doing":   {left: "To Do", right: "Done"},
+	"Done":    {left: "Doing", right: "Backlog"},
+}
+
+// TODO: should place on view
+func (c *Ctrl) Left(g *gocui.Gui, v *gocui.View) error {
+	g.SetCurrentView(p[g.CurrentView().Name()].left)
+	g.Update(func(*gocui.Gui) error {
+		return nil
+	})
+	return nil
+}
+
+// TODO: should place on view
+func (c *Ctrl) Right(g *gocui.Gui, v *gocui.View) error {
+	g.SetCurrentView(p[g.CurrentView().Name()].right)
+	g.Update(func(*gocui.Gui) error {
+		return nil
+	})
+	return nil
 }
 
 func (c *Ctrl) Quit(*gocui.Gui, *gocui.View) error {
 	return gocui.ErrQuit
 }
 
+// TODO: should place on view
 func (c *Ctrl) SetFocus(name string) error {
-	// TODO: should place on view
 	_, err := c.g.SetCurrentView(name)
 	c.g.Update(func(*gocui.Gui) error { return nil })
 	return err
