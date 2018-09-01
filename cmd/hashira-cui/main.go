@@ -29,7 +29,6 @@ func main() {
 		Address: "localhost:50056",
 	}
 	m.SetHashiraClient(hashirac)
-	m.SetPublisher(ps)
 
 	// prepare view
 	v := &View{}
@@ -39,20 +38,21 @@ func main() {
 	}
 	g.SetManager(v)
 
+	err = v.ConfigureKeyBindings(g)
+	if err != nil {
+		panic(fmt.Sprintf("failed to configure keybindings: %s", err.Error()))
+	}
+
 	ps.Subscribe("view", v)
 
 	// prepare controller
 	c := &Ctrl{
-		m: m,
-		g: g,
+		m:   m,
+		pub: ps,
 	}
 
 	c.Initialize()
-
-	err = c.ConfigureKeyBindings(g)
-	if err != nil {
-		panic(fmt.Sprintf("failed to configure keybindings: %s", err.Error()))
-	}
+	c.SetPublisher(ps)
 
 	// retrieve tasks first for initial screen
 	err = c.Update(context.Background())
@@ -73,7 +73,7 @@ func main() {
 	// TODO: should be fixed
 	<-time.After(5 * time.Millisecond)
 
-	err = c.SetFocus("Backlog")
+	err = v.SetFocus("Backlog")
 	if err != nil {
 		panic(fmt.Sprintf("failed to set focus on initialization: %s", err.Error()))
 	}
