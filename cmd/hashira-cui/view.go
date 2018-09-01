@@ -9,29 +9,39 @@ import (
 )
 
 type View struct {
-	pains [4]Pain
+	pains map[string]*Pain
 	g     *gocui.Gui
 }
 
+type Pain struct {
+	name  string
+	index int // place of this pane
+	left  *Pain
+	right *Pain
+	tasks []*service.Task
+}
+
 func (v *View) Initialize(g *gocui.Gui) error {
-	v.pains[0].name = "Backlog"
-	v.pains[1].name = "To Do"
-	v.pains[2].name = "Doing"
-	v.pains[3].name = "Done"
+	v.pains = make(map[string]*Pain)
 
-	v.pains[0].right = &v.pains[1]
-	v.pains[1].right = &v.pains[2]
-	v.pains[2].right = &v.pains[3]
-	v.pains[3].right = &v.pains[0]
+	v.pains["Backlog"] = &Pain{name: "Backlog", index: 0}
+	v.pains["To Do"] = &Pain{name: "To Do", index: 1}
+	v.pains["Doing"] = &Pain{name: "Doing", index: 2}
+	v.pains["Done"] = &Pain{name: "Done", index: 3}
 
-	v.pains[0].left = &v.pains[3]
-	v.pains[1].left = &v.pains[2]
-	v.pains[2].left = &v.pains[1]
-	v.pains[3].left = &v.pains[0]
+	v.pains["Backlog"].right = v.pains["To Do"]
+	v.pains["To Do"].right = v.pains["Doing"]
+	v.pains["Doing"].right = v.pains["Done"]
+	v.pains["Done"].right = v.pains["Backlog"]
+
+	v.pains["Backlog"].left = v.pains["Done"]
+	v.pains["To Do"].left = v.pains["Doing"]
+	v.pains["Doing"].left = v.pains["To Do"]
+	v.pains["Done"].left = v.pains["Backlog"]
 
 	g.Highlight = true
 	g.SelFgColor = gocui.ColorBlue
-	g.SetCurrentView(v.pains[0].name)
+	g.SetCurrentView(v.pains["Backlog"].name)
 
 	v.g = g
 
@@ -88,8 +98,8 @@ func (v *View) Quit(g *gocui.Gui, _ *gocui.View) error {
 }
 
 func (v *View) Layout(g *gocui.Gui) error {
-	for i := range v.pains {
-		err := v.pains[i].Layout(i, g)
+	for _, v := range v.pains {
+		err := v.Layout(g)
 		if err != nil {
 			return err
 		}
@@ -109,13 +119,6 @@ func (v *View) OnEvent(event string, data interface{}) {
 	}
 }
 
-type Pain struct {
-	name  string
-	left  *Pain
-	right *Pain
-	tasks []*service.Task
-}
-
 var place = map[int]service.Place{
 	0: service.Place_BACKLOG,
 	1: service.Place_TODO,
@@ -123,15 +126,16 @@ var place = map[int]service.Place{
 	3: service.Place_DONE,
 }
 
-func (p *Pain) Layout(index int, g *gocui.Gui) error {
+func (p *Pain) Layout(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
-	if v, err := g.SetView(p.name, maxX/4*index, 1, maxX/4*index+maxX/4-1, maxY-1); err != nil {
+	v, err := g.SetView(p.name, maxX/4*p.index, 1, maxX/4*p.index+maxX/4-1, maxY-1)
+	if err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
 		v.Title = p.name
 		for _, task := range p.tasks {
-			if task.Place == place[index] && !task.IsDeleted {
+			if task.Place == place[p.index] && !task.IsDeleted {
 				_, err = fmt.Fprintln(v, task.Name)
 				if err != nil {
 					return err
