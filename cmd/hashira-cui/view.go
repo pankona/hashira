@@ -9,25 +9,25 @@ import (
 )
 
 type View struct {
-	pains map[string]*Pain
+	pains map[string]*Pane
 	g     *gocui.Gui
 }
 
-type Pain struct {
+type Pane struct {
 	name  string
 	index int // place of this pane
-	left  *Pain
-	right *Pain
+	left  *Pane
+	right *Pane
 	tasks []*service.Task
 }
 
 func (v *View) Initialize(g *gocui.Gui) error {
-	v.pains = make(map[string]*Pain)
+	v.pains = make(map[string]*Pane)
 
-	v.pains["Backlog"] = &Pain{name: "Backlog", index: 0}
-	v.pains["To Do"] = &Pain{name: "To Do", index: 1}
-	v.pains["Doing"] = &Pain{name: "Doing", index: 2}
-	v.pains["Done"] = &Pain{name: "Done", index: 3}
+	v.pains["Backlog"] = &Pane{name: "Backlog", index: 0}
+	v.pains["To Do"] = &Pane{name: "To Do", index: 1}
+	v.pains["Doing"] = &Pane{name: "Doing", index: 2}
+	v.pains["Done"] = &Pane{name: "Done", index: 3}
 
 	v.pains["Backlog"].right = v.pains["To Do"]
 	v.pains["To Do"].right = v.pains["Doing"]
@@ -126,7 +126,7 @@ var place = map[int]service.Place{
 	3: service.Place_DONE,
 }
 
-func (p *Pain) Layout(g *gocui.Gui) error {
+func (p *Pane) Layout(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 	v, err := g.SetView(p.name, maxX/4*p.index, 1, maxX/4*p.index+maxX/4-1, maxY-1)
 	if err != nil {
