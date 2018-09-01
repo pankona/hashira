@@ -25,10 +25,18 @@ type Pane struct {
 func (v *View) Initialize(g *gocui.Gui) error {
 	v.pains = make(map[string]*Pane)
 
-	v.pains["Backlog"] = &Pane{name: "Backlog", index: 0, place: service.Place_BACKLOG}
-	v.pains["To Do"] = &Pane{name: "To Do", index: 1, place: service.Place_TODO}
-	v.pains["Doing"] = &Pane{name: "Doing", index: 2, place: service.Place_DOING}
-	v.pains["Done"] = &Pane{name: "Done", index: 3, place: service.Place_DONE}
+	v.pains["Backlog"] = &Pane{
+		name:  "Backlog",
+		index: 0, place: service.Place_BACKLOG}
+	v.pains["To Do"] = &Pane{
+		name:  "To Do",
+		index: 1, place: service.Place_TODO}
+	v.pains["Doing"] = &Pane{
+		name:  "Doing",
+		index: 2, place: service.Place_DOING}
+	v.pains["Done"] = &Pane{
+		name:  "Done",
+		index: 3, place: service.Place_DONE}
 
 	v.pains["Backlog"].right = v.pains["To Do"]
 	v.pains["To Do"].right = v.pains["Doing"]
