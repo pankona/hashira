@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/jroimartin/gocui"
 	hashirac "github.com/pankona/hashira/hashira/client"
@@ -29,7 +28,6 @@ func main() {
 		Address: "localhost:50056",
 	}
 	m.SetHashiraClient(hashirac)
-	m.SetPublisher(ps)
 
 	// prepare view
 	v := &View{}
@@ -39,20 +37,21 @@ func main() {
 	}
 	g.SetManager(v)
 
+	err = v.ConfigureKeyBindings(g)
+	if err != nil {
+		panic(fmt.Sprintf("failed to configure keybindings: %s", err.Error()))
+	}
+
 	ps.Subscribe("view", v)
 
 	// prepare controller
 	c := &Ctrl{
-		m: m,
-		g: g,
+		m:   m,
+		pub: ps,
 	}
 
 	c.Initialize()
-
-	err = c.ConfigureKeyBindings(g)
-	if err != nil {
-		panic(fmt.Sprintf("failed to configure keybindings: %s", err.Error()))
-	}
+	c.SetPublisher(ps)
 
 	// retrieve tasks first for initial screen
 	err = c.Update(context.Background())
@@ -60,23 +59,8 @@ func main() {
 		panic(fmt.Sprintf("failed to retrieve initial tasks: %s", err.Error()))
 	}
 
-	// start to run main loop
-	ch := make(chan struct{})
-	go func() {
-		err = g.MainLoop()
-		if err != nil && err != gocui.ErrQuit {
-			log.Panicln(err)
-		}
-		ch <- struct{}{}
-	}()
-
-	// TODO: should be fixed
-	<-time.After(5 * time.Millisecond)
-
-	err = c.SetFocus("Backlog")
-	if err != nil {
-		panic(fmt.Sprintf("failed to set focus on initialization: %s", err.Error()))
+	err = g.MainLoop()
+	if err != nil && err != gocui.ErrQuit {
+		log.Panicln(err)
 	}
-
-	<-ch
 }
