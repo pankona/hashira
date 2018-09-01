@@ -22,35 +22,43 @@ type Pane struct {
 	tasks []*service.Task
 }
 
+// pane names
+var pn = []string{
+	"Backlog",
+	"To Do",
+	"Doing",
+	"Done",
+}
+
 func (v *View) Initialize(g *gocui.Gui) error {
 	v.pains = make(map[string]*Pane)
 
-	v.pains["Backlog"] = &Pane{
-		name:  "Backlog",
+	v.pains[pn[0]] = &Pane{
+		name:  pn[0],
 		index: 0, place: service.Place_BACKLOG}
-	v.pains["To Do"] = &Pane{
-		name:  "To Do",
+	v.pains[pn[1]] = &Pane{
+		name:  pn[1],
 		index: 1, place: service.Place_TODO}
-	v.pains["Doing"] = &Pane{
-		name:  "Doing",
+	v.pains[pn[2]] = &Pane{
+		name:  pn[2],
 		index: 2, place: service.Place_DOING}
-	v.pains["Done"] = &Pane{
-		name:  "Done",
+	v.pains[pn[3]] = &Pane{
+		name:  pn[3],
 		index: 3, place: service.Place_DONE}
 
-	v.pains["Backlog"].right = v.pains["To Do"]
-	v.pains["To Do"].right = v.pains["Doing"]
-	v.pains["Doing"].right = v.pains["Done"]
-	v.pains["Done"].right = v.pains["Backlog"]
+	v.pains[pn[0]].right = v.pains[pn[1]]
+	v.pains[pn[1]].right = v.pains[pn[2]]
+	v.pains[pn[2]].right = v.pains[pn[3]]
+	v.pains[pn[3]].right = v.pains[pn[0]]
 
-	v.pains["Backlog"].left = v.pains["Done"]
-	v.pains["To Do"].left = v.pains["Backlog"]
-	v.pains["Doing"].left = v.pains["To Do"]
-	v.pains["Done"].left = v.pains["Doing"]
+	v.pains[pn[0]].left = v.pains[pn[3]]
+	v.pains[pn[1]].left = v.pains[pn[0]]
+	v.pains[pn[2]].left = v.pains[pn[1]]
+	v.pains[pn[3]].left = v.pains[pn[2]]
 
 	g.Highlight = true
 	g.SelFgColor = gocui.ColorBlue
-	g.SetCurrentView(v.pains["Backlog"].name)
+	g.SetCurrentView(v.pains[pn[0]].name)
 
 	v.g = g
 
