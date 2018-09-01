@@ -35,9 +35,9 @@ func (v *View) Initialize(g *gocui.Gui) error {
 	v.pains["Done"].right = v.pains["Backlog"]
 
 	v.pains["Backlog"].left = v.pains["Done"]
-	v.pains["To Do"].left = v.pains["Doing"]
+	v.pains["To Do"].left = v.pains["Backlog"]
 	v.pains["Doing"].left = v.pains["To Do"]
-	v.pains["Done"].left = v.pains["Backlog"]
+	v.pains["Done"].left = v.pains["Doing"]
 
 	g.Highlight = true
 	g.SelFgColor = gocui.ColorBlue
