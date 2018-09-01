@@ -3,9 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/pankona/hashira/service"
-
 	"github.com/jroimartin/gocui"
+	"github.com/pankona/hashira/service"
 )
 
 type View struct {

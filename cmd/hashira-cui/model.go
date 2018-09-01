@@ -3,9 +3,8 @@ package main
 import (
 	"context"
 
-	"github.com/pankona/hashira/service"
-
 	hashirac "github.com/pankona/hashira/hashira/client"
+	"github.com/pankona/hashira/service"
 )
 
 type Model struct {
