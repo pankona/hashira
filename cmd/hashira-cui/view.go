@@ -55,18 +55,8 @@ func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 	return nil
 }
 
-var p = map[string]struct {
-	left  string
-	right string
-}{
-	"Backlog": {left: "Done", right: "To Do"},
-	"To Do":   {left: "Backlog", right: "Doing"},
-	"Doing":   {left: "To Do", right: "Done"},
-	"Done":    {left: "Doing", right: "Backlog"},
-}
-
 func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
-	g.SetCurrentView(p[g.CurrentView().Name()].left)
+	g.SetCurrentView(v.pains[g.CurrentView().Name()].left.name)
 	g.Update(func(*gocui.Gui) error {
 		return nil
 	})
@@ -74,7 +64,7 @@ func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
 }
 
 func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
-	g.SetCurrentView(p[g.CurrentView().Name()].right)
+	g.SetCurrentView(v.pains[g.CurrentView().Name()].right.name)
 	g.Update(func(*gocui.Gui) error {
 		return nil
 	})
