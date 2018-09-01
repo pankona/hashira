@@ -18,16 +18,17 @@ type Pane struct {
 	index int // place of this pane
 	left  *Pane
 	right *Pane
+	place service.Place
 	tasks []*service.Task
 }
 
 func (v *View) Initialize(g *gocui.Gui) error {
 	v.pains = make(map[string]*Pane)
 
-	v.pains["Backlog"] = &Pane{name: "Backlog", index: 0}
-	v.pains["To Do"] = &Pane{name: "To Do", index: 1}
-	v.pains["Doing"] = &Pane{name: "Doing", index: 2}
-	v.pains["Done"] = &Pane{name: "Done", index: 3}
+	v.pains["Backlog"] = &Pane{name: "Backlog", index: 0, place: service.Place_BACKLOG}
+	v.pains["To Do"] = &Pane{name: "To Do", index: 1, place: service.Place_TODO}
+	v.pains["Doing"] = &Pane{name: "Doing", index: 2, place: service.Place_DOING}
+	v.pains["Done"] = &Pane{name: "Done", index: 3, place: service.Place_DONE}
 
 	v.pains["Backlog"].right = v.pains["To Do"]
 	v.pains["To Do"].right = v.pains["Doing"]
@@ -103,13 +104,6 @@ func (v *View) OnEvent(event string, data interface{}) {
 	}
 }
 
-var place = map[int]service.Place{
-	0: service.Place_BACKLOG,
-	1: service.Place_TODO,
-	2: service.Place_DOING,
-	3: service.Place_DONE,
-}
-
 func (p *Pane) Layout(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 	v, err := g.SetView(p.name, maxX/4*p.index, 1, maxX/4*p.index+maxX/4-1, maxY-1)
@@ -119,7 +113,7 @@ func (p *Pane) Layout(g *gocui.Gui) error {
 		}
 		v.Title = p.name
 		for _, task := range p.tasks {
-			if task.Place == place[p.index] && !task.IsDeleted {
+			if task.Place == p.place && !task.IsDeleted {
 				_, err = fmt.Fprintln(v, task.Name)
 				if err != nil {
 					return err
