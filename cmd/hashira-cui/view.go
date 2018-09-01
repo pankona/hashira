@@ -49,14 +49,8 @@ func (v *View) Initialize(g *gocui.Gui) error {
 }
 
 func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
-	_ = g.SetKeybinding("Backlog", 'h', gocui.ModNone, v.Left)
-	_ = g.SetKeybinding("Backlog", 'l', gocui.ModNone, v.Right)
-	_ = g.SetKeybinding("To Do", 'h', gocui.ModNone, v.Left)
-	_ = g.SetKeybinding("To Do", 'l', gocui.ModNone, v.Right)
-	_ = g.SetKeybinding("Doing", 'h', gocui.ModNone, v.Left)
-	_ = g.SetKeybinding("Doing", 'l', gocui.ModNone, v.Right)
-	_ = g.SetKeybinding("Done", 'h', gocui.ModNone, v.Left)
-	_ = g.SetKeybinding("Done", 'l', gocui.ModNone, v.Right)
+	_ = g.SetKeybinding("", 'h', gocui.ModNone, v.Left)
+	_ = g.SetKeybinding("", 'l', gocui.ModNone, v.Right)
 	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit)
 	return nil
 }
