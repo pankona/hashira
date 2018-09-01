@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/jroimartin/gocui"
 	"github.com/pankona/hashira/service"
@@ -97,6 +98,8 @@ func (v *View) Quit(g *gocui.Gui, _ *gocui.View) error {
 	return gocui.ErrQuit
 }
 
+var once = sync.Once{}
+
 func (v *View) Layout(g *gocui.Gui) error {
 	for _, v := range v.pains {
 		err := v.Layout(g)
@@ -104,6 +107,15 @@ func (v *View) Layout(g *gocui.Gui) error {
 			return err
 		}
 	}
+
+	// initialize current view
+	// this function only needs to be called once on starting application
+	once.Do(func() {
+		if _, err := g.SetCurrentView(pn[0]); err != nil {
+			panic(err)
+		}
+	})
+
 	return nil
 }
 

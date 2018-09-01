@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/jroimartin/gocui"
 	hashirac "github.com/pankona/hashira/hashira/client"
@@ -60,23 +59,8 @@ func main() {
 		panic(fmt.Sprintf("failed to retrieve initial tasks: %s", err.Error()))
 	}
 
-	// start to run main loop
-	ch := make(chan struct{})
-	go func() {
-		err = g.MainLoop()
-		if err != nil && err != gocui.ErrQuit {
-			log.Panicln(err)
-		}
-		ch <- struct{}{}
-	}()
-
-	// TODO: should be fixed
-	<-time.After(5 * time.Millisecond)
-
-	err = v.SetFocus("Backlog")
-	if err != nil {
-		panic(fmt.Sprintf("failed to set focus on initialization: %s", err.Error()))
+	err = g.MainLoop()
+	if err != nil && err != gocui.ErrQuit {
+		log.Panicln(err)
 	}
-
-	<-ch
 }
