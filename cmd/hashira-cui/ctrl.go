@@ -23,5 +23,6 @@ func (c *Ctrl) Update(ctx context.Context) error {
 	}
 
 	c.pub.Publish("update", tasks)
+
 	return nil
 }
