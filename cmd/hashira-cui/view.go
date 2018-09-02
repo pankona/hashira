@@ -8,8 +8,9 @@ import (
 )
 
 type View struct {
-	pains map[string]*Pane
-	g     *gocui.Gui
+	pains         map[string]*Pane
+	g             *gocui.Gui
+	selectedIndex int
 }
 
 // pane names
@@ -58,6 +59,8 @@ func (v *View) Initialize(g *gocui.Gui) error {
 func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 	_ = g.SetKeybinding("", 'h', gocui.ModNone, v.Left)
 	_ = g.SetKeybinding("", 'l', gocui.ModNone, v.Right)
+	_ = g.SetKeybinding("", 'k', gocui.ModNone, v.Up)
+	_ = g.SetKeybinding("", 'j', gocui.ModNone, v.Down)
 	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit)
 	return nil
 }
@@ -78,6 +81,14 @@ func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
 	return nil
 }
 
+func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
+	return nil
+}
+
+func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
+	return nil
+}
+
 func (v *View) SetFocus(name string) error {
 	_, err := v.g.SetCurrentView(name)
 	v.g.Update(func(*gocui.Gui) error { return nil })
@@ -91,8 +102,8 @@ func (v *View) Quit(g *gocui.Gui, _ *gocui.View) error {
 var once = sync.Once{}
 
 func (v *View) Layout(g *gocui.Gui) error {
-	for _, v := range v.pains {
-		err := v.Layout(g)
+	for _, p := range v.pains {
+		err := p.Layout(g, v.selectedIndex)
 		if err != nil {
 			return err
 		}
