@@ -82,10 +82,14 @@ func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
 }
 
 func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
+	if v.selectedIndex > 0 {
+		v.selectedIndex--
+	}
 	return nil
 }
 
 func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
+	v.selectedIndex++
 	return nil
 }
 

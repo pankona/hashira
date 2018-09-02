@@ -25,11 +25,12 @@ func (p *Pane) Layout(g *gocui.Gui, selectedIndex int) error {
 		}
 		v.Title = p.name
 
+		var itemNum int
 		// render tasks for this pane
-		for i, task := range p.tasks {
+		for _, task := range p.tasks {
 			if task.Place == p.place && !task.IsDeleted {
 				var err error
-				if i == selectedIndex {
+				if itemNum == selectedIndex {
 					_, err = fmt.Fprintf(v, "\033[3%d;%dm%s\033[0m\n", 7, 4, task.Name)
 				} else {
 					_, err = fmt.Fprintf(v, "%s\n", task.Name)
@@ -37,7 +38,26 @@ func (p *Pane) Layout(g *gocui.Gui, selectedIndex int) error {
 				if err != nil {
 					return err
 				}
+				itemNum++
 			}
+		}
+		return nil
+	}
+
+	v.Clear()
+	var itemNum int
+	for _, task := range p.tasks {
+		if task.Place == p.place && !task.IsDeleted {
+			var err error
+			if itemNum == selectedIndex {
+				_, err = fmt.Fprintf(v, "\033[3%d;%dm%s\033[0m\n", 7, 4, task.Name)
+			} else {
+				_, err = fmt.Fprintf(v, "%s\n", task.Name)
+			}
+			if err != nil {
+				return err
+			}
+			itemNum++
 		}
 	}
 	return nil
