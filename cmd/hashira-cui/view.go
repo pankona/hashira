@@ -137,6 +137,7 @@ func (v *View) OnEvent(event string, data interface{}) {
 	case "update":
 		tasks := data.([]*service.Task)
 		for i := range v.pains {
+			// TODO: filter tasks for each pane
 			v.pains[i].tasks = tasks
 		}
 
