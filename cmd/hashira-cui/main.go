@@ -29,9 +29,17 @@ func main() {
 	}
 	m.SetHashiraClient(hashirac)
 
+	// prepare controller
+	c := &Ctrl{
+		m:   m,
+		pub: ps,
+	}
+
+	c.Initialize()
+	c.SetPublisher(ps)
 	// prepare view
 	v := &View{}
-	err = v.Initialize(g)
+	err = v.Initialize(g, c)
 	if err != nil {
 		panic(fmt.Sprintf("failed to initialize view: %s", err.Error()))
 	}
@@ -43,15 +51,6 @@ func main() {
 	}
 
 	ps.Subscribe("view", v)
-
-	// prepare controller
-	c := &Ctrl{
-		m:   m,
-		pub: ps,
-	}
-
-	c.Initialize()
-	c.SetPublisher(ps)
 
 	// retrieve tasks first for initial screen
 	err = c.Update(context.Background())

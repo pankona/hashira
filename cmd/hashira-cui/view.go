@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"sync"
 
 	"github.com/jroimartin/gocui"
@@ -11,6 +12,11 @@ type View struct {
 	pains         map[string]*Pane
 	g             *gocui.Gui
 	selectedIndex int
+	Delegater
+}
+
+type Delegater interface {
+	Delegate(event, msg string) error
 }
 
 // pane names
@@ -21,7 +27,7 @@ var pn = []string{
 	"Done",
 }
 
-func (v *View) Initialize(g *gocui.Gui) error {
+func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 	v.pains = make(map[string]*Pane)
 
 	v.pains[pn[0]] = &Pane{
@@ -52,6 +58,7 @@ func (v *View) Initialize(g *gocui.Gui) error {
 	g.SetCurrentView(v.pains[pn[0]].name)
 
 	v.g = g
+	v.Delegater = d
 
 	return nil
 }
@@ -96,12 +103,21 @@ func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 
 func (v *View) Enter(g *gocui.Gui, gv *gocui.View) error {
 	if gv.Name() == "input" {
-		err := g.DeleteView("input")
+		defer func() {
+			g.DeleteView("input")
+			g.SetCurrentView(v.pains[pn[0]].name)
+		}()
+
+		msg := gv.Buffer()
+		if msg == "" {
+			return nil
+		}
+
+		msg = strings.TrimSuffix(msg, "\n")
+		err := v.Delegate("add", msg)
 		if err != nil {
 			return err
 		}
-		_, err = g.SetCurrentView(v.pains[pn[0]].name)
-		return err
 	}
 
 	maxX, maxY := g.Size()
