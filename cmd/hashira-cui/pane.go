@@ -32,6 +32,16 @@ func (p *Pane) Layout(g *gocui.Gui, selectedIndex int) error {
 	return renderTasks(v, p.place, p.tasks, selectedIndex)
 }
 
+func (p *Pane) len() int {
+	var itemNum int
+	for _, v := range p.tasks {
+		if v.Place == p.place && !v.IsDeleted {
+			itemNum++
+		}
+	}
+	return itemNum
+}
+
 func renderTasks(w io.Writer, place service.Place, tasks []*service.Task, selectedIndex int) error {
 	var itemNum int
 	// render tasks for this pane

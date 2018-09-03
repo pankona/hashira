@@ -82,9 +82,7 @@ func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
 }
 
 func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
-	if v.selectedIndex > 0 {
-		v.selectedIndex--
-	}
+	v.selectedIndex--
 	return nil
 }
 
@@ -107,6 +105,16 @@ var once = sync.Once{}
 
 func (v *View) Layout(g *gocui.Gui) error {
 	for _, p := range v.pains {
+		if g.CurrentView() != nil &&
+			g.CurrentView().Name() == p.name {
+			if v.selectedIndex <= 0 {
+				v.selectedIndex = 0
+			}
+			if v.selectedIndex >= p.len() {
+				v.selectedIndex = p.len() - 1
+			}
+		}
+
 		err := p.Layout(g, v.selectedIndex)
 		if err != nil {
 			return err
