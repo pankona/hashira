@@ -57,10 +57,13 @@ func (v *View) Initialize(g *gocui.Gui) error {
 }
 
 func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
-	_ = g.SetKeybinding("", 'h', gocui.ModNone, v.Left)
-	_ = g.SetKeybinding("", 'l', gocui.ModNone, v.Right)
-	_ = g.SetKeybinding("", 'k', gocui.ModNone, v.Up)
-	_ = g.SetKeybinding("", 'j', gocui.ModNone, v.Down)
+	for _, p := range v.pains {
+		_ = g.SetKeybinding(p.name, 'h', gocui.ModNone, v.Left)
+		_ = g.SetKeybinding(p.name, 'l', gocui.ModNone, v.Right)
+		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)
+		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)
+	}
+	_ = g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.Enter)
 	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit)
 	return nil
 }
@@ -88,6 +91,28 @@ func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
 
 func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 	v.selectedIndex++
+	return nil
+}
+
+func (v *View) Enter(g *gocui.Gui, gv *gocui.View) error {
+	if gv.Name() == "input" {
+		err := g.DeleteView("input")
+		if err != nil {
+			return err
+		}
+		_, err = g.SetCurrentView(v.pains[pn[0]].name)
+		return err
+	}
+
+	maxX, maxY := g.Size()
+	if v, err := g.SetView("input", maxX/2-20, maxY/2, maxX/2+20, maxY/2+2); err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+		v.Title = "New task?"
+		v.Editable = true
+		g.SetCurrentView("input")
+	}
 	return nil
 }
 
