@@ -46,6 +46,22 @@ func (c *Client) Create(ctx context.Context, taskName string) error {
 		})
 }
 
+// Delete marks specified task as deleted
+func (c *Client) Delete(ctx context.Context, id string) error {
+	return c.withClient(
+		func(hc service.HashiraClient) error {
+			cd := &service.CommandDelete{
+				Id: id,
+			}
+			result, err := hc.Delete(ctx, cd)
+			if err != nil {
+				return errors.New("Delete failed: " + err.Error())
+			}
+			result.ProtoMessage()
+			return nil
+		})
+}
+
 // Retrieve retrieves all tasks
 func (c *Client) Retrieve(ctx context.Context) ([]*service.Task, error) {
 	var tasks []*service.Task
