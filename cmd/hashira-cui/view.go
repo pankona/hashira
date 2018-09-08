@@ -112,8 +112,8 @@ func (v *View) Enter(g *gocui.Gui, gv *gocui.View) error {
 		if msg == "" {
 			return nil
 		}
-
 		msg = strings.TrimSuffix(msg, "\n")
+
 		err := v.Delegate("add", msg)
 		if err != nil {
 			return err
