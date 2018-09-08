@@ -197,11 +197,6 @@ func (v *View) OnEvent(event string, data interface{}) {
 				}
 			}
 		}
-
-		// ZZZ: this update may not be needed
-		v.g.Update(func(*gocui.Gui) error {
-			return nil
-		})
 	default:
 		// nop
 	}
