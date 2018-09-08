@@ -69,6 +69,7 @@ func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 		_ = g.SetKeybinding(p.name, 'l', gocui.ModNone, v.Right)
 		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)
 		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)
+		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.Delete)
 	}
 	_ = g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.Enter)
 	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit)
@@ -99,6 +100,17 @@ func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
 func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 	v.selectedIndex++
 	return nil
+}
+
+func (v *View) Delete(g *gocui.Gui, _ *gocui.View) error {
+	t := v.SelectedItem()
+	return v.Delegate("delete", t)
+}
+
+func (v *View) SelectedItem() *service.Task {
+	p := v.pains[v.g.CurrentView().Name()]
+	return p.tasks[v.selectedIndex]
+
 }
 
 func (v *View) Enter(g *gocui.Gui, gv *gocui.View) error {
