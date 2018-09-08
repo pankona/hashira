@@ -24,6 +24,8 @@ func (c *Ctrl) Delegate(event string, data interface{}) error {
 			return err
 		}
 		return c.Update(context.Background())
+	case "delete":
+		panic("not implemented")
 	default:
 	}
 	return nil
