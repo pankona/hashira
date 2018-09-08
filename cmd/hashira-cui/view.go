@@ -16,7 +16,7 @@ type View struct {
 }
 
 type Delegater interface {
-	Delegate(event, msg string) error
+	Delegate(event string, data interface{}) error
 }
 
 // pane names

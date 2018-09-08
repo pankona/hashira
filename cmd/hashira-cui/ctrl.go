@@ -16,10 +16,10 @@ func (c *Ctrl) SetPublisher(p Publisher) {
 	c.pub = p
 }
 
-func (c *Ctrl) Delegate(event, msg string) error {
+func (c *Ctrl) Delegate(event string, data interface{}) error {
 	switch event {
 	case "add":
-		err := c.m.hashirac.Create(context.Background(), msg)
+		err := c.m.hashirac.Create(context.Background(), data.(string))
 		if err != nil {
 			return err
 		}
