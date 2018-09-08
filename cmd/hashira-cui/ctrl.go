@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+
+	"github.com/pankona/hashira/service"
 )
 
 type Ctrl struct {
@@ -25,7 +27,12 @@ func (c *Ctrl) Delegate(event string, data interface{}) error {
 		}
 		return c.Update(context.Background())
 	case "delete":
-		panic("not implemented")
+		t := data.(*service.Task)
+		err := c.m.hashirac.Delete(context.Background(), t.Id)
+		if err != nil {
+			return err
+		}
+		return c.Update(context.Background())
 	default:
 	}
 	return nil
@@ -38,6 +45,5 @@ func (c *Ctrl) Update(ctx context.Context) error {
 	}
 
 	c.pub.Publish("update", tasks)
-
 	return nil
 }

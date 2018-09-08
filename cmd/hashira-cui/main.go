@@ -4,12 +4,16 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"log/syslog"
 
 	"github.com/jroimartin/gocui"
 	hashirac "github.com/pankona/hashira/hashira/client"
 )
 
 func main() {
+
+	logger, err := syslog.New(syslog.LOG_INFO|syslog.LOG_LOCAL0, "cps_supervisor")
+	log.SetOutput(logger)
 
 	var (
 		m  = &Model{}

@@ -192,7 +192,7 @@ func (v *View) OnEvent(event string, data interface{}) {
 		for i := range v.pains {
 			v.pains[i].tasks = nil
 			for _, t := range tasks {
-				if v.pains[i].place == t.Place {
+				if !t.IsDeleted && v.pains[i].place == t.Place {
 					v.pains[i].tasks = append(v.pains[i].tasks, t)
 				}
 			}
