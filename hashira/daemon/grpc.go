@@ -38,28 +38,48 @@ func (d *Daemon) Update(context.Context, *service.CommandUpdate) (*service.Resul
 }
 
 // Delete deletes an existing task
-func (d *Daemon) Delete(context.Context, *service.CommandDelete) (*service.ResultDelete, error) {
-	// TODO: implement
-	return nil, nil
+func (d *Daemon) Delete(ctx context.Context, cd *service.CommandDelete) (*service.ResultDelete, error) {
+	buf, err := d.DB.Load(cd.Id)
+	if err != nil {
+		// TODO: error handling
+	}
+
+	t := &service.Task{Id: cd.Id}
+	err = json.Unmarshal(buf, t)
+	if err != nil {
+		// TODO: error handling
+	}
+
+	t.IsDeleted = true
+	buf, err = json.Marshal(t)
+	if err != nil {
+		// TODO: error handling
+	}
+
+	return &service.ResultDelete{Task: t}, d.DB.Save(cd.Id, buf)
 }
 
 // Retrieve retrieves all existing tasks
 func (d *Daemon) Retrieve(ctx context.Context, cr *service.CommandRetrieve) (*service.ResultRetrieve, error) {
 	tasks := make([]*service.Task, 0)
+
 	err := d.DB.ForEach(func(k, v []byte) error {
 		t := &service.Task{Id: string(k)}
 		err := json.Unmarshal(v, t)
 		if err != nil {
 			return errors.New("failed to retrieve tasks: " + err.Error())
 		}
+
 		tasks = append(tasks, t)
 		return nil
 	})
 	if err != nil {
 		return nil, errors.New("failed to retrieve tasks: " + err.Error())
 	}
+
 	result := &service.ResultRetrieve{
 		Tasks: tasks,
 	}
+
 	return result, err
 }
