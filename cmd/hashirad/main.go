@@ -17,6 +17,7 @@ func initializeDB() (database.Databaser, error) {
 	if err != nil {
 		return nil, errors.New("failed to current user: " + err.Error())
 	}
+
 	configDir := filepath.Join(usr.HomeDir, ".config", "hashira")
 	err = os.MkdirAll(configDir, 0700)
 	if err != nil {
