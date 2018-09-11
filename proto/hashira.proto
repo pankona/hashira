@@ -20,8 +20,7 @@ message Task {
   string id        = 1;
   string name      = 2;
   Place  place     = 3;
-  int32  Priority  = 4;
-  bool   isDeleted = 5;
+  bool   isDeleted = 4;
 }
 
 message CommandCreate {
