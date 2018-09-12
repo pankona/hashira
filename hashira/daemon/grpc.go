@@ -88,3 +88,11 @@ func (d *Daemon) Retrieve(ctx context.Context, cr *service.CommandRetrieve) (*se
 
 	return result, err
 }
+
+func (d *Daemon) UpdatePriority(ctx context.Context, cup *service.CommandUpdatePriority) (*service.ResultUpdatePriority, error) {
+	panic("implement me")
+}
+
+func (d *Daemon) RetrievePriority(ctx context.Context, crp *service.CommandRetrievePriority) (*service.ResultRetrievePriority, error) {
+	panic("implement me")
+}
