@@ -77,3 +77,16 @@ func (c *Client) Retrieve(ctx context.Context) ([]*service.Task, error) {
 		})
 	return tasks, err
 }
+
+// UpdatePriority updates tasks' priorities
+func (c *Client) UpdatePriority(ctx context.Context, place service.Place, ids []string) ([]string, error) {
+	// TODO: implement
+	return nil, nil
+
+}
+
+// RetrievePriority retrieves tasks' priorities
+func (c *Client) RetrievePriority(ctx context.Context, place service.Place) ([]string, error) {
+	// TODO: implement
+	return nil, nil
+}
