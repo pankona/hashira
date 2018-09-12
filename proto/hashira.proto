@@ -7,6 +7,8 @@ service Hashira {
   rpc Update(CommandUpdate) returns (ResultUpdate) {}
   rpc Delete(CommandDelete) returns (ResultDelete) {}
   rpc Retrieve(CommandRetrieve) returns (ResultRetrieve) {}
+  rpc UpdatePriority(CommandUpdatePriority) returns (ResultUpdatePriority) {}
+  rpc RetrievePriority(CommandRetrievePriority) returns (ResultRetrievePriority) {}
 }
 
 enum Place {
@@ -40,6 +42,15 @@ message CommandDelete {
 message CommandRetrieve {
 }
 
+message CommandUpdatePriority {
+  Place place         = 1;
+  repeated string ids = 2;
+}
+
+message CommandRetrievePriority {
+  Place place = 1;
+}
+
 message ResultCreate {
   Task task = 1;
 }
@@ -54,4 +65,14 @@ message ResultDelete {
 
 message ResultRetrieve {
   repeated Task tasks = 1;
+}
+
+message ResultUpdatePriority {
+  Place place         = 1;
+  repeated string ids = 2;
+}
+
+message ResultRetrievePriority {
+  Place place         = 1;
+  repeated string ids = 2;
 }
