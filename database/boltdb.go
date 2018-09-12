@@ -58,12 +58,12 @@ func (b *BoltDB) withDBOpenClose(f func() error) error {
 }
 
 // Save stores specified key/value to database
-func (b *BoltDB) Save(id string, value []byte) error {
+func (b *BoltDB) Save(bucket, id string, value []byte) error {
 	return b.withDBOpenClose(
 		func() error {
 			return b.db.Update(
 				func(tx *bolt.Tx) error {
-					b, err := tx.CreateBucketIfNotExists([]byte("taskBucket"))
+					b, err := tx.CreateBucketIfNotExists([]byte(bucket))
 					if err != nil {
 						return errors.New("failed to create bucket: " + err.Error())
 					}
@@ -82,13 +82,13 @@ func (b *BoltDB) Save(id string, value []byte) error {
 }
 
 // Load loads data by id
-func (b *BoltDB) Load(id string) ([]byte, error) {
+func (b *BoltDB) Load(bucket, id string) ([]byte, error) {
 	var ret []byte
 	err := b.withDBOpenClose(
 		func() error {
 			err := b.db.View(
 				func(tx *bolt.Tx) error {
-					b := tx.Bucket([]byte("taskBucket"))
+					b := tx.Bucket([]byte(bucket))
 					v := b.Get([]byte(id))
 					ret = make([]byte, len(v))
 					copy(ret, v)
@@ -103,12 +103,12 @@ func (b *BoltDB) Load(id string) ([]byte, error) {
 }
 
 // ForEach loops for all items already saved and invoke specified function
-func (b *BoltDB) ForEach(f func(k, v []byte) error) error {
+func (b *BoltDB) ForEach(bucket string, f func(k, v []byte) error) error {
 	err := b.withDBOpenClose(
 		func() error {
 			err := b.db.View(
 				func(tx *bolt.Tx) error {
-					b := tx.Bucket([]byte("taskBucket"))
+					b := tx.Bucket([]byte(bucket))
 					err := b.ForEach(f)
 					if err != nil {
 						return errors.New("for each stopped: " + err.Error())

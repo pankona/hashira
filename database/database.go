@@ -4,7 +4,7 @@ package database
 type Databaser interface {
 	Initialize(dbpath string) error
 	Finalize() error
-	Save(id string, value []byte) error
-	Load(id string) ([]byte, error)
-	ForEach(func(k, v []byte) error) error
+	Save(bucket, id string, value []byte) error
+	Load(bucket, id string) ([]byte, error)
+	ForEach(bucket string, f func(k, v []byte) error) error
 }
