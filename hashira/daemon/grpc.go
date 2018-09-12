@@ -66,6 +66,19 @@ func (d *Daemon) Delete(ctx context.Context, cd *service.CommandDelete) (*servic
 
 // Retrieve retrieves all existing tasks
 func (d *Daemon) Retrieve(ctx context.Context, cr *service.CommandRetrieve) (*service.ResultRetrieve, error) {
+	tasks, err := d.retrieve()
+	if err != nil {
+		return nil, errors.New("failed to retrieve tasks: " + err.Error())
+	}
+
+	result := &service.ResultRetrieve{
+		Tasks: tasks,
+	}
+
+	return result, err
+}
+
+func (d *Daemon) retrieve() ([]*service.Task, error) {
 	tasks := make([]*service.Task, 0)
 
 	err := d.DB.ForEach(taskBucket, func(k, v []byte) error {
@@ -79,14 +92,10 @@ func (d *Daemon) Retrieve(ctx context.Context, cr *service.CommandRetrieve) (*se
 		return nil
 	})
 	if err != nil {
-		return nil, errors.New("failed to retrieve tasks: " + err.Error())
+		return nil, err
 	}
 
-	result := &service.ResultRetrieve{
-		Tasks: tasks,
-	}
-
-	return result, err
+	return tasks, nil
 }
 
 func (d *Daemon) UpdatePriority(ctx context.Context, cup *service.CommandUpdatePriority) (*service.ResultUpdatePriority, error) {
