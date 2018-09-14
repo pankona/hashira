@@ -80,13 +80,36 @@ func (c *Client) Retrieve(ctx context.Context) ([]*service.Task, error) {
 
 // UpdatePriority updates tasks' priorities
 func (c *Client) UpdatePriority(ctx context.Context, place service.Place, ids []string) ([]string, error) {
-	// TODO: implement
-	return nil, nil
+	var ret []string
+	err := c.withClient(func(hc service.HashiraClient) error {
+		cup := &service.CommandUpdatePriority{
+			Place: place,
+			Ids:   ids,
+		}
+		result, err := hc.UpdatePriority(ctx, cup)
+		if err != nil {
+			return errors.New("UpdatePriority failed: " + err.Error())
+		}
+		ret = result.Ids
+		return nil
+	})
+	return ret, err
 
 }
 
 // RetrievePriority retrieves tasks' priorities
 func (c *Client) RetrievePriority(ctx context.Context, place service.Place) ([]string, error) {
-	// TODO: implement
-	return nil, nil
+	var ret []string
+	err := c.withClient(func(hc service.HashiraClient) error {
+		crp := &service.CommandRetrievePriority{
+			Place: place,
+		}
+		result, err := hc.RetrievePriority(ctx, crp)
+		if err != nil {
+			return errors.New("RetrievePriority failed: " + err.Error())
+		}
+		ret = result.Ids
+		return nil
+	})
+	return ret, err
 }
