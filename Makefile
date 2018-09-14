@@ -16,7 +16,7 @@ $(PB_GO_DIR)/%.pb.go: $(PROTO_DIR)/%.proto
 	protoc -I $(PROTO_DIR) --go_out=plugins=grpc:$(dir $@) ./$<
 
 lint:
-	gometalinter.v2 \
+	gometalinter \
 		--vendor \
 		--deadline=300s \
 		--skip=$(CURDIR)/cmd/hashira-gui \
