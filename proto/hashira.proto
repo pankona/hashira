@@ -3,76 +3,81 @@ syntax = "proto3";
 package service;
 
 service Hashira {
-  rpc Create(CommandCreate) returns (ResultCreate) {}
-  rpc Update(CommandUpdate) returns (ResultUpdate) {}
-  rpc Delete(CommandDelete) returns (ResultDelete) {}
-  rpc Retrieve(CommandRetrieve) returns (ResultRetrieve) {}
-  rpc UpdatePriority(CommandUpdatePriority) returns (ResultUpdatePriority) {}
-  rpc RetrievePriority(CommandRetrievePriority) returns (ResultRetrievePriority) {}
+    rpc Create(CommandCreate) returns (ResultCreate) {}
+    rpc Update(CommandUpdate) returns (ResultUpdate) {}
+    rpc Delete(CommandDelete) returns (ResultDelete) {}
+    rpc Retrieve(CommandRetrieve) returns (ResultRetrieve) {}
+    rpc UpdatePriority(CommandUpdatePriority) returns (ResultUpdatePriority) {}
+    rpc RetrievePriority(CommandRetrievePriority) returns (ResultRetrievePriority) {}
 }
 
 enum Place {
-  BACKLOG = 0;
-  TODO    = 1;
-  DOING   = 2;
-  DONE    = 3;
+    BACKLOG = 0;
+    TODO    = 1;
+    DOING   = 2;
+    DONE    = 3;
 }
 
 message Task {
-  string id        = 1;
-  string name      = 2;
-  Place  place     = 3;
-  bool   isDeleted = 4;
+    string id        = 1;
+    string name      = 2;
+    Place  place     = 3;
+    bool   isDeleted = 4;
+}
+
+message Priority {
+    Place place         = 1;
+    repeated string ids = 2;
 }
 
 message CommandCreate {
-  string name = 1;
-  Place place = 2;
+    string name = 1;
+    Place place = 2;
 }
 
 message CommandUpdate {
-  string id   = 1;
-  Place place = 2;
+    string id   = 1;
+    Place place = 2;
 }
 
 message CommandDelete {
-  string id = 1;
+    string id = 1;
 }
 
 message CommandRetrieve {
 }
 
 message CommandUpdatePriority {
-  Place place         = 1;
-  repeated string ids = 2;
+    Place place         = 1;
+    repeated string ids = 2;
 }
 
 message CommandRetrievePriority {
-  Place place = 1;
+    Place place = 1;
 }
 
 message ResultCreate {
-  Task task = 1;
+    Task task = 1;
 }
 
 message ResultUpdate {
-  Task task = 1;
+    Task task = 1;
 }
 
 message ResultDelete {
-  Task task = 1;
+    Task task = 1;
 }
 
 message ResultRetrieve {
-  repeated Task tasks = 1;
+    repeated Task tasks = 1;
 }
 
 message ResultUpdatePriority {
-  Place place         = 1;
-  repeated string ids = 2;
+    Place place         = 1;
+    repeated string ids = 2;
 }
 
 message ResultRetrievePriority {
-  Place place         = 1;
-  repeated string ids = 2;
+    Place place         = 1;
+    repeated string ids = 2;
 }
