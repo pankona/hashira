@@ -79,37 +79,37 @@ func (c *Client) Retrieve(ctx context.Context) ([]*service.Task, error) {
 }
 
 // UpdatePriority updates tasks' priorities
-func (c *Client) UpdatePriority(ctx context.Context, place service.Place, ids []string) ([]string, error) {
-	var ret []string
+func (c *Client) UpdatePriority(ctx context.Context, priorities []*service.Priority) ([]*service.Priority, error) {
+	var ret []*service.Priority
+
 	err := c.withClient(func(hc service.HashiraClient) error {
 		cup := &service.CommandUpdatePriority{
-			Place: place,
-			Ids:   ids,
+			Priorities: priorities,
 		}
-		result, err := hc.UpdatePriority(ctx, cup)
+		p, err := hc.UpdatePriority(ctx, cup)
 		if err != nil {
 			return errors.New("UpdatePriority failed: " + err.Error())
 		}
-		ret = result.Ids
+		ret = p.Priorities
 		return nil
 	})
-	return ret, err
 
+	return ret, err
 }
 
 // RetrievePriority retrieves tasks' priorities
-func (c *Client) RetrievePriority(ctx context.Context, place service.Place) ([]string, error) {
-	var ret []string
+func (c *Client) RetrievePriority(ctx context.Context, place service.Place) ([]*service.Priority, error) {
+	var ret []*service.Priority
+
 	err := c.withClient(func(hc service.HashiraClient) error {
-		crp := &service.CommandRetrievePriority{
-			Place: place,
-		}
-		result, err := hc.RetrievePriority(ctx, crp)
+		crp := &service.CommandRetrievePriority{}
+		p, err := hc.RetrievePriority(ctx, crp)
 		if err != nil {
 			return errors.New("RetrievePriority failed: " + err.Error())
 		}
-		ret = result.Ids
+		ret = p.Priorities
 		return nil
 	})
+
 	return ret, err
 }

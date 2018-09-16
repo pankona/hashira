@@ -14,6 +14,13 @@ const (
 	priorityBucket = "priorityBucket"
 )
 
+var places = []service.Place{
+	service.Place_BACKLOG,
+	service.Place_TODO,
+	service.Place_DOING,
+	service.Place_DONE,
+}
+
 // Create creates a new task
 func (d *Daemon) Create(ctx context.Context, cc *service.CommandCreate) (*service.ResultCreate, error) {
 	t := &service.Task{
@@ -103,77 +110,131 @@ func (d *Daemon) retrieve() ([]*service.Task, error) {
 	return tasks, nil
 }
 
+// returns map[Place.String()]*service.Task
+func (d *Daemon) retrieveMap() (map[string][]*service.Task, error) {
+	m := make(map[string][]*service.Task, 0)
+	for _, v := range places {
+		m[v.String()] = make([]*service.Task, 0)
+	}
+
+	err := d.DB.ForEach(taskBucket, func(k, v []byte) error {
+		t := &service.Task{Id: string(k)}
+		err := json.Unmarshal(v, t)
+		if err != nil {
+			return errors.New("failed to retrieve tasks: " + err.Error())
+		}
+
+		if t.IsDeleted {
+			return nil
+		}
+
+		m[t.Place.String()] = append(m[t.Place.String()], t)
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return m, nil
+}
+
 func (d *Daemon) UpdatePriority(ctx context.Context, cup *service.CommandUpdatePriority) (*service.ResultUpdatePriority, error) {
-	p := service.Priority{
-		Place: cup.Place,
-		Ids:   cup.Ids,
-	}
-	buf, err := json.Marshal(p)
-	if err != nil {
-		return nil, errors.New("failed to marshal CommandUpdatePriority into json: " + err.Error())
+	for _, v := range cup.Priorities {
+		p := service.Priority{
+			Place: v.Place,
+			Ids:   v.Ids,
+		}
+
+		buf, err := json.Marshal(p)
+		if err != nil {
+			return nil, errors.New("failed to marshal CommandUpdatePriority into json: " + err.Error())
+		}
+
+		err = d.DB.Save(priorityBucket, v.Place.String(), buf)
+		if err != nil {
+			return nil, errors.New("failed to save priority on database: " + err.Error())
+		}
 	}
 
-	err = d.DB.Save(priorityBucket, cup.Place.String(), buf)
-	if err != nil {
-		return nil, errors.New("failed to save priority on database: " + err.Error())
+	priorities, err := d.retrievePriority()
+	ret := make([]*service.Priority, 0)
+	for _, v := range priorities {
+		ret = append(ret, v)
 	}
 
-	result, err := d.retrievePriority(cup.Place)
-	return &service.ResultUpdatePriority{
-		Place: result.Place,
-		Ids:   result.Ids,
-	}, err
+	return &service.ResultUpdatePriority{Priorities: ret}, err
+}
+
+func toPlace(s string) service.Place {
+	switch s {
+	case service.Place_BACKLOG.String():
+		return service.Place_BACKLOG
+	case service.Place_TODO.String():
+		return service.Place_TODO
+	case service.Place_DOING.String():
+		return service.Place_DOING
+	case service.Place_DONE.String():
+		return service.Place_DONE
+	default:
+		panic("unknown place specified: " + s)
+	}
 }
 
 func (d *Daemon) RetrievePriority(ctx context.Context, crp *service.CommandRetrievePriority) (*service.ResultRetrievePriority, error) {
-	result, err := d.retrievePriority(crp.Place)
+	priorities, err := d.retrievePriority()
 	if err != nil {
 		// TODO: error handling
 	}
 
-	tasks, err := d.retrieve()
+	tasks, err := d.retrieveMap()
 	if err != nil {
 		// TODO: error handling
 	}
 
-	if len(result.Ids) != len(tasks) {
-		m := make(map[string]struct{})
+	for k := range tasks {
+		ids := priorities[k].Ids
+		tasks := tasks[k]
+		if len(ids) != len(tasks) {
+			m := make(map[string]struct{})
 
-		for i := range result.Ids {
-			for j := range tasks {
-				if result.Ids[i] == tasks[j].Id {
-					m[result.Ids[i]] = struct{}{}
+			for i := range ids {
+				for j := range tasks {
+					if ids[i] == tasks[j].Id {
+						m[ids[i]] = struct{}{}
+					}
 				}
 			}
-		}
 
-		if len(result.Ids) < len(tasks) {
-			// must cover lacked IDs
-			for _, v := range tasks {
-				if _, ok := m[v.Id]; ok {
-					continue
+			if len(ids) < len(tasks) {
+				// must cover lacked IDs
+				for _, v := range tasks {
+					if _, ok := m[v.Id]; ok {
+						continue
+					}
+
+					priorities[k].Ids = append(priorities[k].Ids, v.Id)
 				}
-
-				result.Ids = append(result.Ids, v.Id)
 			}
-		}
 
-		if len(result.Ids) > len(tasks) {
-			// must remove extra IDs
-			for _, v := range result.Ids {
-				if _, ok := m[v]; ok {
-					continue
+			if len(ids) > len(tasks) {
+				// must remove extra IDs
+				for _, v := range ids {
+					if _, ok := m[v]; ok {
+						continue
+					}
+
+					priorities[k].Ids = remove(priorities[k].Ids, v)
 				}
-
-				result.Ids = remove(result.Ids, v)
 			}
 		}
 	}
 
-	return &service.ResultRetrievePriority{
-		Place: result.Place,
-		Ids:   result.Ids,
-	}, err
+	ret := make([]*service.Priority, 0)
+	for _, v := range priorities {
+		ret = append(ret, v)
+	}
+
+	return &service.ResultRetrievePriority{Priorities: ret}, err
 }
 
 func remove(ids []string, id string) []string {
@@ -187,17 +248,22 @@ func remove(ids []string, id string) []string {
 	return ret
 }
 
-func (d *Daemon) retrievePriority(place service.Place) (*service.Priority, error) {
-	buf, err := d.DB.Load(priorityBucket, place.String())
-	if err != nil {
-		return nil, err
+func (d *Daemon) retrievePriority() (map[string]*service.Priority, error) {
+	ret := make(map[string]*service.Priority)
+
+	for _, v := range places {
+		buf, err := d.DB.Load(priorityBucket, v.String())
+		if err != nil {
+			return nil, err
+		}
+
+		p := &service.Priority{}
+		err = json.Unmarshal(buf, p)
+		if err != nil {
+			return nil, fmt.Errorf("failed to unmarshal loaded data into service.Priority: %s", err.Error())
+		}
+		ret[v.String()] = p
 	}
 
-	p := &service.Priority{}
-	err = json.Unmarshal(buf, p)
-	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal loaded data into service.Priority: %s", err.Error())
-	}
-
-	return p, nil
+	return ret, nil
 }
