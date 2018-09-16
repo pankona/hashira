@@ -165,21 +165,6 @@ func (d *Daemon) UpdatePriority(ctx context.Context, cup *service.CommandUpdateP
 	return &service.ResultUpdatePriority{Priorities: ret}, err
 }
 
-func toPlace(s string) service.Place {
-	switch s {
-	case service.Place_BACKLOG.String():
-		return service.Place_BACKLOG
-	case service.Place_TODO.String():
-		return service.Place_TODO
-	case service.Place_DOING.String():
-		return service.Place_DOING
-	case service.Place_DONE.String():
-		return service.Place_DONE
-	default:
-		panic("unknown place specified: " + s)
-	}
-}
-
 func (d *Daemon) RetrievePriority(ctx context.Context, crp *service.CommandRetrievePriority) (*service.ResultRetrievePriority, error) {
 	priorities, err := d.retrievePriority()
 	if err != nil {
