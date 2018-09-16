@@ -30,6 +30,10 @@ message Priority {
     repeated string ids = 2;
 }
 
+message Priorities {
+    map<string, Priority> byPlace = 1;
+}
+
 message CommandCreate {
     string name = 1;
     Place place = 2;
