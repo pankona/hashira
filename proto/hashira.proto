@@ -30,10 +30,6 @@ message Priority {
     repeated string ids = 2;
 }
 
-message Priorities {
-    map<string, Priority> byPlace = 1;
-}
-
 message CommandCreate {
     string name = 1;
     Place place = 2;
@@ -52,7 +48,7 @@ message CommandRetrieve {
 }
 
 message CommandUpdatePriority {
-    Priorities priorities = 1;
+    repeated Priority priorities = 1;
 }
 
 message CommandRetrievePriority {
@@ -75,9 +71,9 @@ message ResultRetrieve {
 }
 
 message ResultUpdatePriority {
-    Priorities priorities = 1;
+    repeated Priority priorities = 1;
 }
 
 message ResultRetrievePriority {
-    Priorities priorities = 1;
+    repeated Priority priorities = 1;
 }
