@@ -136,10 +136,9 @@ func (d *Daemon) RetrievePriority(ctx context.Context, crp *service.CommandRetri
 		// TODO: error handling
 	}
 
-	m := make(map[string]struct{})
-
 	if len(result.Ids) != len(tasks) {
-		// must cover lacked IDs
+		m := make(map[string]struct{})
+
 		for i := range result.Ids {
 			for j := range tasks {
 				if result.Ids[i] == tasks[j].Id {
@@ -148,12 +147,26 @@ func (d *Daemon) RetrievePriority(ctx context.Context, crp *service.CommandRetri
 			}
 		}
 
-		for _, v := range tasks {
-			if _, ok := m[v.Id]; ok {
-				continue
-			}
+		if len(result.Ids) < len(tasks) {
+			// must cover lacked IDs
+			for _, v := range tasks {
+				if _, ok := m[v.Id]; ok {
+					continue
+				}
 
-			result.Ids = append(result.Ids, v.Id)
+				result.Ids = append(result.Ids, v.Id)
+			}
+		}
+
+		if len(result.Ids) > len(tasks) {
+			// must remove extra IDs
+			for _, v := range result.Ids {
+				if _, ok := m[v]; ok {
+					continue
+				}
+
+				result.Ids = remove(result.Ids, v)
+			}
 		}
 	}
 
@@ -161,6 +174,17 @@ func (d *Daemon) RetrievePriority(ctx context.Context, crp *service.CommandRetri
 		Place: result.Place,
 		Ids:   result.Ids,
 	}, err
+}
+
+func remove(ids []string, id string) []string {
+	var ret []string
+	for _, v := range ids {
+		if v == id {
+			continue
+		}
+		ret = append(ret, v)
+	}
+	return ret
 }
 
 func (d *Daemon) retrievePriority(place service.Place) (*service.Priority, error) {
