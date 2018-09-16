@@ -52,12 +52,10 @@ message CommandRetrieve {
 }
 
 message CommandUpdatePriority {
-    Place place         = 1;
-    repeated string ids = 2;
+    Priorities priorities = 1;
 }
 
 message CommandRetrievePriority {
-    Place place = 1;
 }
 
 message ResultCreate {
@@ -77,11 +75,9 @@ message ResultRetrieve {
 }
 
 message ResultUpdatePriority {
-    Place place         = 1;
-    repeated string ids = 2;
+    Priorities priorities = 1;
 }
 
 message ResultRetrievePriority {
-    Place place         = 1;
-    repeated string ids = 2;
+    Priorities priorities = 1;
 }
