@@ -89,7 +89,13 @@ func (b *BoltDB) Load(bucket, id string) ([]byte, error) {
 			err := b.db.View(
 				func(tx *bolt.Tx) error {
 					b := tx.Bucket([]byte(bucket))
+					if b == nil {
+						return nil
+					}
 					v := b.Get([]byte(id))
+					if v == nil {
+						return nil
+					}
 					ret = make([]byte, len(v))
 					copy(ret, v)
 					return nil

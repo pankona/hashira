@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"strings"
 	"sync"
 
@@ -190,6 +191,11 @@ func (v *View) OnEvent(event string, data ...interface{}) {
 	case "update":
 		tasks := data[0].([]*service.Task)
 		priorities := data[1].([]*service.Priority)
+		for _, p := range priorities {
+			log.Printf("view receives priority of : %s", p.Place.String())
+			log.Printf("view receives priority : %v", p)
+		}
+
 		for i := range v.pains {
 			v.pains[i].tasks = nil
 			for _, t := range tasks {

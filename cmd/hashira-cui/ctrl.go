@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 
 	"github.com/pankona/hashira/service"
 )
@@ -47,6 +48,10 @@ func (c *Ctrl) Update(ctx context.Context) error {
 	}
 
 	priorities, err := c.m.RetrievePriority(ctx)
+	log.Printf("ctrl retrieves priority: %v", priorities)
+	if err != nil {
+		return err
+	}
 
 	c.pub.Publish("update", tasks, priorities)
 	return nil

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"log"
 
 	"github.com/jroimartin/gocui"
 	"github.com/pankona/hashira/service"
@@ -31,6 +32,8 @@ func (p *Pane) Layout(g *gocui.Gui, selectedIndex int) error {
 
 	v.Clear()
 
+	log.Printf("Tasks (%s): %v", p.place.String(), p.tasks)
+	log.Printf("Priorities (%s): %v", p.place, p.priorities)
 	return renderTasks(v, p.tasks, p.priorities, selectedIndex)
 }
 

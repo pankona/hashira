@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
+	"log"
 
 	"github.com/pankona/hashira/service"
 )
@@ -168,12 +168,12 @@ func (d *Daemon) UpdatePriority(ctx context.Context, cup *service.CommandUpdateP
 func (d *Daemon) RetrievePriority(ctx context.Context, crp *service.CommandRetrievePriority) (*service.ResultRetrievePriority, error) {
 	priorities, err := d.retrievePriority()
 	if err != nil {
-		// TODO: error handling
+		return nil, err
 	}
 
 	tasks, err := d.retrieveMap()
 	if err != nil {
-		// TODO: error handling
+		return nil, err
 	}
 
 	for k := range tasks {
@@ -219,6 +219,8 @@ func (d *Daemon) RetrievePriority(ctx context.Context, crp *service.CommandRetri
 		ret = append(ret, v)
 	}
 
+	log.Printf("priorities: %v", ret)
+
 	return &service.ResultRetrievePriority{Priorities: ret}, err
 }
 
@@ -245,7 +247,8 @@ func (d *Daemon) retrievePriority() (map[string]*service.Priority, error) {
 		p := &service.Priority{}
 		err = json.Unmarshal(buf, p)
 		if err != nil {
-			return nil, fmt.Errorf("failed to unmarshal loaded data into service.Priority: %s", err.Error())
+			log.Printf("failed to unmarshal loaded data into service.Priority: %s", err.Error())
+			p = &service.Priority{Place: v}
 		}
 		ret[v.String()] = p
 	}
