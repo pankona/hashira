@@ -8,8 +8,9 @@ PROTOS = $(shell find $(PROTO_DIR) -printf "%f\n" | grep proto$$)
 PB_GOS = $(PROTOS:%.proto=$(PB_GO_DIR)/%.pb.go)
 
 build:
-	cd $(CURDIR)/cmd/hashira  && go build
-	cd $(CURDIR)/cmd/hashirad && go build
+	cd $(CURDIR)/cmd/hashira     && go build
+	cd $(CURDIR)/cmd/hashirad    && go build
+	cd $(CURDIR)/cmd/hashira-cui && go build
 
 all: genproto lint
 	make build
