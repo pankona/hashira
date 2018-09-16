@@ -12,7 +12,7 @@ import (
 
 func main() {
 
-	logger, err := syslog.New(syslog.LOG_INFO|syslog.LOG_LOCAL0, "cps_supervisor")
+	logger, err := syslog.New(syslog.LOG_INFO|syslog.LOG_LOCAL0, "hashira-cui")
 	log.SetOutput(logger)
 
 	var (
