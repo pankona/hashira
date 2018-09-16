@@ -99,7 +99,27 @@ func (d *Daemon) retrieve() ([]*service.Task, error) {
 }
 
 func (d *Daemon) UpdatePriority(ctx context.Context, cup *service.CommandUpdatePriority) (*service.ResultUpdatePriority, error) {
-	panic("implement me")
+	p := service.Priority{
+		Place: cup.Place,
+		Ids:   cup.Ids,
+	}
+	buf, err := json.Marshal(p)
+	if err != nil {
+		return nil, errors.New("failed to marshal CommandUpdatePriority into json: " + err.Error())
+	}
+
+	err = d.DB.Save(priorityBucket, "0", buf)
+	if err != nil {
+		return nil, errors.New("failed to save priority on database: " + err.Error())
+	}
+
+	// TODO: should retrieve from DB
+	result := &service.ResultUpdatePriority{
+		Place: cup.Place,
+		Ids:   cup.Ids,
+	}
+
+	return result, nil
 }
 
 func (d *Daemon) RetrievePriority(ctx context.Context, crp *service.CommandRetrievePriority) (*service.ResultRetrievePriority, error) {
