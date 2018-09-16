@@ -89,6 +89,10 @@ func (d *Daemon) retrieve() ([]*service.Task, error) {
 			return errors.New("failed to retrieve tasks: " + err.Error())
 		}
 
+		if t.IsDeleted {
+			return nil
+		}
+
 		tasks = append(tasks, t)
 		return nil
 	})
