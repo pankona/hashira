@@ -7,10 +7,15 @@ PB_GO_DIR = service
 PROTOS = $(shell find $(PROTO_DIR) -printf "%f\n" | grep proto$$)
 PB_GOS = $(PROTOS:%.proto=$(PB_GO_DIR)/%.pb.go)
 
+BUILD_CMD ?= go build
+
 build:
-	cd $(CURDIR)/cmd/hashira     && go build
-	cd $(CURDIR)/cmd/hashirad    && go build
-	cd $(CURDIR)/cmd/hashira-cui && go build
+	cd $(CURDIR)/cmd/hashira     && $(BUILD_CMD)
+	cd $(CURDIR)/cmd/hashirad    && $(BUILD_CMD)
+	cd $(CURDIR)/cmd/hashira-cui && $(BUILD_CMD)
+
+install:
+	@BUILD_CMD="go install" make build
 
 all: genproto lint
 	make build
