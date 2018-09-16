@@ -98,7 +98,7 @@ func (c *Client) UpdatePriority(ctx context.Context, priorities []*service.Prior
 }
 
 // RetrievePriority retrieves tasks' priorities
-func (c *Client) RetrievePriority(ctx context.Context, place service.Place) ([]*service.Priority, error) {
+func (c *Client) RetrievePriority(ctx context.Context) ([]*service.Priority, error) {
 	var ret []*service.Priority
 
 	err := c.withClient(func(hc service.HashiraClient) error {
