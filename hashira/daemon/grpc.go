@@ -127,13 +127,43 @@ func (d *Daemon) UpdatePriority(ctx context.Context, cup *service.CommandUpdateP
 
 func (d *Daemon) RetrievePriority(ctx context.Context, crp *service.CommandRetrievePriority) (*service.ResultRetrievePriority, error) {
 	result, err := d.retrievePriority(crp.Place)
+	if err != nil {
+		// TODO: error handling
+	}
+
+	tasks, err := d.retrieve()
+	if err != nil {
+		// TODO: error handling
+	}
+
+	m := make(map[string]struct{})
+
+	if len(result.Ids) != len(tasks) {
+		// must cover lacked IDs
+		for i := range result.Ids {
+			for j := range tasks {
+				if result.Ids[i] == tasks[j].Id {
+					m[result.Ids[i]] = struct{}{}
+				}
+			}
+		}
+
+		for _, v := range tasks {
+			if _, ok := m[v.Id]; ok {
+				continue
+			}
+
+			result.Ids = append(result.Ids, v.Id)
+		}
+	}
+
 	return &service.ResultRetrievePriority{
 		Place: result.Place,
 		Ids:   result.Ids,
 	}, err
 }
 
-func (d *Daemon) retrievePriority(place service.Place) (*service.ResultRetrievePriority, error) {
+func (d *Daemon) retrievePriority(place service.Place) (*service.Priority, error) {
 	buf, err := d.DB.Load(priorityBucket, place.String())
 	if err != nil {
 		return nil, err
