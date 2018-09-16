@@ -189,11 +189,18 @@ func (v *View) OnEvent(event string, data ...interface{}) {
 	switch event {
 	case "update":
 		tasks := data[0].([]*service.Task)
+		priorities := data[1].([]*service.Priority)
 		for i := range v.pains {
 			v.pains[i].tasks = nil
 			for _, t := range tasks {
-				if !t.IsDeleted && v.pains[i].place == t.Place {
+				if v.pains[i].place == t.Place {
 					v.pains[i].tasks = append(v.pains[i].tasks, t)
+				}
+			}
+
+			for _, p := range priorities {
+				if v.pains[i].place == p.Place {
+					v.pains[i].priorities = p.Ids
 				}
 			}
 		}

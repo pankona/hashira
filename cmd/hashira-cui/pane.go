@@ -9,12 +9,13 @@ import (
 )
 
 type Pane struct {
-	name  string
-	index int // place of this pane
-	left  *Pane
-	right *Pane
-	place service.Place
-	tasks []*service.Task
+	name       string
+	index      int // place of this pane
+	left       *Pane
+	right      *Pane
+	place      service.Place
+	tasks      []*service.Task
+	priorities []string // array of task IDs
 }
 
 func (p *Pane) Layout(g *gocui.Gui, selectedIndex int) error {
