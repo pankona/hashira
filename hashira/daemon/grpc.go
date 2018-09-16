@@ -109,27 +109,33 @@ func (d *Daemon) UpdatePriority(ctx context.Context, cup *service.CommandUpdateP
 		return nil, errors.New("failed to marshal CommandUpdatePriority into json: " + err.Error())
 	}
 
-	err = d.DB.Save(priorityBucket, "0", buf)
+	err = d.DB.Save(priorityBucket, cup.Place.String(), buf)
 	if err != nil {
 		return nil, errors.New("failed to save priority on database: " + err.Error())
 	}
 
-	// TODO: should retrieve from DB
-	result := &service.ResultUpdatePriority{
-		Place: cup.Place,
-		Ids:   cup.Ids,
-	}
-
-	return result, nil
+	result, err := d.retrievePriority(cup.Place)
+	return &service.ResultUpdatePriority{
+		Place: result.Place,
+		Ids:   result.Ids,
+	}, err
 }
 
 func (d *Daemon) RetrievePriority(ctx context.Context, crp *service.CommandRetrievePriority) (*service.ResultRetrievePriority, error) {
-	buf, err := d.DB.Load(priorityBucket, "0")
+	result, err := d.retrievePriority(crp.Place)
+	return &service.ResultRetrievePriority{
+		Place: result.Place,
+		Ids:   result.Ids,
+	}, err
+}
+
+func (d *Daemon) retrievePriority(place service.Place) (*service.ResultRetrievePriority, error) {
+	buf, err := d.DB.Load(priorityBucket, place.String())
 	if err != nil {
 		return nil, err
 	}
 
-	var p service.Priority{}
+	p := &service.Priority{}
 	err = json.Unmarshal(buf, p)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal loaded data into service.Priority: %s", err.Error())
