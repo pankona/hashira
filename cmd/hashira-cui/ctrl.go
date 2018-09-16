@@ -46,6 +46,8 @@ func (c *Ctrl) Update(ctx context.Context) error {
 		return err
 	}
 
-	c.pub.Publish("update", tasks)
+	priorities, err := c.m.RetrievePriority(ctx)
+
+	c.pub.Publish("update", tasks, priorities)
 	return nil
 }

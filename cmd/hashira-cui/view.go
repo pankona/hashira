@@ -185,10 +185,10 @@ func (v *View) Layout(g *gocui.Gui) error {
 	return nil
 }
 
-func (v *View) OnEvent(event string, data interface{}) {
+func (v *View) OnEvent(event string, data ...interface{}) {
 	switch event {
 	case "update":
-		tasks := data.([]*service.Task)
+		tasks := data[0].([]*service.Task)
 		for i := range v.pains {
 			v.pains[i].tasks = nil
 			for _, t := range tasks {
