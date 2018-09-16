@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/pankona/hashira/service"
 )
@@ -123,5 +124,16 @@ func (d *Daemon) UpdatePriority(ctx context.Context, cup *service.CommandUpdateP
 }
 
 func (d *Daemon) RetrievePriority(ctx context.Context, crp *service.CommandRetrievePriority) (*service.ResultRetrievePriority, error) {
-	panic("implement me")
+	buf, err := d.DB.Load(priorityBucket, "0")
+	if err != nil {
+		return nil, err
+	}
+
+	var p service.Priority{}
+	err = json.Unmarshal(buf, p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal loaded data into service.Priority: %s", err.Error())
+	}
+
+	return p, nil
 }
