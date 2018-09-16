@@ -30,18 +30,26 @@ func (p *Pane) Layout(g *gocui.Gui, selectedIndex int) error {
 	}
 
 	v.Clear()
-	return renderTasks(v, p.tasks, selectedIndex)
+
+	return renderTasks(v, p.tasks, p.priorities, selectedIndex)
 }
 
 func (p *Pane) len() int {
 	return len(p.tasks)
 }
 
-func renderTasks(w io.Writer, tasks []*service.Task, selectedIndex int) error {
+func renderTasks(w io.Writer, tasks []*service.Task, priorities []string, selectedIndex int) error {
+	m := make(map[string]*service.Task)
+	for _, v := range tasks {
+		m[v.Id] = v
+	}
+
 	var itemNum int
+	var err error
+
 	// render tasks for this pane
-	for _, task := range tasks {
-		var err error
+	for _, p := range priorities {
+		task := m[p]
 		if itemNum == selectedIndex {
 			_, err = fmt.Fprintf(w, "\033[3%d;%dm%s\033[0m\n", 7, 4, task.Name)
 		} else {
@@ -52,5 +60,6 @@ func renderTasks(w io.Writer, tasks []*service.Task, selectedIndex int) error {
 		}
 		itemNum++
 	}
+
 	return nil
 }
