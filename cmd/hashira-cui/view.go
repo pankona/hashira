@@ -13,6 +13,8 @@ type View struct {
 	pains         map[string]*Pane
 	g             *gocui.Gui
 	selectedIndex int
+	grabbedTask   *service.Task
+	priorities    []*service.Priority
 	Delegater
 }
 
@@ -33,16 +35,26 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 
 	v.pains[pn[0]] = &Pane{
 		name:  pn[0],
-		index: 0, place: service.Place_BACKLOG}
+		index: 0,
+		place: service.Place_BACKLOG,
+	}
 	v.pains[pn[1]] = &Pane{
 		name:  pn[1],
-		index: 1, place: service.Place_TODO}
+		index: 1,
+		place: service.Place_TODO,
+	}
 	v.pains[pn[2]] = &Pane{
 		name:  pn[2],
-		index: 2, place: service.Place_DOING}
+		index: 2, place: service.Place_DOING,
+	}
 	v.pains[pn[3]] = &Pane{
 		name:  pn[3],
-		index: 3, place: service.Place_DONE}
+		index: 3, place: service.Place_DONE,
+	}
+
+	for k := range v.pains {
+		v.pains[k].tasks = make(map[string]*service.Task)
+	}
 
 	v.pains[pn[0]].right = v.pains[pn[1]]
 	v.pains[pn[1]].right = v.pains[pn[2]]
@@ -71,6 +83,7 @@ func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)
 		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)
 		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.Delete)
+		_ = g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.Grab)
 	}
 	_ = g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.Enter)
 	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit)
@@ -94,24 +107,91 @@ func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
 }
 
 func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
+	if v.grabbedTask != nil {
+		v.setPriorityHigh(v.priorities, v.grabbedTask)
+	}
 	v.selectedIndex--
 	return nil
 }
 
 func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
+	if v.grabbedTask != nil {
+		v.setPriorityLow(v.priorities, v.grabbedTask)
+	}
 	v.selectedIndex++
 	return nil
 }
 
+// TODO: should be delegated
+func (v *View) setPriorityHigh(priorities []*service.Priority, task *service.Task) error {
+	place := task.Place
+	var index int
+	for i, p := range v.priorities {
+		if p.Place == place {
+			index = i
+		}
+	}
+
+	log.Printf("priority updated (before): %v", v.priorities[index])
+
+	for i, id := range v.priorities[index].Ids {
+		if id == task.Id {
+			if i == 0 {
+				return nil
+			}
+			v.priorities[index].Ids[i-1], v.priorities[index].Ids[i] = v.priorities[index].Ids[i], v.priorities[index].Ids[i-1]
+			break
+		}
+	}
+
+	log.Printf("priority updated (after): %v", v.priorities[index])
+
+	return nil
+}
+
+// TODO: should be delegated
+func (v *View) setPriorityLow(priorities []*service.Priority, task *service.Task) error {
+	place := task.Place
+	var index int
+	for i, p := range v.priorities {
+		if p.Place == place {
+			index = i
+		}
+	}
+
+	for i, id := range v.priorities[index].Ids {
+		if id == task.Id {
+			if i == len(v.priorities[index].Ids)-1 {
+				return nil
+			}
+			v.priorities[index].Ids[i+1], v.priorities[index].Ids[i] = v.priorities[index].Ids[i], v.priorities[index].Ids[i+1]
+			break
+		}
+	}
+
+	return nil
+}
+
 func (v *View) Delete(g *gocui.Gui, _ *gocui.View) error {
+	// TODO: (word revision) "Selected" should be "Focused"
 	t := v.SelectedItem()
 	return v.Delegate("delete", t)
 }
 
+func (v *View) Grab(g *gocui.Gui, _ *gocui.View) error {
+	if v.grabbedTask != nil {
+		v.grabbedTask = nil
+	} else {
+		v.grabbedTask = v.SelectedItem()
+	}
+	return nil
+}
+
 func (v *View) SelectedItem() *service.Task {
 	p := v.pains[v.g.CurrentView().Name()]
-	return p.tasks[v.selectedIndex]
-
+	// FIXME
+	id := v.priorities[0].Ids[v.selectedIndex]
+	return p.tasks[id]
 }
 
 func (v *View) Enter(g *gocui.Gui, gv *gocui.View) error {
@@ -169,7 +249,7 @@ func (v *View) Layout(g *gocui.Gui) error {
 			}
 		}
 
-		err := p.Layout(g, v.selectedIndex)
+		err := p.Layout(g, v.selectedIndex, v.grabbedTask)
 		if err != nil {
 			return err
 		}
@@ -190,21 +270,20 @@ func (v *View) OnEvent(event string, data ...interface{}) {
 	switch event {
 	case "update":
 		tasks := data[0].([]*service.Task)
-		priorities := data[1].([]*service.Priority)
-		for _, p := range priorities {
+		v.priorities = data[1].([]*service.Priority)
+		for _, p := range v.priorities {
 			log.Printf("view receives priority of : %s", p.Place.String())
 			log.Printf("view receives priority : %v", p)
 		}
 
 		for i := range v.pains {
-			v.pains[i].tasks = nil
 			for _, t := range tasks {
 				if v.pains[i].place == t.Place {
-					v.pains[i].tasks = append(v.pains[i].tasks, t)
+					v.pains[i].tasks[t.Id] = t
 				}
 			}
 
-			for _, p := range priorities {
+			for _, p := range v.priorities {
 				if v.pains[i].place == p.Place {
 					v.pains[i].priorities = p.Ids
 				}
