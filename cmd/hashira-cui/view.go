@@ -181,6 +181,7 @@ func (v *View) Delete(g *gocui.Gui, _ *gocui.View) error {
 func (v *View) Grab(g *gocui.Gui, _ *gocui.View) error {
 	if v.grabbedTask != nil {
 		v.grabbedTask = nil
+		v.Delegate("updatePriority", v.priorities)
 	} else {
 		v.grabbedTask = v.SelectedItem()
 	}

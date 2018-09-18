@@ -35,6 +35,13 @@ func (c *Ctrl) Delegate(event string, data interface{}) error {
 			return err
 		}
 		return c.Update(context.Background())
+	case "updatePriority":
+		p := data.([]*service.Priority)
+		_, err := c.m.hashirac.UpdatePriority(context.Background(), p)
+		if err != nil {
+			return err
+		}
+		return c.Update(context.Background())
 	default:
 		// nop
 	}
