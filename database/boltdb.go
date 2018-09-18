@@ -88,6 +88,9 @@ func (b *BoltDB) Load(bucket, id string) ([]byte, error) {
 		func() error {
 			err := b.db.View(
 				func(tx *bolt.Tx) error {
+					if tx == nil {
+						return nil
+					}
 					b := tx.Bucket([]byte(bucket))
 					if b == nil {
 						return nil
@@ -114,7 +117,13 @@ func (b *BoltDB) ForEach(bucket string, f func(k, v []byte) error) error {
 		func() error {
 			err := b.db.View(
 				func(tx *bolt.Tx) error {
+					if tx == nil {
+						return nil
+					}
 					b := tx.Bucket([]byte(bucket))
+					if b == nil {
+						return nil
+					}
 					err := b.ForEach(f)
 					if err != nil {
 						return errors.New("for each stopped: " + err.Error())
