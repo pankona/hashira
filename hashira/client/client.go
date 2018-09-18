@@ -34,11 +34,11 @@ func (c *Client) withClient(f func(service.HashiraClient) error) error {
 func (c *Client) Create(ctx context.Context, taskName string) error {
 	return c.withClient(
 		func(hc service.HashiraClient) error {
-			cc := &service.CommandCreate{
+			com := &service.CommandCreate{
 				Name:  taskName,
 				Place: service.Place_BACKLOG,
 			}
-			result, err := hc.Create(ctx, cc)
+			result, err := hc.Create(ctx, com)
 			if err != nil {
 				return errors.New("Create failed: " + err.Error())
 			}
@@ -51,10 +51,10 @@ func (c *Client) Create(ctx context.Context, taskName string) error {
 func (c *Client) Delete(ctx context.Context, id string) error {
 	return c.withClient(
 		func(hc service.HashiraClient) error {
-			cd := &service.CommandDelete{
+			com := &service.CommandDelete{
 				Id: id,
 			}
-			result, err := hc.Delete(ctx, cd)
+			result, err := hc.Delete(ctx, com)
 			if err != nil {
 				return errors.New("Delete failed: " + err.Error())
 			}
@@ -68,8 +68,8 @@ func (c *Client) Retrieve(ctx context.Context) ([]*service.Task, error) {
 	var tasks []*service.Task
 	err := c.withClient(
 		func(hc service.HashiraClient) error {
-			cr := &service.CommandRetrieve{}
-			result, err := hc.Retrieve(ctx, cr)
+			com := &service.CommandRetrieve{}
+			result, err := hc.Retrieve(ctx, com)
 			if err != nil {
 				return errors.New("Retrieve failed: " + err.Error())
 			}
@@ -84,10 +84,10 @@ func (c *Client) UpdatePriority(ctx context.Context, priorities []*service.Prior
 	var ret []*service.Priority
 
 	err := c.withClient(func(hc service.HashiraClient) error {
-		cup := &service.CommandUpdatePriority{
+		com := &service.CommandUpdatePriority{
 			Priorities: priorities,
 		}
-		p, err := hc.UpdatePriority(ctx, cup)
+		p, err := hc.UpdatePriority(ctx, com)
 		if err != nil {
 			return errors.New("UpdatePriority failed: " + err.Error())
 		}
@@ -103,8 +103,8 @@ func (c *Client) RetrievePriority(ctx context.Context) ([]*service.Priority, err
 	var ret []*service.Priority
 
 	err := c.withClient(func(hc service.HashiraClient) error {
-		crp := &service.CommandRetrievePriority{}
-		p, err := hc.RetrievePriority(ctx, crp)
+		com := &service.CommandRetrievePriority{}
+		p, err := hc.RetrievePriority(ctx, com)
 		if err != nil {
 			return errors.New("RetrievePriority failed: " + err.Error())
 		}
