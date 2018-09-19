@@ -175,6 +175,9 @@ func (v *View) setPriorityLow(priorities []*service.Priority, task *service.Task
 func (v *View) Delete(g *gocui.Gui, _ *gocui.View) error {
 	// TODO: (word revision) "Selected" should be "Focused"
 	t := v.SelectedItem()
+	if t == nil {
+		return nil
+	}
 	return v.Delegate("delete", t)
 }
 
@@ -189,9 +192,19 @@ func (v *View) Grab(g *gocui.Gui, _ *gocui.View) error {
 }
 
 func (v *View) SelectedItem() *service.Task {
+	if v.selectedIndex < 0 {
+		return nil
+	}
 	p := v.pains[v.g.CurrentView().Name()]
 	// FIXME
-	id := v.priorities[0].Ids[v.selectedIndex]
+	log.Printf("selectedIndex = %d, priorities: %v", v.selectedIndex, v.priorities[0].Ids)
+	var index int
+	for i, t := range v.priorities {
+		if t.Place == p.place {
+			index = i
+		}
+	}
+	id := v.priorities[index].Ids[v.selectedIndex]
 	return p.tasks[id]
 }
 
@@ -245,6 +258,7 @@ func (v *View) Layout(g *gocui.Gui) error {
 			if v.selectedIndex <= 0 {
 				v.selectedIndex = 0
 			}
+			log.Printf("p.len() = %d", p.len())
 			if v.selectedIndex >= p.len() {
 				v.selectedIndex = p.len() - 1
 			}
@@ -278,6 +292,8 @@ func (v *View) OnEvent(event string, data ...interface{}) {
 		}
 
 		for i := range v.pains {
+			// reset tasks
+			v.pains[i].tasks = make(map[string]*service.Task)
 			for _, t := range tasks {
 				if v.pains[i].place == t.Place {
 					v.pains[i].tasks[t.Id] = t

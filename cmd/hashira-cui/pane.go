@@ -47,7 +47,11 @@ func renderTasks(w io.Writer, tasks map[string]*service.Task, priorities []strin
 
 	// render tasks for this pane
 	for _, p := range priorities {
-		task := tasks[p]
+		task, ok := tasks[p]
+		if !ok {
+			continue
+		}
+
 		prefix := ""
 		if grabbedTask != nil && task.Id == grabbedTask.Id {
 			prefix = "*"
