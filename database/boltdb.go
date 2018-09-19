@@ -58,8 +58,9 @@ func (b *BoltDB) withDBOpenClose(f func() error) error {
 }
 
 // Save stores specified key/value to database
-func (b *BoltDB) Save(bucket, id string, value []byte) error {
-	return b.withDBOpenClose(
+func (b *BoltDB) Save(bucket, id string, value []byte) (string, error) {
+	var ret string
+	return ret, b.withDBOpenClose(
 		func() error {
 			return b.db.Update(
 				func(tx *bolt.Tx) error {
@@ -75,9 +76,13 @@ func (b *BoltDB) Save(bucket, id string, value []byte) error {
 						id = strconv.FormatUint(n, 10)
 					}
 
-					return b.Put([]byte(id), value)
+					err = b.Put([]byte(id), value)
+					if err != nil {
+						return err
+					}
+					ret = id
+					return nil
 				})
-
 		})
 }
 
