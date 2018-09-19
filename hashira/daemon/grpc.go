@@ -40,6 +40,21 @@ func (d *Daemon) Create(ctx context.Context, com *service.CommandCreate) (*servi
 		return nil, errors.New("failed to save new task on database: " + err.Error())
 	}
 
+	p, err := d.retrievePriority()
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("retrieve priority on create: %v", p)
+	priorities := make([]*service.Priority, 0)
+	for _, v := range p {
+		priorities = append(priorities, v)
+	}
+	pmap, err := d.updatePriority(priorities)
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("update priority on create: %v", pmap)
+
 	result := &service.ResultCreate{Task: t}
 	return result, nil
 }
@@ -139,7 +154,20 @@ func (d *Daemon) retrieveTaskMap() (map[string]map[string]*service.Task, error) 
 }
 
 func (d *Daemon) UpdatePriority(ctx context.Context, com *service.CommandUpdatePriority) (*service.ResultUpdatePriority, error) {
-	for _, v := range com.Priorities {
+	pmap, err := d.updatePriority(com.Priorities)
+	priorities := make([]*service.Priority, len(pmap))
+	var index int
+	for _, v := range pmap {
+		priorities[index] = v
+		index++
+	}
+	return &service.ResultUpdatePriority{
+		Priorities: priorities,
+	}, err
+}
+
+func (d *Daemon) updatePriority(p []*service.Priority) (map[string]*service.Priority, error) {
+	for _, v := range p {
 		p := service.Priority{
 			Place: v.Place,
 			Ids:   v.Ids,
@@ -156,13 +184,7 @@ func (d *Daemon) UpdatePriority(ctx context.Context, com *service.CommandUpdateP
 		}
 	}
 
-	priorities, err := d.retrievePriorityMap()
-	ret := make([]*service.Priority, 0)
-	for _, v := range priorities {
-		ret = append(ret, v)
-	}
-
-	return &service.ResultUpdatePriority{Priorities: ret}, err
+	return d.retrievePriorityMap()
 }
 
 func lookupTaskByID(tasks map[string]map[string]*service.Task, id string) *service.Task {
@@ -176,6 +198,19 @@ func lookupTaskByID(tasks map[string]map[string]*service.Task, id string) *servi
 }
 
 func (d *Daemon) RetrievePriority(ctx context.Context, com *service.CommandRetrievePriority) (*service.ResultRetrievePriority, error) {
+	pmap, err := d.retrievePriority()
+
+	priorities := make([]*service.Priority, len(pmap))
+	var index int
+	for _, v := range pmap {
+		priorities[index] = v
+		index++
+	}
+
+	return &service.ResultRetrievePriority{Priorities: priorities}, err
+}
+
+func (d *Daemon) retrievePriority() (map[string]*service.Priority, error) {
 	priorities, err := d.retrievePriorityMap()
 	if err != nil {
 		return nil, err
@@ -236,14 +271,7 @@ func (d *Daemon) RetrievePriority(ctx context.Context, com *service.CommandRetri
 		}
 	}
 
-	ret := make([]*service.Priority, 0)
-	for _, v := range priorities {
-		ret = append(ret, v)
-	}
-
-	log.Printf("priorities: %v", ret)
-
-	return &service.ResultRetrievePriority{Priorities: ret}, err
+	return priorities, nil
 }
 
 func remove(ids []string, id string) ([]string, bool) {
