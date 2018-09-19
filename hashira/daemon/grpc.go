@@ -22,9 +22,9 @@ var places = []service.Place{
 }
 
 // Create creates a new task
-func (d *Daemon) Create(ctx context.Context, cc *service.CommandCreate) (*service.ResultCreate, error) {
+func (d *Daemon) Create(ctx context.Context, com *service.CommandCreate) (*service.ResultCreate, error) {
 	t := &service.Task{
-		Name:      cc.GetName(),
+		Name:      com.GetName(),
 		Place:     service.Place_BACKLOG,
 		IsDeleted: false,
 	}
@@ -51,13 +51,13 @@ func (d *Daemon) Update(context.Context, *service.CommandUpdate) (*service.Resul
 }
 
 // Delete deletes an existing task
-func (d *Daemon) Delete(ctx context.Context, cd *service.CommandDelete) (*service.ResultDelete, error) {
-	buf, err := d.DB.Load(taskBucket, cd.Id)
+func (d *Daemon) Delete(ctx context.Context, com *service.CommandDelete) (*service.ResultDelete, error) {
+	buf, err := d.DB.Load(taskBucket, com.Id)
 	if err != nil {
 		// TODO: error handling
 	}
 
-	t := &service.Task{Id: cd.Id}
+	t := &service.Task{Id: com.Id}
 	err = json.Unmarshal(buf, t)
 	if err != nil {
 		// TODO: error handling
@@ -69,11 +69,11 @@ func (d *Daemon) Delete(ctx context.Context, cd *service.CommandDelete) (*servic
 		// TODO: error handling
 	}
 
-	return &service.ResultDelete{Task: t}, d.DB.Save(taskBucket, cd.Id, buf)
+	return &service.ResultDelete{Task: t}, d.DB.Save(taskBucket, com.Id, buf)
 }
 
 // Retrieve retrieves all existing tasks
-func (d *Daemon) Retrieve(ctx context.Context, cr *service.CommandRetrieve) (*service.ResultRetrieve, error) {
+func (d *Daemon) Retrieve(ctx context.Context, com *service.CommandRetrieve) (*service.ResultRetrieve, error) {
 	tasks, err := d.retrieve()
 	if err != nil {
 		return nil, errors.New("failed to retrieve tasks: " + err.Error())
@@ -138,8 +138,8 @@ func (d *Daemon) retrieveMap() (map[string][]*service.Task, error) {
 	return m, nil
 }
 
-func (d *Daemon) UpdatePriority(ctx context.Context, cup *service.CommandUpdatePriority) (*service.ResultUpdatePriority, error) {
-	for _, v := range cup.Priorities {
+func (d *Daemon) UpdatePriority(ctx context.Context, com *service.CommandUpdatePriority) (*service.ResultUpdatePriority, error) {
+	for _, v := range com.Priorities {
 		p := service.Priority{
 			Place: v.Place,
 			Ids:   v.Ids,
@@ -165,7 +165,7 @@ func (d *Daemon) UpdatePriority(ctx context.Context, cup *service.CommandUpdateP
 	return &service.ResultUpdatePriority{Priorities: ret}, err
 }
 
-func (d *Daemon) RetrievePriority(ctx context.Context, crp *service.CommandRetrievePriority) (*service.ResultRetrievePriority, error) {
+func (d *Daemon) RetrievePriority(ctx context.Context, com *service.CommandRetrievePriority) (*service.ResultRetrievePriority, error) {
 	priorities, err := d.retrievePriority()
 	if err != nil {
 		return nil, err
