@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/pankona/hashira/service"
@@ -65,9 +66,24 @@ func (d *Daemon) Create(ctx context.Context, com *service.CommandCreate) (*servi
 }
 
 // Update updates an existing task
-func (d *Daemon) Update(context.Context, *service.CommandUpdate) (*service.ResultUpdate, error) {
-	// TODO: implement
-	return nil, nil
+func (d *Daemon) Update(ctx context.Context, com *service.CommandUpdate) (*service.ResultUpdate, error) {
+	if com.Task == nil {
+		return nil, errors.New("failed to update a task because specified task is nil")
+	}
+
+	buf, err := json.Marshal(com.Task)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal specified task: %s", err.Error())
+	}
+
+	_, err = d.DB.Save(taskBucket, com.Task.Id, buf)
+	if err != nil {
+		return nil, fmt.Errorf("failed to save update of task: %s", err.Error())
+	}
+
+	return &service.ResultUpdate{
+		Task: com.Task,
+	}, nil
 }
 
 // Delete deletes an existing task
