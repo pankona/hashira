@@ -226,6 +226,7 @@ func (v *View) Enter(g *gocui.Gui, gv *gocui.View) error {
 	if gv.Name() == "input" {
 		defer func() {
 			v.editingTask = nil
+			g.Cursor = false
 			g.DeleteView("input")
 			// TODO: set selected pane as current view
 			g.SetCurrentView(v.pains[pn[0]].name)
@@ -259,6 +260,8 @@ func (v *View) Enter(g *gocui.Gui, gv *gocui.View) error {
 			}
 		}
 		input.Editable = true
+		input.MoveCursor(len(input.Buffer())-1, 0, true)
+		g.Cursor = true
 		g.SetCurrentView("input")
 	}
 	return nil
