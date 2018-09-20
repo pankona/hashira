@@ -20,6 +20,8 @@ func (c *Ctrl) SetPublisher(p Publisher) {
 }
 
 func (c *Ctrl) Delegate(event string, data interface{}) error {
+	defer c.Update(context.Background())
+
 	switch event {
 	// TODO: event should be dispatched by type assertion?
 	case "add":
@@ -27,30 +29,27 @@ func (c *Ctrl) Delegate(event string, data interface{}) error {
 		if err != nil {
 			return err
 		}
-		return c.Update(context.Background())
 	case "update":
 		err := c.m.hashirac.Update(context.Background(), data.(*service.Task))
 		if err != nil {
 			return err
 		}
-		return c.Update(context.Background())
 	case "delete":
 		t := data.(*service.Task)
 		err := c.m.hashirac.Delete(context.Background(), t.Id)
 		if err != nil {
 			return err
 		}
-		return c.Update(context.Background())
 	case "updatePriority":
 		p := data.([]*service.Priority)
 		_, err := c.m.hashirac.UpdatePriority(context.Background(), p)
 		if err != nil {
 			return err
 		}
-		return c.Update(context.Background())
 	default:
 		// nop
 	}
+
 	return nil
 }
 
