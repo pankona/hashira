@@ -2,18 +2,63 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"log/syslog"
+	"os"
+	"os/user"
+	"path/filepath"
 
 	"github.com/jroimartin/gocui"
+	"github.com/pankona/hashira/database"
 	hashirac "github.com/pankona/hashira/hashira/client"
+	"github.com/pankona/hashira/hashira/daemon"
 )
 
-func main() {
+func initializeDB() (database.Databaser, error) {
+	db := &database.BoltDB{}
+	usr, err := user.Current()
+	if err != nil {
+		return nil, errors.New("failed to current user: " + err.Error())
+	}
 
+	configDir := filepath.Join(usr.HomeDir, ".config", "hashira")
+	err = os.MkdirAll(configDir, 0700)
+	if err != nil {
+		return nil, errors.New("failed to create config directory: " + err.Error())
+	}
+
+	err = db.Initialize(filepath.Join(configDir, "db"))
+	if err != nil {
+		return nil, errors.New("failed to initialize db: " + err.Error())
+	}
+	return db, nil
+}
+
+func main() {
 	logger, err := syslog.New(syslog.LOG_INFO|syslog.LOG_LOCAL0, "hashira-cui")
 	log.SetOutput(logger)
+
+	db, err := initializeDB()
+	if err != nil {
+		os.Exit(1)
+	}
+
+	d := &daemon.Daemon{
+		Port: 50056,
+		DB:   db,
+	}
+
+	go func() {
+		if err = d.Run(); err != nil {
+			fmt.Printf("failed to start hashira daemon: %s\n", err.Error())
+			os.Exit(1)
+		}
+	}()
+	defer func() {
+		d.Stop()
+	}()
 
 	var (
 		m  = &Model{}

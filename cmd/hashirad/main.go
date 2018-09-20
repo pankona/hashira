@@ -42,6 +42,7 @@ func main() {
 		Port: 50056,
 		DB:   db,
 	}
+
 	if err = d.Run(); err != nil {
 		fmt.Printf("failed to start hashira daemon: %s\n", err.Error())
 		os.Exit(1)
