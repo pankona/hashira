@@ -47,6 +47,23 @@ func (c *Client) Create(ctx context.Context, taskName string) error {
 		})
 }
 
+// Create updates an existing task
+func (c *Client) Update(ctx context.Context, task *service.Task) error {
+	return c.withClient(
+		func(hc service.HashiraClient) error {
+			com := &service.CommandUpdate{
+				Task: task,
+			}
+
+			_, err := hc.Update(context.Background(), com)
+			if err != nil {
+				return fmt.Errorf("update a task failed: %s", err.Error())
+			}
+
+			return nil
+		})
+}
+
 // Delete marks specified task as deleted
 func (c *Client) Delete(ctx context.Context, id string) error {
 	return c.withClient(
