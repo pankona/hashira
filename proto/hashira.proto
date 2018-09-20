@@ -36,8 +36,7 @@ message CommandCreate {
 }
 
 message CommandUpdate {
-    string id   = 1;
-    Place place = 2;
+    Task task = 1;
 }
 
 message CommandDelete {
