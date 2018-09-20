@@ -13,8 +13,9 @@ import (
 
 // Daemon is a structure that implement hashira service
 type Daemon struct {
-	Port int
-	DB   database.Databaser
+	Port   int
+	DB     database.Databaser
+	server *grpc.Server
 }
 
 // Run starts hashira daemon (as gRPC server)
@@ -27,5 +28,13 @@ func (d *Daemon) Run() error {
 	s := grpc.NewServer()
 	reflection.Register(s)
 	service.RegisterHashiraServer(s, d)
-	return s.Serve(listen)
+
+	d.server = s
+
+	return d.server.Serve(listen)
+}
+
+// Stop stops hashira daemon
+func (d *Daemon) Stop() {
+	d.server.Stop()
 }
