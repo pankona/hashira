@@ -78,15 +78,15 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 
 func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 	for _, p := range v.pains {
-		_ = g.SetKeybinding(p.name, 'h', gocui.ModNone, v.Left)
-		_ = g.SetKeybinding(p.name, 'l', gocui.ModNone, v.Right)
-		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)
-		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)
-		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.Delete)
-		_ = g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.Grab)
+		_ = g.SetKeybinding(p.name, 'h', gocui.ModNone, v.Left)            // TODO: should be v.h
+		_ = g.SetKeybinding(p.name, 'l', gocui.ModNone, v.Right)           // TODO: should be v.l
+		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)              // TODO: should be v.k
+		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)            // TODO: should be v.j
+		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.Delete)          // TODO: should be v.x
+		_ = g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.Grab) // TODO: should be v.Space
 	}
 	_ = g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.Enter)
-	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit)
+	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit) // TODO: should be v.CtrlC
 	return nil
 }
 
