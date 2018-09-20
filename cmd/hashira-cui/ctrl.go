@@ -28,6 +28,12 @@ func (c *Ctrl) Delegate(event string, data interface{}) error {
 			return err
 		}
 		return c.Update(context.Background())
+	case "update":
+		err := c.m.hashirac.Update(context.Background(), data.(*service.Task))
+		if err != nil {
+			return err
+		}
+		return c.Update(context.Background())
 	case "delete":
 		t := data.(*service.Task)
 		err := c.m.hashirac.Delete(context.Background(), t.Id)

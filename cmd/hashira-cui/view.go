@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strings"
 	"sync"
@@ -14,6 +15,7 @@ type View struct {
 	g             *gocui.Gui
 	selectedIndex int
 	grabbedTask   *service.Task
+	editingTask   *service.Task
 	priorities    []*service.Priority
 	Delegater
 }
@@ -78,16 +80,28 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 
 func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 	for _, p := range v.pains {
-		_ = g.SetKeybinding(p.name, 'h', gocui.ModNone, v.Left)            // TODO: should be v.h
-		_ = g.SetKeybinding(p.name, 'l', gocui.ModNone, v.Right)           // TODO: should be v.l
-		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)              // TODO: should be v.k
-		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)            // TODO: should be v.j
-		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.Delete)          // TODO: should be v.x
-		_ = g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.Grab) // TODO: should be v.Space
+		_ = g.SetKeybinding(p.name, 'h', gocui.ModNone, v.Left)            // TODO: should be v.KeyH
+		_ = g.SetKeybinding(p.name, 'l', gocui.ModNone, v.Right)           // TODO: should be v.KeyL
+		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)              // TODO: should be v.KeyK
+		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)            // TODO: should be v.KeyJ
+		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.Delete)          // TODO: should be v.KeyX
+		_ = g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.Grab) // TODO: should be v.KeySpace
+		_ = g.SetKeybinding(p.name, 'e', gocui.ModNone, v.KeyE)
 	}
-	_ = g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.Enter)
-	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit) // TODO: should be v.CtrlC
+	_ = g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.Enter) // TODO: should be v.KeyEnter
+	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit)  // TODO: should be v.KeyCtrlC
 	return nil
+}
+
+func (v *View) KeyE(g *gocui.Gui, gv *gocui.View) error {
+	t := v.SelectedItem()
+	if t == nil {
+		return nil
+	}
+
+	v.editingTask = t
+
+	return v.Enter(g, gv)
 }
 
 func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
@@ -211,7 +225,9 @@ func (v *View) SelectedItem() *service.Task {
 func (v *View) Enter(g *gocui.Gui, gv *gocui.View) error {
 	if gv.Name() == "input" {
 		defer func() {
+			v.editingTask = nil
 			g.DeleteView("input")
+			// TODO: set selected pane as current view
 			g.SetCurrentView(v.pains[pn[0]].name)
 		}()
 
@@ -221,19 +237,28 @@ func (v *View) Enter(g *gocui.Gui, gv *gocui.View) error {
 		}
 		msg = strings.TrimSuffix(msg, "\n")
 
-		err := v.Delegate("add", msg)
-		if err != nil {
-			return err
+		if v.editingTask == nil {
+			return v.Delegate("add", msg)
 		}
+		v.editingTask.Name = msg
+		return v.Delegate("update", v.editingTask)
 	}
 
 	maxX, maxY := g.Size()
-	if v, err := g.SetView("input", maxX/2-20, maxY/2, maxX/2+20, maxY/2+2); err != nil {
+	if input, err := g.SetView("input", maxX/2-20, maxY/2, maxX/2+20, maxY/2+2); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
-		v.Title = "New task?"
-		v.Editable = true
+		if v.editingTask == nil {
+			input.Title = "New task?"
+		} else {
+			input.Title = "Update task?"
+			_, err = fmt.Fprintf(input, v.editingTask.Name)
+			if err != nil {
+				return fmt.Errorf("failed to write on input view for update: %s", err)
+			}
+		}
+		input.Editable = true
 		g.SetCurrentView("input")
 	}
 	return nil
