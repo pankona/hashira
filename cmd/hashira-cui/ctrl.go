@@ -22,35 +22,25 @@ func (c *Ctrl) SetPublisher(p Publisher) {
 func (c *Ctrl) Delegate(event string, data interface{}) error {
 	defer c.Update(context.Background())
 
+	var err error
+
 	switch event {
 	// TODO: event should be dispatched by type assertion?
 	case "add":
-		err := c.m.hashirac.Create(context.Background(), data.(string))
-		if err != nil {
-			return err
-		}
+		err = c.m.hashirac.Create(context.Background(), data.(string))
 	case "update":
-		err := c.m.hashirac.Update(context.Background(), data.(*service.Task))
-		if err != nil {
-			return err
-		}
+		err = c.m.hashirac.Update(context.Background(), data.(*service.Task))
 	case "delete":
 		t := data.(*service.Task)
-		err := c.m.hashirac.Delete(context.Background(), t.Id)
-		if err != nil {
-			return err
-		}
+		err = c.m.hashirac.Delete(context.Background(), t.Id)
 	case "updatePriority":
 		p := data.([]*service.Priority)
-		_, err := c.m.hashirac.UpdatePriority(context.Background(), p)
-		if err != nil {
-			return err
-		}
+		_, err = c.m.hashirac.UpdatePriority(context.Background(), p)
 	default:
 		// nop
 	}
 
-	return nil
+	return err
 }
 
 func (c *Ctrl) Update(ctx context.Context) error {
