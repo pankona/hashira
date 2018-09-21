@@ -86,10 +86,11 @@ func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)   // TODO: should be v.KeyJ
 		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.Delete) // TODO: should be v.KeyX
 		_ = g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.KeySpace)
+		_ = g.SetKeybinding(p.name, 'i', gocui.ModNone, v.KeyI)
 		_ = g.SetKeybinding(p.name, 'e', gocui.ModNone, v.KeyE)
 	}
-	_ = g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.Enter) // TODO: should be v.KeyEnter
-	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit)  // TODO: should be v.KeyCtrlC
+	_ = g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.KeyEnter)
+	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit) // TODO: should be v.KeyCtrlC
 	return nil
 }
 
@@ -101,7 +102,7 @@ func (v *View) KeyE(g *gocui.Gui, gv *gocui.View) error {
 
 	v.editingTask = t
 
-	return v.Enter(g, gv)
+	return v.KeyEnter(g, gv)
 }
 
 func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
@@ -226,7 +227,16 @@ func (v *View) SelectedItem() *service.Task {
 	return p.tasks[id]
 }
 
-func (v *View) Enter(g *gocui.Gui, gv *gocui.View) error {
+func (v *View) KeyI(g *gocui.Gui, gv *gocui.View) error {
+	// TODO: implement
+	return nil
+}
+
+func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
+	return v.input(g, gv)
+}
+
+func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 	if gv.Name() == "input" {
 		defer func() {
 			v.editingTask = nil
