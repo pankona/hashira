@@ -229,6 +229,11 @@ func (v *View) FocusedItem() *service.Task {
 		}
 	}
 
+	if len(v.priorities[index].Ids) == 0 {
+		// no task in this pane
+		return nil
+	}
+
 	if v.focusedIndex >= len(v.priorities[index].Ids) {
 		v.focusedIndex = len(v.priorities[index].Ids) - 1
 	}
