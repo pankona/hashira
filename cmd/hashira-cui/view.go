@@ -148,8 +148,6 @@ func (v *View) setPriorityHigh(priorities []*service.Priority, task *service.Tas
 		}
 	}
 
-	log.Printf("priority updated (before): %v", v.priorities[index])
-
 	for i, id := range v.priorities[index].Ids {
 		if id == task.Id {
 			if i == 0 {
@@ -159,8 +157,6 @@ func (v *View) setPriorityHigh(priorities []*service.Priority, task *service.Tas
 			break
 		}
 	}
-
-	log.Printf("priority updated (after): %v", v.priorities[index])
 
 	return nil
 }
@@ -426,10 +422,6 @@ func (v *View) OnEvent(event string, data ...interface{}) {
 	case "update":
 		tasks := data[0].([]*service.Task)
 		v.priorities = data[1].([]*service.Priority)
-		for _, p := range v.priorities {
-			log.Printf("view receives priority of : %s", p.Place.String())
-			log.Printf("view receives priority : %v", p)
-		}
 
 		for i := range v.panes {
 			// reset tasks
