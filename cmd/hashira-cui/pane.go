@@ -42,7 +42,7 @@ func (p *Pane) len() int {
 }
 
 func renderTasks(w io.Writer, tasks map[string]*service.Task, priorities []string, focusedTask, selectedTask *service.Task) error {
-	var itemNum int
+	var taskNum int
 	var err error
 
 	// render tasks for this pane
@@ -60,14 +60,14 @@ func renderTasks(w io.Writer, tasks map[string]*service.Task, priorities []strin
 
 		if task == focusedTask {
 			_, err = fmt.Fprintf(w, "%s \033[3%d;%dm%s\033[0m\n", prefix, 7, 4, task.Name)
-			log.Printf("focusedIndex = %d", itemNum)
+			log.Printf("focusedIndex = %d", taskNum)
 		} else {
 			_, err = fmt.Fprintf(w, "%s %s\n", prefix, task.Name)
 		}
 		if err != nil {
 			return err
 		}
-		itemNum++
+		taskNum++
 	}
 
 	return nil

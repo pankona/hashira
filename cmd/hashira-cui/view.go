@@ -96,7 +96,7 @@ func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 }
 
 func (v *View) KeyE(g *gocui.Gui, gv *gocui.View) error {
-	t := v.FocusedItem()
+	t := v.FocusedTask()
 	if t == nil {
 		return nil
 	}
@@ -185,7 +185,7 @@ func (v *View) setPriorityLow(priorities []*service.Priority, task *service.Task
 }
 
 func (v *View) Delete(g *gocui.Gui, _ *gocui.View) error {
-	t := v.FocusedItem()
+	t := v.FocusedTask()
 	if t == nil {
 		return nil
 	}
@@ -193,21 +193,21 @@ func (v *View) Delete(g *gocui.Gui, _ *gocui.View) error {
 }
 
 func (v *View) KeySpace(g *gocui.Gui, gv *gocui.View) error {
-	return v.selectFocusedItem()
+	return v.selectFocusedTask()
 }
 
-// selectFocusedItem selects focused task.
+// selectFocusedTask selects focused task.
 // call this function again for deselect.
-func (v *View) selectFocusedItem() error {
+func (v *View) selectFocusedTask() error {
 	if v.selectedTask != nil {
 		v.selectedTask = nil
 	} else {
-		v.selectedTask = v.FocusedItem()
+		v.selectedTask = v.FocusedTask()
 	}
 	return nil
 }
 
-func (v *View) FocusedItem() *service.Task {
+func (v *View) FocusedTask() *service.Task {
 	if v.focusedIndex < 0 {
 		return nil
 	}
@@ -258,9 +258,9 @@ func (v *View) KeyI(g *gocui.Gui, gv *gocui.View) error {
 		return v.input(g, gv)
 	}
 
-	t := v.FocusedItem()
+	t := v.FocusedTask()
 	if t == nil {
-		log.Printf("selectedItem is nil")
+		log.Printf("selectedTask is nil")
 		return nil
 	}
 	return v.moveTaskTo(t, dirRight)
@@ -271,9 +271,9 @@ func (v *View) KeyShiftI(g *gocui.Gui, gv *gocui.View) error {
 		return v.input(g, gv)
 	}
 
-	t := v.FocusedItem()
+	t := v.FocusedTask()
 	if t == nil {
-		log.Printf("selectedItem is nil")
+		log.Printf("selectedTask is nil")
 		return nil
 	}
 	return v.moveTaskTo(t, dirLeft)
@@ -399,7 +399,7 @@ func (v *View) Layout(g *gocui.Gui) error {
 			}
 		}
 
-		err := p.Layout(g, v.FocusedItem(), v.selectedTask)
+		err := p.Layout(g, v.FocusedTask(), v.selectedTask)
 		if err != nil {
 			return err
 		}
