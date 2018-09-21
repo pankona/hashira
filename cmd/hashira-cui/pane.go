@@ -19,7 +19,7 @@ type Pane struct {
 	priorities []string // array of task IDs
 }
 
-func (p *Pane) Layout(g *gocui.Gui, selectedIndex int, grabbedTask *service.Task) error {
+func (p *Pane) Layout(g *gocui.Gui, fucusedIndex int, selectedTask *service.Task) error {
 	maxX, maxY := g.Size()
 	v, err := g.SetView(p.name, maxX/4*p.index, 1, maxX/4*p.index+maxX/4-1, maxY-1)
 
@@ -34,14 +34,14 @@ func (p *Pane) Layout(g *gocui.Gui, selectedIndex int, grabbedTask *service.Task
 
 	log.Printf("Tasks (%s): %v", p.place.String(), p.tasks)
 	log.Printf("Priorities (%s): %v", p.place, p.priorities)
-	return renderTasks(v, p.tasks, p.priorities, selectedIndex, grabbedTask)
+	return renderTasks(v, p.tasks, p.priorities, fucusedIndex, selectedTask)
 }
 
 func (p *Pane) len() int {
 	return len(p.tasks)
 }
 
-func renderTasks(w io.Writer, tasks map[string]*service.Task, priorities []string, selectedIndex int, grabbedTask *service.Task) error {
+func renderTasks(w io.Writer, tasks map[string]*service.Task, priorities []string, focusedIndex int, selectedTask *service.Task) error {
 	var itemNum int
 	var err error
 
@@ -53,11 +53,11 @@ func renderTasks(w io.Writer, tasks map[string]*service.Task, priorities []strin
 		}
 
 		prefix := ""
-		if grabbedTask != nil && task.Id == grabbedTask.Id {
+		if selectedTask != nil && task.Id == selectedTask.Id {
 			prefix = "*"
 			log.Printf("selectedTask = %v", task)
 		}
-		if itemNum == selectedIndex {
+		if itemNum == focusedIndex {
 			_, err = fmt.Fprintf(w, "%s \033[3%d;%dm%s\033[0m\n", prefix, 7, 4, task.Name)
 			log.Printf("focusedIndex = %d", itemNum)
 		} else {

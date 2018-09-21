@@ -213,6 +213,7 @@ func (v *View) FocusedItem() *service.Task {
 	if v.focusedIndex < 0 {
 		return nil
 	}
+
 	p := v.pains[v.g.CurrentView().Name()]
 	// FIXME
 	log.Printf("focusedIndex = %d, priorities: %v", v.focusedIndex, v.priorities[0].Ids)
