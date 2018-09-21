@@ -201,6 +201,9 @@ func (v *View) KeySpace(g *gocui.Gui, gv *gocui.View) error {
 func (v *View) selectFocusedTask() error {
 	if v.selectedTask != nil {
 		v.selectedTask = nil
+		// on deselect task, it means the deselected task's
+		// priority is determined. update priority is necessary.
+		return v.Delegate("updatePriority", v.priorities)
 	} else {
 		v.selectedTask = v.FocusedTask()
 	}
