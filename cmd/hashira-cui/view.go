@@ -228,12 +228,12 @@ func (v *View) SelectedItem() *service.Task {
 }
 
 func (v *View) KeyI(g *gocui.Gui, gv *gocui.View) error {
-	// TODO: implement
-	return nil
+	return v.input(g, gv)
 }
 
 func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
-	return v.input(g, gv)
+	// TODO: implement
+	return nil
 }
 
 func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
