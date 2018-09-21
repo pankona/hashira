@@ -11,7 +11,7 @@ import (
 )
 
 type View struct {
-	pains        map[string]*Pane
+	panes        map[string]*Pane
 	g            *gocui.Gui
 	focusedIndex int
 	selectedTask *service.Task
@@ -33,44 +33,44 @@ var pn = []string{
 }
 
 func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
-	v.pains = make(map[string]*Pane)
+	v.panes = make(map[string]*Pane)
 
-	v.pains[pn[0]] = &Pane{
+	v.panes[pn[0]] = &Pane{
 		name:  pn[0],
 		index: 0,
 		place: service.Place_BACKLOG,
 	}
-	v.pains[pn[1]] = &Pane{
+	v.panes[pn[1]] = &Pane{
 		name:  pn[1],
 		index: 1,
 		place: service.Place_TODO,
 	}
-	v.pains[pn[2]] = &Pane{
+	v.panes[pn[2]] = &Pane{
 		name:  pn[2],
 		index: 2, place: service.Place_DOING,
 	}
-	v.pains[pn[3]] = &Pane{
+	v.panes[pn[3]] = &Pane{
 		name:  pn[3],
 		index: 3, place: service.Place_DONE,
 	}
 
-	for k := range v.pains {
-		v.pains[k].tasks = make(map[string]*service.Task)
+	for k := range v.panes {
+		v.panes[k].tasks = make(map[string]*service.Task)
 	}
 
-	v.pains[pn[0]].right = v.pains[pn[1]]
-	v.pains[pn[1]].right = v.pains[pn[2]]
-	v.pains[pn[2]].right = v.pains[pn[3]]
-	v.pains[pn[3]].right = v.pains[pn[0]]
+	v.panes[pn[0]].right = v.panes[pn[1]]
+	v.panes[pn[1]].right = v.panes[pn[2]]
+	v.panes[pn[2]].right = v.panes[pn[3]]
+	v.panes[pn[3]].right = v.panes[pn[0]]
 
-	v.pains[pn[0]].left = v.pains[pn[3]]
-	v.pains[pn[1]].left = v.pains[pn[0]]
-	v.pains[pn[2]].left = v.pains[pn[1]]
-	v.pains[pn[3]].left = v.pains[pn[2]]
+	v.panes[pn[0]].left = v.panes[pn[3]]
+	v.panes[pn[1]].left = v.panes[pn[0]]
+	v.panes[pn[2]].left = v.panes[pn[1]]
+	v.panes[pn[3]].left = v.panes[pn[2]]
 
 	g.Highlight = true
 	g.SelFgColor = gocui.ColorBlue
-	g.SetCurrentView(v.pains[pn[0]].name)
+	g.SetCurrentView(v.panes[pn[0]].name)
 
 	v.g = g
 	v.Delegater = d
@@ -79,7 +79,7 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 }
 
 func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
-	for _, p := range v.pains {
+	for _, p := range v.panes {
 		_ = g.SetKeybinding(p.name, 'h', gocui.ModNone, v.Left)   // TODO: should be v.KeyH
 		_ = g.SetKeybinding(p.name, 'l', gocui.ModNone, v.Right)  // TODO: should be v.KeyL
 		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)     // TODO: should be v.KeyK
@@ -107,7 +107,7 @@ func (v *View) KeyE(g *gocui.Gui, gv *gocui.View) error {
 }
 
 func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
-	g.SetCurrentView(v.pains[g.CurrentView().Name()].left.name)
+	g.SetCurrentView(v.panes[g.CurrentView().Name()].left.name)
 	g.Update(func(*gocui.Gui) error {
 		return nil
 	})
@@ -115,7 +115,7 @@ func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
 }
 
 func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
-	g.SetCurrentView(v.pains[g.CurrentView().Name()].right.name)
+	g.SetCurrentView(v.panes[g.CurrentView().Name()].right.name)
 	g.Update(func(*gocui.Gui) error {
 		return nil
 	})
@@ -222,7 +222,7 @@ func (v *View) FocusedItem() *service.Task {
 		return nil
 	}
 
-	p := v.pains[currentView.Name()]
+	p := v.panes[currentView.Name()]
 	if p == nil {
 		return nil
 	}
@@ -285,9 +285,9 @@ func (v *View) KeyShiftI(g *gocui.Gui, gv *gocui.View) error {
 }
 
 func (v *View) lookupPaneByTask(t *service.Task) *Pane {
-	for i, p := range v.pains {
+	for i, p := range v.panes {
 		if p.place == t.Place {
-			return v.pains[i]
+			return v.panes[i]
 		}
 	}
 	return nil
@@ -317,7 +317,7 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 			g.Cursor = false
 			g.DeleteView("input")
 			// TODO: set selected pane as current view
-			g.SetCurrentView(v.pains[pn[0]].name)
+			g.SetCurrentView(v.panes[pn[0]].name)
 		}()
 
 		msg := gv.Buffer()
@@ -368,7 +368,7 @@ func (v *View) Quit(g *gocui.Gui, _ *gocui.View) error {
 var once = sync.Once{}
 
 func (v *View) Layout(g *gocui.Gui) error {
-	for _, p := range v.pains {
+	for _, p := range v.panes {
 		log.Printf("@@@@@@ g.CurrentView = %v", g.CurrentView())
 		log.Printf("@@@@@@ p.name = %v", p.name)
 		if g.CurrentView() != nil &&
@@ -412,18 +412,18 @@ func (v *View) OnEvent(event string, data ...interface{}) {
 			log.Printf("view receives priority : %v", p)
 		}
 
-		for i := range v.pains {
+		for i := range v.panes {
 			// reset tasks
-			v.pains[i].tasks = make(map[string]*service.Task)
+			v.panes[i].tasks = make(map[string]*service.Task)
 			for _, t := range tasks {
-				if v.pains[i].place == t.Place {
-					v.pains[i].tasks[t.Id] = t
+				if v.panes[i].place == t.Place {
+					v.panes[i].tasks[t.Id] = t
 				}
 			}
 
 			for _, p := range v.priorities {
-				if v.pains[i].place == p.Place {
-					v.pains[i].priorities = p.Ids
+				if v.panes[i].place == p.Place {
+					v.panes[i].priorities = p.Ids
 				}
 			}
 		}
