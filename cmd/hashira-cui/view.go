@@ -85,10 +85,10 @@ func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)     // TODO: should be v.KeyK
 		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)   // TODO: should be v.KeyJ
 		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.Delete) // TODO: should be v.KeyX
-		_ = g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.KeySpace)
 		_ = g.SetKeybinding(p.name, 'i', gocui.ModNone, v.KeyI)
 		_ = g.SetKeybinding(p.name, 'I', gocui.ModNone, v.KeyShiftI)
 		_ = g.SetKeybinding(p.name, 'e', gocui.ModNone, v.KeyE)
+		_ = g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.KeySpace)
 	}
 	_ = g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.KeyEnter)
 	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit) // TODO: should be v.KeyCtrlC
@@ -302,12 +302,37 @@ func (v *View) moveTaskTo(t *service.Task, dir directive) error {
 	switch dir {
 	case dirRight:
 		t.Place = pane.right.place
+		pane = pane.right
 	case dirLeft:
 		t.Place = pane.left.place
+		pane = pane.left
 	}
 
-	log.Printf("new task's status: %v", t)
-	return v.Delegate("update", t)
+	err := v.Delegate("update", t)
+	if err != nil {
+		return fmt.Errorf("failed to update: %s", err.Error())
+	}
+
+	// put the moved task on top of pane
+	priorities := make([]string, 0)
+	priorities = append([]string{t.Id}, priorities...)
+	for _, id := range pane.priorities {
+		if t.Id != id {
+			priorities = append(priorities, id)
+		}
+	}
+
+	pane.priorities = priorities
+	for i, p := range v.priorities {
+		if p.Place == pane.place {
+			v.priorities[i] = &service.Priority{
+				Place: pane.place,
+				Ids:   pane.priorities,
+			}
+		}
+	}
+
+	return v.Delegate("updatePriority", v.priorities)
 }
 
 func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
@@ -369,20 +394,14 @@ var once = sync.Once{}
 
 func (v *View) Layout(g *gocui.Gui) error {
 	for _, p := range v.panes {
-		log.Printf("@@@@@@ g.CurrentView = %v", g.CurrentView())
-		log.Printf("@@@@@@ p.name = %v", p.name)
 		if g.CurrentView() != nil &&
 			g.CurrentView().Name() == p.name {
 			if v.focusedIndex <= 0 {
 				v.focusedIndex = 0
 			}
-			log.Printf("@@@@@@@@ p.len() = %d", p.len())
 			if v.focusedIndex >= p.len() {
-				log.Printf("@@@@@@@@ p.len() = %d (-1)", p.len())
 				v.focusedIndex = p.len() - 1
 			}
-
-			log.Printf("@@@@@@@@ focusedIndex = %d", v.focusedIndex)
 		}
 
 		err := p.Layout(g, v.FocusedItem(), v.selectedTask)
