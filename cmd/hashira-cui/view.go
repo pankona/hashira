@@ -196,10 +196,10 @@ func (v *View) Delete(g *gocui.Gui, _ *gocui.View) error {
 }
 
 func (v *View) KeySpace(g *gocui.Gui, gv *gocui.View) error {
-	return v.grabFocusedItem()
+	return v.selectFocusedItem()
 }
 
-func (v *View) grabFocusedItem() error {
+func (v *View) selectFocusedItem() error {
 	if v.selectedTask != nil {
 		v.selectedTask = nil
 		v.Delegate("updatePriority", v.priorities)
