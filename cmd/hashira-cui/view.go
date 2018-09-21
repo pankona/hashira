@@ -334,8 +334,9 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 	if gv.Name() == "input" {
 		defer func() {
 			v.editingTask = nil
+			g.DeleteKeybindings(gv.Name())
 			g.Cursor = false
-			g.DeleteView("input")
+			g.DeleteView(gv.Name())
 			// TODO: set selected pane as current view
 			g.SetCurrentView(v.panes[pn[0]].name)
 		}()
@@ -369,9 +370,25 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 		}
 		input.Editable = true
 		input.MoveCursor(len(input.Buffer())-1, 0, true)
+		_ = g.SetKeybinding(input.Name(), gocui.KeyCtrlH, gocui.ModNone, v.KeyCtrlH)
+		_ = g.SetKeybinding(input.Name(), gocui.KeyCtrlL, gocui.ModNone, v.KeyCtrlL)
 		g.Cursor = true
 		g.SetCurrentView("input")
 	}
+	return nil
+}
+
+func (v *View) KeyCtrlH(g *gocui.Gui, gv *gocui.View) error {
+	gv.MoveCursor(-1, 0, true)
+	return nil
+}
+
+func (v *View) KeyCtrlL(g *gocui.Gui, gv *gocui.View) error {
+	x, _ := gv.Cursor()
+	if len(gv.Buffer())-1 <= x {
+		return nil
+	}
+	gv.MoveCursor(+1, 0, true)
 	return nil
 }
 
