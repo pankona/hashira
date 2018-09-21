@@ -196,12 +196,11 @@ func (v *View) KeySpace(g *gocui.Gui, gv *gocui.View) error {
 	return v.selectFocusedItem()
 }
 
-// TODO: rename function name. this is toggle.
+// selectFocusedItem selects focused task.
+// call this function again for deselect.
 func (v *View) selectFocusedItem() error {
 	if v.selectedTask != nil {
 		v.selectedTask = nil
-		// TODO: confirm is this necessary?
-		v.Delegate("updatePriority", v.priorities)
 	} else {
 		v.selectedTask = v.FocusedItem()
 	}
