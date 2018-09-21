@@ -199,9 +199,11 @@ func (v *View) KeySpace(g *gocui.Gui, gv *gocui.View) error {
 	return v.selectFocusedItem()
 }
 
+// TODO: rename function name. this is toggle.
 func (v *View) selectFocusedItem() error {
 	if v.selectedTask != nil {
 		v.selectedTask = nil
+		// TODO: confirm is this necessary?
 		v.Delegate("updatePriority", v.priorities)
 	} else {
 		v.selectedTask = v.FocusedItem()
@@ -214,15 +216,23 @@ func (v *View) FocusedItem() *service.Task {
 		return nil
 	}
 
+	currentView := v.g.CurrentView()
+	if currentView == nil {
+		return nil
+	}
+
 	p := v.pains[v.g.CurrentView().Name()]
-	// FIXME
-	log.Printf("focusedIndex = %d, priorities: %v", v.focusedIndex, v.priorities[0].Ids)
 	var index int
 	for i, t := range v.priorities {
 		if t.Place == p.place {
 			index = i
 		}
 	}
+
+	if v.focusedIndex >= len(v.priorities[index].Ids) {
+		v.focusedIndex = len(v.priorities[index].Ids) - 1
+	}
+
 	id := v.priorities[index].Ids[v.focusedIndex]
 	return p.tasks[id]
 }
@@ -336,18 +346,23 @@ var once = sync.Once{}
 
 func (v *View) Layout(g *gocui.Gui) error {
 	for _, p := range v.pains {
+		log.Printf("@@@@@@ g.CurrentView = %v", g.CurrentView())
+		log.Printf("@@@@@@ p.name = %v", p.name)
 		if g.CurrentView() != nil &&
 			g.CurrentView().Name() == p.name {
 			if v.focusedIndex <= 0 {
 				v.focusedIndex = 0
 			}
-			log.Printf("p.len() = %d", p.len())
+			log.Printf("@@@@@@@@ p.len() = %d", p.len())
 			if v.focusedIndex >= p.len() {
+				log.Printf("@@@@@@@@ p.len() = %d (-1)", p.len())
 				v.focusedIndex = p.len() - 1
 			}
+
+			log.Printf("@@@@@@@@ focusedIndex = %d", v.focusedIndex)
 		}
 
-		err := p.Layout(g, v.focusedIndex, v.selectedTask)
+		err := p.Layout(g, v.FocusedItem(), v.selectedTask)
 		if err != nil {
 			return err
 		}
