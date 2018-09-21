@@ -14,7 +14,7 @@ type View struct {
 	pains        map[string]*Pane
 	g            *gocui.Gui
 	focusedIndex int
-	grabbedTask  *service.Task
+	selectedTask *service.Task
 	editingTask  *service.Task
 	priorities   []*service.Priority
 	Delegater
@@ -122,16 +122,16 @@ func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
 }
 
 func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
-	if v.grabbedTask != nil {
-		v.setPriorityHigh(v.priorities, v.grabbedTask)
+	if v.selectedTask != nil {
+		v.setPriorityHigh(v.priorities, v.selectedTask)
 	}
 	v.focusedIndex--
 	return nil
 }
 
 func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
-	if v.grabbedTask != nil {
-		v.setPriorityLow(v.priorities, v.grabbedTask)
+	if v.selectedTask != nil {
+		v.setPriorityLow(v.priorities, v.selectedTask)
 	}
 	v.focusedIndex++
 	return nil
@@ -200,11 +200,11 @@ func (v *View) KeySpace(g *gocui.Gui, gv *gocui.View) error {
 }
 
 func (v *View) grabFocusedItem() error {
-	if v.grabbedTask != nil {
-		v.grabbedTask = nil
+	if v.selectedTask != nil {
+		v.selectedTask = nil
 		v.Delegate("updatePriority", v.priorities)
 	} else {
-		v.grabbedTask = v.FocusedItem()
+		v.selectedTask = v.FocusedItem()
 	}
 	return nil
 }
@@ -346,7 +346,7 @@ func (v *View) Layout(g *gocui.Gui) error {
 			}
 		}
 
-		err := p.Layout(g, v.focusedIndex, v.grabbedTask)
+		err := p.Layout(g, v.focusedIndex, v.selectedTask)
 		if err != nil {
 			return err
 		}

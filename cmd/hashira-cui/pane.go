@@ -55,7 +55,7 @@ func renderTasks(w io.Writer, tasks map[string]*service.Task, priorities []strin
 		prefix := ""
 		if grabbedTask != nil && task.Id == grabbedTask.Id {
 			prefix = "*"
-			log.Printf("grabbedTask = %v", task)
+			log.Printf("selectedTask = %v", task)
 		}
 		if itemNum == selectedIndex {
 			_, err = fmt.Fprintf(w, "%s \033[3%d;%dm%s\033[0m\n", prefix, 7, 4, task.Name)
