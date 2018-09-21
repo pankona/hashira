@@ -232,6 +232,10 @@ func (v *View) KeyI(g *gocui.Gui, gv *gocui.View) error {
 }
 
 func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
+	if gv.Name() == "input" {
+		return v.input(g, gv)
+	}
+
 	// TODO: implement
 	return nil
 }
