@@ -102,7 +102,7 @@ func (v *View) KeyE(g *gocui.Gui, gv *gocui.View) error {
 
 	v.editingTask = t
 
-	return v.KeyEnter(g, gv)
+	return v.input(g, gv)
 }
 
 func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
