@@ -87,6 +87,7 @@ func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.Delete) // TODO: should be v.KeyX
 		_ = g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.KeySpace)
 		_ = g.SetKeybinding(p.name, 'i', gocui.ModNone, v.KeyI)
+		_ = g.SetKeybinding(p.name, 'I', gocui.ModNone, v.KeyShiftI)
 		_ = g.SetKeybinding(p.name, 'e', gocui.ModNone, v.KeyE)
 	}
 	_ = g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.KeyEnter)
@@ -246,7 +247,7 @@ func (v *View) FocusedItem() *service.Task {
 	return p.tasks[id]
 }
 
-func (v *View) KeyI(g *gocui.Gui, gv *gocui.View) error {
+func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
 	return v.input(g, gv)
 }
 
@@ -257,7 +258,7 @@ const (
 	dirLeft
 )
 
-func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
+func (v *View) KeyI(g *gocui.Gui, gv *gocui.View) error {
 	if gv.Name() == "input" {
 		return v.input(g, gv)
 	}
@@ -268,6 +269,19 @@ func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
 		return nil
 	}
 	return v.moveTaskTo(t, dirRight)
+}
+
+func (v *View) KeyShiftI(g *gocui.Gui, gv *gocui.View) error {
+	if gv.Name() == "input" {
+		return v.input(g, gv)
+	}
+
+	t := v.FocusedItem()
+	if t == nil {
+		log.Printf("selectedItem is nil")
+		return nil
+	}
+	return v.moveTaskTo(t, dirLeft)
 }
 
 func (v *View) lookupPaneByTask(t *service.Task) *Pane {
