@@ -221,7 +221,11 @@ func (v *View) FocusedItem() *service.Task {
 		return nil
 	}
 
-	p := v.pains[v.g.CurrentView().Name()]
+	p := v.pains[currentView.Name()]
+	if p == nil {
+		return nil
+	}
+
 	var index int
 	for i, t := range v.priorities {
 		if t.Place == p.place {
