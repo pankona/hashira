@@ -80,12 +80,12 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 
 func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 	for _, p := range v.pains {
-		_ = g.SetKeybinding(p.name, 'h', gocui.ModNone, v.Left)            // TODO: should be v.KeyH
-		_ = g.SetKeybinding(p.name, 'l', gocui.ModNone, v.Right)           // TODO: should be v.KeyL
-		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)              // TODO: should be v.KeyK
-		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)            // TODO: should be v.KeyJ
-		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.Delete)          // TODO: should be v.KeyX
-		_ = g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.Grab) // TODO: should be v.KeySpace
+		_ = g.SetKeybinding(p.name, 'h', gocui.ModNone, v.Left)   // TODO: should be v.KeyH
+		_ = g.SetKeybinding(p.name, 'l', gocui.ModNone, v.Right)  // TODO: should be v.KeyL
+		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)     // TODO: should be v.KeyK
+		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)   // TODO: should be v.KeyJ
+		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.Delete) // TODO: should be v.KeyX
+		_ = g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.KeySpace)
 		_ = g.SetKeybinding(p.name, 'e', gocui.ModNone, v.KeyE)
 	}
 	_ = g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.Enter) // TODO: should be v.KeyEnter
@@ -195,7 +195,11 @@ func (v *View) Delete(g *gocui.Gui, _ *gocui.View) error {
 	return v.Delegate("delete", t)
 }
 
-func (v *View) Grab(g *gocui.Gui, _ *gocui.View) error {
+func (v *View) KeySpace(g *gocui.Gui, gv *gocui.View) error {
+	return v.grabFocusedItem()
+}
+
+func (v *View) grabFocusedItem() error {
 	if v.grabbedTask != nil {
 		v.grabbedTask = nil
 		v.Delegate("updatePriority", v.priorities)
