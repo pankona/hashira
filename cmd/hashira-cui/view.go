@@ -11,12 +11,12 @@ import (
 )
 
 type View struct {
-	pains         map[string]*Pane
-	g             *gocui.Gui
-	selectedIndex int
-	grabbedTask   *service.Task
-	editingTask   *service.Task
-	priorities    []*service.Priority
+	pains        map[string]*Pane
+	g            *gocui.Gui
+	focusedIndex int
+	grabbedTask  *service.Task
+	editingTask  *service.Task
+	priorities   []*service.Priority
 	Delegater
 }
 
@@ -95,7 +95,7 @@ func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 }
 
 func (v *View) KeyE(g *gocui.Gui, gv *gocui.View) error {
-	t := v.SelectedItem()
+	t := v.FocusedItem()
 	if t == nil {
 		return nil
 	}
@@ -125,7 +125,7 @@ func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
 	if v.grabbedTask != nil {
 		v.setPriorityHigh(v.priorities, v.grabbedTask)
 	}
-	v.selectedIndex--
+	v.focusedIndex--
 	return nil
 }
 
@@ -133,7 +133,7 @@ func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 	if v.grabbedTask != nil {
 		v.setPriorityLow(v.priorities, v.grabbedTask)
 	}
-	v.selectedIndex++
+	v.focusedIndex++
 	return nil
 }
 
@@ -188,8 +188,7 @@ func (v *View) setPriorityLow(priorities []*service.Priority, task *service.Task
 }
 
 func (v *View) Delete(g *gocui.Gui, _ *gocui.View) error {
-	// TODO: (word revision) "Selected" should be "Focused"
-	t := v.SelectedItem()
+	t := v.FocusedItem()
 	if t == nil {
 		return nil
 	}
@@ -205,25 +204,25 @@ func (v *View) grabFocusedItem() error {
 		v.grabbedTask = nil
 		v.Delegate("updatePriority", v.priorities)
 	} else {
-		v.grabbedTask = v.SelectedItem()
+		v.grabbedTask = v.FocusedItem()
 	}
 	return nil
 }
 
-func (v *View) SelectedItem() *service.Task {
-	if v.selectedIndex < 0 {
+func (v *View) FocusedItem() *service.Task {
+	if v.focusedIndex < 0 {
 		return nil
 	}
 	p := v.pains[v.g.CurrentView().Name()]
 	// FIXME
-	log.Printf("selectedIndex = %d, priorities: %v", v.selectedIndex, v.priorities[0].Ids)
+	log.Printf("focusedIndex = %d, priorities: %v", v.focusedIndex, v.priorities[0].Ids)
 	var index int
 	for i, t := range v.priorities {
 		if t.Place == p.place {
 			index = i
 		}
 	}
-	id := v.priorities[index].Ids[v.selectedIndex]
+	id := v.priorities[index].Ids[v.focusedIndex]
 	return p.tasks[id]
 }
 
@@ -243,7 +242,7 @@ func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
 		return v.input(g, gv)
 	}
 
-	t := v.SelectedItem()
+	t := v.FocusedItem()
 	if t == nil {
 		log.Printf("selectedItem is nil")
 		return nil
@@ -338,16 +337,16 @@ func (v *View) Layout(g *gocui.Gui) error {
 	for _, p := range v.pains {
 		if g.CurrentView() != nil &&
 			g.CurrentView().Name() == p.name {
-			if v.selectedIndex <= 0 {
-				v.selectedIndex = 0
+			if v.focusedIndex <= 0 {
+				v.focusedIndex = 0
 			}
 			log.Printf("p.len() = %d", p.len())
-			if v.selectedIndex >= p.len() {
-				v.selectedIndex = p.len() - 1
+			if v.focusedIndex >= p.len() {
+				v.focusedIndex = p.len() - 1
 			}
 		}
 
-		err := p.Layout(g, v.selectedIndex, v.grabbedTask)
+		err := p.Layout(g, v.focusedIndex, v.grabbedTask)
 		if err != nil {
 			return err
 		}
