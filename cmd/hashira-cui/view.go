@@ -231,13 +231,50 @@ func (v *View) KeyI(g *gocui.Gui, gv *gocui.View) error {
 	return v.input(g, gv)
 }
 
+type directive int
+
+const (
+	dirRight directive = iota
+	dirLeft
+)
+
 func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
 	if gv.Name() == "input" {
 		return v.input(g, gv)
 	}
 
-	// TODO: implement
+	t := v.SelectedItem()
+	if t == nil {
+		log.Printf("selectedItem is nil")
+		return nil
+	}
+	return v.moveTaskTo(t, dirRight)
+}
+
+func (v *View) lookupPaneByTask(t *service.Task) *Pane {
+	for i, p := range v.pains {
+		if p.place == t.Place {
+			return v.pains[i]
+		}
+	}
 	return nil
+}
+
+func (v *View) moveTaskTo(t *service.Task, dir directive) error {
+	pane := v.lookupPaneByTask(t)
+	if pane == nil {
+		return fmt.Errorf("couldn't lookup a pane by specified task")
+	}
+
+	switch dir {
+	case dirRight:
+		t.Place = pane.right.place
+	case dirLeft:
+		t.Place = pane.left.place
+	}
+
+	log.Printf("new task's status: %v", t)
+	return v.Delegate("update", t)
 }
 
 func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
