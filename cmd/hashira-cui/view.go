@@ -108,14 +108,89 @@ func (v *View) KeyE(g *gocui.Gui, gv *gocui.View) error {
 
 func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
 	dest := v.panes[g.CurrentView().Name()].left
-	_, err := g.SetCurrentView(dest.name)
-	return err
+	return v.changeFocusedPane(dest)
 }
 
 func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
 	dest := v.panes[g.CurrentView().Name()].right
-	_, err := g.SetCurrentView(dest.name)
-	return err
+	return v.changeFocusedPane(dest)
+}
+
+func (v *View) changeFocusedPane(pane *Pane) error {
+	g := v.g
+	_, err := g.SetCurrentView(pane.name)
+	if err != nil {
+		return err
+	}
+
+	t := v.selectedTask
+	if t == nil {
+		return nil
+	}
+
+	t.Place = pane.place
+	err = v.Delegate("update", t)
+	if err != nil {
+		return err
+	}
+
+	priority := remove(pane.priorities, t.Id)
+	priority = insert(priority, t.Id, v.focusedIndex)
+	if priority == nil {
+		return fmt.Errorf("failed to insert [%s] to [%s]. fatal", t.Name, pane.name)
+	}
+
+	for i, p := range v.priorities {
+		if p.Place == pane.place {
+			v.priorities[i].Ids = priority
+		}
+	}
+
+	err = v.Delegate("updatePriority", v.priorities)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func remove(ss []string, s string) []string {
+	ret := make([]string, len(ss))
+	var index int
+	var found bool
+
+	for i := 0; i < len(ss); i++ {
+		if ss[i] == s {
+			found = true
+			continue
+		}
+		ret[index] = ss[i]
+		index++
+	}
+
+	if found {
+		return ret[:len(ss)-1]
+	}
+	return ret
+}
+
+func insert(ss []string, s string, index int) []string {
+	if index < 0 {
+		return nil
+	}
+	if index > len(ss) {
+		index = len(ss)
+	}
+
+	ret := make([]string, len(ss)+1)
+	for i := 0; i < index; i++ {
+		ret[i] = ss[i]
+	}
+	ret[index] = s
+	for i := index; i < len(ss); i++ {
+		ret[i+1] = ss[i]
+	}
+	return ret
 }
 
 func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
