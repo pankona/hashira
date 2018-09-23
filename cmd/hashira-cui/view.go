@@ -107,18 +107,14 @@ func (v *View) KeyE(g *gocui.Gui, gv *gocui.View) error {
 }
 
 func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
-	g.SetCurrentView(v.panes[g.CurrentView().Name()].left.name)
-	g.Update(func(*gocui.Gui) error {
-		return nil
-	})
+	dest := v.panes[g.CurrentView().Name()].left
+	g.SetCurrentView(dest.name)
 	return nil
 }
 
 func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
-	g.SetCurrentView(v.panes[g.CurrentView().Name()].right.name)
-	g.Update(func(*gocui.Gui) error {
-		return nil
-	})
+	dest := v.panes[g.CurrentView().Name()].right
+	g.SetCurrentView(dest.name)
 	return nil
 }
 
