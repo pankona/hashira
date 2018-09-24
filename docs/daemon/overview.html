@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Daemon · GitBook</title>
+        <title>Overview · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -12,16 +12,16 @@
         
         
     
-    <link rel="stylesheet" href="gitbook/style.css">
+    <link rel="stylesheet" href="../gitbook/style.css">
 
     
             
                 
-                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
                 
             
                 
-                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
                 
             
         
@@ -49,14 +49,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
-    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="tables.html" />
+    <link rel="next" href="entity.html" />
     
-    
-    <link rel="prev" href="communication/daemon2datastore.html" />
     
 
     </head>
@@ -81,9 +79,9 @@
         
         
     
-        <li class="chapter " data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="../">
             
-                <a href="./">
+                <a href="../">
             
                     
                     Introduction
@@ -94,9 +92,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2" data-path="overview.html">
+        <li class="chapter " data-level="1.2" data-path="../overview.html">
             
-                <a href="overview.html">
+                <a href="../overview.html">
             
                     
                     Overview
@@ -121,9 +119,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.3.1" data-path="communication/front2daemon.html">
+        <li class="chapter " data-level="1.3.1" data-path="../communication/front2daemon.html">
             
-                <a href="communication/front2daemon.html">
+                <a href="../communication/front2daemon.html">
             
                     
                     Front to daemon
@@ -134,9 +132,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.2" data-path="communication/daemon2datastore.html">
+        <li class="chapter " data-level="1.3.2" data-path="../communication/daemon2datastore.html">
             
-                <a href="communication/daemon2datastore.html">
+                <a href="../communication/daemon2datastore.html">
             
                     
                     Daemon to database
@@ -152,12 +150,26 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.4" data-path="daemon.html">
+        <li class="chapter " data-level="1.4" >
             
-                <a href="daemon.html">
+                <span>
             
                     
                     Daemon
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter active" data-level="1.4.1" data-path="overview.html">
+            
+                <a href="overview.html">
+            
+                    
+                    Overview
             
                 </a>
             
@@ -165,9 +177,27 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5" data-path="tables.html">
+        <li class="chapter " data-level="1.4.2" data-path="entity.html">
             
-                <a href="tables.html">
+                <a href="entity.html">
+            
+                    
+                    Entity
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../tables.html">
+            
+                <a href="../tables.html">
             
                     
                     DB tables
@@ -178,25 +208,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.6" data-path="prototype.html">
+        <li class="chapter " data-level="1.6" data-path="../prototype.html">
             
-                <a href="prototype.html">
+                <a href="../prototype.html">
             
                     
                     Prototype
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.7" data-path="proto.html">
-            
-                <a href="proto.html">
-            
-                    
-                    Protocol Buffers
             
                 </a>
             
@@ -234,7 +251,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Daemon</a>
+        <a href=".." >Overview</a>
     </h1>
 </div>
 
@@ -246,8 +263,7 @@
                             
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="daemon">daemon</h1>
-<h2 id="overview">overview</h2>
+                                <h1 id="overview-of-daemons-functionality">Overview of Daemon&apos;s functionality</h1>
 <ul>
 <li>Daemon has responsibility for<ul>
 <li>Receive requests from front end.</li>
@@ -257,7 +273,14 @@
 </ul>
 </li>
 </ul>
-<h2 id="sync-with-datastore">sync with datastore</h2>
+<h2 id="caches-data-entities-on-local-document-store">Caches data entities on local document store</h2>
+<ul>
+<li>Caches commands and reflect them to local document store for working without network.<ul>
+<li><a href="entity.html">here</a> is data entities for local document store</li>
+</ul>
+</li>
+</ul>
+<h2 id="sync-with-datastore">Sync with datastore</h2>
 <ul>
 <li>Daemon has a document store to cache commands from front end, and store data from datastore.</li>
 <li>Periodically, daemon tries to perform syncing local data with datastore.<ul>
@@ -267,8 +290,8 @@
 </ul>
 </li>
 </ul>
-<p><img src="assets/images/uml/046717e1e2c33fa8c3007e6a79f853670d932ea6.svg"></p>
-<h2 id="grpc-api">gRPC API</h2>
+<p><img src="../assets/images/uml/046717e1e2c33fa8c3007e6a79f853670d932ea6.svg"></p>
+<h2 id="grpc-api">GRPC API</h2>
 <ul>
 <li><p>Hashira Service</p>
 <ul>
@@ -326,7 +349,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="command-handling">command handling</h2>
+<h2 id="command-handling">Command handling</h2>
 <ul>
 <li>When daemon receives commands, cache them and return ok immediately.</li>
 <li>If daemon is online, send cached commands to datastore.</li>
@@ -343,7 +366,7 @@ and send notification to front end as same as written above.</li>
 </ul>
 </li>
 </ul>
-<p><img src="assets/images/uml/0a331877ecc2320535f07c31ef2c8471bd76dd39.svg"></p>
+<p><img src="../assets/images/uml/0a331877ecc2320535f07c31ef2c8471bd76dd39.svg"></p>
 
                                 
                                 </section>
@@ -355,12 +378,8 @@ and send notification to front end as same as written above.</li>
 
             
                 
-                <a href="communication/daemon2datastore.html" class="navigation navigation-prev " aria-label="Previous page: Daemon to database">
-                    <i class="fa fa-angle-left"></i>
-                </a>
                 
-                
-                <a href="tables.html" class="navigation navigation-next " aria-label="Next page: DB tables">
+                <a href="entity.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Entity">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -371,29 +390,29 @@ and send notification to front end as same as written above.</li>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Daemon","level":"1.4","depth":1,"next":{"title":"DB tables","level":"1.5","depth":1,"path":"tables.md","ref":"./tables.md","articles":[]},"previous":{"title":"Daemon to database","level":"1.3.2","depth":2,"path":"communication/daemon2datastore.md","ref":"./communication/daemon2datastore.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["uml","-search"],"pluginsConfig":{"uml":{"format":"svg","charset":"UTF-8","nailgun":false},"highlight":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"daemon.md","mtime":"2017-12-29T02:55:19.652Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-29T07:51:54.458Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Overview","level":"1.4.1","depth":2,"next":{"title":"Entity","level":"1.4.2","depth":2,"path":"daemon/entity.md","ref":"./daemon/entity.md","articles":[]},"previous":{"title":"Daemon","level":"1.4","depth":1,"ref":"","articles":[{"title":"Overview","level":"1.4.1","depth":2,"path":"daemon/overview.md","ref":"./daemon/overview.md","articles":[]},{"title":"Entity","level":"1.4.2","depth":2,"path":"daemon/entity.md","ref":"./daemon/entity.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["uml","-search"],"pluginsConfig":{"uml":{"format":"svg","charset":"UTF-8","nailgun":false},"highlight":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"daemon/overview.md","mtime":"2018-09-24T08:59:34.160Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-09-24T09:08:48.312Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
 
         
-    <script src="gitbook/gitbook.js"></script>
-    <script src="gitbook/theme.js"></script>
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
     
         
-        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
-        
-    
-        
-        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
         
     
         
-        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
         
     
         
-        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
         
     
 

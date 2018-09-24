@@ -150,16 +150,48 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="daemon.html">
+        <li class="chapter " data-level="1.4" >
             
-                <a href="daemon.html">
+                <span>
             
                     
                     Daemon
             
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="daemon/overview.html">
+            
+                <a href="daemon/overview.html">
+            
+                    
+                    Overview
+            
                 </a>
             
 
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="daemon/entity.html">
+            
+                <a href="daemon/entity.html">
+            
+                    
+                    Entity
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -182,19 +214,6 @@
             
                     
                     Prototype
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.7" data-path="proto.html">
-            
-                <a href="proto.html">
-            
-                    
-                    Protocol Buffers
             
                 </a>
             
@@ -244,51 +263,51 @@
                             
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="design-overview">design overview</h1>
-<h2 id="functions-of-hashira-on-pc">functions of hashira on PC</h2>
-<h3 id="cli-and-gui">cli and gui</h3>
+                                <h1 id="hashira-design-overview">hashira Design overview</h1>
+<h2 id="functions-of-hashira-on-pc">Functions of hashira on PC</h2>
+<h3 id="cli-and-gui">CLI and GUI</h3>
 <ul>
-<li>add a new task and place it on Backlog</li>
-<li>change status of tasks to ToDo, Doing, and Done</li>
-<li>add interrupter task, place it on Doing directory</li>
-<li>show list of tasks on each status</li>
+<li>Add a new task and place it on Backlog</li>
+<li>Change status of tasks to ToDo, Doing, and Done</li>
+<li>Add interrupter task, place it on Doing directory</li>
+<li>Show list of tasks on each status</li>
 </ul>
-<h3 id="gui-specific">gui specific</h3>
+<h3 id="gui-specific">GUI specific</h3>
 <ul>
-<li>show chart to indicate how long time spent to current task </li>
+<li>Show chart to indicate how long time spent to current task </li>
 </ul>
-<h2 id="functions-of-hashira-on-android">functions of hashira on Android</h2>
-<h3 id="application">application</h3>
+<h2 id="functions-of-hashira-on-android">Functions of hashira on Android</h2>
+<h3 id="application">Application</h3>
 <ul>
-<li>add a new task and place it on Backlog</li>
-<li>change status of tasks to ToDo, Doing, and Done</li>
-<li>add interrupter task, place it on Doing directory</li>
-<li>show list of tasks on each status</li>
+<li>Add a new task and place it on Backlog</li>
+<li>Change status of tasks to ToDo, Doing, and Done</li>
+<li>Add interrupter task, place it on Doing directory</li>
+<li>Show list of tasks on each status</li>
 </ul>
-<h3 id="widget">widget</h3>
+<h3 id="widget">Widget</h3>
 <ul>
-<li>add a new task and place it on Backlog</li>
-<li>show list of tasks on Backlog</li>
-<li>show current task and how long time spent to the task</li>
+<li>Add a new task and place it on Backlog</li>
+<li>Show list of tasks on Backlog</li>
+<li>Show current task and how long time spent to the task</li>
 </ul>
-<h2 id="functions-of-daemon">functions of daemon</h2>
+<h2 id="functions-of-daemon">Functions of Daemon</h2>
 <ul>
-<li>it is for making hashira work even there&apos;s no network</li>
-<li>daemon has database to cache the tasks and &quot;commands&quot;<ul>
+<li>It is for making hashira work even there&apos;s no network</li>
+<li>Daemon has database to cache the tasks and &quot;commands&quot;<ul>
 <li>&quot;commands&quot; means a unit of modifications to tasks.
-e.g) add new task, move task to ToDo, and so on</li>
+e.g) Add new task, move task to ToDo, and so on</li>
 <li>&quot;commands&quot; are used to sync with datastore</li>
 </ul>
 </li>
-<li>if network is available, then sync registered or changed tasks with cloud</li>
+<li>If network is available, then sync registered or changed tasks with cloud</li>
 </ul>
-<h2 id="functions-of-datastore">functions of datastore</h2>
+<h2 id="functions-of-datastore">Functions of datastore</h2>
 <ul>
-<li>it is assumed to place on cloud. it is for syncing data between devices</li>
-<li>it accepts &quot;commands&quot; to add or modify tasks</li>
-<li>daemon can retrieve chunk of commands with from-to query to reflect datastore&apos;s update to local database</li>
+<li>It is assumed to place on cloud. it is for syncing data between devices</li>
+<li>It accepts &quot;commands&quot; to add or modify tasks</li>
+<li>Daemon can retrieve chunk of commands with from-to query to reflect datastore&apos;s update to local database</li>
 </ul>
-<h2 id="modules">modules</h2>
+<h2 id="modules">Modules</h2>
 <p><img src="assets/images/uml/c9a9978db11ac62b5667fe689064c3957d0d48bb.svg"></p>
 
                                 
@@ -313,7 +332,7 @@ e.g) add new task, move task to ToDo, and so on</li>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Overview","level":"1.2","depth":1,"next":{"title":"Communication","level":"1.3","depth":1,"ref":"","articles":[{"title":"Front to daemon","level":"1.3.1","depth":2,"path":"communication/front2daemon.md","ref":"./communication/front2daemon.md","articles":[]},{"title":"Daemon to database","level":"1.3.2","depth":2,"path":"communication/daemon2datastore.md","ref":"./communication/daemon2datastore.md","articles":[]}]},"previous":{"title":"Introduction","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["uml","-search"],"pluginsConfig":{"uml":{"format":"svg","charset":"UTF-8","nailgun":false},"highlight":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"overview.md","mtime":"2017-12-29T07:34:42.692Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-29T07:51:54.458Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Overview","level":"1.2","depth":1,"next":{"title":"Communication","level":"1.3","depth":1,"ref":"","articles":[{"title":"Front to daemon","level":"1.3.1","depth":2,"path":"communication/front2daemon.md","ref":"./communication/front2daemon.md","articles":[]},{"title":"Daemon to database","level":"1.3.2","depth":2,"path":"communication/daemon2datastore.md","ref":"./communication/daemon2datastore.md","articles":[]}]},"previous":{"title":"Introduction","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["uml","-search"],"pluginsConfig":{"uml":{"format":"svg","charset":"UTF-8","nailgun":false},"highlight":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"overview.md","mtime":"2018-09-24T09:05:46.463Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-09-24T09:08:48.312Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

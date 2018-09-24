@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Front to daemon · GitBook</title>
+        <title>Entity · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -53,8 +53,10 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="daemon2datastore.html" />
+    <link rel="next" href="../tables.html" />
     
+    
+    <link rel="prev" href="overview.html" />
     
 
     </head>
@@ -119,9 +121,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter active" data-level="1.3.1" data-path="front2daemon.html">
+        <li class="chapter " data-level="1.3.1" data-path="../communication/front2daemon.html">
             
-                <a href="front2daemon.html">
+                <a href="../communication/front2daemon.html">
             
                     
                     Front to daemon
@@ -132,9 +134,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3.2" data-path="daemon2datastore.html">
+        <li class="chapter " data-level="1.3.2" data-path="../communication/daemon2datastore.html">
             
-                <a href="daemon2datastore.html">
+                <a href="../communication/daemon2datastore.html">
             
                     
                     Daemon to database
@@ -164,9 +166,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.4.1" data-path="../daemon/overview.html">
+        <li class="chapter " data-level="1.4.1" data-path="overview.html">
             
-                <a href="../daemon/overview.html">
+                <a href="overview.html">
             
                     
                     Overview
@@ -177,9 +179,9 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4.2" data-path="../daemon/entity.html">
+        <li class="chapter active" data-level="1.4.2" data-path="entity.html">
             
-                <a href="../daemon/entity.html">
+                <a href="entity.html">
             
                     
                     Entity
@@ -251,7 +253,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >Front to daemon</a>
+        <a href=".." >Entity</a>
     </h1>
 </div>
 
@@ -263,78 +265,40 @@
                             
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="communication-between-front-to-daemon">Communication between front to daemon</h1>
-<h2 id="overview">Overview</h2>
+                                <h1 id="data-entities-for-local-document-store">Data entities for local document store</h1>
 <ul>
-<li>hashira uses GRPC for communication between front and daemon</li>
-</ul>
-<h2 id="pc">PC</h2>
-<h3 id="cli-and-daemon">CLI and Daemon</h3>
+<li><p>Two data entities are declared for local document store.</p>
 <ul>
-<li>CLI to Daemon<ul>
-<li>Add a new task to Backlog</li>
-<li>Change task&apos;s status</li>
-<li>Show task list</li>
+<li>Tasks</li>
+<li>Priorities</li>
 </ul>
 </li>
-<li>Daemon to CLI<ul>
-<li>None</li>
-</ul>
+<li><p>Refer <a href="https://github.com/pankona/hashira/blob/master/proto/hashira.proto" target="_blank">proto file</a> for latest data entity declaration.</p>
 </li>
 </ul>
-<h3 id="gui-and-daemon">GUI and Daemon</h3>
+<h2 id="tasks">Tasks</h2>
 <ul>
-<li>Assume to use Electron</li>
-<li>GUI to daemon<ul>
-<li>Add a new task to Backlog, ToDo, Doing, Done</li>
-<li>Change task&apos;s status</li>
-<li>Show task list on each status</li>
-<li>Show consume of each task</li>
+<li>Tasks represents each ToDo items.</li>
 </ul>
-</li>
-<li><p>Daemon to GUI</p>
+<pre><code>message Task {
+    string id        = 1;
+    string name      = 2;
+    Place  place     = 3;
+    bool   isDeleted = 4;
+}
+</code></pre><h2 id="priorities">Priorities</h2>
 <ul>
-<li>notify any update of tasks</li>
+<li>Priorities represents priority of each task.<ul>
+<li>Priorities are represented as its place and array of task ID.</li>
+<li>The ID placed on lower index means higher priority.</li>
 </ul>
 </li>
-<li><p>TODO: Show GUI picture</p>
-</li>
 </ul>
-<h2 id="android">Android</h2>
-<h3 id="application-and-daemon">application and daemon</h3>
-<ul>
-<li>GUI to Daemon<ul>
-<li>Add a new task to Backlog, ToDo, Doing, Done</li>
-<li>Change task&apos;s status</li>
-<li>Show task list on each status</li>
-<li>Show consume of each task</li>
-</ul>
-</li>
-<li><p>Daemon to GUI</p>
-<ul>
-<li>Notify any update of tasks</li>
-</ul>
-</li>
-<li><p>TODO: Show GUI picture</p>
-</li>
-</ul>
-<h3 id="widget-and-daemon">Widget and Daemon</h3>
-<ul>
-<li>Widget to Daemon<ul>
-<li>Add a new task to Backlog</li>
-<li>Change task&apos;s status to Done</li>
-<li>Show task list</li>
-</ul>
-</li>
-<li><p>Daemon to widget</p>
-<ul>
-<li>Notify any update of tasks</li>
-</ul>
-</li>
-<li><p>TODO: Show GUI picture</p>
-</li>
-</ul>
-
+<pre><code>message Priority {
+    Place place         = 1;
+    repeated string ids = 2;
+}
+</code></pre>
                                 
                                 </section>
                             
@@ -345,8 +309,12 @@
 
             
                 
+                <a href="overview.html" class="navigation navigation-prev " aria-label="Previous page: Overview">
+                    <i class="fa fa-angle-left"></i>
+                </a>
                 
-                <a href="daemon2datastore.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Daemon to database">
+                
+                <a href="../tables.html" class="navigation navigation-next " aria-label="Next page: DB tables">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -357,7 +325,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Front to daemon","level":"1.3.1","depth":2,"next":{"title":"Daemon to database","level":"1.3.2","depth":2,"path":"communication/daemon2datastore.md","ref":"./communication/daemon2datastore.md","articles":[]},"previous":{"title":"Communication","level":"1.3","depth":1,"ref":"","articles":[{"title":"Front to daemon","level":"1.3.1","depth":2,"path":"communication/front2daemon.md","ref":"./communication/front2daemon.md","articles":[]},{"title":"Daemon to database","level":"1.3.2","depth":2,"path":"communication/daemon2datastore.md","ref":"./communication/daemon2datastore.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["uml","-search"],"pluginsConfig":{"uml":{"format":"svg","charset":"UTF-8","nailgun":false},"highlight":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"communication/front2daemon.md","mtime":"2018-09-24T09:02:04.141Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-09-24T09:08:48.312Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Entity","level":"1.4.2","depth":2,"next":{"title":"DB tables","level":"1.5","depth":1,"path":"tables.md","ref":"./tables.md","articles":[]},"previous":{"title":"Overview","level":"1.4.1","depth":2,"path":"daemon/overview.md","ref":"./daemon/overview.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["uml","-search"],"pluginsConfig":{"uml":{"format":"svg","charset":"UTF-8","nailgun":false},"highlight":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"daemon/entity.md","mtime":"2018-09-24T08:58:30.753Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-09-24T09:08:48.312Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

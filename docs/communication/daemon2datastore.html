@@ -53,8 +53,6 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="../daemon.html" />
-    
     
     <link rel="prev" href="front2daemon.html" />
     
@@ -152,16 +150,48 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="../daemon.html">
+        <li class="chapter " data-level="1.4" >
             
-                <a href="../daemon.html">
+                <span>
             
                     
                     Daemon
             
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../daemon/overview.html">
+            
+                <a href="../daemon/overview.html">
+            
+                    
+                    Overview
+            
                 </a>
             
 
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../daemon/entity.html">
+            
+                <a href="../daemon/entity.html">
+            
+                    
+                    Entity
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -184,19 +214,6 @@
             
                     
                     Prototype
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.7" data-path="../proto.html">
-            
-                <a href="../proto.html">
-            
-                    
-                    Protocol Buffers
             
                 </a>
             
@@ -246,18 +263,18 @@
                             
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="communication-between-daemon-to-datastore">communication between daemon to datastore</h1>
-<h2 id="overview">overview</h2>
+                                <h1 id="communication-between-daemon-to-datastore">Communication between daemon to datastore</h1>
+<h2 id="overview">Overview</h2>
 <ul>
-<li>Use gRPC for communication between daemon and datastore<ul>
+<li>Use GRPC for communication between daemon and datastore<ul>
 <li>Daemon send array of command, and datastore will apply them</li>
 <li>Daemon retrieves updates from datastore periodically for syncing</li>
 </ul>
 </li>
 </ul>
-<h2 id="grpc-apis">gRPC APIs</h2>
+<h2 id="grpc-apis">GRPC APIs</h2>
 <ul>
-<li>Use Hashira service. See <a href="../daemon.html">daemon.md</a>.</li>
+<li>Use Hashira service. See <a href="../daemon/overview.html">daemon overview</a>.</li>
 </ul>
 
                                 
@@ -270,14 +287,10 @@
 
             
                 
-                <a href="front2daemon.html" class="navigation navigation-prev " aria-label="Previous page: Front to daemon">
+                <a href="front2daemon.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Front to daemon">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
-                
-                <a href="../daemon.html" class="navigation navigation-next " aria-label="Next page: Daemon">
-                    <i class="fa fa-angle-right"></i>
-                </a>
                 
             
         
@@ -286,7 +299,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Daemon to database","level":"1.3.2","depth":2,"next":{"title":"Daemon","level":"1.4","depth":1,"path":"daemon.md","ref":"./daemon.md","articles":[]},"previous":{"title":"Front to daemon","level":"1.3.1","depth":2,"path":"communication/front2daemon.md","ref":"./communication/front2daemon.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["uml","-search"],"pluginsConfig":{"uml":{"format":"svg","charset":"UTF-8","nailgun":false},"highlight":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"communication/daemon2datastore.md","mtime":"2017-12-04T13:34:41.121Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-29T07:51:54.458Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Daemon to database","level":"1.3.2","depth":2,"next":{"title":"Daemon","level":"1.4","depth":1,"ref":"","articles":[{"title":"Overview","level":"1.4.1","depth":2,"path":"daemon/overview.md","ref":"./daemon/overview.md","articles":[]},{"title":"Entity","level":"1.4.2","depth":2,"path":"daemon/entity.md","ref":"./daemon/entity.md","articles":[]}]},"previous":{"title":"Front to daemon","level":"1.3.1","depth":2,"path":"communication/front2daemon.md","ref":"./communication/front2daemon.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["uml","-search"],"pluginsConfig":{"uml":{"format":"svg","charset":"UTF-8","nailgun":false},"highlight":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"communication/daemon2datastore.md","mtime":"2018-09-24T09:06:20.276Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-09-24T09:08:48.312Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
