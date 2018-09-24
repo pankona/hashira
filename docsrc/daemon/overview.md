@@ -1,6 +1,4 @@
-# daemon
-
-## overview
+# Overview of Daemon's functionality
 
 * Daemon has responsibility for
   * Receive requests from front end.
@@ -8,7 +6,12 @@
   * Send chunk of commands to datastore for syncing.
   * Receive chunk of data to sync with datastore.
 
-## sync with datastore
+## Caches data entities on local document store
+
+* Caches commands and reflect them to local document store for working without network.
+  * [here](./entity.md) is data entities for local document store
+
+## Sync with datastore
 
 * Daemon has a document store to cache commands from front end, and store data from datastore.
 * Periodically, daemon tries to perform syncing local data with datastore.

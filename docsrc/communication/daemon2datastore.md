@@ -8,5 +8,5 @@
 
 ## gRPC APIs
 
-* Use Hashira service. See [daemon.md](../daemon.md).
+* Use Hashira service. See [daemon overview](../daemon/overview.md).
 
