@@ -10,7 +10,7 @@
 
 * Tasks represents each ToDo items.
 
-```proto
+```
 message Task {
     string id        = 1;
     string name      = 2;
@@ -25,7 +25,7 @@ message Task {
   * Priorities are represented as its place and array of task ID.
   * The ID placed on lower index means higher priority.
 
-```proto
+```
 message Priority {
     Place place         = 1;
     repeated string ids = 2;
