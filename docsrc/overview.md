@@ -1,49 +1,49 @@
-# design overview
+# hashira Design overview
 
-## functions of hashira on PC
+## Functions of hashira on PC
 
-### cli and gui
+### CLI and GUI
 
-* add a new task and place it on Backlog
-* change status of tasks to ToDo, Doing, and Done
-* add interrupter task, place it on Doing directory
-* show list of tasks on each status
+* Add a new task and place it on Backlog
+* Change status of tasks to ToDo, Doing, and Done
+* Add interrupter task, place it on Doing directory
+* Show list of tasks on each status
 
-### gui specific
+### GUI specific
 
-* show chart to indicate how long time spent to current task 
+* Show chart to indicate how long time spent to current task 
 
-## functions of hashira on Android
+## Functions of hashira on Android
 
-### application
+### Application
 
-* add a new task and place it on Backlog
-* change status of tasks to ToDo, Doing, and Done
-* add interrupter task, place it on Doing directory
-* show list of tasks on each status
+* Add a new task and place it on Backlog
+* Change status of tasks to ToDo, Doing, and Done
+* Add interrupter task, place it on Doing directory
+* Show list of tasks on each status
 
-### widget
+### Widget
 
-* add a new task and place it on Backlog
-* show list of tasks on Backlog
-* show current task and how long time spent to the task
+* Add a new task and place it on Backlog
+* Show list of tasks on Backlog
+* Show current task and how long time spent to the task
 
-## functions of daemon
+## Functions of Daemon
 
-* it is for making hashira work even there's no network
-* daemon has database to cache the tasks and "commands"
+* It is for making hashira work even there's no network
+* Daemon has database to cache the tasks and "commands"
   * "commands" means a unit of modifications to tasks.
-  e.g) add new task, move task to ToDo, and so on
+  e.g) Add new task, move task to ToDo, and so on
   * "commands" are used to sync with datastore
-* if network is available, then sync registered or changed tasks with cloud
+* If network is available, then sync registered or changed tasks with cloud
 
-## functions of datastore
+## Functions of datastore
 
-* it is assumed to place on cloud. it is for syncing data between devices
-* it accepts "commands" to add or modify tasks
-* daemon can retrieve chunk of commands with from-to query to reflect datastore's update to local database
+* It is assumed to place on cloud. it is for syncing data between devices
+* It accepts "commands" to add or modify tasks
+* Daemon can retrieve chunk of commands with from-to query to reflect datastore's update to local database
 
-## modules
+## Modules
 
 ```uml
 @startuml

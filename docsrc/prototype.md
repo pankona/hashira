@@ -2,7 +2,7 @@
 
 Here's design memorandum of hashira prototyping, for checking usability.
 
-## feature notice of prototype version
+## Feature notice of prototype version
 
 * No performance/resource consideration
 * front end is for linux PC only

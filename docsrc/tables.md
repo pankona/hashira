@@ -1,7 +1,7 @@
 
-# database tables
+# Database tables
 
-## user
+## User
 
 | column    | type   | remarks                       |
 |-----------|--------|-------------------------------|
@@ -9,7 +9,7 @@
 | user_name | string | non-null, unique              |
 | password  | string | non-null                      |
 
-## task
+## Task
 
 | column    | type   | remarks                       |
 |-----------|--------|-------------------------------|
@@ -22,7 +22,7 @@
 
 * task represents tasks and its status.
 
-## status
+## Status
 
 | column      | type   | remarks                       |
 |-------------|--------|-------------------------------|
@@ -31,7 +31,7 @@
 
 * status represents task's status. like "Backlog", "ToDo", "Doing" and "Done" will be inserted here.
 
-## consume
+## Consume
 
 | column      | type   | remarks                       |
 |-------------|--------|-------------------------------|
@@ -43,7 +43,7 @@
 
 * consume represents how many times are consumed for specified task.
 
-## label
+## Label
 
 | column     | type   | remarks                       |
 |------------|--------|-------------------------------|

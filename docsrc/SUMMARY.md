@@ -7,5 +7,4 @@
   * [Entity](./daemon/entity.md)
 * [DB tables](./tables.md)
 * [Prototype](./prototype.md)
-* [Protocol Buffers](./proto.md)
 

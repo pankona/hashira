@@ -63,7 +63,7 @@ d1 -> d1 : store JSON to local document store
 @enduml
 ```
 
-## gRPC API
+## GRPC API
 
 * Hashira Service
   * send(array of command)
@@ -87,7 +87,7 @@ command (structure)
 | what    | enum of what | new, update, etc.                        |
 | payload | string       | JSON formatted string how to treat what. |
 
-## command handling
+## Command handling
 
 * When daemon receives commands, cache them and return ok immediately.
 * If daemon is online, send cached commands to datastore.

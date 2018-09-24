@@ -1,54 +1,54 @@
-# communication between front to daemon
+# Communication between front to daemon
 
-## overview
+## Overview
 
-* Use gRPC for communication between front and daemon
+* hashira uses GRPC for communication between front and daemon
 
 ## PC
 
-### cli and daemon
+### CLI and Daemon
 
-* cli to daemon
-  * add a new task to Backlog
-  * change task's status
-  * show task list
-* daemon to cli
-  * none
+* CLI to Daemon
+  * Add a new task to Backlog
+  * Change task's status
+  * Show task list
+* Daemon to CLI
+  * None
 
-### gui and daemon
+### GUI and Daemon
 
-* assume to use Electron
-* gui to daemon
-  * add a new task to Backlog, ToDo, Doing, Done
-  * change task's status
-  * show task list on each status
-  * show consume of each task
-* daemon to gui
+* Assume to use Electron
+* GUI to daemon
+  * Add a new task to Backlog, ToDo, Doing, Done
+  * Change task's status
+  * Show task list on each status
+  * Show consume of each task
+* Daemon to GUI
   * notify any update of tasks
 
-* TODO: show GUI picture
+* TODO: Show GUI picture
 
 ## Android
 
 ### application and daemon
 
-* gui to daemon
-  * add a new task to Backlog, ToDo, Doing, Done
-  * change task's status
-  * show task list on each status
-  * show consume of each task
-* daemon to gui
-  * notify any update of tasks
+* GUI to Daemon
+  * Add a new task to Backlog, ToDo, Doing, Done
+  * Change task's status
+  * Show task list on each status
+  * Show consume of each task
+* Daemon to GUI
+  * Notify any update of tasks
 
-* TODO: show GUI picture
+* TODO: Show GUI picture
 
-### widget and daemon
+### Widget and Daemon
 
-* widget to daemon
-  * add a new task to Backlog
-  * change task's status to Done
-  * show task list
-* daemon to widget
-  * notify any update of tasks
+* Widget to Daemon
+  * Add a new task to Backlog
+  * Change task's status to Done
+  * Show task list
+* Daemon to widget
+  * Notify any update of tasks
 
-* TODO: show GUI picture
+* TODO: Show GUI picture
