@@ -107,13 +107,13 @@ func (v *View) KeyE(g *gocui.Gui, gv *gocui.View) error {
 }
 
 func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
-	dest := v.panes[g.CurrentView().Name()].left
-	return v.changeFocusedPane(dest)
+	dst := v.panes[g.CurrentView().Name()].left
+	return v.changeFocusedPane(dst)
 }
 
 func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
-	dest := v.panes[g.CurrentView().Name()].right
-	return v.changeFocusedPane(dest)
+	dst := v.panes[g.CurrentView().Name()].right
+	return v.changeFocusedPane(dst)
 }
 
 func (v *View) changeFocusedPane(pane *Pane) error {
