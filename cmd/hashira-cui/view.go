@@ -268,11 +268,11 @@ func (v *View) KeyX(*gocui.Gui, *gocui.View) error {
 
 func (v *View) moveFocusedTaskToDone() error {
 	t := v.FocusedTask()
-	if t == nil {
+	p := v.panes[pn[len(pn)-1]] // last pane (may be Done)
+	if t == nil || p == nil {
 		return nil
 	}
-	t.Place = service.Place_DONE
-	return v.Delegate("update", t)
+	return v.moveTaskPlaceTo(t, p, 0)
 }
 
 func (v *View) KeySpace(g *gocui.Gui, gv *gocui.View) error {
