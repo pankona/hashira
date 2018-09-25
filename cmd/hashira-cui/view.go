@@ -108,34 +108,41 @@ func (v *View) KeyE(g *gocui.Gui, gv *gocui.View) error {
 
 func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
 	dst := v.panes[g.CurrentView().Name()].left
-	return v.changeFocusedPane(dst)
-}
-
-func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
-	dst := v.panes[g.CurrentView().Name()].right
-	return v.changeFocusedPane(dst)
-}
-
-func (v *View) changeFocusedPane(pane *Pane) error {
-	g := v.g
-	_, err := g.SetCurrentView(pane.name)
+	err := v.changeFocusedPane(dst)
 	if err != nil {
 		return err
 	}
 
 	t := v.selectedTask
-	if t == nil {
-		return nil
+	if t != nil {
+		return v.moveTaskPlaceTo(t, dst, v.focusedIndex)
+	}
+	return nil
+}
+
+func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
+	dst := v.panes[g.CurrentView().Name()].right
+	err := v.changeFocusedPane(dst)
+	if err != nil {
+		return err
 	}
 
+	t := v.selectedTask
+	if t != nil {
+		return v.moveTaskPlaceTo(t, dst, v.focusedIndex)
+	}
+	return nil
+}
+
+func (v *View) moveTaskPlaceTo(t *service.Task, pane *Pane, insertTo int) error {
 	t.Place = pane.place
-	err = v.Delegate("update", t)
+	err := v.Delegate("update", t)
 	if err != nil {
 		return err
 	}
 
 	priority := remove(pane.priorities, t.Id)
-	priority = insert(priority, t.Id, v.focusedIndex)
+	priority = insert(priority, t.Id, insertTo)
 	if priority == nil {
 		return fmt.Errorf("failed to insert [%s] to [%s]. fatal", t.Name, pane.name)
 	}
@@ -146,12 +153,12 @@ func (v *View) changeFocusedPane(pane *Pane) error {
 		}
 	}
 
-	err = v.Delegate("updatePriority", v.priorities)
-	if err != nil {
-		return err
-	}
+	return v.Delegate("updatePriority", v.priorities)
+}
 
-	return nil
+func (v *View) changeFocusedPane(pane *Pane) error {
+	_, err := v.g.SetCurrentView(pane.name)
+	return err
 }
 
 func remove(ss []string, s string) []string {
