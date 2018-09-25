@@ -260,7 +260,8 @@ func (v *View) Delete(g *gocui.Gui, _ *gocui.View) error {
 	if t == nil {
 		return nil
 	}
-	return v.Delegate("delete", t)
+	t.Place = service.Place_DONE
+	return v.Delegate("update", t)
 }
 
 func (v *View) KeySpace(g *gocui.Gui, gv *gocui.View) error {
