@@ -80,11 +80,11 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 
 func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 	for _, p := range v.panes {
-		_ = g.SetKeybinding(p.name, 'h', gocui.ModNone, v.Left)   // TODO: should be v.KeyH
-		_ = g.SetKeybinding(p.name, 'l', gocui.ModNone, v.Right)  // TODO: should be v.KeyL
-		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)     // TODO: should be v.KeyK
-		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)   // TODO: should be v.KeyJ
-		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.Delete) // TODO: should be v.KeyX
+		_ = g.SetKeybinding(p.name, 'h', gocui.ModNone, v.Left)  // TODO: should be v.KeyH
+		_ = g.SetKeybinding(p.name, 'l', gocui.ModNone, v.Right) // TODO: should be v.KeyL
+		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)    // TODO: should be v.KeyK
+		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)  // TODO: should be v.KeyJ
+		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.KeyX)
 		_ = g.SetKeybinding(p.name, 'i', gocui.ModNone, v.KeyI)
 		_ = g.SetKeybinding(p.name, 'I', gocui.ModNone, v.KeyShiftI)
 		_ = g.SetKeybinding(p.name, 'e', gocui.ModNone, v.KeyE)
@@ -255,7 +255,11 @@ func (v *View) setPriorityLow(priorities []*service.Priority, task *service.Task
 	return nil
 }
 
-func (v *View) Delete(g *gocui.Gui, _ *gocui.View) error {
+func (v *View) KeyX(*gocui.Gui, *gocui.View) error {
+	return v.moveFocusedTaskToDone()
+}
+
+func (v *View) moveFocusedTaskToDone() error {
 	t := v.FocusedTask()
 	if t == nil {
 		return nil
