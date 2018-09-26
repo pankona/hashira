@@ -437,10 +437,11 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 		}()
 
 		msg := gv.Buffer()
+		msg = strings.TrimSuffix(msg, "\n")
+		msg = strings.TrimSpace(msg)
 		if msg == "" {
 			return nil
 		}
-		msg = strings.TrimSuffix(msg, "\n")
 
 		if v.editingTask == nil {
 			return v.Delegate("add", msg)
