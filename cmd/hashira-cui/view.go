@@ -173,7 +173,11 @@ func (v *View) changeFocusedPane(pane *Pane) error {
 	}
 
 	// resume scroll status
-	v.focusedIndex += pane.renderFrom
+	var index int
+	if v.cursor.index > 0 {
+		index = v.cursor.index
+	}
+	v.focusedIndex = pane.renderFrom + index
 
 	_, err := v.g.SetCurrentView(pane.name)
 	return err
@@ -326,6 +330,9 @@ func (v *View) selectFocusedTask() error {
 }
 
 func (v *View) FocusedTask() *service.Task {
+	if v.focusedIndex < 0 {
+		return nil
+	}
 	id := v.cursor.pane.priorities[v.focusedIndex]
 	return v.cursor.pane.tasks[id]
 }

@@ -26,8 +26,9 @@ type rectangle struct {
 
 func (p *Pane) Layout(g *gocui.Gui, c *cursor, focusedIndex int, selectedTask *service.Task) error {
 	maxX, maxY := g.Size()
-	r := rectangle{maxX / 4 * p.index, 1, maxX/4*p.index + maxX/4 - 1, maxY - 1}
-	v, err := g.SetView(p.name, r.x0, r.y0, r.x1, r.y1)
+	rect := rectangle{maxX / 4 * p.index, 1, maxX/4*p.index + maxX/4 - 1, maxY - 1}
+
+	v, err := g.SetView(p.name, rect.x0, rect.y0, rect.x1, rect.y1)
 	if err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
@@ -37,53 +38,74 @@ func (p *Pane) Layout(g *gocui.Gui, c *cursor, focusedIndex int, selectedTask *s
 
 	v.Clear()
 
-	return p.renderTasks(v, r, c, p.tasks, p.priorities, focusedIndex, selectedTask)
+	return p.render(v, rect, c, focusedIndex, selectedTask)
 }
 
-func (p *Pane) len() int {
-	return len(p.tasks)
-}
-
-func (p *Pane) renderTasks(w io.Writer, rect rectangle, c *cursor,
-	tasks map[string]*service.Task, priorities []string,
+func (p *Pane) render(w io.Writer, rect rectangle, cursor *cursor,
 	focusedIndex int, selectedTask *service.Task) error {
 
-	height := rect.y1 - rect.y0
-	if height < 0 {
+	// -1 is adjustment for considering width of frame
+	maxLen := rect.y1 - rect.y0 - 2
+	if maxLen < 0 {
 		return fmt.Errorf("invalid pane height. height must be positive")
 	}
 
-	// cursor must be in pane height
+	// cursor must point within pane max length
+	c := cursor.sanitize(maxLen)
+
+	// calculate index from where to render for scrolling
+	p.renderFrom = p.calcRenderFrom(focusedIndex, maxLen)
+
+	return p.renderTasks(w, c, selectedTask)
+}
+
+func (c *cursor) sanitize(maxLen int) *cursor {
+	ret := c
+
 	if c.index < 0 {
-		c.index = 0
-	} else if c.index >= height-2 {
-		c.index = height - 2
+		ret.index = 0
+	} else if c.index > maxLen {
+		ret.index = maxLen
 	}
 
-	// calculate scroll
-	to := p.renderFrom + height - 2 // -2 for considering frame width
+	if c.index > len(c.pane.priorities)-1 {
+		ret.index = len(c.pane.priorities) - 1
+	}
+
+	return ret
+}
+
+func (p *Pane) calcRenderFrom(focusedIndex, maxLen int) int {
+	renderFrom := p.renderFrom
+
 	if focusedIndex == -1 {
 		// this pane is not focused. nop
-	} else if focusedIndex > to {
-		p.renderFrom += focusedIndex - to
-	} else if focusedIndex < p.renderFrom {
-		p.renderFrom -= p.renderFrom - focusedIndex
+		return renderFrom
 	}
 
+	// calculate renderFrom for scrolling
+	to := renderFrom + maxLen
+
+	if focusedIndex > to {
+		renderFrom += focusedIndex - to
+	} else if focusedIndex < p.renderFrom {
+		renderFrom -= renderFrom - focusedIndex
+	}
+
+	return renderFrom
+}
+
+func (p *Pane) renderTasks(w io.Writer, cursor *cursor, selected *service.Task) error {
 	var taskNum int
 
-	if p == c.pane && c.index > len(priorities)-1 {
-		c.index = len(priorities) - 1
-	}
-
 	// render tasks for this pane
-	for i, id := range priorities {
+	for i, id := range p.priorities {
 		if i < p.renderFrom {
 			// skip rendering to scroll
 			continue
 		}
 
-		task, ok := tasks[id]
+		task, ok := p.tasks[id]
 		if !ok {
 			// should not reach here
 			// TODO: error logging and continue
@@ -92,13 +114,13 @@ func (p *Pane) renderTasks(w io.Writer, rect rectangle, c *cursor,
 		}
 
 		prefix := ""
-		if selectedTask != nil && task.Id == selectedTask.Id {
+		if selected != nil && task.Id == selected.Id {
 			prefix = "*"
 		}
 
 		var err error
 
-		if p == c.pane && taskNum == c.index {
+		if p == cursor.pane && taskNum == cursor.index {
 			_, err = fmt.Fprintf(w, "%s \033[3%d;%dm%s\033[0m\n", prefix, 7, 4, task.Name)
 		} else {
 			_, err = fmt.Fprintf(w, "%s %s\n", prefix, task.Name)
