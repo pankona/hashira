@@ -31,8 +31,7 @@ message Priority {
 }
 
 message CommandCreate {
-    string name = 1;
-    Place place = 2;
+    Task task = 1;
 }
 
 message CommandUpdate {
