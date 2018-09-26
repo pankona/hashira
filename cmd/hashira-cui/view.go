@@ -13,11 +13,17 @@ import (
 type View struct {
 	panes        map[string]*Pane
 	g            *gocui.Gui
+	cursor       *cursor
 	focusedIndex int
 	selectedTask *service.Task
 	editingTask  *service.Task
 	priorities   []*service.Priority
 	Delegater
+}
+
+type cursor struct {
+	index int
+	pane  *Pane
 }
 
 type Delegater interface {
@@ -74,6 +80,10 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 
 	v.g = g
 	v.Delegater = d
+	v.cursor = &cursor{
+		index: 0,
+		pane:  v.panes[pn[0]],
+	}
 
 	return nil
 }
@@ -115,7 +125,7 @@ func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
 
 	t := v.selectedTask
 	if t != nil {
-		return v.moveTaskPlaceTo(t, dst, v.focusedIndex)
+		return v.moveTaskPlaceTo(t, dst, v.cursor.index)
 	}
 	return nil
 }
@@ -129,7 +139,7 @@ func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
 
 	t := v.selectedTask
 	if t != nil {
-		return v.moveTaskPlaceTo(t, dst, v.focusedIndex)
+		return v.moveTaskPlaceTo(t, dst, v.cursor.index)
 	}
 	return nil
 }
@@ -157,6 +167,18 @@ func (v *View) moveTaskPlaceTo(t *service.Task, pane *Pane, insertTo int) error 
 }
 
 func (v *View) changeFocusedPane(pane *Pane) error {
+	v.cursor.pane = pane
+	if v.cursor.index > len(v.cursor.pane.priorities)-1 {
+		v.cursor.index = len(v.cursor.pane.priorities) - 1
+	}
+
+	// resume scroll status
+	var index int
+	if v.cursor.index > 0 {
+		index = v.cursor.index
+	}
+	v.focusedIndex = pane.renderFrom + index
+
 	_, err := v.g.SetCurrentView(pane.name)
 	return err
 }
@@ -204,7 +226,10 @@ func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
 	if v.selectedTask != nil {
 		v.setPriorityHigh(v.priorities, v.selectedTask)
 	}
+
+	v.cursor.index--
 	v.focusedIndex--
+
 	return nil
 }
 
@@ -212,7 +237,10 @@ func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 	if v.selectedTask != nil {
 		v.setPriorityLow(v.priorities, v.selectedTask)
 	}
+
+	v.cursor.index++
 	v.focusedIndex++
+
 	return nil
 }
 
@@ -305,35 +333,8 @@ func (v *View) FocusedTask() *service.Task {
 	if v.focusedIndex < 0 {
 		return nil
 	}
-
-	currentView := v.g.CurrentView()
-	if currentView == nil {
-		return nil
-	}
-
-	p := v.panes[currentView.Name()]
-	if p == nil {
-		return nil
-	}
-
-	var index int
-	for i, t := range v.priorities {
-		if t.Place == p.place {
-			index = i
-		}
-	}
-
-	if len(v.priorities[index].Ids) == 0 {
-		// no task in this pane
-		return nil
-	}
-
-	if v.focusedIndex >= len(v.priorities[index].Ids) {
-		v.focusedIndex = len(v.priorities[index].Ids) - 1
-	}
-
-	id := v.priorities[index].Ids[v.focusedIndex]
-	return p.tasks[id]
+	id := v.cursor.pane.priorities[v.focusedIndex]
+	return v.cursor.pane.tasks[id]
 }
 
 func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
@@ -500,17 +501,19 @@ var once = sync.Once{}
 
 func (v *View) Layout(g *gocui.Gui) error {
 	for _, p := range v.panes {
-		if g.CurrentView() != nil &&
-			g.CurrentView().Name() == p.name {
-			if v.focusedIndex <= 0 {
+
+		focusedIndex := -1
+		if p == v.cursor.pane {
+			if v.focusedIndex < 0 {
 				v.focusedIndex = 0
 			}
-			if v.focusedIndex >= p.len() {
-				v.focusedIndex = p.len() - 1
+			if len(v.cursor.pane.priorities)-1 < v.focusedIndex {
+				v.focusedIndex = len(v.cursor.pane.priorities) - 1
 			}
+			focusedIndex = v.focusedIndex
 		}
 
-		err := p.Layout(g, v.FocusedTask(), v.selectedTask)
+		err := p.Layout(g, v.cursor, focusedIndex, v.selectedTask)
 		if err != nil {
 			return err
 		}
