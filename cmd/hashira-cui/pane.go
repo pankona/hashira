@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io"
-	"log"
 
 	"github.com/jroimartin/gocui"
 	"github.com/pankona/hashira/service"
@@ -17,11 +16,17 @@ type Pane struct {
 	place      service.Place
 	tasks      map[string]*service.Task
 	priorities []string // array of task IDs
+	from       int
 }
 
-func (p *Pane) Layout(g *gocui.Gui, fucusedTask, selectedTask *service.Task) error {
+type rectangle struct {
+	x0, y0, x1, y1 int
+}
+
+func (p *Pane) Layout(g *gocui.Gui, focusedTask, selectedTask *service.Task) error {
 	maxX, maxY := g.Size()
-	v, err := g.SetView(p.name, maxX/4*p.index, 1, maxX/4*p.index+maxX/4-1, maxY-1)
+	r := rectangle{maxX / 4 * p.index, 1, maxX/4*p.index + maxX/4 - 1, maxY - 1}
+	v, err := g.SetView(p.name, r.x0, r.y0, r.x1, r.y1)
 	if err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
@@ -31,35 +36,63 @@ func (p *Pane) Layout(g *gocui.Gui, fucusedTask, selectedTask *service.Task) err
 
 	v.Clear()
 
-	log.Printf("Tasks (%s): %v", p.place.String(), p.tasks)
-	log.Printf("Priorities (%s): %v", p.place, p.priorities)
-	return renderTasks(v, p.tasks, p.priorities, fucusedTask, selectedTask)
+	return p.renderTasks(v, r, p.tasks, p.priorities, focusedTask, selectedTask)
 }
 
 func (p *Pane) len() int {
 	return len(p.tasks)
 }
 
-func renderTasks(w io.Writer, tasks map[string]*service.Task, priorities []string, focusedTask, selectedTask *service.Task) error {
+func (p *Pane) renderTasks(w io.Writer, rect rectangle, tasks map[string]*service.Task, priorities []string, focusedTask, selectedTask *service.Task) error {
 	var taskNum int
 	var err error
 
-	// render tasks for this pane
-	for _, p := range priorities {
-		task, ok := tasks[p]
+	height := rect.y1 - rect.y0
+	if height < 0 {
+		return fmt.Errorf("invalid pane height. height must be positive")
+	}
+
+	var focusedIndex int
+	for i, id := range priorities {
+		task, ok := tasks[id]
 		if !ok {
+			// should not reach here
+			// TODO: error logging and continue
+			continue
+		}
+		if task == focusedTask {
+			focusedIndex = i
+		}
+	}
+
+	to := p.from + height - 2 // -2 for frame width
+	if focusedIndex > to {
+		p.from += focusedIndex - to
+	} else if focusedIndex < p.from {
+		p.from -= p.from - focusedIndex
+	}
+	to = p.from + height - 2
+
+	// render tasks for this pane
+	for i, id := range priorities {
+		if i < p.from || i > to {
+			continue
+		}
+
+		task, ok := tasks[id]
+		if !ok {
+			// should not reach here
+			// TODO: error logging and continue
 			continue
 		}
 
 		prefix := ""
 		if selectedTask != nil && task.Id == selectedTask.Id {
 			prefix = "*"
-			log.Printf("selectedTask = %v", task)
 		}
 
 		if task == focusedTask {
 			_, err = fmt.Fprintf(w, "%s \033[3%d;%dm%s\033[0m\n", prefix, 7, 4, task.Name)
-			log.Printf("focusedIndex = %d", taskNum)
 		} else {
 			_, err = fmt.Fprintf(w, "%s %s\n", prefix, task.Name)
 		}
