@@ -18,6 +18,7 @@ type View struct {
 	selectedTask *service.Task
 	editingTask  *service.Task
 	priorities   []*service.Priority
+	pane         *Pane // for restoring focused pane after input
 	Delegater
 }
 
@@ -432,8 +433,13 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 			g.DeleteKeybindings(gv.Name())
 			g.Cursor = false
 			g.DeleteView(gv.Name())
-			// TODO: set selected pane as current view
-			g.SetCurrentView(v.panes[pn[0]].name)
+			if v.pane == nil {
+				// should not reach.
+				log.Printf("[WARNING] pane to restore after input is nil")
+				v.pane = v.panes[pn[0]]
+			}
+			g.SetCurrentView(v.pane.name)
+			v.pane = nil
 		}()
 
 		msg := gv.Buffer()
@@ -451,7 +457,8 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 	}
 
 	maxX, maxY := g.Size()
-	if input, err := g.SetView("input", maxX/2-20, maxY/2, maxX/2+20, maxY/2+2); err != nil {
+	input, err := g.SetView("input", maxX/2-20, maxY/2, maxX/2+20, maxY/2+2)
+	if err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
@@ -469,9 +476,13 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 		_ = g.SetKeybinding(input.Name(), gocui.KeyCtrlH, gocui.ModNone, v.KeyCtrlH)
 		_ = g.SetKeybinding(input.Name(), gocui.KeyCtrlL, gocui.ModNone, v.KeyCtrlL)
 		g.Cursor = true
-		g.SetCurrentView("input")
 	}
-	return nil
+
+	// use this pane to restore focused pane after input
+	v.pane = v.panes[g.CurrentView().Name()]
+
+	_, err = g.SetCurrentView("input")
+	return err
 }
 
 func (v *View) KeyCtrlH(g *gocui.Gui, gv *gocui.View) error {
