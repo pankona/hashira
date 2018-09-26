@@ -24,11 +24,7 @@ var places = []service.Place{
 
 // Create creates a new task
 func (d *Daemon) Create(ctx context.Context, com *service.CommandCreate) (*service.ResultCreate, error) {
-	t := &service.Task{
-		Name:      com.GetName(),
-		Place:     service.Place_BACKLOG,
-		IsDeleted: false,
-	}
+	t := com.Task
 	buf, err := json.Marshal(t)
 	if err != nil {
 		return nil, errors.New("failed to create a new task: " + err.Error())

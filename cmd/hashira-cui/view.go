@@ -450,7 +450,11 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 		}
 
 		if v.editingTask == nil {
-			return v.Delegate("add", msg)
+			t := &service.Task{
+				Name:  msg,
+				Place: v.pane.place,
+			}
+			return v.Delegate("add", t)
 		}
 		v.editingTask.Name = msg
 		return v.Delegate("update", v.editingTask)

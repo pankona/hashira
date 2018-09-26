@@ -26,7 +26,7 @@ func (c *Ctrl) Delegate(event string, data interface{}) error {
 	switch event {
 	// TODO: event should be dispatched by type assertion?
 	case "add":
-		err = c.m.hashirac.Create(context.Background(), data.(string))
+		err = c.m.hashirac.Create(context.Background(), data.(*service.Task))
 	case "update":
 		err = c.m.hashirac.Update(context.Background(), data.(*service.Task))
 	case "delete":
