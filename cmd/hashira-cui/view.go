@@ -264,14 +264,22 @@ func (v *View) setPriorityLow(priorities []*service.Priority, task *service.Task
 
 func (v *View) KeyX(*gocui.Gui, *gocui.View) error {
 	t := v.FocusedTask()
-	return v.moveTaskToDone(t)
+	return v.markTaskAsDone(t)
 }
 
-func (v *View) moveTaskToDone(t *service.Task) error {
+// markTaskAsDone moves specified task to Done pane.
+// If the specified task is already on Done, the task is deleted.
+func (v *View) markTaskAsDone(t *service.Task) error {
 	p := v.panes[pn[len(pn)-1]] // last pane (may be Done)
 	if t == nil || p == nil {
 		return nil
 	}
+
+	if t.Place == p.place {
+		t.IsDeleted = true
+		return v.Delegate("update", t)
+	}
+
 	return v.moveTaskPlaceTo(t, p, 0)
 }
 
