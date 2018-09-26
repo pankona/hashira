@@ -44,10 +44,9 @@ func (p *Pane) len() int {
 	return len(p.tasks)
 }
 
-func (p *Pane) renderTasks(w io.Writer,
-	rect rectangle, c *cursor, tasks map[string]*service.Task, priorities []string,
+func (p *Pane) renderTasks(w io.Writer, rect rectangle, c *cursor,
+	tasks map[string]*service.Task, priorities []string,
 	focusedIndex int, selectedTask *service.Task) error {
-	var err error
 
 	height := rect.y1 - rect.y0
 	if height < 0 {
@@ -70,12 +69,6 @@ func (p *Pane) renderTasks(w io.Writer,
 	} else if focusedIndex < p.renderFrom {
 		p.renderFrom -= p.renderFrom - focusedIndex
 	}
-	to = p.renderFrom + height - 2
-
-	if focusedIndex != -1 {
-		log.Printf("[%s] focused index = %d, from:to = %d:%d, cursor index = %d",
-			p.name, focusedIndex, p.renderFrom, to, c.index)
-	}
 
 	var taskNum int
 
@@ -85,7 +78,8 @@ func (p *Pane) renderTasks(w io.Writer,
 
 	// render tasks for this pane
 	for i, id := range priorities {
-		if i < p.renderFrom || i > to {
+		if i < p.renderFrom {
+			// skip rendering to scroll
 			continue
 		}
 
@@ -93,6 +87,7 @@ func (p *Pane) renderTasks(w io.Writer,
 		if !ok {
 			// should not reach here
 			// TODO: error logging and continue
+			log.Printf("[WARNING] a task with ID [%s] is missing", id)
 			continue
 		}
 
@@ -101,7 +96,8 @@ func (p *Pane) renderTasks(w io.Writer,
 			prefix = "*"
 		}
 
-		//if task == focusedTask {
+		var err error
+
 		if p == c.pane && taskNum == c.index {
 			_, err = fmt.Fprintf(w, "%s \033[3%d;%dm%s\033[0m\n", prefix, 7, 4, task.Name)
 		} else {
