@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 	"errors"
-
 	"fmt"
 	"strconv"
 
 	"github.com/pankona/hashira/hashira/client"
+	"github.com/pankona/hashira/service"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -34,7 +34,11 @@ func addListCmd(ctx context.Context, c *client.Client) {
 }
 
 func create(ctx context.Context, c *client.Client, name string) error {
-	err := c.Create(ctx, name)
+	t := &service.Task{
+		Name:  name,
+		Place: service.Place_BACKLOG,
+	}
+	err := c.Create(ctx, t)
 	if err != nil {
 		return errors.New("failed to create a new task: " + err.Error())
 	}
