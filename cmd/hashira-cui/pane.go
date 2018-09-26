@@ -22,7 +22,6 @@ type Pane struct {
 func (p *Pane) Layout(g *gocui.Gui, fucusedTask, selectedTask *service.Task) error {
 	maxX, maxY := g.Size()
 	v, err := g.SetView(p.name, maxX/4*p.index, 1, maxX/4*p.index+maxX/4-1, maxY-1)
-
 	if err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
