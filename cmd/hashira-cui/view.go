@@ -22,11 +22,6 @@ type View struct {
 	Delegater
 }
 
-type cursor struct {
-	index int
-	pane  *Pane
-}
-
 type Delegater interface {
 	Delegate(event string, data interface{}) error
 }
@@ -89,36 +84,8 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 	return nil
 }
 
-func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
-	for _, p := range v.panes {
-		_ = g.SetKeybinding(p.name, 'h', gocui.ModNone, v.Left)  // TODO: should be v.KeyH
-		_ = g.SetKeybinding(p.name, 'l', gocui.ModNone, v.Right) // TODO: should be v.KeyL
-		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)    // TODO: should be v.KeyK
-		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)  // TODO: should be v.KeyJ
-		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.KeyX)
-		_ = g.SetKeybinding(p.name, 'i', gocui.ModNone, v.KeyI)
-		_ = g.SetKeybinding(p.name, 'I', gocui.ModNone, v.KeyShiftI)
-		_ = g.SetKeybinding(p.name, 'e', gocui.ModNone, v.KeyE)
-		_ = g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.KeySpace)
-	}
-	_ = g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.KeyEnter)
-	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit) // TODO: should be v.KeyCtrlC
-	return nil
-}
-
-func (v *View) KeyE(g *gocui.Gui, gv *gocui.View) error {
-	t := v.FocusedTask()
-	if t == nil {
-		return nil
-	}
-
-	v.editingTask = t
-
-	return v.input(g, gv)
-}
-
-func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
-	dst := v.panes[g.CurrentView().Name()].left
+func (v *View) Left() error {
+	dst := v.panes[v.g.CurrentView().Name()].left
 	err := v.changeFocusedPane(dst)
 	if err != nil {
 		return err
@@ -131,8 +98,8 @@ func (v *View) Left(g *gocui.Gui, _ *gocui.View) error {
 	return nil
 }
 
-func (v *View) Right(g *gocui.Gui, _ *gocui.View) error {
-	dst := v.panes[g.CurrentView().Name()].right
+func (v *View) Right() error {
+	dst := v.panes[v.g.CurrentView().Name()].right
 	err := v.changeFocusedPane(dst)
 	if err != nil {
 		return err
@@ -291,11 +258,6 @@ func (v *View) setPriorityLow(priorities []*service.Priority, task *service.Task
 	return nil
 }
 
-func (v *View) KeyX(*gocui.Gui, *gocui.View) error {
-	t := v.FocusedTask()
-	return v.markTaskAsDone(t)
-}
-
 // markTaskAsDone moves specified task to Done pane.
 // If the specified task is already on Done, the task is deleted.
 func (v *View) markTaskAsDone(t *service.Task) error {
@@ -310,10 +272,6 @@ func (v *View) markTaskAsDone(t *service.Task) error {
 	}
 
 	return v.moveTaskPlaceTo(t, p, 0)
-}
-
-func (v *View) KeySpace(g *gocui.Gui, gv *gocui.View) error {
-	return v.selectFocusedTask()
 }
 
 // selectFocusedTask selects focused task.
@@ -338,42 +296,12 @@ func (v *View) FocusedTask() *service.Task {
 	return v.cursor.pane.tasks[id]
 }
 
-func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
-	return v.input(g, gv)
-}
-
 type directive int
 
 const (
 	dirRight directive = iota
 	dirLeft
 )
-
-func (v *View) KeyI(g *gocui.Gui, gv *gocui.View) error {
-	if gv.Name() == "input" {
-		return v.input(g, gv)
-	}
-
-	t := v.FocusedTask()
-	if t == nil {
-		log.Printf("selectedTask is nil")
-		return nil
-	}
-	return v.moveTaskTo(t, dirRight)
-}
-
-func (v *View) KeyShiftI(g *gocui.Gui, gv *gocui.View) error {
-	if gv.Name() == "input" {
-		return v.input(g, gv)
-	}
-
-	t := v.FocusedTask()
-	if t == nil {
-		log.Printf("selectedTask is nil")
-		return nil
-	}
-	return v.moveTaskTo(t, dirLeft)
-}
 
 func (v *View) lookupPaneByTask(t *service.Task) *Pane {
 	for i, p := range v.panes {
@@ -477,6 +405,7 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 		}
 		input.Editable = true
 		input.MoveCursor(len(input.Buffer())-1, 0, true)
+		// TODO: should inject Editor interface
 		_ = g.SetKeybinding(input.Name(), gocui.KeyCtrlH, gocui.ModNone, v.KeyCtrlH)
 		_ = g.SetKeybinding(input.Name(), gocui.KeyCtrlL, gocui.ModNone, v.KeyCtrlL)
 		g.Cursor = true
@@ -487,20 +416,6 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 
 	_, err = g.SetCurrentView("input")
 	return err
-}
-
-func (v *View) KeyCtrlH(g *gocui.Gui, gv *gocui.View) error {
-	gv.MoveCursor(-1, 0, true)
-	return nil
-}
-
-func (v *View) KeyCtrlL(g *gocui.Gui, gv *gocui.View) error {
-	x, _ := gv.Cursor()
-	if len(gv.Buffer())-1 <= x {
-		return nil
-	}
-	gv.MoveCursor(+1, 0, true)
-	return nil
 }
 
 func (v *View) SetFocus(name string) error {

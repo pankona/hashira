@@ -59,22 +59,6 @@ func (p *Pane) render(w io.Writer, rect rectangle, cursor *cursor,
 	return p.renderTasks(w, c, selectedTask)
 }
 
-func (c *cursor) sanitize(maxLen int) *cursor {
-	ret := c
-
-	if c.index < 0 {
-		ret.index = 0
-	} else if c.index > maxLen {
-		ret.index = maxLen
-	}
-
-	if c.index > len(c.pane.priorities)-1 {
-		ret.index = len(c.pane.priorities) - 1
-	}
-
-	return ret
-}
-
 func (p *Pane) calcRenderFrom(focusedIndex, maxLen int) int {
 	renderFrom := p.renderFrom
 
