@@ -275,16 +275,16 @@ func (v *View) markTaskAsDone(t *service.Task) error {
 }
 
 // selectFocusedTask selects focused task.
-// call this function again for deselect.
+// call this function again for deselect (toggle).
 func (v *View) selectFocusedTask() error {
 	if v.selectedTask != nil {
 		v.selectedTask = nil
 		// on deselect task, it means the deselected task's
 		// priority is determined. update priority is necessary.
 		return v.Delegate("updatePriority", v.priorities)
-	} else {
-		v.selectedTask = v.FocusedTask()
 	}
+
+	v.selectedTask = v.FocusedTask()
 	return nil
 }
 
