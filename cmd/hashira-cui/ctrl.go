@@ -47,6 +47,9 @@ func (c *Ctrl) Delegate(event string, data interface{}) (err error) {
 }
 
 func (c *Ctrl) Update(ctx context.Context) error {
+	// TODO:
+	// List and RetrievePriority should archive in
+	// one communication for better performance
 	tasks, err := c.m.List(ctx)
 	if err != nil {
 		return err
