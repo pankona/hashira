@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/pankona/hashira/service"
+	"github.com/pkg/errors"
 )
 
 type Ctrl struct {
@@ -18,23 +20,25 @@ func (c *Ctrl) SetPublisher(p Publisher) {
 	c.pub = p
 }
 
-func (c *Ctrl) Delegate(event string, data interface{}) error {
-	defer c.Update(context.Background())
+func (c *Ctrl) Delegate(event string, data interface{}) (err error) {
+	defer func() {
+		e := c.Update(context.Background())
+		if err != nil {
+			err = errors.Wrap(err, fmt.Sprintf("failed to Update: %s", e.Error()))
+		}
+	}()
 
-	var err error
+	ctx := context.Background()
 
 	switch event {
-	// TODO: event should be dispatched by type assertion?
 	case "add":
-		err = c.m.hashirac.Create(context.Background(), data.(*service.Task))
+		err = c.m.hashirac.Create(ctx, data.(*service.Task))
 	case "update":
-		err = c.m.hashirac.Update(context.Background(), data.(*service.Task))
+		err = c.m.hashirac.Update(ctx, data.(*service.Task))
 	case "delete":
-		t := data.(*service.Task)
-		err = c.m.hashirac.Delete(context.Background(), t.Id)
+		err = c.m.hashirac.Delete(ctx, data.(*service.Task).Id)
 	case "updatePriority":
-		p := data.([]*service.Priority)
-		_, err = c.m.hashirac.UpdatePriority(context.Background(), p)
+		_, err = c.m.hashirac.UpdatePriority(ctx, data.([]*service.Priority))
 	default:
 		// nop
 	}
