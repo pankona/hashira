@@ -5,6 +5,7 @@ docsrc/_book
 cmd/hashirad/hashirad
 cmd/hashira/hashira
 cmd/hashira-cui/hashira-cui
+cmd/hashira-cui/github-release.sh
 cmd/hashira-cui/pkg
 .idea/
 vendor/
