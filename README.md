@@ -29,6 +29,37 @@ design documents are available at [here](https://pankona.github.io/hashira/)
 * Consumed time is measured only for one task, which is placed on top of "Doing".
 * Show them in graph. 
 
+## Available Keybindings of hashira-cui
+
+* Ordinal use
+
+| Key   | Action                                                            | Remarks                                           |
+|-------|-------------------------------------------------------------------|---------------------------------------------------|
+| Enter | Show input window for register a new task                         |                                                   |
+| e     | Show input window for editing focused task                        |                                                   |
+| Space | Select focused task                                               |                                                   |
+| j/k   | Up/Down cursor<br>(change priority if a task is selected)         |                                                   |
+| h/l   | Change focused pane<br>(change task's pane if a task is selected) |                                                   |
+| i/I   | Move focused task to left/right pane                              |                                                   |
+| x     | Move focused task to Done                                         | If focused task is already on Done, it is deleted |
+
+* While input
+
+| Key      | Action      | Remarks                 |
+| Ctrl-h/l | Move cursor | Same as using arrow key |
+
+
+## Notes
+
+* hashira generates its configuration file under `$HOME/.config/hashira`
+  * Remove them for re-initializing hashira or leaving from using hashira...
+
+## Limitation
+
+### hashira-cui
+
+* Multi-byte characters are not supported
+
 ## LICENSE
 
 MIT
