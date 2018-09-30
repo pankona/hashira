@@ -77,8 +77,8 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 	v.g = g
 	v.Delegater = d
 	v.cursor = &cursor{
-		index: 0,
-		pane:  v.panes[pn[0]],
+		index:       0,
+		focusedPane: v.panes[pn[0]],
 	}
 
 	return nil
@@ -135,10 +135,7 @@ func (v *View) moveTaskPlaceTo(t *service.Task, pane *Pane, insertTo int) error 
 }
 
 func (v *View) changeFocusedPane(pane *Pane) error {
-	v.cursor.pane = pane
-	if v.cursor.index > len(v.cursor.pane.priorities)-1 {
-		v.cursor.index = len(v.cursor.pane.priorities) - 1
-	}
+	v.cursor.changeFocusedPane(pane)
 
 	// resume scroll status
 	var index int
@@ -292,8 +289,8 @@ func (v *View) FocusedTask() *service.Task {
 	if v.focusedIndex < 0 {
 		return nil
 	}
-	id := v.cursor.pane.priorities[v.focusedIndex]
-	return v.cursor.pane.tasks[id]
+	id := v.cursor.focusedPane.priorities[v.focusedIndex]
+	return v.cursor.focusedPane.tasks[id]
 }
 
 type directive int
@@ -434,12 +431,12 @@ func (v *View) Layout(g *gocui.Gui) error {
 	for _, p := range v.panes {
 
 		focusedIndex := -1
-		if p == v.cursor.pane {
+		if p == v.cursor.focusedPane {
 			if v.focusedIndex < 0 {
 				v.focusedIndex = 0
 			}
-			if len(v.cursor.pane.priorities)-1 < v.focusedIndex {
-				v.focusedIndex = len(v.cursor.pane.priorities) - 1
+			if len(v.cursor.focusedPane.priorities)-1 < v.focusedIndex {
+				v.focusedIndex = len(v.cursor.focusedPane.priorities) - 1
 			}
 			focusedIndex = v.focusedIndex
 		}

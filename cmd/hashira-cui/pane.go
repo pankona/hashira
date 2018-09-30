@@ -104,7 +104,7 @@ func (p *Pane) renderTasks(w io.Writer, cursor *cursor, selected *service.Task) 
 
 		var err error
 
-		if p == cursor.pane && taskNum == cursor.index {
+		if p == cursor.focusedPane && taskNum == cursor.index {
 			_, err = fmt.Fprintf(w, "%s \033[3%d;%dm%s\033[0m\n", prefix, 7, 4, task.Name)
 		} else {
 			_, err = fmt.Fprintf(w, "%s %s\n", prefix, task.Name)
