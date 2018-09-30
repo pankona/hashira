@@ -45,9 +45,9 @@ design documents are available at [here](https://pankona.github.io/hashira/)
 
 * While input
 
-| Key      | Action      | Remarks                 |
-|----------|-------------|-------------------------|
-| Ctrl-h/l | Move cursor | Same as using arrow key |
+| Key         | Action      | Remarks                 |
+|-------------|-------------|-------------------------|
+| Ctrl- h / l | Move cursor | Same as using arrow key |
 
 
 ## Notes
