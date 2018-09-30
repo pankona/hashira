@@ -21,16 +21,6 @@ func (c *cursor) sanitize(maxLen int) *cursor {
 	return ret
 }
 
-func (c *cursor) moveUp() {
-	c.index--
-	c = c.sanitize(len(c.focusedPane.priorities))
-}
-
-func (c *cursor) moveDown() {
-	c.index++
-	c = c.sanitize(len(c.focusedPane.priorities))
-}
-
 func (c *cursor) changeFocusedPane(p *Pane) {
 	c.focusedPane = p
 	c = c.sanitize(len(c.focusedPane.priorities))

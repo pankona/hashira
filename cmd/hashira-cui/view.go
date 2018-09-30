@@ -137,12 +137,12 @@ func (v *View) moveTaskPlaceTo(t *service.Task, pane *Pane, insertTo int) error 
 func (v *View) changeFocusedPane(pane *Pane) error {
 	v.cursor.changeFocusedPane(pane)
 
-	// resume scroll status
-	var index int
-	if v.cursor.index > 0 {
-		index = v.cursor.index
+	// Resume scroll status
+	// Check if index is positive since there's possibility that
+	// this variable becomes negative if pane has no task
+	if v.cursor.index >= 0 {
+		v.focusedIndex = pane.renderFrom + v.cursor.index
 	}
-	v.focusedIndex = pane.renderFrom + index
 
 	_, err := v.g.SetCurrentView(pane.name)
 	return err
@@ -165,6 +165,7 @@ func remove(ss []string, s string) []string {
 	if found {
 		return ret[:len(ss)-1]
 	}
+
 	return ret
 }
 
@@ -172,6 +173,7 @@ func insert(ss []string, s string, index int) []string {
 	if index < 0 {
 		return nil
 	}
+
 	if index > len(ss) {
 		index = len(ss)
 	}
@@ -180,10 +182,12 @@ func insert(ss []string, s string, index int) []string {
 	for i := 0; i < index; i++ {
 		ret[i] = ss[i]
 	}
+
 	ret[index] = s
 	for i := index; i < len(ss); i++ {
 		ret[i+1] = ss[i]
 	}
+
 	return ret
 }
 
@@ -209,7 +213,6 @@ func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 	return nil
 }
 
-// TODO: should be delegated
 func (v *View) setPriorityHigh(priorities []*service.Priority, task *service.Task) error {
 	place := task.Place
 	var index int
@@ -224,7 +227,9 @@ func (v *View) setPriorityHigh(priorities []*service.Priority, task *service.Tas
 			if i == 0 {
 				return nil
 			}
-			v.priorities[index].Ids[i-1], v.priorities[index].Ids[i] = v.priorities[index].Ids[i], v.priorities[index].Ids[i-1]
+			// swap
+			v.priorities[index].Ids[i-1], v.priorities[index].Ids[i] =
+				v.priorities[index].Ids[i], v.priorities[index].Ids[i-1]
 			break
 		}
 	}
@@ -232,7 +237,6 @@ func (v *View) setPriorityHigh(priorities []*service.Priority, task *service.Tas
 	return nil
 }
 
-// TODO: should be delegated
 func (v *View) setPriorityLow(priorities []*service.Priority, task *service.Task) error {
 	place := task.Place
 	var index int
@@ -247,7 +251,9 @@ func (v *View) setPriorityLow(priorities []*service.Priority, task *service.Task
 			if i == len(v.priorities[index].Ids)-1 {
 				return nil
 			}
-			v.priorities[index].Ids[i+1], v.priorities[index].Ids[i] = v.priorities[index].Ids[i], v.priorities[index].Ids[i+1]
+			// swap
+			v.priorities[index].Ids[i+1], v.priorities[index].Ids[i] =
+				v.priorities[index].Ids[i], v.priorities[index].Ids[i+1]
 			break
 		}
 	}
