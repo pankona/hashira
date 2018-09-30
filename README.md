@@ -38,9 +38,9 @@ design documents are available at [here](https://pankona.github.io/hashira/)
 | Enter | Show input window for register a new task                         |                                                   |
 | e     | Show input window for editing focused task                        |                                                   |
 | Space | Select focused task                                               |                                                   |
-| j/k   | Up/Down cursor<br>(change priority if a task is selected)         |                                                   |
-| h/l   | Change focused pane<br>(change task's pane if a task is selected) |                                                   |
-| i/I   | Move focused task to left/right pane                              |                                                   |
+| j / k | Up/Down cursor<br>(change priority if a task is selected)         |                                                   |
+| h / l | Change focused pane<br>(change task's pane if a task is selected) |                                                   |
+| i / I | Move focused task to left/right pane                              |                                                   |
 | x     | Move focused task to Done                                         | If focused task is already on Done, it is deleted |
 
 * While input
