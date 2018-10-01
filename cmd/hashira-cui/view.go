@@ -201,27 +201,25 @@ func insert(ss []string, s string, index int) []string {
 // Up represents action for up key
 // TODO: should be more suitable name
 func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
-	if v.selectedTask != nil {
-		v.setPriorityHigh(v.priorities, v.selectedTask)
-	}
-
 	v.cursor.index--
 	v.focusedIndex--
 
-	return nil
+	if v.selectedTask == nil {
+		return nil
+	}
+	return v.setPriorityHigh(v.priorities, v.selectedTask)
 }
 
 // Down represents action for down key
 // TODO: should be more suitable name
 func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
-	if v.selectedTask != nil {
-		v.setPriorityLow(v.selectedTask)
-	}
-
 	v.cursor.index++
 	v.focusedIndex++
 
-	return nil
+	if v.selectedTask == nil {
+		return nil
+	}
+	return v.setPriorityLow(v.selectedTask)
 }
 
 func (v *View) setPriorityHigh(priorities []*service.Priority, task *service.Task) error {
@@ -325,6 +323,10 @@ func (v *View) lookupPaneByTask(t *service.Task) (*Pane, error) {
 	return nil, fmt.Errorf("failed to lookup pane by task")
 }
 
+// TODO: Performance concern.
+// This function executes two communication (over delegation),
+// in case that calling this function quickly and continuously, it causes
+// awkward movement.
 func (v *View) moveTaskTo(t *service.Task, dir directive) error {
 	pane, err := v.lookupPaneByTask(t)
 	if err != nil {
@@ -346,6 +348,7 @@ func (v *View) moveTaskTo(t *service.Task, dir directive) error {
 	}
 
 	// put the moved task on top of pane
+	// TODO: don't specify 0 as cap to improve performance
 	priorities := make([]string, 0)
 	priorities = append([]string{t.Id}, priorities...)
 	for _, id := range pane.priorities {
@@ -354,6 +357,7 @@ func (v *View) moveTaskTo(t *service.Task, dir directive) error {
 		}
 	}
 
+	// update priorities by newly created priority array
 	pane.priorities = priorities
 	for i, p := range v.priorities {
 		if p.Place == pane.place {
@@ -373,13 +377,23 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 			v.editingTask = nil
 			g.DeleteKeybindings(gv.Name())
 			g.Cursor = false
-			g.DeleteView(gv.Name())
+
+			err := g.DeleteView(gv.Name())
+			if err != nil {
+				log.Printf("[WARNING] failed to delete view: %v", err)
+			}
+
 			if v.pane == nil {
 				// should not reach.
 				log.Printf("[WARNING] pane to restore after input is nil")
 				v.pane = v.panes[pn[0]]
 			}
-			g.SetCurrentView(v.pane.name)
+
+			_, err = g.SetCurrentView(v.pane.name)
+			if err != nil {
+				log.Printf("[WARNING] failed to restore current view: %v", err)
+			}
+
 			v.pane = nil
 		}()
 
