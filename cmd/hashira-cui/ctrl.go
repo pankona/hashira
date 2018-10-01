@@ -8,18 +8,22 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Ctrl represents controller of hashira-cui's mvc
 type Ctrl struct {
 	m   *Model
 	pub Publisher
 }
 
-func (c *Ctrl) Initialize() {
-}
+// Initialize initializes controller
+func (c *Ctrl) Initialize() {}
 
+// SetPublisher sets controller's Publisher
 func (c *Ctrl) SetPublisher(p Publisher) {
 	c.pub = p
 }
 
+// Delegate is called from view to delegate functionality that are not
+// covered by view.
 func (c *Ctrl) Delegate(event string, data interface{}) (err error) {
 	defer func() {
 		e := c.Update(context.Background())
@@ -46,6 +50,8 @@ func (c *Ctrl) Delegate(event string, data interface{}) (err error) {
 	return err
 }
 
+// Update retrieve latest information from model and
+// reflect them to view via PubSub.
 func (c *Ctrl) Update(ctx context.Context) error {
 	// TODO:
 	// List and RetrievePriority should archive in
