@@ -225,7 +225,11 @@ func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 }
 
 func (v *View) setPriorityHigh(priorities []*service.Priority, task *service.Task) error {
-	p := v.lookupPaneByTask(task)
+	p, err := v.lookupPaneByTask(task)
+	if err != nil {
+		return err
+	}
+
 	ids := p.priorities
 
 	for i, id := range ids {
@@ -240,11 +244,15 @@ func (v *View) setPriorityHigh(priorities []*service.Priority, task *service.Tas
 		}
 	}
 
-	return nil
+	return fmt.Errorf("failed to set priority high for task [%s]", task.Name)
 }
 
 func (v *View) setPriorityLow(task *service.Task) error {
-	p := v.lookupPaneByTask(task)
+	p, err := v.lookupPaneByTask(task)
+	if err != nil {
+		return err
+	}
+
 	ids := p.priorities
 
 	for i, id := range ids {
@@ -259,7 +267,7 @@ func (v *View) setPriorityLow(task *service.Task) error {
 		}
 	}
 
-	return nil
+	return fmt.Errorf("failed to set priority low for task [%s]", task.Name)
 }
 
 // markTaskAsDone moves specified task to Done pane.
@@ -308,19 +316,19 @@ const (
 	dirLeft
 )
 
-func (v *View) lookupPaneByTask(t *service.Task) *Pane {
+func (v *View) lookupPaneByTask(t *service.Task) (*Pane, error) {
 	for i, p := range v.panes {
 		if p.place == t.Place {
-			return v.panes[i]
+			return v.panes[i], nil
 		}
 	}
-	return nil
+	return nil, fmt.Errorf("failed to lookup pane by task")
 }
 
 func (v *View) moveTaskTo(t *service.Task, dir directive) error {
-	pane := v.lookupPaneByTask(t)
-	if pane == nil {
-		return fmt.Errorf("couldn't lookup a pane by specified task")
+	pane, err := v.lookupPaneByTask(t)
+	if err != nil {
+		return err
 	}
 
 	switch dir {
