@@ -3,25 +3,38 @@ package main
 import (
 	"log"
 
+	"github.com/pkg/errors"
+
 	"github.com/jroimartin/gocui"
 )
 
+type errContainer struct {
+	err error
+}
+
+func (e *errContainer) setError(err error) {
+	if err != nil {
+		e.err = errors.Wrapf(e.err, "failed to set keybinding: %v", err.Error())
+	}
+}
+
 // ConfigureKeyBindings configures keybindings for ordinal use
 func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
+	ec := &errContainer{}
 	for _, p := range v.panes {
-		_ = g.SetKeybinding(p.name, 'h', gocui.ModNone, v.KeyH)
-		_ = g.SetKeybinding(p.name, 'l', gocui.ModNone, v.KeyL)
-		_ = g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up)   // TODO: should be v.KeyK
-		_ = g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down) // TODO: should be v.KeyJ
-		_ = g.SetKeybinding(p.name, 'x', gocui.ModNone, v.KeyX)
-		_ = g.SetKeybinding(p.name, 'i', gocui.ModNone, v.KeyI)
-		_ = g.SetKeybinding(p.name, 'I', gocui.ModNone, v.KeyShiftI)
-		_ = g.SetKeybinding(p.name, 'e', gocui.ModNone, v.KeyE)
-		_ = g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.KeySpace)
+		ec.setError(g.SetKeybinding(p.name, 'h', gocui.ModNone, v.KeyH))
+		ec.setError(g.SetKeybinding(p.name, 'l', gocui.ModNone, v.KeyL))
+		ec.setError(g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up))   // TODO: should be v.KeyK
+		ec.setError(g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)) // TODO: should be v.KeyJ
+		ec.setError(g.SetKeybinding(p.name, 'x', gocui.ModNone, v.KeyX))
+		ec.setError(g.SetKeybinding(p.name, 'i', gocui.ModNone, v.KeyI))
+		ec.setError(g.SetKeybinding(p.name, 'I', gocui.ModNone, v.KeyShiftI))
+		ec.setError(g.SetKeybinding(p.name, 'e', gocui.ModNone, v.KeyE))
+		ec.setError(g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.KeySpace))
 	}
-	_ = g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.KeyEnter)
-	_ = g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit) // TODO: should be v.KeyCtrlC
-	return nil
+	ec.setError(g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.KeyEnter))
+	ec.setError(g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit)) // TODO: should be v.KeyCtrlC
+	return ec.err
 }
 
 // KeyH reacts for "h"
