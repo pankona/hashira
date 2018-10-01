@@ -340,7 +340,7 @@ func (v *View) moveTaskTo(t *service.Task, dir directive) error {
 		pane = pane.left
 	}
 
-	err := v.Delegate("update", t)
+	err = v.Delegate("update", t)
 	if err != nil {
 		return fmt.Errorf("failed to update: %s", err.Error())
 	}
