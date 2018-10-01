@@ -142,7 +142,7 @@ func (v *View) moveTaskPlaceTo(t *service.Task, pane *Pane, insertTo int) error 
 }
 
 func (v *View) changeFocusedPane(pane *Pane) error {
-	v.cursor = v.cursor.changeFocusedPane(pane)
+	v.cursor.focusedPane = pane
 
 	// Resume scroll status
 	// Check if index is positive since there's possibility that

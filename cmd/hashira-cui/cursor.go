@@ -20,8 +20,3 @@ func (c *cursor) sanitize(maxLen int) *cursor {
 
 	return ret
 }
-
-func (c *cursor) changeFocusedPane(p *Pane) *cursor {
-	c.focusedPane = p
-	return c.sanitize(len(c.focusedPane.priorities))
-}
