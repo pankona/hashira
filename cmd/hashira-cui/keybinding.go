@@ -55,10 +55,6 @@ func (v *View) KeyX(*gocui.Gui, *gocui.View) error {
 
 // KeyI reacts for "i"
 func (v *View) KeyI(g *gocui.Gui, gv *gocui.View) error {
-	if gv.Name() == "input" {
-		return v.input(g, gv)
-	}
-
 	t := v.FocusedTask()
 	if t == nil {
 		log.Printf("selectedTask is nil")
