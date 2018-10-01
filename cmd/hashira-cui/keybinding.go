@@ -6,6 +6,7 @@ import (
 	"github.com/jroimartin/gocui"
 )
 
+// ConfigureKeyBindings configures keybindings for ordinal use
 func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 	for _, p := range v.panes {
 		_ = g.SetKeybinding(p.name, 'h', gocui.ModNone, v.KeyH)
@@ -23,19 +24,23 @@ func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 	return nil
 }
 
+// KeyH reacts for "h"
 func (v *View) KeyH(g *gocui.Gui, _ *gocui.View) error {
 	return v.Left()
 }
 
+// KeyL reacts for "l"
 func (v *View) KeyL(g *gocui.Gui, _ *gocui.View) error {
 	return v.Right()
 }
 
+// KeyX reacts for "x"
 func (v *View) KeyX(*gocui.Gui, *gocui.View) error {
 	t := v.FocusedTask()
 	return v.markTaskAsDone(t)
 }
 
+// KeyI reacts for "i"
 func (v *View) KeyI(g *gocui.Gui, gv *gocui.View) error {
 	if gv.Name() == "input" {
 		return v.input(g, gv)
@@ -49,6 +54,7 @@ func (v *View) KeyI(g *gocui.Gui, gv *gocui.View) error {
 	return v.moveTaskTo(t, dirRight)
 }
 
+// KeyShiftI reacts for "I"
 func (v *View) KeyShiftI(g *gocui.Gui, gv *gocui.View) error {
 	if gv.Name() == "input" {
 		return v.input(g, gv)
@@ -62,6 +68,7 @@ func (v *View) KeyShiftI(g *gocui.Gui, gv *gocui.View) error {
 	return v.moveTaskTo(t, dirLeft)
 }
 
+// KeyE reacts for "e"
 func (v *View) KeyE(g *gocui.Gui, gv *gocui.View) error {
 	t := v.FocusedTask()
 	if t == nil {
@@ -73,10 +80,12 @@ func (v *View) KeyE(g *gocui.Gui, gv *gocui.View) error {
 	return v.input(g, gv)
 }
 
+// KeySpace reacts for "Space"
 func (v *View) KeySpace(g *gocui.Gui, gv *gocui.View) error {
 	return v.selectFocusedTask()
 }
 
+// KeyEnter reacts for "Enter"
 func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
 	return v.input(g, gv)
 }
