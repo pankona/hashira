@@ -276,6 +276,11 @@ func (v *View) markTaskAsDone(t *service.Task) error {
 		return nil
 	}
 
+	if t == v.selectedTask {
+		// deselect
+		v.selectedTask = nil
+	}
+
 	if t.Place == p.place {
 		t.IsDeleted = true
 		return v.Delegate("update", t)
