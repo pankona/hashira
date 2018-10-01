@@ -215,7 +215,7 @@ func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
 // TODO: should be more suitable name
 func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 	if v.selectedTask != nil {
-		v.setPriorityLow(v.priorities, v.selectedTask)
+		v.setPriorityLow(v.selectedTask)
 	}
 
 	v.cursor.index++
@@ -225,47 +225,37 @@ func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 }
 
 func (v *View) setPriorityHigh(priorities []*service.Priority, task *service.Task) error {
-	place := task.Place
-	var index int
-	for i, p := range v.priorities {
-		if p.Place == place {
-			index = i
-		}
-	}
+	p := v.lookupPaneByTask(task)
+	ids := p.priorities
 
-	for i, id := range v.priorities[index].Ids {
+	for i, id := range ids {
 		if id == task.Id {
 			if i == 0 {
+				// already on top. do nothing.
 				return nil
 			}
 			// swap
-			v.priorities[index].Ids[i-1], v.priorities[index].Ids[i] =
-				v.priorities[index].Ids[i], v.priorities[index].Ids[i-1]
-			break
+			ids[i-1], ids[i] = ids[i], ids[i-1]
+			return nil
 		}
 	}
 
 	return nil
 }
 
-func (v *View) setPriorityLow(priorities []*service.Priority, task *service.Task) error {
-	place := task.Place
-	var index int
-	for i, p := range v.priorities {
-		if p.Place == place {
-			index = i
-		}
-	}
+func (v *View) setPriorityLow(task *service.Task) error {
+	p := v.lookupPaneByTask(task)
+	ids := p.priorities
 
-	for i, id := range v.priorities[index].Ids {
+	for i, id := range ids {
 		if id == task.Id {
-			if i == len(v.priorities[index].Ids)-1 {
+			if i == len(ids)-1 {
+				// already on bottom. do nothing.
 				return nil
 			}
 			// swap
-			v.priorities[index].Ids[i+1], v.priorities[index].Ids[i] =
-				v.priorities[index].Ids[i], v.priorities[index].Ids[i+1]
-			break
+			ids[i+1], ids[i] = ids[i], ids[i+1]
+			return nil
 		}
 	}
 
