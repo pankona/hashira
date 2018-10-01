@@ -76,10 +76,6 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 
 	g.Highlight = true
 	g.SelFgColor = gocui.ColorBlue
-	_, err := g.SetCurrentView(v.panes[pn[0]].name)
-	if err != nil {
-		return err
-	}
 
 	v.g = g
 	v.Delegater = d
