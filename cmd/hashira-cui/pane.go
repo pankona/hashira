@@ -9,6 +9,8 @@ import (
 	"github.com/pankona/hashira/service"
 )
 
+// Pane represents a pane,
+// like one of Backlog, ToDo, Doing, Done
 type Pane struct {
 	name       string
 	index      int // place of this pane
@@ -24,6 +26,7 @@ type rectangle struct {
 	x0, y0, x1, y1 int
 }
 
+// Layout writes tasks in pane
 func (p *Pane) Layout(g *gocui.Gui, c *cursor, focusedIndex int, selectedTask *service.Task) error {
 	maxX, maxY := g.Size()
 	rect := rectangle{maxX / 4 * p.index, 1, maxX/4*p.index + maxX/4 - 1, maxY - 1}
