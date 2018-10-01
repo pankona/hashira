@@ -373,48 +373,12 @@ func (v *View) moveTaskTo(t *service.Task, dir directive) error {
 
 func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 	if gv.Name() == "input" {
-		defer func() {
-			v.editingTask = nil
-			g.DeleteKeybindings(gv.Name())
-			g.Cursor = false
-
-			err := g.DeleteView(gv.Name())
-			if err != nil {
-				log.Printf("[WARNING] failed to delete view: %v", err)
-			}
-
-			if v.pane == nil {
-				// should not reach.
-				log.Printf("[WARNING] pane to restore after input is nil")
-				v.pane = v.panes[pn[0]]
-			}
-
-			_, err = g.SetCurrentView(v.pane.name)
-			if err != nil {
-				log.Printf("[WARNING] failed to restore current view: %v", err)
-			}
-
-			v.pane = nil
-		}()
-
-		msg := gv.Buffer()
-		msg = strings.TrimSuffix(msg, "\n")
-		msg = strings.TrimSpace(msg)
-		if msg == "" {
-			return nil
-		}
-
-		if v.editingTask == nil {
-			t := &service.Task{
-				Name:  msg,
-				Place: v.pane.place,
-			}
-			return v.Delegate("add", t)
-		}
-		v.editingTask.Name = msg
-		return v.Delegate("update", v.editingTask)
+		return v.determineInput(g, gv)
 	}
+	return v.showInput(g)
+}
 
+func (v *View) showInput(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 	input, err := g.SetView("input", maxX/2-20, maxY/2, maxX/2+20, maxY/2+2)
 	if err != nil {
@@ -443,6 +407,49 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 
 	_, err = g.SetCurrentView("input")
 	return err
+}
+
+func (v *View) determineInput(g *gocui.Gui, gv *gocui.View) error {
+	defer func() {
+		v.editingTask = nil
+		g.DeleteKeybindings(gv.Name())
+		g.Cursor = false
+
+		err := g.DeleteView(gv.Name())
+		if err != nil {
+			log.Printf("[WARNING] failed to delete view: %v", err)
+		}
+
+		if v.pane == nil {
+			// should not reach.
+			log.Printf("[WARNING] pane to restore after input is nil")
+			v.pane = v.panes[pn[0]]
+		}
+
+		_, err = g.SetCurrentView(v.pane.name)
+		if err != nil {
+			log.Printf("[WARNING] failed to restore current view: %v", err)
+		}
+
+		v.pane = nil
+	}()
+
+	msg := gv.Buffer()
+	msg = strings.TrimSuffix(msg, "\n")
+	msg = strings.TrimSpace(msg)
+	if msg == "" {
+		return nil
+	}
+
+	if v.editingTask == nil {
+		t := &service.Task{
+			Name:  msg,
+			Place: v.pane.place,
+		}
+		return v.Delegate("add", t)
+	}
+	v.editingTask.Name = msg
+	return v.Delegate("update", v.editingTask)
 }
 
 // Quit quits hashira-cui application
