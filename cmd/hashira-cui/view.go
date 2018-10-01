@@ -10,6 +10,7 @@ import (
 	"github.com/pankona/hashira/service"
 )
 
+// View represents a view of hashira-cui's mvc
 type View struct {
 	panes        map[string]*Pane
 	g            *gocui.Gui
@@ -22,6 +23,8 @@ type View struct {
 	Delegater
 }
 
+// Delegater in an interface to call delegate function,
+// to cover functionality that is not covered by view
 type Delegater interface {
 	Delegate(event string, data interface{}) error
 }
@@ -34,6 +37,7 @@ var pn = []string{
 	"Done",
 }
 
+// Initialize initializes view
 func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 	v.panes = make(map[string]*Pane)
 
@@ -84,6 +88,8 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 	return nil
 }
 
+// Left represents action for left key
+// TODO: should be more suitable name
 func (v *View) Left() error {
 	dst := v.panes[v.g.CurrentView().Name()].left
 	err := v.changeFocusedPane(dst)
@@ -98,6 +104,8 @@ func (v *View) Left() error {
 	return nil
 }
 
+// Right represents action for right key
+// TODO: should be more suitable name
 func (v *View) Right() error {
 	dst := v.panes[v.g.CurrentView().Name()].right
 	err := v.changeFocusedPane(dst)
@@ -191,6 +199,8 @@ func insert(ss []string, s string, index int) []string {
 	return ret
 }
 
+// Up represents action for up key
+// TODO: should be more suitable name
 func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
 	if v.selectedTask != nil {
 		v.setPriorityHigh(v.priorities, v.selectedTask)
@@ -202,6 +212,8 @@ func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
 	return nil
 }
 
+// Down represents action for down key
+// TODO: should be more suitable name
 func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 	if v.selectedTask != nil {
 		v.setPriorityLow(v.priorities, v.selectedTask)
@@ -291,6 +303,7 @@ func (v *View) selectFocusedTask() error {
 	return nil
 }
 
+// FocusedTask returns a task that is focused by cursor
 func (v *View) FocusedTask() *service.Task {
 	if v.focusedIndex < 0 {
 		return nil
@@ -421,18 +434,15 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 	return err
 }
 
-func (v *View) SetFocus(name string) error {
-	_, err := v.g.SetCurrentView(name)
-	v.g.Update(func(*gocui.Gui) error { return nil })
-	return err
-}
-
+// Quit quits hashira-cui application
+// TODO: should be more suitable name
 func (v *View) Quit(g *gocui.Gui, _ *gocui.View) error {
 	return gocui.ErrQuit
 }
 
 var once = sync.Once{}
 
+// Layout renders panes on screen
 func (v *View) Layout(g *gocui.Gui) error {
 	for _, p := range v.panes {
 
@@ -464,6 +474,8 @@ func (v *View) Layout(g *gocui.Gui) error {
 	return nil
 }
 
+// OnEvent is called when PubSub publisher publishes messages.
+// This method is necessary to fulfill Subscriber interface.
 func (v *View) OnEvent(event string, data ...interface{}) {
 	switch event {
 	case "update":
