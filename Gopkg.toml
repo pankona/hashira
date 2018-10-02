@@ -44,6 +44,7 @@
 [[constraint]]
   name = "github.com/jroimartin/gocui"
   version = "0.4.0"
+  source = "https://github.com/pankona/gocui"
 
 [[constraint]]
   branch = "master"
