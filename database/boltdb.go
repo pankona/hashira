@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/coreos/bbolt"
+	bolt "github.com/etcd-io/bbolt"
 )
 
 // BoltDB provides API for using BoltDB
