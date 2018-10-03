@@ -171,6 +171,7 @@ func (d *Daemon) retrieveTaskMap() (map[string]map[string]*service.Task, error) 
 	return m, nil
 }
 
+// UpdatePriority updates priority array
 func (d *Daemon) UpdatePriority(ctx context.Context, com *service.CommandUpdatePriority) (*service.ResultUpdatePriority, error) {
 	pmap, err := d.updatePriority(com.Priorities)
 	priorities := make([]*service.Priority, len(pmap))
@@ -215,6 +216,7 @@ func lookupTaskByID(tasks map[string]map[string]*service.Task, id string) *servi
 	return nil
 }
 
+// RetrievePriority returns priority array
 func (d *Daemon) RetrievePriority(ctx context.Context, com *service.CommandRetrievePriority) (*service.ResultRetrievePriority, error) {
 	pmap, err := d.retrievePriority()
 

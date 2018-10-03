@@ -73,7 +73,7 @@
     "url",
   ]
   pruneopts = "UT"
-  revision = "ba990859ce2f4e682d2bad3f4b452fb523164339"
+  revision = "db3ecb6248db27f2c809b5359e4e12e34abe101e"
 
 [[projects]]
   branch = "master"
@@ -84,20 +84,20 @@
   revision = "a0ff2567cfb70903282db057e799fd826784d41d"
 
 [[projects]]
-  digest = "1:c28625428387b63dd7154eb857f51e700465cfbf7c06f619e71f2da33cefe47e"
-  name = "github.com/coreos/bbolt"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "583e8937c61f1af6513608ccc75c97b6abdf4ff9"
-  version = "v1.3.0"
-
-[[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
   pruneopts = "UT"
   revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
   version = "v1.1.1"
+
+[[projects]]
+  digest = "1:c28625428387b63dd7154eb857f51e700465cfbf7c06f619e71f2da33cefe47e"
+  name = "github.com/etcd-io/bbolt"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "583e8937c61f1af6513608ccc75c97b6abdf4ff9"
+  version = "v1.3.0"
 
 [[projects]]
   digest = "1:5d1b5a25486fc7d4e133646d834f6fca7ba1cef9903d40e7aa786c41b89e9e91"
@@ -120,6 +120,7 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "c055c87ae801372cd74a0839b972db4f7697ae5f"
+  source = "https://github.com/pankona/gocui"
   version = "v0.4.0"
 
 [[projects]]
@@ -227,7 +228,7 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "4dfa2610cdf3b287375bbba5b8f2a14d3b01d8de"
+  revision = "f5e5bdd778241bfefa8627f7124c39cd6ad8d74f"
 
 [[projects]]
   branch = "master"
@@ -322,7 +323,7 @@
   input-imports = [
     "github.com/asticode/go-astilectron",
     "github.com/asticode/go-astilectron-bundler",
-    "github.com/coreos/bbolt",
+    "github.com/etcd-io/bbolt",
     "github.com/golang/protobuf/proto",
     "github.com/jroimartin/gocui",
     "github.com/pkg/errors",

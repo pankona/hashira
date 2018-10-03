@@ -33,6 +33,9 @@ $(PB_GO_DIR)/%.pb.go: $(PROTO_DIR)/%.proto
 	mkdir -p $(dir $@)
 	protoc -I $(PROTO_DIR) --go_out=plugins=grpc:$(dir $@) ./$<
 
+golangci-lint:
+	golangci-lint run
+
 lint:
 	gometalinter \
 		--vendor \

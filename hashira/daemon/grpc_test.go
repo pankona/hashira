@@ -10,16 +10,36 @@ import (
 
 type mockDB struct {
 	database.Databaser
-	data map[string][]byte
+	data map[string]map[string][]byte
 }
 
-func (m *mockDB) Save(id string, value []byte) error {
-	m.data[id] = value
-	return nil
+func (m *mockDB) Save(bucket, id string, value []byte) (string, error) {
+	if m.data == nil {
+		m.data = make(map[string]map[string][]byte)
+	}
+
+	if m.data[bucket] == nil {
+		m.data[bucket] = make(map[string][]byte)
+	}
+
+	m.data[bucket][id] = value
+	return id, nil
 }
 
-func (m *mockDB) ForEach(f func(k, v []byte) error) error {
-	for k, v := range m.data {
+func (m *mockDB) Load(bucket, id string) ([]byte, error) {
+	if m.data == nil {
+		return nil, nil
+	}
+
+	if m.data[bucket] == nil {
+		return nil, nil
+	}
+
+	return m.data[bucket][id], nil
+}
+
+func (m *mockDB) ForEach(bucket string, f func(k, v []byte) error) error {
+	for k, v := range m.data[bucket] {
 		err := f([]byte(k), v)
 		if err != nil {
 			return err
@@ -43,8 +63,10 @@ var tcs = []struct {
 func testCreate(d *Daemon, t *testing.T) {
 	for _, tc := range tcs {
 		cc := &service.CommandCreate{
-			Name:  tc.inName,
-			Place: tc.inPlace,
+			Task: &service.Task{
+				Name:  tc.inName,
+				Place: tc.inPlace,
+			},
 		}
 		result, err := d.Create(context.Background(), cc)
 		if err != nil {
@@ -63,14 +85,14 @@ func testCreate(d *Daemon, t *testing.T) {
 
 func TestEndPointCreate(t *testing.T) {
 	d := &Daemon{
-		DB: &mockDB{data: make(map[string][]byte)},
+		DB: &mockDB{},
 	}
 	testCreate(d, t)
 }
 
 func TestEndPointRetrieve(t *testing.T) {
 	d := &Daemon{
-		DB: &mockDB{data: make(map[string][]byte)},
+		DB: &mockDB{},
 	}
 	testCreate(d, t)
 
