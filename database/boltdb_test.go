@@ -60,12 +60,12 @@ func TestBoltDBSaveLoad(t *testing.T) {
 		t.Fatalf("Initialized returned unexpected error: %s", err.Error())
 	}
 
-	err = db.Save("testid", []byte("testdata"))
+	_, err = db.Save("testbucket", "testid", []byte("testdata"))
 	if err != nil {
 		t.Fatalf("save returned unexpected error: %s", err.Error())
 	}
 
-	v, err := db.Load("testid")
+	v, err := db.Load("testbucket", "testid")
 	if err != nil {
 		t.Fatalf("load returned unexpected error: %s", err.Error())
 	}
@@ -90,13 +90,13 @@ func TestBoltDBSaveLoadWithoutID(t *testing.T) {
 	}
 
 	for i := 0; i < 10; i++ {
-		err = db.Save("", []byte("testdata"))
+		_, err = db.Save("testbucket", "", []byte("testdata"))
 		if err != nil {
 			t.Fatalf("save returned unexpected error: %s", err.Error())
 		}
 	}
 
-	err = db.ForEach(func(k, v []byte) error {
+	err = db.ForEach("testbucket", func(k, v []byte) error {
 		t.Logf("[%s] %s", string(k), string(v))
 		return nil
 	})

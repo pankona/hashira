@@ -49,7 +49,7 @@ func (c *Client) Create(ctx context.Context, task *service.Task) error {
 		})
 }
 
-// Create updates an existing task
+// Update updates an existing task
 func (c *Client) Update(ctx context.Context, task *service.Task) error {
 	return c.withClient(
 		func(hc service.HashiraClient) error {
