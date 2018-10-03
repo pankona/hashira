@@ -10,9 +10,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-type Hoge struct {
-}
-
 // Client is a hashira client structure
 type Client struct {
 	Address string
