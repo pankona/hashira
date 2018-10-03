@@ -24,7 +24,7 @@ $(GOPATH)/bin/dep:
 	$(error dep is not installed. install dep by following command: \
 		curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh)
 
-all: genproto lint
+all: genproto lint test
 	make build
 
 genproto: $(PB_GOS)
@@ -43,6 +43,9 @@ lint:
 		--skip=$(CURDIR)/cmd/hashira-gui \
 		--skip=$(CURDIR)/service \
 		$(CURDIR)/...
+
+test:
+	go test `go list ./... | grep -v cmd/hashira-gui`
 
 clean:
 	rm -rf $(PB_GO_DIR)
