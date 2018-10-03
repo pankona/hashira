@@ -1,3 +1,6 @@
+run:
+  skip-dirs:
+    - cmd/hashira-gui
 linters:
   enable-all: true
 
