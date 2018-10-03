@@ -1,5 +1,4 @@
-// +build !linux
-// +build !amd64
+// +build !linux, !amd64
 
 package main
 
