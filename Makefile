@@ -45,7 +45,7 @@ lint:
 		$(CURDIR)/...
 
 test:
-	go test ./...
+	go test `go list ./... | grep -v cmd/hashira-gui`
 
 clean:
 	rm -rf $(PB_GO_DIR)
