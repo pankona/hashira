@@ -26,7 +26,7 @@ type View struct {
 // Delegater in an interface to call delegate function,
 // to cover functionality that is not covered by view
 type Delegater interface {
-	Delegate(event string, data interface{}) error
+	Delegate(event string, data ...interface{}) error
 }
 
 // pane names
@@ -121,10 +121,6 @@ func (v *View) Right() error {
 
 func (v *View) moveTaskPlaceTo(t *service.Task, pane *Pane, insertTo int) error {
 	t.Place = pane.place
-	err := v.Delegate("update", t)
-	if err != nil {
-		return err
-	}
 
 	priority := remove(pane.priorities, t.Id)
 	priority = insert(priority, t.Id, insertTo)
@@ -138,7 +134,7 @@ func (v *View) moveTaskPlaceTo(t *service.Task, pane *Pane, insertTo int) error 
 		}
 	}
 
-	return v.Delegate("updatePriority", v.priorities)
+	return v.Delegate("updateBulk", t, v.priorities)
 }
 
 func (v *View) changeFocusedPane(pane *Pane) error {

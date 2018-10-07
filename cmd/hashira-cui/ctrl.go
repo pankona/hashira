@@ -16,7 +16,7 @@ type Ctrl struct {
 
 type delegateCommand struct {
 	event string
-	data  interface{}
+	data  []interface{}
 }
 
 // Initialize initializes controller
@@ -36,13 +36,19 @@ func (c *Ctrl) Initialize() {
 
 			switch event {
 			case "add":
-				err = c.m.hashirac.Create(ctx, data.(*service.Task))
+				err = c.m.hashirac.Create(ctx, data[0].(*service.Task))
 			case "update":
-				err = c.m.hashirac.Update(ctx, data.(*service.Task))
+				err = c.m.hashirac.Update(ctx, data[0].(*service.Task))
 			case "delete":
-				err = c.m.hashirac.Delete(ctx, data.(*service.Task).Id)
+				err = c.m.hashirac.Delete(ctx, data[0].(*service.Task).Id)
 			case "updatePriority":
-				_, err = c.m.hashirac.UpdatePriority(ctx, data.([]*service.Priority))
+				_, err = c.m.hashirac.UpdatePriority(ctx, data[0].([]*service.Priority))
+			case "updateBulk":
+				err = c.m.hashirac.Update(ctx, data[0].(*service.Task))
+				if err != nil {
+					c.errChan <- err
+				}
+				_, err = c.m.hashirac.UpdatePriority(ctx, data[1].([]*service.Priority))
 			default:
 				// nop
 			}
@@ -66,7 +72,7 @@ func (c *Ctrl) SetPublisher(p Publisher) {
 
 // Delegate is called from view to delegate functionality that are not
 // covered by view.
-func (c *Ctrl) Delegate(event string, data interface{}) (err error) {
+func (c *Ctrl) Delegate(event string, data ...interface{}) (err error) {
 	c.queue <- delegateCommand{event: event, data: data}
 	return nil
 }
