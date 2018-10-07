@@ -17,7 +17,7 @@ type Ctrl struct {
 }
 
 type delegateCommand struct {
-	event string
+	event delegateEvent
 	data  []interface{}
 }
 
@@ -44,15 +44,15 @@ func (c *Ctrl) Initialize() {
 			var err error
 
 			switch event {
-			case "add":
+			case Add:
 				err = c.m.hashirac.Create(ctx, data[0].(*service.Task))
-			case "update":
+			case Update:
 				err = c.m.hashirac.Update(ctx, data[0].(*service.Task))
-			case "delete":
+			case Delete:
 				err = c.m.hashirac.Delete(ctx, data[0].(*service.Task).Id)
-			case "updatePriority":
+			case UpdatePriority:
 				_, err = c.m.hashirac.UpdatePriority(ctx, data[0].([]*service.Priority))
-			case "updateBulk":
+			case UpdateBulk:
 				err = c.m.hashirac.Update(ctx, data[0].(*service.Task))
 				if err != nil {
 					c.errChan <- err
@@ -81,7 +81,7 @@ func (c *Ctrl) SetPublisher(p Publisher) {
 
 // Delegate is called from view to delegate functionality that are not
 // covered by view.
-func (c *Ctrl) Delegate(event string, data ...interface{}) (err error) {
+func (c *Ctrl) Delegate(event delegateEvent, data ...interface{}) (err error) {
 	c.queue <- delegateCommand{event: event, data: data}
 	return nil
 }

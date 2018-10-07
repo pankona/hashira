@@ -23,12 +23,6 @@ type View struct {
 	Delegater
 }
 
-// Delegater in an interface to call delegate function,
-// to cover functionality that is not covered by view
-type Delegater interface {
-	Delegate(event string, data ...interface{}) error
-}
-
 // pane names
 var pn = []string{
 	"Backlog",
@@ -134,7 +128,7 @@ func (v *View) moveTaskPlaceTo(t *service.Task, pane *Pane, insertTo int) error 
 		}
 	}
 
-	return v.Delegate("updateBulk", t, v.priorities)
+	return v.Delegate(UpdateBulk, t, v.priorities)
 }
 
 func (v *View) changeFocusedPane(pane *Pane) error {
@@ -279,7 +273,7 @@ func (v *View) markTaskAsDone(t *service.Task) error {
 
 	if t.Place == p.place {
 		t.IsDeleted = true
-		return v.Delegate("update", t)
+		return v.Delegate(Update, t)
 	}
 
 	return v.moveTaskPlaceTo(t, p, 0)
@@ -292,7 +286,7 @@ func (v *View) selectFocusedTask() error {
 		v.selectedTask = nil
 		// on deselect task, it means the deselected task's
 		// priority is determined. update priority is necessary.
-		return v.Delegate("updatePriority", v.priorities)
+		return v.Delegate(UpdatePriority, v.priorities)
 	}
 
 	v.selectedTask = v.FocusedTask()
@@ -343,7 +337,7 @@ func (v *View) moveTaskTo(t *service.Task, dir directive) error {
 		pane = pane.left
 	}
 
-	err = v.Delegate("update", t)
+	err = v.Delegate(Update, t)
 	if err != nil {
 		return fmt.Errorf("failed to update: %s", err.Error())
 	}
@@ -369,7 +363,7 @@ func (v *View) moveTaskTo(t *service.Task, dir directive) error {
 		}
 	}
 
-	return v.Delegate("updatePriority", v.priorities)
+	return v.Delegate(UpdatePriority, v.priorities)
 }
 
 func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
@@ -447,10 +441,10 @@ func (v *View) determineInput(g *gocui.Gui, gv *gocui.View) error {
 			Name:  msg,
 			Place: v.pane.place,
 		}
-		return v.Delegate("add", t)
+		return v.Delegate(Add, t)
 	}
 	v.editingTask.Name = msg
-	return v.Delegate("update", v.editingTask)
+	return v.Delegate(Update, v.editingTask)
 }
 
 // Quit quits hashira-cui application
