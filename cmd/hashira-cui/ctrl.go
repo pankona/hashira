@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/pankona/hashira/service"
@@ -58,7 +59,7 @@ func (c *Ctrl) Initialize() {
 				}
 				_, err = c.m.hashirac.UpdatePriority(ctx, data[1].([]*service.Priority))
 			default:
-				// nop
+				panic(fmt.Sprintf("unknown delegateCommand: %v", event))
 			}
 
 			if err != nil {
