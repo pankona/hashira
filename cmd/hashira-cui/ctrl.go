@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 
 	"github.com/pankona/hashira/service"
 )
@@ -23,6 +24,14 @@ type delegateCommand struct {
 func (c *Ctrl) Initialize() {
 	c.queue = make(chan delegateCommand, 128)
 
+	ctx := context.Background()
+
+	go func() {
+		// TODO: support cancel using context
+		err := <-c.errChan
+		log.Printf("[ERROR] %v", err)
+	}()
+
 	go func() {
 		for {
 			// TODO: support cancel using context
@@ -32,7 +41,6 @@ func (c *Ctrl) Initialize() {
 			data := com.data
 
 			var err error
-			ctx := context.Background()
 
 			switch event {
 			case "add":
