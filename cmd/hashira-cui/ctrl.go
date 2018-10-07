@@ -44,11 +44,11 @@ func (c *Ctrl) Initialize() {
 			var err error
 
 			switch event {
-			case Add:
+			case AddTask:
 				err = c.m.hashirac.Create(ctx, data[0].(*service.Task))
-			case Update:
+			case UpdateTask:
 				err = c.m.hashirac.Update(ctx, data[0].(*service.Task))
-			case Delete:
+			case DeleteTask:
 				err = c.m.hashirac.Delete(ctx, data[0].(*service.Task).Id)
 			case UpdatePriority:
 				_, err = c.m.hashirac.UpdatePriority(ctx, data[0].([]*service.Priority))

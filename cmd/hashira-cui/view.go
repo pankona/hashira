@@ -273,7 +273,7 @@ func (v *View) markTaskAsDone(t *service.Task) error {
 
 	if t.Place == p.place {
 		t.IsDeleted = true
-		return v.Delegate(Update, t)
+		return v.Delegate(UpdateTask, t)
 	}
 
 	return v.moveTaskPlaceTo(t, p, 0)
@@ -337,7 +337,7 @@ func (v *View) moveTaskTo(t *service.Task, dir directive) error {
 		pane = pane.left
 	}
 
-	err = v.Delegate(Update, t)
+	err = v.Delegate(UpdateTask, t)
 	if err != nil {
 		return fmt.Errorf("failed to update: %s", err.Error())
 	}
@@ -441,10 +441,10 @@ func (v *View) determineInput(g *gocui.Gui, gv *gocui.View) error {
 			Name:  msg,
 			Place: v.pane.place,
 		}
-		return v.Delegate(Add, t)
+		return v.Delegate(AddTask, t)
 	}
 	v.editingTask.Name = msg
-	return v.Delegate(Update, v.editingTask)
+	return v.Delegate(UpdateTask, v.editingTask)
 }
 
 // Quit quits hashira-cui application

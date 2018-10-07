@@ -9,9 +9,9 @@ type Delegater interface {
 type delegateEvent int
 
 const (
-	Add delegateEvent = iota
-	Update
-	Delete
+	AddTask delegateEvent = iota
+	UpdateTask
+	DeleteTask
 	UpdatePriority
 	UpdateBulk
 )
