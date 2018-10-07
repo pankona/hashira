@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 
 	"github.com/pankona/hashira/service"
 	"google.golang.org/grpc"
@@ -127,8 +126,6 @@ func (c *Client) RetrievePriority(ctx context.Context) ([]*service.Priority, err
 		ret = p.Priorities
 		return nil
 	})
-
-	log.Printf("client retrieves priority: %v", ret)
 
 	return ret, err
 }

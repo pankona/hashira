@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/pankona/hashira/database"
 	"github.com/pankona/hashira/service"
 )
@@ -81,6 +83,38 @@ func testCreate(d *Daemon, t *testing.T) {
 			t.Errorf("unexpected result. [got] %v [want] %v", result.GetTask().GetPlace(), tc.wantPlace)
 		}
 	}
+}
+
+func TestUpdatePriority(t *testing.T) {
+	p := []*service.Priority{
+		{
+			Place: service.Place_BACKLOG,
+			Ids:   []string{"1", "2", "3", "4", "5"},
+		},
+		{
+			Place: service.Place_TODO,
+			Ids:   []string{"6", "7", "8", "9", "10"},
+		},
+		{
+			Place: service.Place_DOING,
+			Ids:   []string{"11", "12", "13", "14", "15"},
+		},
+		{
+			Place: service.Place_DONE,
+			Ids:   []string{"16", "17", "18", "19", "20"},
+		},
+	}
+
+	d := &Daemon{
+		DB: &mockDB{},
+	}
+	m, err := d.updatePriority(p)
+	require.Nil(t, err)
+
+	require.Equal(t, m[service.Place_BACKLOG.String()].Ids, []string{"1", "2", "3", "4", "5"})
+	require.Equal(t, m[service.Place_TODO.String()].Ids, []string{"6", "7", "8", "9", "10"})
+	require.Equal(t, m[service.Place_DOING.String()].Ids, []string{"11", "12", "13", "14", "15"})
+	require.Equal(t, m[service.Place_DONE.String()].Ids, []string{"16", "17", "18", "19", "20"})
 }
 
 func TestEndPointCreate(t *testing.T) {

@@ -22,6 +22,13 @@ var places = []service.Place{
 	service.Place_DONE,
 }
 
+var lookupPlaceByName = map[string]service.Place{
+	service.Place_BACKLOG.String(): service.Place_BACKLOG,
+	service.Place_TODO.String():    service.Place_TODO,
+	service.Place_DOING.String():   service.Place_DOING,
+	service.Place_DONE.String():    service.Place_DONE,
+}
+
 // Create creates a new task
 func (d *Daemon) Create(ctx context.Context, com *service.CommandCreate) (*service.ResultCreate, error) {
 	t := com.Task
@@ -42,20 +49,18 @@ func (d *Daemon) Create(ctx context.Context, com *service.CommandCreate) (*servi
 		return nil, errors.New("failed to save new task on database: " + err.Error())
 	}
 
-	log.Printf("(create) before priority: %v", p)
 	// put new task on first place
 	p[t.Place.String()].Ids = append([]string{id}, p[t.Place.String()].Ids...)
-	log.Printf("(create) before priority (after insert): %v", p)
 
 	priorities := make([]*service.Priority, 0)
 	for _, v := range p {
 		priorities = append(priorities, v)
 	}
-	pmap, err := d.updatePriority(priorities)
+
+	_, err = d.updatePriority(priorities)
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("(create) updated priority: %v", pmap)
 
 	result := &service.ResultCreate{Task: t}
 	return result, nil
@@ -186,28 +191,29 @@ func (d *Daemon) UpdatePriority(ctx context.Context, com *service.CommandUpdateP
 }
 
 func (d *Daemon) updatePriority(p []*service.Priority) (map[string]*service.Priority, error) {
+	m := make(map[string]*service.Priority)
+
 	for _, v := range p {
-		p := service.Priority{
+		m[v.Place.String()] = &service.Priority{
 			Place: v.Place,
 			Ids:   v.Ids,
 		}
-
-		buf, err := json.Marshal(p)
-		if err != nil {
-			return nil, errors.New("failed to marshal CommandUpdatePriority into json: " + err.Error())
-		}
-
-		_, err = d.DB.Save(priorityBucket, v.Place.String(), buf)
-		if err != nil {
-			return nil, errors.New("failed to save priority on database: " + err.Error())
-		}
 	}
 
-	return d.retrievePriorityMap()
+	buf, err := json.Marshal(m)
+	if err != nil {
+		return nil, errors.New("failed to marshal CommandUpdatePriority into json: " + err.Error())
+	}
+
+	_, err = d.DB.Save(priorityBucket, "priority", buf)
+	if err != nil {
+		return nil, errors.New("failed to save priority on database: " + err.Error())
+	}
+
+	return m, nil
 }
 
 func lookupTaskByID(tasks map[string]map[string]*service.Task, id string) *service.Task {
-	log.Printf("lookup id [%s]", id)
 	for _, t := range tasks {
 		if _, ok := t[id]; ok {
 			return t[id]
@@ -241,20 +247,24 @@ func (d *Daemon) retrievePriority() (map[string]*service.Priority, error) {
 		return nil, err
 	}
 
-	log.Printf("priorities (before): %v", priorities)
-	log.Printf("tasks: %v", tasks)
 	for _, priority := range priorities {
 		for _, id := range priority.Ids {
 			if lookupTaskByID(tasks, id) == nil {
-				log.Printf("remove %s, ", id)
 				priority.Ids, _ = remove(priority.Ids, id)
 			}
 		}
 	}
-	log.Printf("priorities (after): %v", priorities)
 
 	for k := range tasks {
+		if _, ok := priorities[k]; !ok {
+			s := &service.Priority{
+				Place: lookupPlaceByName[k],
+			}
+			s.Ids = make([]string, 0)
+			priorities[k] = s
+		}
 		ids := priorities[k].Ids
+
 		tasks := tasks[k]
 		if len(ids) != len(tasks) {
 			m := make(map[string]struct{})
@@ -274,7 +284,7 @@ func (d *Daemon) retrievePriority() (map[string]*service.Priority, error) {
 						continue
 					}
 
-					priorities[k].Ids = append(priorities[k].Ids, v.Id)
+					ids = append(ids, v.Id)
 				}
 			}
 
@@ -285,10 +295,12 @@ func (d *Daemon) retrievePriority() (map[string]*service.Priority, error) {
 						continue
 					}
 
-					priorities[k].Ids, _ = remove(priorities[k].Ids, v)
+					ids, _ = remove(ids, v)
 				}
 			}
 		}
+
+		priorities[k].Ids = ids
 	}
 
 	return priorities, nil
@@ -308,22 +320,17 @@ func remove(ids []string, id string) ([]string, bool) {
 }
 
 func (d *Daemon) retrievePriorityMap() (map[string]*service.Priority, error) {
-	ret := make(map[string]*service.Priority)
+	m := make(map[string]*service.Priority)
 
-	for _, v := range places {
-		buf, err := d.DB.Load(priorityBucket, v.String())
-		if err != nil {
-			return nil, err
-		}
-
-		p := &service.Priority{}
-		err = json.Unmarshal(buf, p)
-		if err != nil {
-			log.Printf("failed to unmarshal loaded data into service.Priority: %s", err.Error())
-			p = &service.Priority{Place: v}
-		}
-		ret[v.String()] = p
+	buf, err := d.DB.Load(priorityBucket, "priority")
+	if err != nil {
+		return nil, err
 	}
 
-	return ret, nil
+	err = json.Unmarshal(buf, &m)
+	if err != nil {
+		log.Printf("failed to unmarshal loaded data into service.Priority: %s", err.Error())
+	}
+
+	return m, nil
 }
