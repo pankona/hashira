@@ -500,27 +500,31 @@ func (v *View) Layout(g *gocui.Gui) error {
 // OnEvent is called when PubSub publisher publishes messages.
 // This method is necessary to fulfill Subscriber interface.
 func (v *View) OnEvent(event string, data ...interface{}) {
-	switch event {
-	case "update":
-		tasks := data[0].([]*service.Task)
-		v.priorities = data[1].([]*service.Priority)
+	v.gui.Update(func(*gocui.Gui) error {
+		switch event {
+		case "update":
+			tasks := data[0].([]*service.Task)
+			v.priorities = data[1].([]*service.Priority)
 
-		for i := range v.panes {
-			// reset tasks
-			v.panes[i].tasks = make(map[string]*service.Task)
-			for _, t := range tasks {
-				if v.panes[i].place == t.Place {
-					v.panes[i].tasks[t.Id] = t
+			for i := range v.panes {
+				// reset tasks
+				v.panes[i].tasks = make(map[string]*service.Task)
+				for _, t := range tasks {
+					if v.panes[i].place == t.Place {
+						v.panes[i].tasks[t.Id] = t
+					}
+				}
+
+				for _, p := range v.priorities {
+					if v.panes[i].place == p.Place {
+						v.panes[i].priorities = p.Ids
+					}
 				}
 			}
-
-			for _, p := range v.priorities {
-				if v.panes[i].place == p.Place {
-					v.panes[i].priorities = p.Ids
-				}
-			}
+		default:
+			// nop
 		}
-	default:
-		// nop
-	}
+
+		return nil
+	})
 }

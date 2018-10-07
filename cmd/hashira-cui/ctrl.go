@@ -2,20 +2,62 @@ package main
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/pankona/hashira/service"
-	"github.com/pkg/errors"
 )
 
 // Ctrl represents controller of hashira-cui's mvc
 type Ctrl struct {
-	m   *Model
-	pub Publisher
+	m       *Model
+	pub     Publisher
+	queue   chan delegateCommand
+	errChan chan error
+}
+
+type delegateCommand struct {
+	event string
+	data  interface{}
 }
 
 // Initialize initializes controller
-func (c *Ctrl) Initialize() {}
+func (c *Ctrl) Initialize() {
+	c.queue = make(chan delegateCommand, 128)
+
+	go func() {
+		for {
+			// TODO: support cancel using context
+			com := <-c.queue
+
+			event := com.event
+			data := com.data
+
+			var err error
+			ctx := context.Background()
+
+			switch event {
+			case "add":
+				err = c.m.hashirac.Create(ctx, data.(*service.Task))
+			case "update":
+				err = c.m.hashirac.Update(ctx, data.(*service.Task))
+			case "delete":
+				err = c.m.hashirac.Delete(ctx, data.(*service.Task).Id)
+			case "updatePriority":
+				_, err = c.m.hashirac.UpdatePriority(ctx, data.([]*service.Priority))
+			default:
+				// nop
+			}
+
+			if err != nil {
+				c.errChan <- err
+			}
+
+			err = c.Update(context.Background())
+			if err != nil {
+				c.errChan <- err
+			}
+		}
+	}()
+}
 
 // SetPublisher sets controller's Publisher
 func (c *Ctrl) SetPublisher(p Publisher) {
@@ -25,29 +67,8 @@ func (c *Ctrl) SetPublisher(p Publisher) {
 // Delegate is called from view to delegate functionality that are not
 // covered by view.
 func (c *Ctrl) Delegate(event string, data interface{}) (err error) {
-	defer func() {
-		e := c.Update(context.Background())
-		if err != nil {
-			err = errors.Wrap(err, fmt.Sprintf("failed to Update: %s", e.Error()))
-		}
-	}()
-
-	ctx := context.Background()
-
-	switch event {
-	case "add":
-		err = c.m.hashirac.Create(ctx, data.(*service.Task))
-	case "update":
-		err = c.m.hashirac.Update(ctx, data.(*service.Task))
-	case "delete":
-		err = c.m.hashirac.Delete(ctx, data.(*service.Task).Id)
-	case "updatePriority":
-		_, err = c.m.hashirac.UpdatePriority(ctx, data.([]*service.Priority))
-	default:
-		// nop
-	}
-
-	return err
+	c.queue <- delegateCommand{event: event, data: data}
+	return nil
 }
 
 // Update retrieve latest information from model and
