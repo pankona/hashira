@@ -13,7 +13,7 @@ import (
 // View represents a view of hashira-cui's mvc
 type View struct {
 	panes        map[string]*Pane
-	g            *gocui.Gui
+	gui          *gocui.Gui
 	cursor       *cursor
 	focusedIndex int
 	selectedTask *service.Task
@@ -77,7 +77,7 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 	g.Highlight = true
 	g.SelFgColor = gocui.ColorBlue
 
-	v.g = g
+	v.gui = g
 	v.Delegater = d
 	v.cursor = &cursor{
 		index:       0,
@@ -90,7 +90,7 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 // Left represents action for left key
 // TODO: should be more suitable name
 func (v *View) Left() error {
-	dst := v.panes[v.g.CurrentView().Name()].left
+	dst := v.panes[v.gui.CurrentView().Name()].left
 	err := v.changeFocusedPane(dst)
 	if err != nil {
 		return err
@@ -106,7 +106,7 @@ func (v *View) Left() error {
 // Right represents action for right key
 // TODO: should be more suitable name
 func (v *View) Right() error {
-	dst := v.panes[v.g.CurrentView().Name()].right
+	dst := v.panes[v.gui.CurrentView().Name()].right
 	err := v.changeFocusedPane(dst)
 	if err != nil {
 		return err
@@ -151,7 +151,7 @@ func (v *View) changeFocusedPane(pane *Pane) error {
 		v.focusedIndex = pane.renderFrom + v.cursor.index
 	}
 
-	_, err := v.g.SetCurrentView(pane.name)
+	_, err := v.gui.SetCurrentView(pane.name)
 	return err
 }
 
