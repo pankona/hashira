@@ -96,7 +96,7 @@ func (p *Pane) renderTasks(w io.Writer, cursor *cursor, selected *service.Task) 
 		if !ok {
 			// should not reach here
 			// TODO: error logging and continue
-			log.Printf("[WARNING] a task with ID [%s] is missing", id)
+			log.Printf("[WARNING] a task with ID [%s] is missing in [%s]", id, p.name)
 			continue
 		}
 
