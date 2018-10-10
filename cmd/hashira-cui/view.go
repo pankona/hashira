@@ -302,10 +302,10 @@ func (v *View) FocusedTask() *service.Task {
 	return v.cursor.focusedPane.tasks[id]
 }
 
-type directive int
+type direction int
 
 const (
-	dirRight directive = iota
+	dirRight direction = iota
 	dirLeft
 )
 
@@ -318,7 +318,7 @@ func (v *View) lookupPaneByTask(t *service.Task) (*Pane, error) {
 	return nil, fmt.Errorf("failed to lookup pane by task")
 }
 
-func (v *View) moveTaskTo(t *service.Task, dir directive) error {
+func (v *View) moveTaskTo(t *service.Task, dir direction) error {
 	pane, err := v.lookupPaneByTask(t)
 	if err != nil {
 		return err
