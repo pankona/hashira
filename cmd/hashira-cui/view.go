@@ -197,7 +197,7 @@ func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
 	if v.selectedTask == nil {
 		return nil
 	}
-	return v.setPriorityHigh(v.priorities, v.selectedTask)
+	return v.setPriorityHigh(v.selectedTask)
 }
 
 // Down represents action for down key
@@ -212,7 +212,7 @@ func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 	return v.setPriorityLow(v.selectedTask)
 }
 
-func (v *View) setPriorityHigh(priorities []*service.Priority, task *service.Task) error {
+func (v *View) setPriorityHigh(task *service.Task) error {
 	p, err := v.lookupPaneByTask(task)
 	if err != nil {
 		return err
@@ -362,8 +362,14 @@ func (v *View) showInput(g *gocui.Gui) error {
 		input.Editable = true
 		input.MoveCursor(len(input.Buffer())-1, 0, true)
 		// TODO: should inject Editor interface
-		_ = g.SetKeybinding(input.Name(), gocui.KeyCtrlH, gocui.ModNone, v.KeyCtrlH)
-		_ = g.SetKeybinding(input.Name(), gocui.KeyCtrlL, gocui.ModNone, v.KeyCtrlL)
+		err = g.SetKeybinding(input.Name(), gocui.KeyCtrlH, gocui.ModNone, v.KeyCtrlH)
+		if err != nil {
+			log.Printf("[ERROR] %v", err)
+		}
+		err = g.SetKeybinding(input.Name(), gocui.KeyCtrlL, gocui.ModNone, v.KeyCtrlL)
+		if err != nil {
+			log.Printf("[ERROR] %v", err)
+		}
 		g.Cursor = true
 	}
 
