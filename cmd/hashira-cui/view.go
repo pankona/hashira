@@ -318,10 +318,6 @@ func (v *View) lookupPaneByTask(t *service.Task) (*Pane, error) {
 	return nil, fmt.Errorf("failed to lookup pane by task")
 }
 
-// TODO: Performance concern.
-// This function executes two communication (over delegation),
-// in case that calling this function quickly and continuously, it causes
-// awkward movement.
 func (v *View) moveTaskTo(t *service.Task, dir directive) error {
 	pane, err := v.lookupPaneByTask(t)
 	if err != nil {
@@ -337,33 +333,7 @@ func (v *View) moveTaskTo(t *service.Task, dir directive) error {
 		pane = pane.left
 	}
 
-	err = v.Delegate(UpdateTask, t)
-	if err != nil {
-		return fmt.Errorf("failed to update: %s", err.Error())
-	}
-
-	// put the moved task on top of pane
-	// TODO: don't specify 0 as cap to improve performance
-	priorities := make([]string, 0)
-	priorities = append([]string{t.Id}, priorities...)
-	for _, id := range pane.priorities {
-		if t.Id != id {
-			priorities = append(priorities, id)
-		}
-	}
-
-	// update priorities by newly created priority array
-	pane.priorities = priorities
-	for i, p := range v.priorities {
-		if p.Place == pane.place {
-			v.priorities[i] = &service.Priority{
-				Place: pane.place,
-				Ids:   pane.priorities,
-			}
-		}
-	}
-
-	return v.Delegate(UpdatePriority, v.priorities)
+	return v.moveTaskPlaceTo(t, pane, 0)
 }
 
 func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
