@@ -2,6 +2,7 @@ package database
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -13,9 +14,15 @@ func setup(filename *string) (func(), error) {
 		return nil, errors.New("fatal. failed to create tempfile")
 	}
 	*filename = f.Name()
-	_ = f.Close()
+	err = f.Close()
+	if err != nil {
+		return nil, errors.New("fatal. failed to close file")
+	}
 	return func() {
-		_ = os.RemoveAll(*filename)
+		err = os.RemoveAll(*filename)
+		if err != nil {
+			fmt.Printf("os.RemoveAll returned error: %v", err)
+		}
 	}, nil
 }
 
