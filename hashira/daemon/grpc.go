@@ -91,19 +91,19 @@ func (d *Daemon) Update(ctx context.Context, com *service.CommandUpdate) (*servi
 func (d *Daemon) Delete(ctx context.Context, com *service.CommandDelete) (*service.ResultDelete, error) {
 	buf, err := d.DB.Load(taskBucket, com.Id)
 	if err != nil {
-		// TODO: error handling
+		return nil, err
 	}
 
 	t := &service.Task{Id: com.Id}
 	err = json.Unmarshal(buf, t)
 	if err != nil {
-		// TODO: error handling
+		return nil, err
 	}
 
 	t.IsDeleted = true
 	buf, err = json.Marshal(t)
 	if err != nil {
-		// TODO: error handling
+		return nil, err
 	}
 
 	_, err = d.DB.Save(taskBucket, com.Id, buf)
@@ -150,9 +150,9 @@ func (d *Daemon) retrieve() ([]*service.Task, error) {
 
 // returns map[Place.String()][]*service.Task
 func (d *Daemon) retrieveTaskMap() (map[string]map[string]*service.Task, error) {
-	m := make(map[string]map[string]*service.Task, 0)
+	m := make(map[string]map[string]*service.Task)
 	for _, v := range places {
-		m[v.String()] = make(map[string]*service.Task, 0)
+		m[v.String()] = make(map[string]*service.Task)
 	}
 
 	err := d.DB.ForEach(taskBucket, func(k, v []byte) error {
@@ -308,15 +308,17 @@ func (d *Daemon) retrievePriority() (map[string]*service.Priority, error) {
 
 func remove(ids []string, id string) ([]string, bool) {
 	var removed bool
-	var ret []string
+	ret := make([]string, len(ids))
+	var index int
 	for _, v := range ids {
 		if v == id {
 			removed = true
 			continue
 		}
-		ret = append(ret, v)
+		ret[index] = v
+		index++
 	}
-	return ret, removed
+	return ret[:index], removed
 }
 
 func (d *Daemon) retrievePriorityMap() (map[string]*service.Priority, error) {

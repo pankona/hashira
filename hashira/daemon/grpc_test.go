@@ -52,8 +52,8 @@ func (m *mockDB) ForEach(bucket string, f func(k, v []byte) error) error {
 
 var tcs = []struct {
 	inName    string
-	inPlace   service.Place
 	wantName  string
+	inPlace   service.Place
 	wantPlace service.Place
 }{
 	{
