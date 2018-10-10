@@ -9,9 +9,14 @@ type Delegater interface {
 type delegateEvent int
 
 const (
+	// AddTask is a event for adding a new task
 	AddTask delegateEvent = iota
+	// UpdateTask is a event for updating a task
 	UpdateTask
+	// DeleteTask is a event for deleting a task
 	DeleteTask
+	// UpdatePriority is a event for updating task priority
 	UpdatePriority
+	// UpdateBulk updates specified task and priority
 	UpdateBulk
 )
