@@ -155,49 +155,6 @@ func (v *View) changeFocusedPane(pane *Pane) error {
 	return err
 }
 
-func remove(ss []string, s string) []string {
-	ret := make([]string, len(ss))
-	var index int
-	var found bool
-
-	for i := 0; i < len(ss); i++ {
-		if ss[i] == s {
-			found = true
-			continue
-		}
-		ret[index] = ss[i]
-		index++
-	}
-
-	if found {
-		return ret[:len(ss)-1]
-	}
-
-	return ret
-}
-
-func insert(ss []string, s string, index int) []string {
-	if index < 0 {
-		return nil
-	}
-
-	if index > len(ss) {
-		index = len(ss)
-	}
-
-	ret := make([]string, len(ss)+1)
-	for i := 0; i < index; i++ {
-		ret[i] = ss[i]
-	}
-
-	ret[index] = s
-	for i := index; i < len(ss); i++ {
-		ret[i+1] = ss[i]
-	}
-
-	return ret
-}
-
 // Up represents action for up key
 // TODO: should be more suitable name
 func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
