@@ -218,6 +218,7 @@ func (d *Daemon) retrievePriority() (map[string]*service.Priority, error) {
 		return nil, err
 	}
 
+	// remove ID from priorities if there's no task which has the ID
 	for _, priority := range priorities {
 		for _, id := range priority.Ids {
 			if lookupTaskByID(tasks, id) == nil {
@@ -226,49 +227,49 @@ func (d *Daemon) retrievePriority() (map[string]*service.Priority, error) {
 		}
 	}
 
+	// repair IDs to keep consistency between priorities and tasks
 	for k := range tasks {
 		if _, ok := priorities[k]; !ok {
 			priorities[k] = &service.Priority{
 				Ids: make([]string, 0),
 			}
 		}
-		ids := priorities[k].Ids
+		repair(priorities[k].Ids, tasks[k])
+	}
 
-		tasks := tasks[k]
+	return priorities, nil
+}
 
-		if len(ids) == len(tasks) {
-			priorities[k].Ids = ids
-			continue
+func repair(dst []string, tasks map[string]*service.Task) {
+	if len(dst) == len(tasks) {
+		return
+	}
+
+	m := make(map[string]struct{})
+
+	for i, id := range dst {
+		if _, ok := tasks[id]; ok {
+			m[dst[i]] = struct{}{}
 		}
+	}
 
-		m := make(map[string]struct{})
-
-		for i, id := range ids {
-			if _, ok := tasks[id]; ok {
-				m[ids[i]] = struct{}{}
-			}
-		}
-
-		if len(ids) < len(tasks) {
-			// must cover lacked IDs
-			for _, v := range tasks {
-				if _, ok := m[v.Id]; !ok {
-					ids = append(ids, v.Id)
-				}
-			}
-		}
-
-		if len(ids) > len(tasks) {
-			// must remove extra IDs
-			for _, v := range ids {
-				if _, ok := m[v]; !ok {
-					ids, _ = remove(ids, v)
-				}
+	if len(dst) < len(tasks) {
+		// must cover lacked dst
+		for _, v := range tasks {
+			if _, ok := m[v.Id]; !ok {
+				dst = append(dst, v.Id)
 			}
 		}
 	}
 
-	return priorities, nil
+	if len(dst) > len(tasks) {
+		// must remove extra IDs
+		for _, v := range dst {
+			if _, ok := m[v]; !ok {
+				dst, _ = remove(dst, v)
+			}
+		}
+	}
 }
 
 func remove(ids []string, id string) ([]string, bool) {
