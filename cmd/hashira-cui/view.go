@@ -129,7 +129,11 @@ func (v *View) moveTaskPlaceTo(t *KeyedTask, pane *Pane, insertTo int) error {
 	}
 
 	// add specified task to specified pane
-	_ = pane.tasks.RemoveByKey(t.Id)
+	err = pane.tasks.RemoveByKey(t.Id)
+	if err != nil {
+		// should not reach
+		log.Printf("[WARNING] failed remove task [%s:%s] from [%s]", t.Id, t.Name, pane.name)
+	}
 	err = pane.tasks.Insert(t, insertTo)
 	if err != nil {
 		return fmt.Errorf("failed to insert [%s] to [%s]. fatal", t.Name, pane.name)
