@@ -22,13 +22,6 @@ var places = []service.Place{
 	service.Place_DONE,
 }
 
-var lookupPlaceByName = map[string]service.Place{
-	service.Place_BACKLOG.String(): service.Place_BACKLOG,
-	service.Place_TODO.String():    service.Place_TODO,
-	service.Place_DOING.String():   service.Place_DOING,
-	service.Place_DONE.String():    service.Place_DONE,
-}
-
 // Create creates a new task
 func (d *Daemon) Create(ctx context.Context, com *service.CommandCreate) (*service.ResultCreate, error) {
 	t := com.Task
