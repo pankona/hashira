@@ -172,6 +172,14 @@
   revision = "b66b20ab708e289ff1eb3e218478302e6aec28ce"
 
 [[projects]]
+  branch = "master"
+  digest = "1:c190e003c1a2ef3d53971c3ed792e14c70c44d5f63a701948586c276477dbe77"
+  name = "github.com/pankona/orderedmap"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "782e514ec8689409e0ee60cccfda719096dce700"
+
+[[projects]]
   digest = "1:40e195917a951a8bf867cd05de2a46aaf1806c50cf92eebf4c16f78cd196f747"
   name = "github.com/pkg/errors"
   packages = ["."]
@@ -228,18 +236,18 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "146acd28ed5894421fb5aac80ca93bc1b1f46f87"
+  revision = "49bb7cea24b1df9410e1712aa6433dae904ff66a"
 
 [[projects]]
   branch = "master"
-  digest = "1:850d28ab022512e2cd3cf511a77f363c29e22689b4031f2050871f5de47ae4a0"
+  digest = "1:f5aa274a0377f85735edc7fedfb0811d3cbc20af91633797cb359e29c3272271"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "4497e2df6f9e69048a54498c7affbbec3294ad47"
+  revision = "fa43e7bc11baaae89f3f902b2b4d832b68234844"
 
 [[projects]]
   digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
@@ -326,6 +334,7 @@
     "github.com/etcd-io/bbolt",
     "github.com/golang/protobuf/proto",
     "github.com/jroimartin/gocui",
+    "github.com/pankona/orderedmap",
     "github.com/pkg/errors",
     "github.com/stretchr/testify/require",
     "golang.org/x/net/context",
