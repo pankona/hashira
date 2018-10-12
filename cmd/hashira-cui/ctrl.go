@@ -34,44 +34,50 @@ func (c *Ctrl) Initialize() {
 	}()
 
 	go func() {
-		for {
-			// TODO: support cancel using context
-			com := <-c.queue
-
-			event := com.event
-			data := com.data
-
-			var err error
-
-			switch event {
-			case AddTask:
-				err = c.m.hashirac.Create(ctx, (*service.Task)(data[0].(*KeyedTask)))
-			case UpdateTask:
-				err = c.m.hashirac.Update(ctx, (*service.Task)(data[0].(*KeyedTask)))
-			case DeleteTask:
-				err = c.m.hashirac.Delete(ctx, (*service.Task)(data[0].(*KeyedTask)).Id)
-			case UpdatePriority:
-				_, err = c.m.hashirac.UpdatePriority(ctx, data[0].(map[string]*service.Priority))
-			case UpdateBulk:
-				err = c.m.hashirac.Update(ctx, (*service.Task)(data[0].(*KeyedTask)))
-				if err != nil {
-					c.errChan <- err
-				}
-				_, err = c.m.hashirac.UpdatePriority(ctx, data[1].(map[string]*service.Priority))
-			default:
-				panic(fmt.Sprintf("unknown delegateCommand: %v", event))
-			}
-
-			if err != nil {
-				c.errChan <- err
-			}
-
-			err = c.Update(context.Background())
-			if err != nil {
-				c.errChan <- err
-			}
-		}
+		c.eventLoop(ctx)
 	}()
+}
+
+func (c *Ctrl) eventLoop(ctx context.Context) {
+	for {
+		// TODO: support cancel using context
+		com := <-c.queue
+
+		err := c.eventDispatch(ctx, com.event, com.data)
+		if err != nil {
+			c.errChan <- err
+		}
+
+		err = c.Update(context.Background())
+		if err != nil {
+			c.errChan <- err
+		}
+	}
+}
+
+func (c *Ctrl) eventDispatch(ctx context.Context, event delegateEvent, data []interface{}) error {
+	var err error
+
+	switch event {
+	case AddTask:
+		err = c.m.hashirac.Create(ctx, (*service.Task)(data[0].(*KeyedTask)))
+	case UpdateTask:
+		err = c.m.hashirac.Update(ctx, (*service.Task)(data[0].(*KeyedTask)))
+	case DeleteTask:
+		err = c.m.hashirac.Delete(ctx, (*service.Task)(data[0].(*KeyedTask)).Id)
+	case UpdatePriority:
+		_, err = c.m.hashirac.UpdatePriority(ctx, data[0].(map[string]*service.Priority))
+	case UpdateBulk:
+		err = c.m.hashirac.Update(ctx, (*service.Task)(data[0].(*KeyedTask)))
+		if err != nil {
+			c.errChan <- err
+		}
+		_, err = c.m.hashirac.UpdatePriority(ctx, data[1].(map[string]*service.Priority))
+	default:
+		panic(fmt.Sprintf("unknown delegateCommand: %v", event))
+	}
+
+	return err
 }
 
 // SetPublisher sets controller's Publisher
