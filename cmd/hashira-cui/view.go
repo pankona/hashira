@@ -19,8 +19,8 @@ type View struct {
 	focusedIndex int
 	selectedTask *keyedTask
 	editingTask  *keyedTask
-	priorities   []*service.Priority // TODO: v.priorities should be represented as map
-	pane         *Pane               // for restoring focused pane after input
+	priorities   map[string]*service.Priority
+	pane         *Pane // for restoring focused pane after input
 	Delegater
 }
 
@@ -115,19 +115,28 @@ func (v *View) Right() error {
 }
 
 func (v *View) moveTaskPlaceTo(t *keyedTask, pane *Pane, insertTo int) error {
+	orgPane, err := v.lookupPaneByTask(t)
+	if err != nil {
+		log.Printf("failed to lookup pane by task: %v", err)
+	}
+
 	t.Place = pane.place
 
+	// remove specified task from the task belonged to
+	err = orgPane.tasks.RemoveByKey(t.Id)
+	if err != nil {
+		log.Printf("failed to remove a task [%s] from [%s]", t.Id, orgPane.name)
+	}
+
+	// add specified task to specified pane
 	_ = pane.tasks.RemoveByKey(t.Id)
-	err := pane.tasks.Insert(t, insertTo)
+	err = pane.tasks.Insert(t, insertTo)
 	if err != nil {
 		return fmt.Errorf("failed to insert [%s] to [%s]. fatal", t.Name, pane.name)
 	}
 
-	for i, p := range v.priorities {
-		if p.Place == pane.place {
-			v.priorities[i].Ids = pane.tasks.Order()
-		}
-	}
+	v.priorities[orgPane.place.String()].Ids = orgPane.tasks.Order()
+	v.priorities[pane.place.String()].Ids = pane.tasks.Order()
 
 	return v.Delegate(UpdateBulk, t, v.priorities)
 }
@@ -198,6 +207,7 @@ func (v *View) Up(g *gocui.Gui, _ *gocui.View) error {
 	if v.selectedTask == nil {
 		return nil
 	}
+
 	return v.setPriorityHigh(v.selectedTask)
 }
 
@@ -210,6 +220,7 @@ func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 	if v.selectedTask == nil {
 		return nil
 	}
+
 	return v.setPriorityLow(v.selectedTask)
 }
 
@@ -284,9 +295,20 @@ func (v *View) markTaskAsDone(t *keyedTask) error {
 // call this function again for deselect (toggle).
 func (v *View) selectFocusedTask() error {
 	if v.selectedTask != nil {
-		v.selectedTask = nil
 		// on deselect task, it means the deselected task's
 		// priority is determined. update priority is necessary.
+		p, err := v.lookupPaneByTask(v.selectedTask)
+		if err != nil {
+			log.Printf("[WARNING] failed to lookup pane by specified task [%s:%s]",
+				v.selectedTask.Id, v.selectedTask.Name)
+		}
+
+		v.priorities[p.place.String()] = &service.Priority{
+			Ids: p.tasks.Order(),
+		}
+
+		v.selectedTask = nil
+
 		return v.Delegate(UpdatePriority, v.priorities)
 	}
 
@@ -311,9 +333,9 @@ const (
 )
 
 func (v *View) lookupPaneByTask(t *keyedTask) (*Pane, error) {
-	for i, p := range v.panes {
+	for k, p := range v.panes {
 		if p.place == t.Place {
-			return v.panes[i], nil
+			return v.panes[k], nil
 		}
 	}
 	return nil, fmt.Errorf("failed to lookup pane by task")
@@ -327,10 +349,8 @@ func (v *View) moveTaskTo(t *keyedTask, dir direction) error {
 
 	switch dir {
 	case dirRight:
-		t.Place = pane.right.place
 		pane = pane.right
 	case dirLeft:
-		t.Place = pane.left.place
 		pane = pane.left
 	}
 
@@ -470,29 +490,20 @@ func (v *View) OnEvent(event string, data ...interface{}) {
 	v.gui.Update(func(*gocui.Gui) error {
 		switch event {
 		case "update":
-			tasks := data[0].([]*keyedTask)
-			v.priorities = data[1].([]*service.Priority)
+			tasks := data[0].(map[string]*keyedTask)
+			v.priorities = data[1].(map[string]*service.Priority)
 
 			for i := range v.panes {
-				var priority []string
-				for _, p := range v.priorities {
-					if v.panes[i].place == p.Place {
-						priority = p.Ids
-					}
-				}
+				priority := v.priorities[v.panes[i].place.String()].Ids
 
 				// reset tasks
 				v.panes[i].tasks = orderedmap.New()
 
 				for _, id := range priority {
-					for _, t := range tasks {
-						if t.Id == id {
-							err := v.panes[i].tasks.Add(t)
-							if err != nil {
-								log.Printf("failed to add a task [%s:%s]. skip: %v", t.Id, t.Name, err)
-							}
-							break
-						}
+					t := tasks[id]
+					err := v.panes[i].tasks.Add(t)
+					if err != nil {
+						log.Printf("failed to add a task [%s:%s]. skip: %v", t.Id, t.Name, err)
 					}
 				}
 			}

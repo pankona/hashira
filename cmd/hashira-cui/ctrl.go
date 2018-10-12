@@ -51,13 +51,13 @@ func (c *Ctrl) Initialize() {
 			case DeleteTask:
 				err = c.m.hashirac.Delete(ctx, (*service.Task)(data[0].(*keyedTask)).Id)
 			case UpdatePriority:
-				_, err = c.m.hashirac.UpdatePriority(ctx, data[0].([]*service.Priority))
+				_, err = c.m.hashirac.UpdatePriority(ctx, data[0].(map[string]*service.Priority))
 			case UpdateBulk:
 				err = c.m.hashirac.Update(ctx, (*service.Task)(data[0].(*keyedTask)))
 				if err != nil {
 					c.errChan <- err
 				}
-				_, err = c.m.hashirac.UpdatePriority(ctx, data[1].([]*service.Priority))
+				_, err = c.m.hashirac.UpdatePriority(ctx, data[1].(map[string]*service.Priority))
 			default:
 				panic(fmt.Sprintf("unknown delegateCommand: %v", event))
 			}
@@ -102,9 +102,9 @@ func (c *Ctrl) Update(ctx context.Context) error {
 		return err
 	}
 
-	ktasks := make([]*keyedTask, len(tasks))
-	for i, t := range tasks {
-		ktasks[i] = (*keyedTask)(t)
+	ktasks := make(map[string]*keyedTask)
+	for k, v := range tasks {
+		ktasks[k] = (*keyedTask)(v)
 	}
 
 	c.pub.Publish("update", ktasks, priorities)

@@ -26,8 +26,7 @@ message Task {
 }
 
 message Priority {
-    Place place         = 1;
-    repeated string ids = 2;
+    repeated string ids = 1;
 }
 
 message CommandCreate {
@@ -46,7 +45,7 @@ message CommandRetrieve {
 }
 
 message CommandUpdatePriority {
-    repeated Priority priorities = 1;
+    map<string, Priority> priorities = 1;
 }
 
 message CommandRetrievePriority {
@@ -65,13 +64,13 @@ message ResultDelete {
 }
 
 message ResultRetrieve {
-    repeated Task tasks = 1;
+    map<string, Task> tasks = 1;
 }
 
 message ResultUpdatePriority {
-    repeated Priority priorities = 1;
+    map<string, Priority> priorities = 1;
 }
 
 message ResultRetrievePriority {
-    repeated Priority priorities = 1;
+    map<string, Priority> priorities = 1;
 }

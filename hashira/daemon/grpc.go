@@ -52,12 +52,7 @@ func (d *Daemon) Create(ctx context.Context, com *service.CommandCreate) (*servi
 	// put new task on first place
 	p[t.Place.String()].Ids = append([]string{id}, p[t.Place.String()].Ids...)
 
-	priorities := make([]*service.Priority, 0)
-	for _, v := range p {
-		priorities = append(priorities, v)
-	}
-
-	_, err = d.updatePriority(priorities)
+	_, err = d.updatePriority(p)
 	if err != nil {
 		return nil, err
 	}
@@ -124,8 +119,8 @@ func (d *Daemon) Retrieve(ctx context.Context, com *service.CommandRetrieve) (*s
 	return result, err
 }
 
-func (d *Daemon) retrieve() ([]*service.Task, error) {
-	tasks := make([]*service.Task, 0)
+func (d *Daemon) retrieve() (map[string]*service.Task, error) {
+	tasks := make(map[string]*service.Task)
 
 	err := d.DB.ForEach(taskBucket, func(k, v []byte) error {
 		t := &service.Task{Id: string(k)}
@@ -138,7 +133,7 @@ func (d *Daemon) retrieve() ([]*service.Task, error) {
 			return nil
 		}
 
-		tasks = append(tasks, t)
+		tasks[t.Id] = t
 		return nil
 	})
 	if err != nil {
@@ -180,29 +175,14 @@ func (d *Daemon) retrieveTaskMap() (map[string]map[string]*service.Task, error) 
 func (d *Daemon) UpdatePriority(
 	ctx context.Context,
 	com *service.CommandUpdatePriority) (*service.ResultUpdatePriority, error) {
-	pmap, err := d.updatePriority(com.Priorities)
-	priorities := make([]*service.Priority, len(pmap))
-	var index int
-	for _, v := range pmap {
-		priorities[index] = v
-		index++
-	}
-	return &service.ResultUpdatePriority{
-		Priorities: priorities,
-	}, err
+
+	p, err := d.updatePriority(com.Priorities)
+
+	return &service.ResultUpdatePriority{Priorities: p}, err
 }
 
-func (d *Daemon) updatePriority(p []*service.Priority) (map[string]*service.Priority, error) {
-	m := make(map[string]*service.Priority)
-
-	for _, v := range p {
-		m[v.Place.String()] = &service.Priority{
-			Place: v.Place,
-			Ids:   v.Ids,
-		}
-	}
-
-	buf, err := json.Marshal(m)
+func (d *Daemon) updatePriority(p map[string]*service.Priority) (map[string]*service.Priority, error) {
+	buf, err := json.Marshal(p)
 	if err != nil {
 		return nil, errors.New("failed to marshal CommandUpdatePriority into json: " + err.Error())
 	}
@@ -212,7 +192,7 @@ func (d *Daemon) updatePriority(p []*service.Priority) (map[string]*service.Prio
 		return nil, errors.New("failed to save priority on database: " + err.Error())
 	}
 
-	return m, nil
+	return p, nil
 }
 
 func lookupTaskByID(tasks map[string]map[string]*service.Task, id string) *service.Task {
@@ -228,16 +208,10 @@ func lookupTaskByID(tasks map[string]map[string]*service.Task, id string) *servi
 func (d *Daemon) RetrievePriority(
 	ctx context.Context,
 	com *service.CommandRetrievePriority) (*service.ResultRetrievePriority, error) {
-	pmap, err := d.retrievePriority()
 
-	priorities := make([]*service.Priority, len(pmap))
-	var index int
-	for _, v := range pmap {
-		priorities[index] = v
-		index++
-	}
+	p, err := d.retrievePriority()
 
-	return &service.ResultRetrievePriority{Priorities: priorities}, err
+	return &service.ResultRetrievePriority{Priorities: p}, err
 }
 
 func (d *Daemon) retrievePriority() (map[string]*service.Priority, error) {
@@ -261,50 +235,44 @@ func (d *Daemon) retrievePriority() (map[string]*service.Priority, error) {
 
 	for k := range tasks {
 		if _, ok := priorities[k]; !ok {
-			s := &service.Priority{
-				Place: lookupPlaceByName[k],
+			priorities[k] = &service.Priority{
+				Ids: make([]string, 0),
 			}
-			s.Ids = make([]string, 0)
-			priorities[k] = s
 		}
 		ids := priorities[k].Ids
 
 		tasks := tasks[k]
-		if len(ids) != len(tasks) {
-			m := make(map[string]struct{})
 
-			for i := range ids {
-				for j := range tasks {
-					if ids[i] == tasks[j].Id {
-						m[ids[i]] = struct{}{}
-					}
-				}
+		if len(ids) == len(tasks) {
+			priorities[k].Ids = ids
+			continue
+		}
+
+		m := make(map[string]struct{})
+
+		for i, id := range ids {
+			if _, ok := tasks[id]; ok {
+				m[ids[i]] = struct{}{}
 			}
+		}
 
-			if len(ids) < len(tasks) {
-				// must cover lacked IDs
-				for _, v := range tasks {
-					if _, ok := m[v.Id]; ok {
-						continue
-					}
-
+		if len(ids) < len(tasks) {
+			// must cover lacked IDs
+			for _, v := range tasks {
+				if _, ok := m[v.Id]; !ok {
 					ids = append(ids, v.Id)
-				}
-			}
-
-			if len(ids) > len(tasks) {
-				// must remove extra IDs
-				for _, v := range ids {
-					if _, ok := m[v]; ok {
-						continue
-					}
-
-					ids, _ = remove(ids, v)
 				}
 			}
 		}
 
-		priorities[k].Ids = ids
+		if len(ids) > len(tasks) {
+			// must remove extra IDs
+			for _, v := range ids {
+				if _, ok := m[v]; !ok {
+					ids, _ = remove(ids, v)
+				}
+			}
+		}
 	}
 
 	return priorities, nil
