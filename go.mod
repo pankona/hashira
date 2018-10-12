@@ -11,6 +11,7 @@ require (
 	github.com/asticode/go-astitools v0.0.0-20180922160804-b99f87cc51bd // indirect
 	github.com/asticode/go-bindata v0.0.0-20151023091102-a0ff2567cfb7 // indirect
 	github.com/coreos/bbolt v1.3.0
+	github.com/etcd-io/bbolt v1.3.0
 	github.com/golang/protobuf v1.2.0
 	github.com/jroimartin/gocui v0.4.0
 	github.com/julienschmidt/httprouter v0.0.0-20180715161854-348b672cd90d // indirect
@@ -18,6 +19,8 @@ require (
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/mattn/go-runewidth v0.0.3 // indirect
 	github.com/nsf/termbox-go v0.0.0-20180819125858-b66b20ab708e // indirect
+	github.com/pankona/orderedmap v0.0.0-20181010071912-782e514ec868
+	github.com/pankona/plog v0.0.0-20181006143739-9bc45b151a72
 	github.com/pkg/errors v0.8.0
 	github.com/sirupsen/logrus v1.1.0 // indirect
 	github.com/stretchr/testify v1.2.2
