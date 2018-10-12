@@ -17,8 +17,8 @@ type View struct {
 	gui          *gocui.Gui
 	cursor       *cursor
 	focusedIndex int
-	selectedTask *keyedTask
-	editingTask  *keyedTask
+	selectedTask *KeyedTask
+	editingTask  *KeyedTask
 	priorities   map[string]*service.Priority
 	pane         *Pane // for restoring focused pane after input
 	Delegater
@@ -114,7 +114,7 @@ func (v *View) Right() error {
 	return nil
 }
 
-func (v *View) moveTaskPlaceTo(t *keyedTask, pane *Pane, insertTo int) error {
+func (v *View) moveTaskPlaceTo(t *KeyedTask, pane *Pane, insertTo int) error {
 	orgPane, err := v.lookupPaneByTask(t)
 	if err != nil {
 		log.Printf("failed to lookup pane by task: %v", err)
@@ -181,7 +181,7 @@ func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 	return v.setPriorityLow(v.selectedTask)
 }
 
-func (v *View) setPriorityHigh(task *keyedTask) error {
+func (v *View) setPriorityHigh(task *KeyedTask) error {
 	p, err := v.lookupPaneByTask(task)
 	if err != nil {
 		return err
@@ -204,7 +204,7 @@ func (v *View) setPriorityHigh(task *keyedTask) error {
 	return fmt.Errorf("failed to set priority high for task [%s]", task.Name)
 }
 
-func (v *View) setPriorityLow(task *keyedTask) error {
+func (v *View) setPriorityLow(task *KeyedTask) error {
 	p, err := v.lookupPaneByTask(task)
 	if err != nil {
 		return err
@@ -229,7 +229,7 @@ func (v *View) setPriorityLow(task *keyedTask) error {
 
 // markTaskAsDone moves specified task to Done pane.
 // If the specified task is already on Done, the task is deleted.
-func (v *View) markTaskAsDone(t *keyedTask) error {
+func (v *View) markTaskAsDone(t *KeyedTask) error {
 	p := v.panes[pn[len(pn)-1]] // last pane (may be Done)
 	if t == nil || p == nil {
 		return nil
@@ -274,12 +274,12 @@ func (v *View) selectFocusedTask() error {
 }
 
 // FocusedTask returns a task that is focused by cursor
-func (v *View) FocusedTask() *keyedTask {
+func (v *View) FocusedTask() *KeyedTask {
 	if v.focusedIndex < 0 {
 		return nil
 	}
 	t := v.cursor.focusedPane.tasks.GetByIndex(v.focusedIndex)
-	return t.(*keyedTask)
+	return t.(*KeyedTask)
 }
 
 type direction int
@@ -289,7 +289,7 @@ const (
 	dirLeft
 )
 
-func (v *View) lookupPaneByTask(t *keyedTask) (*Pane, error) {
+func (v *View) lookupPaneByTask(t *KeyedTask) (*Pane, error) {
 	for k, p := range v.panes {
 		if p.place == t.Place {
 			return v.panes[k], nil
@@ -298,7 +298,7 @@ func (v *View) lookupPaneByTask(t *keyedTask) (*Pane, error) {
 	return nil, fmt.Errorf("failed to lookup pane by task")
 }
 
-func (v *View) moveTaskTo(t *keyedTask, dir direction) error {
+func (v *View) moveTaskTo(t *KeyedTask, dir direction) error {
 	pane, err := v.lookupPaneByTask(t)
 	if err != nil {
 		return err
@@ -391,7 +391,7 @@ func (v *View) determineInput(g *gocui.Gui, gv *gocui.View) error {
 	}
 
 	if v.editingTask == nil {
-		t := &keyedTask{
+		t := &KeyedTask{
 			Name:  msg,
 			Place: v.pane.place,
 		}
@@ -447,7 +447,7 @@ func (v *View) OnEvent(event string, data ...interface{}) {
 	v.gui.Update(func(*gocui.Gui) error {
 		switch event {
 		case "update":
-			tasks := data[0].(map[string]*keyedTask)
+			tasks := data[0].(map[string]*KeyedTask)
 			v.priorities = data[1].(map[string]*service.Priority)
 
 			for i := range v.panes {

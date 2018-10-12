@@ -26,7 +26,7 @@ type rectangle struct {
 }
 
 // Layout writes tasks in pane
-func (p *Pane) Layout(g *gocui.Gui, c *cursor, focusedIndex int, selectedTask *keyedTask) error {
+func (p *Pane) Layout(g *gocui.Gui, c *cursor, focusedIndex int, selectedTask *KeyedTask) error {
 	maxX, maxY := g.Size()
 	rect := rectangle{maxX / 4 * p.index, 1, maxX/4*p.index + maxX/4 - 1, maxY - 1}
 
@@ -44,7 +44,7 @@ func (p *Pane) Layout(g *gocui.Gui, c *cursor, focusedIndex int, selectedTask *k
 }
 
 func (p *Pane) render(w io.Writer, rect rectangle, cursor *cursor,
-	focusedIndex int, selectedTask *keyedTask) error {
+	focusedIndex int, selectedTask *KeyedTask) error {
 
 	// -1 is adjustment for considering width of frame
 	maxLen := rect.y1 - rect.y0 - 2
@@ -81,7 +81,7 @@ func (p *Pane) calcRenderFrom(focusedIndex, maxLen int) int {
 	return renderFrom
 }
 
-func (p *Pane) renderTasks(w io.Writer, cursor *cursor, selected *keyedTask) error {
+func (p *Pane) renderTasks(w io.Writer, cursor *cursor, selected *KeyedTask) error {
 	var taskNum int
 
 	return p.tasks.ForEach(func(i int, v orderedmap.Keyer) error {
@@ -90,7 +90,7 @@ func (p *Pane) renderTasks(w io.Writer, cursor *cursor, selected *keyedTask) err
 			return nil
 		}
 
-		task := v.(*keyedTask)
+		task := v.(*KeyedTask)
 
 		prefix := ""
 		if selected != nil && task.Id == selected.Id {

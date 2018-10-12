@@ -2,8 +2,8 @@ package main
 
 import "github.com/pankona/hashira/service"
 
-type keyedTask service.Task
+type KeyedTask service.Task
 
-func (kt *keyedTask) Key() string {
+func (kt *KeyedTask) Key() string {
 	return kt.Id
 }

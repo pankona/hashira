@@ -45,15 +45,15 @@ func (c *Ctrl) Initialize() {
 
 			switch event {
 			case AddTask:
-				err = c.m.hashirac.Create(ctx, (*service.Task)(data[0].(*keyedTask)))
+				err = c.m.hashirac.Create(ctx, (*service.Task)(data[0].(*KeyedTask)))
 			case UpdateTask:
-				err = c.m.hashirac.Update(ctx, (*service.Task)(data[0].(*keyedTask)))
+				err = c.m.hashirac.Update(ctx, (*service.Task)(data[0].(*KeyedTask)))
 			case DeleteTask:
-				err = c.m.hashirac.Delete(ctx, (*service.Task)(data[0].(*keyedTask)).Id)
+				err = c.m.hashirac.Delete(ctx, (*service.Task)(data[0].(*KeyedTask)).Id)
 			case UpdatePriority:
 				_, err = c.m.hashirac.UpdatePriority(ctx, data[0].(map[string]*service.Priority))
 			case UpdateBulk:
-				err = c.m.hashirac.Update(ctx, (*service.Task)(data[0].(*keyedTask)))
+				err = c.m.hashirac.Update(ctx, (*service.Task)(data[0].(*KeyedTask)))
 				if err != nil {
 					c.errChan <- err
 				}
@@ -102,9 +102,9 @@ func (c *Ctrl) Update(ctx context.Context) error {
 		return err
 	}
 
-	ktasks := make(map[string]*keyedTask)
+	ktasks := make(map[string]*KeyedTask)
 	for k, v := range tasks {
-		ktasks[k] = (*keyedTask)(v)
+		ktasks[k] = (*KeyedTask)(v)
 	}
 
 	c.pub.Publish("update", ktasks, priorities)
