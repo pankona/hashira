@@ -115,31 +115,25 @@ func (v *View) Right() error {
 }
 
 func (v *View) moveTaskPlaceTo(t *KeyedTask, pane *Pane, insertTo int) error {
-	orgPane, err := v.lookupPaneByTask(t)
+	oldhaunt, err := v.lookupPaneByTask(t)
 	if err != nil {
 		log.Printf("failed to lookup pane by task: %v", err)
 	}
 
 	t.Place = pane.place
 
-	// remove specified task from the task belonged to
-	err = orgPane.tasks.RemoveByKey(t.Id)
+	// remove specified task from the task originally belonged to
+	err = oldhaunt.tasks.RemoveByKey(t.Id)
 	if err != nil {
-		log.Printf("failed to remove a task [%s] from [%s]", t.Id, orgPane.name)
+		log.Printf("failed to remove a task [%s] from [%s]", t.Id, oldhaunt.name)
 	}
 
-	// add specified task to specified pane
-	err = pane.tasks.RemoveByKey(t.Id)
-	if err != nil {
-		// should not reach
-		log.Printf("[WARNING] failed remove task [%s:%s] from [%s]", t.Id, t.Name, pane.name)
-	}
 	err = pane.tasks.Insert(t, insertTo)
 	if err != nil {
 		return fmt.Errorf("failed to insert [%s] to [%s]. fatal", t.Name, pane.name)
 	}
 
-	v.priorities[orgPane.place.String()].Ids = orgPane.tasks.Order()
+	v.priorities[oldhaunt.place.String()].Ids = oldhaunt.tasks.Order()
 	v.priorities[pane.place.String()].Ids = pane.tasks.Order()
 
 	return v.Delegate(UpdateBulk, t, v.priorities)
