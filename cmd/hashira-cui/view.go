@@ -24,7 +24,7 @@ type View struct {
 	Delegater
 }
 
-// pane names
+// pane display names
 var pn = []string{
 	"Backlog",
 	"To Do",
