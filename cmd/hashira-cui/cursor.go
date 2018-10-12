@@ -14,8 +14,8 @@ func (c *cursor) sanitize(maxLen int) *cursor {
 		ret.index = maxLen
 	}
 
-	if c.index > len(c.focusedPane.priorities)-1 {
-		ret.index = len(c.focusedPane.priorities) - 1
+	if c.index > c.focusedPane.tasks.Len()-1 {
+		ret.index = c.focusedPane.tasks.Len() - 1
 	}
 
 	return ret

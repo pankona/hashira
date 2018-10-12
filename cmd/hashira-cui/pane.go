@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"io"
-	"log"
 
 	"github.com/jroimartin/gocui"
 	"github.com/pankona/hashira/service"
+	"github.com/pankona/orderedmap"
 )
 
 // Pane represents a pane,
@@ -17,8 +17,7 @@ type Pane struct {
 	left       *Pane
 	right      *Pane
 	place      service.Place
-	tasks      map[string]*service.Task
-	priorities []string // array of task IDs
+	tasks      *orderedmap.OrderedMap
 	renderFrom int
 }
 
@@ -27,7 +26,7 @@ type rectangle struct {
 }
 
 // Layout writes tasks in pane
-func (p *Pane) Layout(g *gocui.Gui, c *cursor, focusedIndex int, selectedTask *service.Task) error {
+func (p *Pane) Layout(g *gocui.Gui, c *cursor, focusedIndex int, selectedTask *keyedTask) error {
 	maxX, maxY := g.Size()
 	rect := rectangle{maxX / 4 * p.index, 1, maxX/4*p.index + maxX/4 - 1, maxY - 1}
 
@@ -45,7 +44,7 @@ func (p *Pane) Layout(g *gocui.Gui, c *cursor, focusedIndex int, selectedTask *s
 }
 
 func (p *Pane) render(w io.Writer, rect rectangle, cursor *cursor,
-	focusedIndex int, selectedTask *service.Task) error {
+	focusedIndex int, selectedTask *keyedTask) error {
 
 	// -1 is adjustment for considering width of frame
 	maxLen := rect.y1 - rect.y0 - 2
@@ -82,23 +81,16 @@ func (p *Pane) calcRenderFrom(focusedIndex, maxLen int) int {
 	return renderFrom
 }
 
-func (p *Pane) renderTasks(w io.Writer, cursor *cursor, selected *service.Task) error {
+func (p *Pane) renderTasks(w io.Writer, cursor *cursor, selected *keyedTask) error {
 	var taskNum int
 
-	// render tasks for this pane
-	for i, id := range p.priorities {
+	return p.tasks.ForEach(func(i int, v orderedmap.Keyer) error {
 		if i < p.renderFrom {
 			// skip rendering to scroll
-			continue
+			return nil
 		}
 
-		task, ok := p.tasks[id]
-		if !ok {
-			// should not reach here
-			// TODO: error logging and continue
-			log.Printf("[WARNING] a task with ID [%s] is missing in [%s]", id, p.name)
-			continue
-		}
+		task := v.(*keyedTask)
 
 		prefix := ""
 		if selected != nil && task.Id == selected.Id {
@@ -114,11 +106,10 @@ func (p *Pane) renderTasks(w io.Writer, cursor *cursor, selected *service.Task) 
 		}
 
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to render task: %v", err)
 		}
 
 		taskNum++
-	}
-
-	return nil
+		return nil
+	})
 }

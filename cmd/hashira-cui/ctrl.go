@@ -45,15 +45,15 @@ func (c *Ctrl) Initialize() {
 
 			switch event {
 			case AddTask:
-				err = c.m.hashirac.Create(ctx, data[0].(*service.Task))
+				err = c.m.hashirac.Create(ctx, (*service.Task)(data[0].(*keyedTask)))
 			case UpdateTask:
-				err = c.m.hashirac.Update(ctx, data[0].(*service.Task))
+				err = c.m.hashirac.Update(ctx, (*service.Task)(data[0].(*keyedTask)))
 			case DeleteTask:
-				err = c.m.hashirac.Delete(ctx, data[0].(*service.Task).Id)
+				err = c.m.hashirac.Delete(ctx, (*service.Task)(data[0].(*keyedTask)).Id)
 			case UpdatePriority:
 				_, err = c.m.hashirac.UpdatePriority(ctx, data[0].([]*service.Priority))
 			case UpdateBulk:
-				err = c.m.hashirac.Update(ctx, data[0].(*service.Task))
+				err = c.m.hashirac.Update(ctx, (*service.Task)(data[0].(*keyedTask)))
 				if err != nil {
 					c.errChan <- err
 				}
@@ -102,6 +102,11 @@ func (c *Ctrl) Update(ctx context.Context) error {
 		return err
 	}
 
-	c.pub.Publish("update", tasks, priorities)
+	ktasks := make([]*keyedTask, len(tasks))
+	for i, t := range tasks {
+		ktasks[i] = (*keyedTask)(t)
+	}
+
+	c.pub.Publish("update", ktasks, priorities)
 	return nil
 }

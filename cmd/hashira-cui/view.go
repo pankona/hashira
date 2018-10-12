@@ -8,6 +8,7 @@ import (
 
 	"github.com/jroimartin/gocui"
 	"github.com/pankona/hashira/service"
+	"github.com/pankona/orderedmap"
 )
 
 // View represents a view of hashira-cui's mvc
@@ -16,10 +17,10 @@ type View struct {
 	gui          *gocui.Gui
 	cursor       *cursor
 	focusedIndex int
-	selectedTask *service.Task
-	editingTask  *service.Task
-	priorities   []*service.Priority
-	pane         *Pane // for restoring focused pane after input
+	selectedTask *keyedTask
+	editingTask  *keyedTask
+	priorities   []*service.Priority // TODO: v.priorities should be represented as map
+	pane         *Pane               // for restoring focused pane after input
 	Delegater
 }
 
@@ -55,7 +56,7 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 	}
 
 	for k := range v.panes {
-		v.panes[k].tasks = make(map[string]*service.Task)
+		v.panes[k].tasks = orderedmap.New()
 	}
 
 	v.panes[pn[0]].right = v.panes[pn[1]]
@@ -113,18 +114,18 @@ func (v *View) Right() error {
 	return nil
 }
 
-func (v *View) moveTaskPlaceTo(t *service.Task, pane *Pane, insertTo int) error {
+func (v *View) moveTaskPlaceTo(t *keyedTask, pane *Pane, insertTo int) error {
 	t.Place = pane.place
 
-	priority := remove(pane.priorities, t.Id)
-	priority = insert(priority, t.Id, insertTo)
-	if priority == nil {
+	_ = pane.tasks.RemoveByKey(t.Id)
+	err := pane.tasks.Insert(t, insertTo)
+	if err != nil {
 		return fmt.Errorf("failed to insert [%s] to [%s]. fatal", t.Name, pane.name)
 	}
 
 	for i, p := range v.priorities {
 		if p.Place == pane.place {
-			v.priorities[i].Ids = priority
+			v.priorities[i].Ids = pane.tasks.Order()
 		}
 	}
 
@@ -212,13 +213,13 @@ func (v *View) Down(g *gocui.Gui, _ *gocui.View) error {
 	return v.setPriorityLow(v.selectedTask)
 }
 
-func (v *View) setPriorityHigh(task *service.Task) error {
+func (v *View) setPriorityHigh(task *keyedTask) error {
 	p, err := v.lookupPaneByTask(task)
 	if err != nil {
 		return err
 	}
 
-	ids := p.priorities
+	ids := p.tasks.Order()
 
 	for i, id := range ids {
 		if id == task.Id {
@@ -227,7 +228,7 @@ func (v *View) setPriorityHigh(task *service.Task) error {
 				return nil
 			}
 			// swap
-			ids[i-1], ids[i] = ids[i], ids[i-1]
+			p.tasks.Swap(i-1, i)
 			return nil
 		}
 	}
@@ -235,13 +236,13 @@ func (v *View) setPriorityHigh(task *service.Task) error {
 	return fmt.Errorf("failed to set priority high for task [%s]", task.Name)
 }
 
-func (v *View) setPriorityLow(task *service.Task) error {
+func (v *View) setPriorityLow(task *keyedTask) error {
 	p, err := v.lookupPaneByTask(task)
 	if err != nil {
 		return err
 	}
 
-	ids := p.priorities
+	ids := p.tasks.Order()
 
 	for i, id := range ids {
 		if id == task.Id {
@@ -250,7 +251,7 @@ func (v *View) setPriorityLow(task *service.Task) error {
 				return nil
 			}
 			// swap
-			ids[i+1], ids[i] = ids[i], ids[i+1]
+			p.tasks.Swap(i, i+1)
 			return nil
 		}
 	}
@@ -260,7 +261,7 @@ func (v *View) setPriorityLow(task *service.Task) error {
 
 // markTaskAsDone moves specified task to Done pane.
 // If the specified task is already on Done, the task is deleted.
-func (v *View) markTaskAsDone(t *service.Task) error {
+func (v *View) markTaskAsDone(t *keyedTask) error {
 	p := v.panes[pn[len(pn)-1]] // last pane (may be Done)
 	if t == nil || p == nil {
 		return nil
@@ -294,12 +295,12 @@ func (v *View) selectFocusedTask() error {
 }
 
 // FocusedTask returns a task that is focused by cursor
-func (v *View) FocusedTask() *service.Task {
+func (v *View) FocusedTask() *keyedTask {
 	if v.focusedIndex < 0 {
 		return nil
 	}
-	id := v.cursor.focusedPane.priorities[v.focusedIndex]
-	return v.cursor.focusedPane.tasks[id]
+	t := v.cursor.focusedPane.tasks.GetByIndex(v.focusedIndex)
+	return t.(*keyedTask)
 }
 
 type direction int
@@ -309,7 +310,7 @@ const (
 	dirLeft
 )
 
-func (v *View) lookupPaneByTask(t *service.Task) (*Pane, error) {
+func (v *View) lookupPaneByTask(t *keyedTask) (*Pane, error) {
 	for i, p := range v.panes {
 		if p.place == t.Place {
 			return v.panes[i], nil
@@ -318,7 +319,7 @@ func (v *View) lookupPaneByTask(t *service.Task) (*Pane, error) {
 	return nil, fmt.Errorf("failed to lookup pane by task")
 }
 
-func (v *View) moveTaskTo(t *service.Task, dir direction) error {
+func (v *View) moveTaskTo(t *keyedTask, dir direction) error {
 	pane, err := v.lookupPaneByTask(t)
 	if err != nil {
 		return err
@@ -413,7 +414,7 @@ func (v *View) determineInput(g *gocui.Gui, gv *gocui.View) error {
 	}
 
 	if v.editingTask == nil {
-		t := &service.Task{
+		t := &keyedTask{
 			Name:  msg,
 			Place: v.pane.place,
 		}
@@ -440,8 +441,8 @@ func (v *View) Layout(g *gocui.Gui) error {
 			if v.focusedIndex < 0 {
 				v.focusedIndex = 0
 			}
-			if len(v.cursor.focusedPane.priorities)-1 < v.focusedIndex {
-				v.focusedIndex = len(v.cursor.focusedPane.priorities) - 1
+			if v.cursor.focusedPane.tasks.Len()-1 < v.focusedIndex {
+				v.focusedIndex = v.cursor.focusedPane.tasks.Len() - 1
 			}
 			focusedIndex = v.focusedIndex
 		}
@@ -469,21 +470,29 @@ func (v *View) OnEvent(event string, data ...interface{}) {
 	v.gui.Update(func(*gocui.Gui) error {
 		switch event {
 		case "update":
-			tasks := data[0].([]*service.Task)
+			tasks := data[0].([]*keyedTask)
 			v.priorities = data[1].([]*service.Priority)
 
 			for i := range v.panes {
-				// reset tasks
-				v.panes[i].tasks = make(map[string]*service.Task)
-				for _, t := range tasks {
-					if v.panes[i].place == t.Place {
-						v.panes[i].tasks[t.Id] = t
+				var priority []string
+				for _, p := range v.priorities {
+					if v.panes[i].place == p.Place {
+						priority = p.Ids
 					}
 				}
 
-				for _, p := range v.priorities {
-					if v.panes[i].place == p.Place {
-						v.panes[i].priorities = p.Ids
+				// reset tasks
+				v.panes[i].tasks = orderedmap.New()
+
+				for _, id := range priority {
+					for _, t := range tasks {
+						if t.Id == id {
+							err := v.panes[i].tasks.Add(t)
+							if err != nil {
+								log.Printf("failed to add a task [%s:%s]. skip: %v", t.Id, t.Name, err)
+							}
+							break
+						}
 					}
 				}
 			}
