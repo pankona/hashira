@@ -36,11 +36,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:a81dcfa2d3d4b897d4f1d849cdc6b9fc994e3e9284ca8bd3909745d050d8fdae"
+  digest = "1:e32fa292ea8513893fa7535a61bbd52144995afd0b9eda16681ab3ef035e92cd"
   name = "github.com/asticode/go-astilectron"
   packages = ["."]
   pruneopts = "UT"
-  revision = "949a87012ce3071523ddd11bd17a17fe2ceda8d3"
+  revision = "87ea6f0bcc3da11c0f3ddbad7dc998ea3904f0da"
 
 [[projects]]
   branch = "master"
