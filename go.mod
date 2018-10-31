@@ -30,7 +30,7 @@ require (
 	golang.org/x/tools v0.0.0-20180928181343-b3c0be4c978b // indirect
 	google.golang.org/appengine v1.2.0 // indirect
 	google.golang.org/genproto v0.0.0-20180928223349-c7e5094acea1 // indirect
-	google.golang.org/grpc v1.15.0
+	google.golang.org/grpc v1.16.0
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
