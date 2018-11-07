@@ -236,7 +236,7 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "ab400d30ebde25116e68880440d31222a016f2a7"
+  revision = "10aee181995363b41f712a55844a0dd52ea04646"
 
 [[projects]]
   branch = "master"
