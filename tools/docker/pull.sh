@@ -1,3 +1,3 @@
 #!/bin/bash -e
 
-docker pull pankona/golangci:1.12
+docker pull pankona/golangci:`cat version.txt`
