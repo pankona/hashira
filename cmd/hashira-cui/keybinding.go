@@ -98,23 +98,3 @@ func (v *View) KeySpace(g *gocui.Gui, gv *gocui.View) error {
 func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
 	return v.input(g, gv)
 }
-
-// KeyCtrlH reacts when Ctrl-h is pressed while inputting task
-// TODO:
-// keybindings for input should inject Editor interface
-func (v *View) KeyCtrlH(g *gocui.Gui, gv *gocui.View) error {
-	gv.MoveCursor(-1, 0, true)
-	return nil
-}
-
-// KeyCtrlL reacts when Ctrl-l is pressed while inputting task
-// TODO:
-// keybindings for input should inject Editor interface
-func (v *View) KeyCtrlL(g *gocui.Gui, gv *gocui.View) error {
-	x, _ := gv.Cursor()
-	if len(gv.Buffer())-1 <= x {
-		return nil
-	}
-	gv.MoveCursor(+1, 0, true)
-	return nil
-}

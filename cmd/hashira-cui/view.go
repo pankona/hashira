@@ -336,16 +336,8 @@ func (v *View) showInput(g *gocui.Gui) error {
 			}
 		}
 		input.Editable = true
+		input.Editor = hashiraEditor
 		input.MoveCursor(len(input.Buffer())-1, 0, true)
-		// TODO: should inject Editor interface
-		err = g.SetKeybinding(input.Name(), gocui.KeyCtrlH, gocui.ModNone, v.KeyCtrlH)
-		if err != nil {
-			log.Printf("[ERROR] %v", err)
-		}
-		err = g.SetKeybinding(input.Name(), gocui.KeyCtrlL, gocui.ModNone, v.KeyCtrlL)
-		if err != nil {
-			log.Printf("[ERROR] %v", err)
-		}
 		g.Cursor = true
 	}
 
