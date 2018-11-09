@@ -1,6 +1,7 @@
 run:
   skip-dirs:
     - cmd/hashira-gui
+    - vendor
 
 linters:
   enable-all: true

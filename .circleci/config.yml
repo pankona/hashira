@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /go/src/github.com/pankona/hashira
     docker:
-      - image: pankona/godev
+        - image: pankona/golangci:1.12
     steps:
       - checkout
       - run:
@@ -12,6 +12,9 @@ jobs:
       - run:
           name: test
           command: make test
+      - run:
+          name: golangci-lint
+          command: make golangci-lint
       - run:
           name: build
           command: make
