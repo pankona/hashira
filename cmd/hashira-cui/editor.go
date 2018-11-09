@@ -4,11 +4,11 @@ import (
 	"github.com/jroimartin/gocui"
 )
 
-type Editor struct{}
+type editor struct{}
 
-var HashiraEditor = &Editor{}
+var hashiraEditor = &editor{}
 
-func (e *Editor) Edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Modifier) {
+func (e *editor) Edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Modifier) {
 	switch key {
 	case gocui.KeyCtrlF:
 		v.MoveCursor(+1, 0, false)

@@ -336,7 +336,7 @@ func (v *View) showInput(g *gocui.Gui) error {
 			}
 		}
 		input.Editable = true
-		input.Editor = HashiraEditor
+		input.Editor = hashiraEditor
 		input.MoveCursor(len(input.Buffer())-1, 0, true)
 		g.Cursor = true
 	}
