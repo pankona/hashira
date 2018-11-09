@@ -34,7 +34,7 @@ $(PB_GO_DIR)/%.pb.go: $(PROTO_DIR)/%.proto
 	protoc -I $(PROTO_DIR) --go_out=plugins=grpc:$(dir $@) ./$<
 
 golangci-lint:
-	golangci-lint run
+	golangci-lint run --deadline 300s --verbose
 
 lint:
 	gometalinter \
