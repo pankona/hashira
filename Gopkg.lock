@@ -52,15 +52,15 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:71f995757424fc8b7332d9c65ab30091baf9c6a3639b80f28ef57cb32e9faf40"
+  digest = "1:4305471fe2c60bdd1a891f56568ce13ef5c3c89e33d001d4fed6ad6267d3d342"
   name = "github.com/asticode/go-astilog"
   packages = ["."]
   pruneopts = "UT"
-  revision = "f17157b971b275cc7f495550c74a7a58be091437"
+  revision = "d7440316555d404a8a6e45ecca822e0d85c3410a"
 
 [[projects]]
   branch = "master"
-  digest = "1:49a8043c19099a9146a2c5083b18e4e0717c6e59f37515919e45c55459ed9baf"
+  digest = "1:83fc31812ba24b7414049e24420fb536ff10d381e282e1a21e15a0071fc35310"
   name = "github.com/asticode/go-astitools"
   packages = [
     "archive",
@@ -73,7 +73,7 @@
     "url",
   ]
   pruneopts = "UT"
-  revision = "9a1cf933b98ba73e0385b05d5f641995546cbdc3"
+  revision = "933b5f686c38971627eb990f415ee6b6f9857cc8"
 
 [[projects]]
   branch = "master"
@@ -124,12 +124,12 @@
   version = "v0.4.0"
 
 [[projects]]
-  digest = "1:ccfa094742ce1c97fd3f6481e1bf98f3d9862510eee2bc0eb56e2745396bd330"
+  digest = "1:f97285a3b0a496dcf8801072622230d513f69175665d94de60eb042d03387f6c"
   name = "github.com/julienschmidt/httprouter"
   packages = ["."]
   pruneopts = "UT"
-  revision = "8c199fb6259ffc1af525cc3ad52ee60ba8359669"
-  version = "v1.1"
+  revision = "348b672cd90d8190f8240323e372ecd1e66b59dc"
+  version = "v1.2.0"
 
 [[projects]]
   digest = "1:0a69a1c0db3591fcefb47f115b224592c8dfa4368b7ba9fae509d5e16cdc95c8"
@@ -165,11 +165,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:f335d800550786b6f51ddaedb9d1107a7a72f4a2195e5b039dd7c0e103e119bc"
+  digest = "1:01d9e47830ef6077fb6f91033b0e83f324ad5966d11ed3daa4a5822ace876dab"
   name = "github.com/nsf/termbox-go"
   packages = ["."]
   pruneopts = "UT"
-  revision = "b66b20ab708e289ff1eb3e218478302e6aec28ce"
+  revision = "60ab7e3d12ed91bc1b2486559c4b3a6b62297577"
 
 [[projects]]
   branch = "master"
@@ -196,12 +196,12 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:3f53e9e4dfbb664cd62940c9c4b65a2171c66acd0b7621a1a6b8e78513525a52"
+  digest = "1:69b1cc331fca23d702bd72f860c6a647afd0aa9fcbc1d0659b1365e26546dd70"
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   pruneopts = "UT"
-  revision = "ad15b42461921f1fb3529b058c6786c6a45d5162"
-  version = "v1.1.1"
+  revision = "bcd833dfe83d3cebad139e4a29ed79cb2318bf95"
+  version = "v1.2.0"
 
 [[projects]]
   digest = "1:c40d65817cdd41fac9aa7af8bed56927bb2d6d47e4fea566a74880f5c2b1c41e"
@@ -220,7 +220,7 @@
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
   pruneopts = "UT"
-  revision = "7c1a557ab941a71c619514f229f0b27ccb0c27cf"
+  revision = "e4dc69e5b2fd71dcaf8bd5d054eb936deb78d1fa"
 
 [[projects]]
   branch = "master"
@@ -240,14 +240,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:f5aa274a0377f85735edc7fedfb0811d3cbc20af91633797cb359e29c3272271"
+  digest = "1:6a875550c3b582f6c2d7e2ce44aba792511f00016d7c46b0a4fb26f730ef3058"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "fa43e7bc11baaae89f3f902b2b4d832b68234844"
+  revision = "66b7b1311ac80bbafcd2daeef9a5e6e2cd1e2399"
 
 [[projects]]
   digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
@@ -278,7 +278,7 @@
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
   pruneopts = "UT"
-  revision = "af9cb2a35e7f169ec875002c1829c9b315cddc04"
+  revision = "b5d43981345bdb2c233eb4bf3277847b48c6fdc6"
 
 [[projects]]
   digest = "1:e72ebff67b73d31785959af0660215213c58ab50d7b7d61aac0f1a6834c07e8c"
