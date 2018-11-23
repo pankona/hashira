@@ -43,12 +43,14 @@ design documents are available at [here](https://pankona.github.io/hashira/)
 | i / I | Move focused task to left/right pane                              |                                                   |
 | x     | Move focused task to Done                                         | If focused task is already on Done, it is deleted |
 
-* While input
+- While input
 
-| Key         | Action      | Remarks                 |
-|-------------|-------------|-------------------------|
-| Ctrl- h / l | Move cursor | Same as using arrow key |
-
+| Key         | Action                                   | Remarks                            |
+| ----------- | ---------------------------------------- | ---------------------------------- |
+| Ctrl- b / f | Move cursor backward/forward             | Same as using arrow left/right key |
+| Ctrl- a / e | Move cursor at start/end of line         | Same as Home/End key               |
+| Ctrl- h     | Remove a character on previous of cursor | Same as Backspace                  |
+| Ctrl- d     | Remove a character on cursor             | Same as Delete                     |
 
 ## Notes
 
