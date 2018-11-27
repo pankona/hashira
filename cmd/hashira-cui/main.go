@@ -11,9 +11,9 @@ import (
 	"path/filepath"
 
 	"github.com/jroimartin/gocui"
+	hashirac "github.com/pankona/hashira/client"
+	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
-	hashirac "github.com/pankona/hashira/hashira/client"
-	"github.com/pankona/hashira/hashira/daemon"
 )
 
 func initializeDB() (database.Databaser, error) {

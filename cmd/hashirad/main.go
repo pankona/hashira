@@ -7,8 +7,8 @@ import (
 	"os/user"
 	"path/filepath"
 
+	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
-	"github.com/pankona/hashira/hashira/daemon"
 )
 
 func initializeDB() (database.Databaser, error) {

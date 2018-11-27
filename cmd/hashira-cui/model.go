@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	hashirac "github.com/pankona/hashira/hashira/client"
+	hashirac "github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/service"
 )
 

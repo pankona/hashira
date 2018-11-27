@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/pankona/hashira/hashira/client"
+	"github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/service"
 	"gopkg.in/alecthomas/kingpin.v2"
 )

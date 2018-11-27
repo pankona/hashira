@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	"github.com/pankona/hashira/hashira/client"
+	"github.com/pankona/hashira/client"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
