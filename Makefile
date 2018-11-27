@@ -44,6 +44,9 @@ lint:
 		--skip=$(CURDIR)/service \
 		$(CURDIR)/...
 
+datastore-emulator:
+	gcloud beta emulators datastore start --no-store-on-disk
+
 test:
 	go test `go list ./... | grep -v cmd/hashira-gui`
 
