@@ -1,7 +1,7 @@
 module github.com/pankona/hashira
 
 require (
-	cloud.google.com/go v0.33.1
+	cloud.google.com/go v0.34.0
 	git.apache.org/thrift.git v0.0.0-20181128031924-7f0fa6c21ec2 // indirect
 	github.com/akavel/rsrc v0.0.0-20170831122431-f6a15ece2cfd // indirect
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc // indirect
