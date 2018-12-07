@@ -17,7 +17,7 @@ require (
 	github.com/golang/protobuf v1.2.0
 	github.com/googleapis/gax-go v2.0.2+incompatible // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.5.1 // indirect
-	github.com/jroimartin/gocui v0.4.0
+	github.com/jesseduffield/gocui v0.0.0
 	github.com/julienschmidt/httprouter v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
