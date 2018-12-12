@@ -14,12 +14,12 @@ require (
 	github.com/etcd-io/bbolt v1.3.0
 	github.com/golang/protobuf v1.2.0
 	github.com/googleapis/gax-go v2.0.2+incompatible // indirect
+	github.com/jesseduffield/termbox-go v0.0.0-20180919093808-1e272ff78dcb // indirect
 	github.com/jroimartin/gocui v0.4.0
 	github.com/julienschmidt/httprouter v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/mattn/go-runewidth v0.0.3 // indirect
-	github.com/nsf/termbox-go v0.0.0-20181027232701-60ab7e3d12ed // indirect
 	github.com/pankona/orderedmap v0.0.0-20181010071912-782e514ec868
 	github.com/pkg/errors v0.8.0
 	github.com/sirupsen/logrus v1.2.0 // indirect
@@ -30,5 +30,9 @@ require (
 	golang.org/x/oauth2 v0.0.0-20181120190819-8f65e3013eba // indirect
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f // indirect
 	golang.org/x/sys v0.0.0-20181122145206-62eef0e2fa9b // indirect
+	google.golang.org/appengine v1.3.0 // indirect
+	google.golang.org/grpc v1.14.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 )
+
+replace github.com/jroimartin/gocui v0.4.0 => github.com/jesseduffield/gocui v0.3.1-0.20181209104758-fe55a32c8a4c
