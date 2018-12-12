@@ -100,7 +100,7 @@ func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
 	return v.input(g, gv)
 }
 
-// KeyEnter reacts for "Enter"
+// KeyEsc reacts for "Esc"
 func (v *View) KeyEsc(g *gocui.Gui, gv *gocui.View) error {
 	if gv.Name() == "input" {
 		return v.hideInput(g, gv)
