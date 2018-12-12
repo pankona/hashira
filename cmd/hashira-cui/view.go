@@ -321,7 +321,7 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 
 func (v *View) showInput(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
-	input, err := g.SetView("input", maxX/2-20, maxY/2, maxX/2+20, maxY/2+2)
+	input, err := g.SetView("input", maxX/2-20, maxY/2, maxX/2+20, maxY/2+2, 0)
 	if err != nil {
 		if err != gocui.ErrUnknownView {
 			return err

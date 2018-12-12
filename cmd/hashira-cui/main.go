@@ -66,7 +66,8 @@ func main() {
 	)
 
 	// initialize gocui
-	g, err := gocui.NewGui(gocui.OutputNormal)
+	// specify false means: supportOverlaps = false
+	g, err := gocui.NewGui(gocui.OutputNormal, false)
 	if err != nil {
 		log.Panicln(err)
 	}
