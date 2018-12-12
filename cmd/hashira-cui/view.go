@@ -319,6 +319,34 @@ func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
 	return v.showInput(g)
 }
 
+func (v *View) hideInput(g *gocui.Gui, gv *gocui.View) error {
+	if gv.Name() == "input" {
+		v.editingTask = nil
+		g.DeleteKeybindings(gv.Name())
+		g.Cursor = false
+
+		err := g.DeleteView(gv.Name())
+		if err != nil {
+			return fmt.Errorf("[WARNING] failed to delete view: %v", err)
+		}
+
+		if v.pane == nil {
+			// should not reach.
+			log.Printf("[WARNING] pane to restore after input is nil")
+			v.pane = v.panes[pn[0]]
+		}
+
+		_, err = g.SetCurrentView(v.pane.name)
+		if err != nil {
+			return fmt.Errorf("[WARNING] failed to restore current view: %v", err)
+		}
+
+		v.pane = nil
+		return nil
+	}
+	return nil
+}
+
 func (v *View) showInput(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 	input, err := g.SetView("input", maxX/2-20, maxY/2, maxX/2+20, maxY/2+2, 0)

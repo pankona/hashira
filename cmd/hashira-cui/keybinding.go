@@ -33,6 +33,7 @@ func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 		ec.setError(g.SetKeybinding(p.name, gocui.KeySpace, gocui.ModNone, v.KeySpace))
 	}
 	ec.setError(g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.KeyEnter))
+	ec.setError(g.SetKeybinding("", gocui.KeyEsc, gocui.ModNone, v.KeyEsc))
 	ec.setError(g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit)) // TODO: should be v.KeyCtrlC
 	return ec.err
 }
@@ -97,4 +98,9 @@ func (v *View) KeySpace(g *gocui.Gui, gv *gocui.View) error {
 // KeyEnter reacts for "Enter"
 func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
 	return v.input(g, gv)
+}
+
+// KeyEnter reacts for "Enter"
+func (v *View) KeyEsc(g *gocui.Gui, gv *gocui.View) error {
+	return v.hideInput(g, gv)
 }
