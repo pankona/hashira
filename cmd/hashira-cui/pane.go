@@ -30,7 +30,7 @@ func (p *Pane) Layout(g *gocui.Gui, c *cursor, focusedIndex int, selectedTask *K
 	maxX, maxY := g.Size()
 	rect := rectangle{maxX / 4 * p.index, 1, maxX/4*p.index + maxX/4 - 1, maxY - 1}
 
-	v, err := g.SetView(p.name, rect.x0, rect.y0, rect.x1, rect.y1)
+	v, err := g.SetView(p.name, rect.x0, rect.y0, rect.x1, rect.y1, 0)
 	if err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
