@@ -140,21 +140,21 @@
   version = "v2.0.2"
 
 [[projects]]
+  branch = "insert_for_widecharactor"
+  digest = "1:c5174c9ef95be1d636223e7253e197ffa481996084261810cc98249161cffae9"
+  name = "github.com/jesseduffield/gocui"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "d48855abd71f2815d60720cc04deda7797d63d1f"
+  source = "https://github.com/pankona/gocui"
+
+[[projects]]
   branch = "master"
   digest = "1:5de83c7993750a8b065540cb6a44040c41fd166ce9a29ae030104951ade80f40"
   name = "github.com/jesseduffield/termbox-go"
   packages = ["."]
   pruneopts = "UT"
   revision = "1e272ff78dcb4c448870f464fda1cdcf2bf0b3dd"
-
-[[projects]]
-  branch = "insert_for_widecharactor"
-  digest = "1:c5174c9ef95be1d636223e7253e197ffa481996084261810cc98249161cffae9"
-  name = "github.com/jroimartin/gocui"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "d48855abd71f2815d60720cc04deda7797d63d1f"
-  source = "https://github.com/pankona/gocui"
 
 [[projects]]
   digest = "1:f97285a3b0a496dcf8801072622230d513f69175665d94de60eb042d03387f6c"
@@ -302,14 +302,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:c73348dab344986c67ff12db47eee08aa2ec1f6bf431dcd73514c6dd8c502a57"
+  digest = "1:ba8cbf57cfd92d5f8592b4aca1a35d92c162363d32aeabd5b12555f8896635e7"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "7da8ea5c81829e397bdf930c5d8ba4b703616f33"
+  revision = "4d1cda033e0619309c606fc686de3adcf599539e"
 
 [[projects]]
   digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
@@ -347,7 +347,7 @@
     "transport/grpc",
   ]
   pruneopts = "UT"
-  revision = "40e757e92c52ce056bea83c8050054d41443ade8"
+  revision = "874d9dc5b186e361475b082852f136f094555c30"
 
 [[projects]]
   digest = "1:b13819327be647014031c6a194299da87ca35313bfc01fdc1da7bd3ddf08cbce"
@@ -444,7 +444,7 @@
     "github.com/asticode/go-astilectron-bundler",
     "github.com/etcd-io/bbolt",
     "github.com/golang/protobuf/proto",
-    "github.com/jroimartin/gocui",
+    "github.com/jesseduffield/gocui",
     "github.com/mattn/go-runewidth",
     "github.com/pankona/orderedmap",
     "github.com/pkg/errors",
