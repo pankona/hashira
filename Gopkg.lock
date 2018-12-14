@@ -148,13 +148,13 @@
   revision = "1e272ff78dcb4c448870f464fda1cdcf2bf0b3dd"
 
 [[projects]]
-  branch = "master"
-  digest = "1:d566efc42265654f2609832766ba928e0a2bc5095f782f98616b405690392abc"
+  branch = "backspace_for_widecharactor"
+  digest = "1:1a8e1b97647dc6929b6692959c5965d0e70a758de417c54a97aba81662efdd98"
   name = "github.com/jroimartin/gocui"
   packages = ["."]
   pruneopts = "UT"
-  revision = "fe55a32c8a4c7cf94b04a6507eae7ece48c2f975"
-  source = "https://github.com/jesseduffield/gocui"
+  revision = "f7455dd8def167a6908454341a37d2d81aeb7217"
+  source = "https://github.com/pankona/gocui"
 
 [[projects]]
   digest = "1:f97285a3b0a496dcf8801072622230d513f69175665d94de60eb042d03387f6c"
