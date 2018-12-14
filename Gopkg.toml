@@ -44,7 +44,7 @@
 [[constraint]]
   name = "github.com/jroimartin/gocui"
   source = "https://github.com/pankona/gocui"
-  branch = "backspace_for_widecharactor"
+  branch = "insert_for_widecharactor"
 
 [[constraint]]
   branch = "master"

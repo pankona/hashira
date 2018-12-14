@@ -148,12 +148,12 @@
   revision = "1e272ff78dcb4c448870f464fda1cdcf2bf0b3dd"
 
 [[projects]]
-  branch = "backspace_for_widecharactor"
-  digest = "1:1a8e1b97647dc6929b6692959c5965d0e70a758de417c54a97aba81662efdd98"
+  branch = "insert_for_widecharactor"
+  digest = "1:c5174c9ef95be1d636223e7253e197ffa481996084261810cc98249161cffae9"
   name = "github.com/jroimartin/gocui"
   packages = ["."]
   pruneopts = "UT"
-  revision = "f7455dd8def167a6908454341a37d2d81aeb7217"
+  revision = "d48855abd71f2815d60720cc04deda7797d63d1f"
   source = "https://github.com/pankona/gocui"
 
 [[projects]]
