@@ -6,8 +6,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/jesseduffield/gocui"
 	runewidth "github.com/mattn/go-runewidth"
+	"github.com/pankona/gocui"
 	"github.com/pankona/hashira/service"
 	"github.com/pankona/orderedmap"
 )

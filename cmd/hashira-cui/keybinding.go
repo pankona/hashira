@@ -3,9 +3,8 @@ package main
 import (
 	"log"
 
+	"github.com/pankona/gocui"
 	"github.com/pkg/errors"
-
-	"github.com/jesseduffield/gocui"
 )
 
 type errContainer struct {
