@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/jroimartin/gocui"
+	"github.com/jesseduffield/gocui"
 	runewidth "github.com/mattn/go-runewidth"
 	"github.com/pankona/hashira/service"
 	"github.com/pankona/orderedmap"

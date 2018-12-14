@@ -10,7 +10,7 @@ import (
 	"os/user"
 	"path/filepath"
 
-	"github.com/jroimartin/gocui"
+	"github.com/jesseduffield/gocui"
 	hashirac "github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
