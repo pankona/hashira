@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/jroimartin/gocui"
+	runewidth "github.com/mattn/go-runewidth"
 	"github.com/pankona/hashira/service"
 	"github.com/pankona/orderedmap"
 )
@@ -362,7 +363,7 @@ func (v *View) showInput(g *gocui.Gui) error {
 		}
 		input.Editable = true
 		input.Editor = hashiraEditor
-		input.MoveCursor(len(input.Buffer())-1, 0, true)
+		input.MoveCursor(runewidth.StringWidth(input.Buffer()), 0, true)
 		g.Cursor = true
 	}
 

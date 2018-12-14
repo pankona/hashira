@@ -19,7 +19,7 @@ require (
 	github.com/julienschmidt/httprouter v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
-	github.com/mattn/go-runewidth v0.0.3 // indirect
+	github.com/mattn/go-runewidth v0.0.3
 	github.com/pankona/orderedmap v0.0.0-20181010071912-782e514ec868
 	github.com/pkg/errors v0.8.0
 	github.com/sirupsen/logrus v1.2.0 // indirect
