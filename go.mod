@@ -35,4 +35,4 @@ require (
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 )
 
-replace github.com/jroimartin/gocui v0.4.0 => github.com/pankona/gocui v0.3.1-0.20181214002935-f7455dd8def1
+replace github.com/jroimartin/gocui v0.4.0 => github.com/pankona/gocui v0.3.1-0.20181214061939-d48855abd71f
