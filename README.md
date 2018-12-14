@@ -45,12 +45,13 @@ design documents are available at [here](https://pankona.github.io/hashira/)
 
 - While input
 
-| Key         | Action                                   | Remarks                            |
-| ----------- | ---------------------------------------- | ---------------------------------- |
-| Ctrl- b / f | Move cursor backward/forward             | Same as using arrow left/right key |
-| Ctrl- a / e | Move cursor at start/end of line         | Same as Home/End key               |
-| Ctrl- h     | Remove a character on previous of cursor | Same as Backspace                  |
-| Ctrl- d     | Remove a character on cursor             | Same as Delete                     |
+| Key         | Action                                    | Remarks                            |
+| ----------- | ----------------------------------------- | ---------------------------------- |
+| Ctrl- b / f | Move cursor backward/forward              | Same as using arrow left/right key |
+| Ctrl- a / e | Move cursor at start/end of line          | Same as Home/End key               |
+| Ctrl- h     | Remove a character on previous of cursor  | Same as Backspace                  |
+| Ctrl- d     | Remove a character on cursor              | Same as Delete                     |
+| Esc         | Discard any change and close input window |                                    |
 
 ## Notes
 
