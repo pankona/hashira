@@ -22,10 +22,17 @@ func (e *errContainer) setError(err error) {
 func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 	ec := &errContainer{}
 	for _, p := range v.panes {
-		ec.setError(g.SetKeybinding(p.name, 'h', gocui.ModNone, v.KeyH))
-		ec.setError(g.SetKeybinding(p.name, 'l', gocui.ModNone, v.KeyL))
-		ec.setError(g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up))   // TODO: should be v.KeyK
-		ec.setError(g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down)) // TODO: should be v.KeyJ
+
+		ec.setError(g.SetKeybinding(p.name, 'h', gocui.ModNone, v.KeyLeft))
+		ec.setError(g.SetKeybinding(p.name, gocui.KeyArrowLeft, gocui.ModNone, v.KeyLeft))
+		ec.setError(g.SetKeybinding(p.name, 'l', gocui.ModNone, v.KeyRight))
+		ec.setError(g.SetKeybinding(p.name, gocui.KeyArrowRight, gocui.ModNone, v.KeyRight))
+
+		ec.setError(g.SetKeybinding(p.name, 'k', gocui.ModNone, v.Up))
+		ec.setError(g.SetKeybinding(p.name, gocui.KeyArrowUp, gocui.ModNone, v.Up))
+		ec.setError(g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down))
+		ec.setError(g.SetKeybinding(p.name, gocui.KeyArrowDown, gocui.ModNone, v.Down))
+
 		ec.setError(g.SetKeybinding(p.name, 'x', gocui.ModNone, v.KeyX))
 		ec.setError(g.SetKeybinding(p.name, 'i', gocui.ModNone, v.KeyI))
 		ec.setError(g.SetKeybinding(p.name, 'I', gocui.ModNone, v.KeyShiftI))
@@ -34,17 +41,17 @@ func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 	}
 	ec.setError(g.SetKeybinding("", gocui.KeyEnter, gocui.ModNone, v.KeyEnter))
 	ec.setError(g.SetKeybinding("", gocui.KeyEsc, gocui.ModNone, v.KeyEsc))
-	ec.setError(g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit)) // TODO: should be v.KeyCtrlC
+	ec.setError(g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, v.Quit))
 	return ec.err
 }
 
-// KeyH reacts for "h"
-func (v *View) KeyH(g *gocui.Gui, _ *gocui.View) error {
+// KeyLeft reacts for "h" and left arrow
+func (v *View) KeyLeft(g *gocui.Gui, _ *gocui.View) error {
 	return v.Left()
 }
 
-// KeyL reacts for "l"
-func (v *View) KeyL(g *gocui.Gui, _ *gocui.View) error {
+// KeyRight reacts for "l" and right arrow
+func (v *View) KeyRight(g *gocui.Gui, _ *gocui.View) error {
 	return v.Right()
 }
 
