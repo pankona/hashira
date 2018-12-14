@@ -48,7 +48,8 @@ github.com/mattn/go-runewidth v0.0.3 h1:a+kO+98RDGEfo6asOGMmpodZq4FNtnGP54yps8Bz
 github.com/mattn/go-runewidth v0.0.3/go.mod h1:LwmH8dsx7+W8Uxz3IHJYH5QSwggIsqBzpuz5H//U1FU=
 github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
 github.com/openzipkin/zipkin-go v0.1.1/go.mod h1:NtoC/o8u3JlF1lSlyPNswIbeQH9bJTmOf0Erfk+hxe8=
-github.com/pankona/gocui v0.3.1-0.20181214061939-d48855abd71f/go.mod h1:YbpnnaXew8rp90mxIrWZhP7FNJoXGaiChttkzIiVRB0=
+github.com/pankona/gocui v0.3.1-0.20181214144533-b2c49721076e h1:3UBUrJGU+mKPFkykog1Q7Zmuunjfk/scN2VH/BAbSgI=
+github.com/pankona/gocui v0.3.1-0.20181214144533-b2c49721076e/go.mod h1:YbpnnaXew8rp90mxIrWZhP7FNJoXGaiChttkzIiVRB0=
 github.com/pankona/orderedmap v0.0.0-20181010071912-782e514ec868 h1:PctvejLvtIhVvQqxqJZkO2TTkDg1gGe6XOt0p8q8KFE=
 github.com/pankona/orderedmap v0.0.0-20181010071912-782e514ec868/go.mod h1:ydQRa986pZuWSGcbkiLzrF2N6KBbKDOlyunsQKsXdfQ=
 github.com/pkg/errors v0.8.0 h1:WdK/asTD0HN+q6hsWO3/vpuAkAr+tw6aNJNDFFf0+qw=

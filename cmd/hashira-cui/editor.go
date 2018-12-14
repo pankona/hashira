@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/jesseduffield/gocui"
+	"github.com/pankona/gocui"
 )
 
 type editor struct{}

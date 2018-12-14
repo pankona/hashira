@@ -42,9 +42,8 @@
   version = "1.2.0"
 
 [[constraint]]
-  name = "github.com/jesseduffield/gocui"
-  source = "https://github.com/pankona/gocui"
-  branch = "insert_for_widecharactor"
+  name = "github.com/pankona/gocui"
+  branch = "master"
 
 [[constraint]]
   branch = "master"

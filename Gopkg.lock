@@ -140,15 +140,6 @@
   version = "v2.0.2"
 
 [[projects]]
-  branch = "insert_for_widecharactor"
-  digest = "1:c5174c9ef95be1d636223e7253e197ffa481996084261810cc98249161cffae9"
-  name = "github.com/jesseduffield/gocui"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "d48855abd71f2815d60720cc04deda7797d63d1f"
-  source = "https://github.com/pankona/gocui"
-
-[[projects]]
   branch = "master"
   digest = "1:5de83c7993750a8b065540cb6a44040c41fd166ce9a29ae030104951ade80f40"
   name = "github.com/jesseduffield/termbox-go"
@@ -195,6 +186,14 @@
   pruneopts = "UT"
   revision = "ce7b0b5c7b45a81508558cd1dba6bb1e4ddb51bb"
   version = "v0.0.3"
+
+[[projects]]
+  branch = "master"
+  digest = "1:c5174c9ef95be1d636223e7253e197ffa481996084261810cc98249161cffae9"
+  name = "github.com/pankona/gocui"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "b2c49721076e2a11357afb11825406ee5cb05739"
 
 [[projects]]
   branch = "master"
@@ -444,8 +443,8 @@
     "github.com/asticode/go-astilectron-bundler",
     "github.com/etcd-io/bbolt",
     "github.com/golang/protobuf/proto",
-    "github.com/jesseduffield/gocui",
     "github.com/mattn/go-runewidth",
+    "github.com/pankona/gocui",
     "github.com/pankona/orderedmap",
     "github.com/pkg/errors",
     "github.com/stretchr/testify/require",
