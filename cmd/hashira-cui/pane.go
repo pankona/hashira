@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/jroimartin/gocui"
+	"github.com/jesseduffield/gocui"
 	"github.com/pankona/hashira/service"
 	"github.com/pankona/orderedmap"
 )
