@@ -21,54 +21,57 @@ type View struct {
 	selectedTask *KeyedTask
 	editingTask  *KeyedTask
 	priorities   map[string]*service.Priority
-	pane         *Pane // for restoring focused pane after input
+	pane         *Pane    // for restoring focused pane after input
+	pn           []string // pane names
 	Delegater
-}
-
-// pane display names
-var pn = []string{
-	"Backlog",
-	"To Do",
-	"Doing",
-	"Done",
 }
 
 // Initialize initializes view
 func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
+	// pane display names
+	v.pn = []string{
+		"Backlog",
+		"To Do",
+		"Doing",
+		"Done",
+	}
+
 	v.panes = make(map[string]*Pane)
 
-	v.panes[pn[0]] = &Pane{
-		name:  pn[0],
+	v.panes[v.pn[0]] = &Pane{
+		name:  v.pn[0],
 		index: 0,
 		place: service.Place_BACKLOG,
 	}
-	v.panes[pn[1]] = &Pane{
-		name:  pn[1],
+	v.panes[v.pn[1]] = &Pane{
+		name:  v.pn[1],
 		index: 1,
 		place: service.Place_TODO,
 	}
-	v.panes[pn[2]] = &Pane{
-		name:  pn[2],
-		index: 2, place: service.Place_DOING,
+	v.panes[v.pn[2]] = &Pane{
+		name:  v.pn[2],
+		index: 2,
+		place: service.Place_DOING,
 	}
-	v.panes[pn[3]] = &Pane{
-		name:  pn[3],
-		index: 3, place: service.Place_DONE,
+	v.panes[v.pn[3]] = &Pane{
+		name:  v.pn[3],
+		index: 3,
+		place: service.Place_DONE,
 	}
 
 	for k := range v.panes {
 		v.panes[k].tasks = orderedmap.New()
 	}
 
-	v.panes[pn[0]].right = v.panes[pn[1]]
-	v.panes[pn[1]].right = v.panes[pn[2]]
-	v.panes[pn[2]].right = v.panes[pn[3]]
-	v.panes[pn[3]].right = v.panes[pn[0]]
+	v.panes[v.pn[0]].right = v.panes[v.pn[1]]
+	v.panes[v.pn[1]].right = v.panes[v.pn[2]]
+	v.panes[v.pn[2]].right = v.panes[v.pn[3]]
+	v.panes[v.pn[3]].right = v.panes[v.pn[0]]
 
-	v.panes[pn[0]].left = v.panes[pn[3]]
-	v.panes[pn[1]].left = v.panes[pn[0]]
-	v.panes[pn[2]].left = v.panes[pn[1]]
-	v.panes[pn[3]].left = v.panes[pn[2]]
+	v.panes[v.pn[0]].left = v.panes[v.pn[3]]
+	v.panes[v.pn[1]].left = v.panes[v.pn[0]]
+	v.panes[v.pn[2]].left = v.panes[v.pn[1]]
+	v.panes[v.pn[3]].left = v.panes[v.pn[2]]
 
 	g.Highlight = true
 	g.SelFgColor = gocui.ColorBlue
@@ -77,7 +80,7 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 	v.Delegater = d
 	v.cursor = &cursor{
 		index:       0,
-		focusedPane: v.panes[pn[0]],
+		focusedPane: v.panes[v.pn[0]],
 	}
 
 	return nil
@@ -229,7 +232,7 @@ func (v *View) setPriorityLow(task *KeyedTask) error {
 // markTaskAsDone moves specified task to Done pane.
 // If the specified task is already on Done, the task is deleted.
 func (v *View) markTaskAsDone(t *KeyedTask) error {
-	p := v.panes[pn[len(pn)-1]] // last pane (may be Done)
+	p := v.panes[v.pn[len(v.pn)-1]] // last pane (may be Done)
 	if t == nil || p == nil {
 		return nil
 	}
@@ -333,7 +336,7 @@ func (v *View) hideInput(g *gocui.Gui, gv *gocui.View) error {
 	if v.pane == nil {
 		// should not reach.
 		log.Printf("[WARNING] pane to restore after input is nil")
-		v.pane = v.panes[pn[0]]
+		v.pane = v.panes[v.pn[0]]
 	}
 
 	_, err = g.SetCurrentView(v.pane.name)
@@ -432,7 +435,7 @@ func (v *View) Layout(g *gocui.Gui) error {
 	// initialize current view
 	// this function only needs to be called once on starting application
 	once.Do(func() {
-		if _, err := g.SetCurrentView(pn[0]); err != nil {
+		if _, err := g.SetCurrentView(v.pn[0]); err != nil {
 			panic(err)
 		}
 	})
