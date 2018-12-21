@@ -79,7 +79,8 @@ func (c *Client) Delete(ctx context.Context, id string) error {
 }
 
 // Retrieve retrieves all tasks
-func (c *Client) Retrieve(ctx context.Context) (map[string]*service.Task, error) {
+func (c *Client) Retrieve(
+	ctx context.Context) (map[string]*service.Task, error) {
 	var tasks map[string]*service.Task
 
 	err := c.withClient(
@@ -97,7 +98,9 @@ func (c *Client) Retrieve(ctx context.Context) (map[string]*service.Task, error)
 }
 
 // UpdatePriority updates tasks' priorities
-func (c *Client) UpdatePriority(ctx context.Context, priorities map[string]*service.Priority) (map[string]*service.Priority, error) {
+func (c *Client) UpdatePriority(
+	ctx context.Context,
+	priorities map[string]*service.Priority) (map[string]*service.Priority, error) {
 	var ret map[string]*service.Priority
 
 	err := c.withClient(func(hc service.HashiraClient) error {
@@ -116,7 +119,8 @@ func (c *Client) UpdatePriority(ctx context.Context, priorities map[string]*serv
 }
 
 // RetrievePriority retrieves tasks' priorities
-func (c *Client) RetrievePriority(ctx context.Context) (map[string]*service.Priority, error) {
+func (c *Client) RetrievePriority(
+	ctx context.Context) (map[string]*service.Priority, error) {
 	var ret map[string]*service.Priority
 
 	err := c.withClient(func(hc service.HashiraClient) error {
