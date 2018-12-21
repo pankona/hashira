@@ -21,8 +21,9 @@ type View struct {
 	selectedTask *KeyedTask
 	editingTask  *KeyedTask
 	priorities   map[string]*service.Priority
-	pane         *Pane    // for restoring focused pane after input
-	pn           []string // pane names
+	pane         *Pane     // for restoring focused pane after input
+	pn           []string  // pane names
+	once         sync.Once // for set current view on first Layout
 	Delegater
 }
 
@@ -409,8 +410,6 @@ func (v *View) Quit(g *gocui.Gui, _ *gocui.View) error {
 	return gocui.ErrQuit
 }
 
-var once = sync.Once{}
-
 // Layout renders panes on screen
 func (v *View) Layout(g *gocui.Gui) error {
 	for _, p := range v.panes {
@@ -434,7 +433,7 @@ func (v *View) Layout(g *gocui.Gui) error {
 
 	// initialize current view
 	// this function only needs to be called once on starting application
-	once.Do(func() {
+	v.once.Do(func() {
 		if _, err := g.SetCurrentView(v.pn[0]); err != nil {
 			panic(err)
 		}
