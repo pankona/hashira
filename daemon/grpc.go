@@ -15,13 +15,6 @@ const (
 	priorityBucket = "priorityBucket"
 )
 
-var places = []service.Place{
-	service.Place_BACKLOG,
-	service.Place_TODO,
-	service.Place_DOING,
-	service.Place_DONE,
-}
-
 // Create creates a new task
 func (d *Daemon) Create(ctx context.Context, com *service.CommandCreate) (*service.ResultCreate, error) {
 	t := com.Task
@@ -138,6 +131,13 @@ func (d *Daemon) retrieve() (map[string]*service.Task, error) {
 
 // returns map[Place.String()][]*service.Task
 func (d *Daemon) retrieveTaskMap() (map[string]map[string]*service.Task, error) {
+	places := []service.Place{
+		service.Place_BACKLOG,
+		service.Place_TODO,
+		service.Place_DOING,
+		service.Place_DONE,
+	}
+
 	m := make(map[string]map[string]*service.Task)
 	for _, v := range places {
 		m[v.String()] = make(map[string]*service.Task)
