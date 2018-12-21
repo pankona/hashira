@@ -320,7 +320,7 @@ func (v *View) moveTaskTo(t *KeyedTask, dir direction) error {
 }
 
 func (v *View) input(g *gocui.Gui, gv *gocui.View) error {
-	if gv.Name() == "input" {
+	if gv.Name() == inputViewName {
 		return v.determineInput(g, gv)
 	}
 	return v.showInput(g)
@@ -353,7 +353,7 @@ func (v *View) hideInput(g *gocui.Gui, gv *gocui.View) error {
 
 func (v *View) showInput(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
-	input, err := g.SetView("input", maxX/2-20, maxY/2, maxX/2+20, maxY/2+2, 0)
+	input, err := g.SetView(inputViewName, maxX/2-20, maxY/2, maxX/2+20, maxY/2+2, 0)
 	if err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
@@ -376,7 +376,7 @@ func (v *View) showInput(g *gocui.Gui) error {
 	// use this pane to restore focused pane after input
 	v.pane = v.panes[g.CurrentView().Name()]
 
-	_, err = g.SetCurrentView("input")
+	_, err = g.SetCurrentView(inputViewName)
 	return err
 }
 
