@@ -4,10 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/require"
-
 	"github.com/pankona/hashira/database"
 	"github.com/pankona/hashira/service"
+	"github.com/stretchr/testify/require"
 )
 
 type mockDB struct {
@@ -50,19 +49,22 @@ func (m *mockDB) ForEach(bucket string, f func(k, v []byte) error) error {
 	return nil
 }
 
-var tcs = []struct {
+type testcase struct {
 	inName    string
 	wantName  string
 	inPlace   service.Place
 	wantPlace service.Place
-}{
-	{
-		inName: "test", inPlace: service.Place_BACKLOG,
-		wantName: "test", wantPlace: service.Place_BACKLOG,
-	},
+}
+
+func testcases() []testcase {
+	tcs := []testcase{
+		{inName: "test", inPlace: service.Place_BACKLOG, wantName: "test", wantPlace: service.Place_BACKLOG},
+	}
+	return tcs
 }
 
 func testCreate(d *Daemon, t *testing.T) {
+	tcs := testcases()
 	for _, tc := range tcs {
 		cc := &service.CommandCreate{
 			Task: &service.Task{
@@ -132,6 +134,7 @@ func TestEndPointRetrieve(t *testing.T) {
 		t.Fatalf("Retrieve returned unexpected error: %s", err.Error())
 	}
 
+	tcs := testcases()
 	tasks := result.GetTasks()
 	if len(tasks) != len(tcs) {
 		t.Errorf("unexpected result. [got] %d [want] %d", len(tasks), len(tcs))

@@ -7,11 +7,9 @@ import (
 	"github.com/pankona/gocui"
 )
 
-type editor struct{}
+type hashiraEditor struct{}
 
-var hashiraEditor = &editor{}
-
-func (e *editor) Edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Modifier) {
+func (e *hashiraEditor) Edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Modifier) {
 	switch key {
 	case gocui.KeyCtrlF:
 		v.MoveCursor(+1, 0, false)

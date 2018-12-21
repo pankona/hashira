@@ -7,6 +7,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+const inputViewName = "input"
+
 type errContainer struct {
 	err error
 }
@@ -21,7 +23,6 @@ func (e *errContainer) setError(err error) {
 func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 	ec := &errContainer{}
 	for _, p := range v.panes {
-
 		ec.setError(g.SetKeybinding(p.name, 'h', gocui.ModNone, v.KeyLeft))
 		ec.setError(g.SetKeybinding(p.name, gocui.KeyArrowLeft, gocui.ModNone, v.KeyLeft))
 		ec.setError(g.SetKeybinding(p.name, 'l', gocui.ModNone, v.KeyRight))
@@ -72,7 +73,7 @@ func (v *View) KeyI(g *gocui.Gui, gv *gocui.View) error {
 
 // KeyShiftI reacts for "I"
 func (v *View) KeyShiftI(g *gocui.Gui, gv *gocui.View) error {
-	if gv.Name() == "input" {
+	if gv.Name() == inputViewName {
 		return v.input(g, gv)
 	}
 
@@ -108,7 +109,7 @@ func (v *View) KeyEnter(g *gocui.Gui, gv *gocui.View) error {
 
 // KeyEsc reacts for "Esc"
 func (v *View) KeyEsc(g *gocui.Gui, gv *gocui.View) error {
-	if gv.Name() == "input" {
+	if gv.Name() == inputViewName {
 		return v.hideInput(g, gv)
 	}
 	return nil
