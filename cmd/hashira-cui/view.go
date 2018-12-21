@@ -24,6 +24,7 @@ type View struct {
 	pane         *Pane     // for restoring focused pane after input
 	pn           []string  // pane names
 	once         sync.Once // for set current view on first Layout
+	editor       gocui.Editor
 	Delegater
 }
 
@@ -83,6 +84,7 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 		index:       0,
 		focusedPane: v.panes[v.pn[0]],
 	}
+	v.editor = &hashiraEditor{}
 
 	return nil
 }
@@ -366,7 +368,7 @@ func (v *View) showInput(g *gocui.Gui) error {
 			}
 		}
 		input.Editable = true
-		input.Editor = hashiraEditor
+		input.Editor = v.editor
 		input.MoveCursor(runewidth.StringWidth(input.Buffer()), 0, true)
 		g.Cursor = true
 	}
