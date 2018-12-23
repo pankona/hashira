@@ -58,12 +58,6 @@ design documents are available at [here](https://pankona.github.io/hashira/)
 - hashira generates its configuration file under `$HOME/.config/hashira`
   - Remove them for re-initializing hashira or leaving from using hashira...
 
-## Limitation
-
-### hashira-cui
-
-- Multi-byte characters are not supported
-
 ## LICENSE
 
 MIT
