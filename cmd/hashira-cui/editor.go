@@ -15,6 +15,8 @@ func (e *hashiraEditor) Edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Mo
 		v.MoveCursor(+1, 0, false)
 	case gocui.KeyCtrlB:
 		v.MoveCursor(-1, 0, false)
+	case gocui.KeyHome:
+		fallthrough
 	case gocui.KeyCtrlA:
 		// move to start of line
 		_, oy := v.Origin()
@@ -23,9 +25,10 @@ func (e *hashiraEditor) Edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Mo
 			log.Printf("failed to set origin: %v", err)
 			return
 		}
-
 		maxX, _ := v.Size()
 		v.MoveCursor(-maxX, 0, false)
+	case gocui.KeyEnd:
+		fallthrough
 	case gocui.KeyCtrlE:
 		// move to end of line
 		_, oy := v.Origin()
@@ -34,7 +37,6 @@ func (e *hashiraEditor) Edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Mo
 			log.Printf("failed to set origin: %v", err)
 			return
 		}
-
 		bufLen := runewidth.StringWidth(v.Buffer())
 		cx, _ := v.Cursor()
 		v.MoveCursor(+bufLen-cx, 0, false)
