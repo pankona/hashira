@@ -29,6 +29,19 @@ design documents are available at [here](https://pankona.github.io/hashira/)
 - Consumed time is measured only for one task, which is placed on top of "Doing".
 - Show them in graph.
 
+## Installation of `hashira-cui`
+
+- At this moment, only `hashira-cui` is available among hashira family.
+  - For Android, iOS, Web, Desktop app, will be available someday...
+- Executable `hashira-cui` is available on [release page](https://github.com/pankona/hashira/releases) (recommended)
+- `hashira-cui` is `go get`able. Try following command to install `hashira-cui` via `go get`.
+  - Note that `hashira-cui` installed via `go get` may be broken because of unsettled dependencies.
+  - Using release page is recommended.
+
+```bash
+$ go get github.com/pankona/hashira/cmd/hashira-cui
+```
+
 ## Available Keybindings of hashira-cui
 
 - Ordinal use
