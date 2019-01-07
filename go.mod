@@ -22,7 +22,7 @@ require (
 	github.com/nsf/termbox-go v0.0.0-20181027232701-60ab7e3d12ed // indirect
 	github.com/pankona/gocui v0.3.1-0.20181216160713-52c82c8f75bc
 	github.com/pankona/orderedmap v0.0.0-20181010071912-782e514ec868
-	github.com/pkg/errors v0.8.0
+	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.2.0 // indirect
 	github.com/stretchr/testify v1.2.2
 	go.opencensus.io v0.18.0 // indirect
