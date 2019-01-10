@@ -12,6 +12,8 @@ github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRF
 github.com/asticode/go-astiamqp v1.0.0/go.mod h1:PDHG8FjHJDtbDNNHixFCm80+7Ma1dKvwYl325Mj5DI4=
 github.com/asticode/go-astilectron v0.6.0 h1:trbVNAbr0bePZdnp1bmTvbMCKo4PH8FfIovrpdEIJdQ=
 github.com/asticode/go-astilectron v0.6.0/go.mod h1:XN7r4w/s0Eu7D5TgmXuPN07sO8CmYHg95kw2EuW15nE=
+github.com/asticode/go-astilectron v0.7.0 h1:4uEhk4ptyFgGg0QOd7+mJZUpw/kLWxFi/I4gdl5YfKU=
+github.com/asticode/go-astilectron v0.7.0/go.mod h1:XN7r4w/s0Eu7D5TgmXuPN07sO8CmYHg95kw2EuW15nE=
 github.com/asticode/go-astilectron-bundler v0.0.0-20181229095247-f74dc5d70c6b h1:KzPV/YqP+z/Hg0CMaYmCfF8X+ajUS6ltHiZwR9u8dLU=
 github.com/asticode/go-astilectron-bundler v0.0.0-20181229095247-f74dc5d70c6b/go.mod h1:7iR/tJj8CDwh3dlELvVf/GzgPzRoj+5t4zqiAPLOZfI=
 github.com/asticode/go-astilog v1.0.0 h1:l9tek0K7KoQCmhZ7cvBTtVu0NsKpS9hB6jBLtQyxWYk=
