@@ -5,7 +5,7 @@ require (
 	github.com/akavel/rsrc v0.0.0-20170831122431-f6a15ece2cfd // indirect
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc // indirect
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
-	github.com/asticode/go-astilectron v0.7.0
+	github.com/asticode/go-astilectron v0.8.0
 	github.com/asticode/go-astilectron-bundler v0.0.0-20181229095247-f74dc5d70c6b
 	github.com/asticode/go-astitools v1.0.0 // indirect
 	github.com/asticode/go-bindata v0.0.0-20151023091102-a0ff2567cfb7 // indirect
