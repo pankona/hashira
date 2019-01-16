@@ -27,6 +27,6 @@ require (
 	google.golang.org/api v0.1.0 // indirect
 	google.golang.org/appengine v1.4.0 // indirect
 	google.golang.org/genproto v0.0.0-20181221175505-bd9b4fb69e2f // indirect
-	google.golang.org/grpc v1.17.0
+	google.golang.org/grpc v1.18.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 )
