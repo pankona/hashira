@@ -10,7 +10,7 @@ require (
 	github.com/asticode/go-astitools v1.0.0 // indirect
 	github.com/asticode/go-bindata v0.0.0-20151023091102-a0ff2567cfb7 // indirect
 	github.com/boltdb/bolt v1.3.1 // indirect
-	github.com/etcd-io/bbolt v1.3.0
+	github.com/etcd-io/bbolt v1.3.2
 	github.com/golang/protobuf v1.2.0
 	github.com/googleapis/gax-go v2.0.2+incompatible // indirect
 	github.com/jesseduffield/termbox-go v0.0.0-20180919093808-1e272ff78dcb // indirect
