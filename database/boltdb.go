@@ -2,9 +2,10 @@ package database
 
 import (
 	"errors"
-	"strconv"
+	"fmt"
 
 	bolt "github.com/etcd-io/bbolt"
+	"github.com/gofrs/uuid"
 )
 
 // BoltDB provides API for using BoltDB
@@ -69,12 +70,11 @@ func (b *BoltDB) Save(bucket, id string, value []byte) (string, error) {
 						return errors.New("failed to create bucket: " + err.Error())
 					}
 					if id == "" {
-						var n uint64
-						n, err = b.NextSequence()
+						u, err := uuid.NewV4()
 						if err != nil {
-							return errors.New("failed to get next sequence from bucket: " + err.Error())
+							return fmt.Errorf("failed generate uuid: %v", err)
 						}
-						id = strconv.FormatUint(n, 10)
+						id = u.String()
 					}
 
 					err = b.Put([]byte(id), value)
