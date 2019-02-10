@@ -1,7 +1,6 @@
 package database
 
 import (
-	"errors"
 	"fmt"
 
 	bolt "github.com/etcd-io/bbolt"
@@ -19,7 +18,7 @@ func (b *BoltDB) open() error {
 	var err error
 	b.db, err = bolt.Open(b.dbpath, 0600, nil)
 	if err != nil {
-		return errors.New("failed to open database: " + err.Error())
+		return fmt.Errorf("failed to open database: %v", err)
 	}
 	return nil
 }
@@ -33,7 +32,7 @@ func (b *BoltDB) Initialize(dbpath string) error {
 	b.dbpath = dbpath
 	err := b.open()
 	if err != nil {
-		return errors.New("failed to open database: " + err.Error())
+		return fmt.Errorf("failed to open database: %v", err)
 	}
 	return b.close()
 }
@@ -47,12 +46,12 @@ func (b *BoltDB) Finalize() error {
 func (b *BoltDB) withDBOpenClose(f func() error) error {
 	err := b.open()
 	if err != nil {
-		return errors.New("open returned error: " + err.Error())
+		return fmt.Errorf("open returned error: %v", err)
 	}
 
 	err = f()
 	if err != nil {
-		return errors.New("failed to save/load: " + err.Error())
+		return fmt.Errorf("failed to save/load: %v", err)
 	}
 
 	return b.close()
@@ -67,7 +66,7 @@ func (b *BoltDB) Save(bucket, id string, value []byte) (string, error) {
 				func(tx *bolt.Tx) error {
 					b, err := tx.CreateBucketIfNotExists([]byte(bucket))
 					if err != nil {
-						return errors.New("failed to create bucket: " + err.Error())
+						return fmt.Errorf("failed to create bucket: %v", err)
 					}
 					if id == "" {
 						u, err := uuid.NewV4()
@@ -110,7 +109,7 @@ func (b *BoltDB) Load(bucket, id string) ([]byte, error) {
 					return nil
 				})
 			if err != nil {
-				return errors.New("failed load: " + err.Error())
+				return fmt.Errorf("failed load: %v", err)
 			}
 			return nil
 		})
@@ -132,12 +131,12 @@ func (b *BoltDB) ForEach(bucket string, f func(k, v []byte) error) error {
 					}
 					err := b.ForEach(f)
 					if err != nil {
-						return errors.New("for each stopped: " + err.Error())
+						return fmt.Errorf("for each stopped: %v", err)
 					}
 					return nil
 				})
 			if err != nil {
-				return errors.New("failed load: " + err.Error())
+				return fmt.Errorf("failed load: %v", err)
 			}
 			return nil
 		})
