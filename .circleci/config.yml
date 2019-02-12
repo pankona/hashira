@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /go/src/github.com/pankona/hashira
     docker:
-        - image: pankona/golangci:1.12
+        - image: pankona/godev:latest
     environment:
         GO111MODULE: "on"
     steps:
