@@ -132,7 +132,7 @@ func (v *View) moveTaskPlaceTo(t *KeyedTask, pane *Pane, insertTo int) error {
 	// remove specified task from the task originally belonged to
 	err = oldhaunt.tasks.RemoveByKey(t.Id)
 	if err != nil {
-		log.Printf("failed to remove a task [%s] from [%s]", t.Id, oldhaunt.name)
+		log.Printf("failed to remove a task [%s] from [%s]: %v", t.Id, oldhaunt.name, err)
 	}
 
 	err = pane.tasks.Insert(t, insertTo)
@@ -416,7 +416,6 @@ func (v *View) Quit(g *gocui.Gui, _ *gocui.View) error {
 // Layout renders panes on screen
 func (v *View) Layout(g *gocui.Gui) error {
 	for _, p := range v.panes {
-
 		focusedIndex := -1
 		if p == v.cursor.focusedPane {
 			if v.focusedIndex < 0 {
