@@ -33,7 +33,8 @@ func (v *View) ConfigureKeyBindings(g *gocui.Gui) error {
 		ec.setError(g.SetKeybinding(p.name, 'j', gocui.ModNone, v.Down))
 		ec.setError(g.SetKeybinding(p.name, gocui.KeyArrowDown, gocui.ModNone, v.Down))
 
-		ec.setError(g.SetKeybinding(p.name, 'x', gocui.ModNone, v.KeyX))
+		ec.setError(g.SetKeybinding(p.name, 'x', gocui.ModNone, v.KeyDelete))
+		ec.setError(g.SetKeybinding(p.name, gocui.KeyDelete, gocui.ModNone, v.KeyDelete))
 		ec.setError(g.SetKeybinding(p.name, 'i', gocui.ModNone, v.KeyI))
 		ec.setError(g.SetKeybinding(p.name, 'I', gocui.ModNone, v.KeyShiftI))
 		ec.setError(g.SetKeybinding(p.name, 'e', gocui.ModNone, v.KeyE))
@@ -55,8 +56,8 @@ func (v *View) KeyRight(g *gocui.Gui, _ *gocui.View) error {
 	return v.Right()
 }
 
-// KeyX reacts for "x"
-func (v *View) KeyX(*gocui.Gui, *gocui.View) error {
+// KeyDelete reacts for "delete" and "x"
+func (v *View) KeyDelete(*gocui.Gui, *gocui.View) error {
 	t := v.FocusedTask()
 	return v.markTaskAsDone(t)
 }
