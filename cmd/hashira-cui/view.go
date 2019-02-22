@@ -280,7 +280,8 @@ func (v *View) selectFocusedTask() error {
 
 // FocusedTask returns a task that is focused by cursor
 func (v *View) FocusedTask() *KeyedTask {
-	if v.focusedIndex < 0 {
+	if v.focusedIndex < 0 ||
+		v.cursor.focusedPane.tasks.Len() <= v.focusedIndex {
 		return nil
 	}
 	t := v.cursor.focusedPane.tasks.GetByIndex(v.focusedIndex)
