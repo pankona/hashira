@@ -137,7 +137,7 @@ func (v *View) moveTaskPlaceTo(t *KeyedTask, pane *Pane, insertTo int) error {
 
 	err = pane.tasks.Insert(t, insertTo)
 	if err != nil {
-		return fmt.Errorf("failed to insert [%s] to [%s]. fatal", t.Name, pane.name)
+		log.Printf("failed to insert [%s] to [%s]. fatal: %v", t.Name, pane.name, err)
 	}
 
 	v.priorities[oldhaunt.place.String()].Ids = oldhaunt.tasks.Order()
