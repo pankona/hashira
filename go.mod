@@ -6,7 +6,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc // indirect
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
 	github.com/asticode/go-astilectron v0.8.0
-	github.com/asticode/go-astilectron-bundler v0.0.0-20190202135539-c9219b8cd01b
+	github.com/asticode/go-astilectron-bundler v0.0.0-20190221164801-6b22eafb3c85
 	github.com/asticode/go-astitools v1.0.0 // indirect
 	github.com/asticode/go-bindata v0.0.0-20151023091102-a0ff2567cfb7 // indirect
 	github.com/etcd-io/bbolt v1.3.2
@@ -25,8 +25,8 @@ require (
 	go.opencensus.io v0.19.0 // indirect
 	golang.org/x/crypto v0.0.0-20190219172222-a4c6cb3142f2 // indirect
 	golang.org/x/net v0.0.0-20190213061140-3a22650c66bd
-	golang.org/x/oauth2 v0.0.0-20190219183015-4b83411ed2b3 // indirect
-	golang.org/x/sys v0.0.0-20190219203350-90b0e4468f99 // indirect
+	golang.org/x/oauth2 v0.0.0-20190220154721-9b3c75971fc9 // indirect
+	golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223 // indirect
 	google.golang.org/genproto v0.0.0-20190219182410-082222b4a5c5 // indirect
 	google.golang.org/grpc v1.18.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6

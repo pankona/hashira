@@ -69,8 +69,8 @@ func (b *BoltDB) Save(bucket, id string, value []byte) (string, error) {
 						return fmt.Errorf("failed to create bucket: %v", err)
 					}
 					if id == "" {
-						u, err := uuid.NewV4()
-						if err != nil {
+						u, e := uuid.NewV4()
+						if e != nil {
 							return fmt.Errorf("failed generate uuid: %v", err)
 						}
 						id = u.String()

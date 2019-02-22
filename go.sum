@@ -20,8 +20,8 @@ github.com/anmitsu/go-shlex v0.0.0-20161002113705-648efa622239/go.mod h1:2FmKhYU
 github.com/asticode/go-astiamqp v1.0.0/go.mod h1:PDHG8FjHJDtbDNNHixFCm80+7Ma1dKvwYl325Mj5DI4=
 github.com/asticode/go-astilectron v0.8.0 h1:OuLahP7CKcQNyXrFMWRzvK4Mymltd94Orp6SvoE4P4g=
 github.com/asticode/go-astilectron v0.8.0/go.mod h1:XN7r4w/s0Eu7D5TgmXuPN07sO8CmYHg95kw2EuW15nE=
-github.com/asticode/go-astilectron-bundler v0.0.0-20190202135539-c9219b8cd01b h1:0BBGNiPcy5uFcML2U3phjLZhuWj7V9r8NqHLsFDLGyM=
-github.com/asticode/go-astilectron-bundler v0.0.0-20190202135539-c9219b8cd01b/go.mod h1:7iR/tJj8CDwh3dlELvVf/GzgPzRoj+5t4zqiAPLOZfI=
+github.com/asticode/go-astilectron-bundler v0.0.0-20190221164801-6b22eafb3c85 h1:IMMknl/D17tmp5hBAf4LbUosnkblirWa7a8emJhiKqs=
+github.com/asticode/go-astilectron-bundler v0.0.0-20190221164801-6b22eafb3c85/go.mod h1:7iR/tJj8CDwh3dlELvVf/GzgPzRoj+5t4zqiAPLOZfI=
 github.com/asticode/go-astilog v1.0.0 h1:l9tek0K7KoQCmhZ7cvBTtVu0NsKpS9hB6jBLtQyxWYk=
 github.com/asticode/go-astilog v1.0.0/go.mod h1:Vg6SGUYb3tVyFeGQe0Mqmh0RMygpwy+huFKcyL92EVc=
 github.com/asticode/go-astitools v1.0.0 h1:B5l3sI+hgQJsUNyLgd6pHrhH75GAtFzZVIirso7oFeg=
@@ -180,8 +180,8 @@ golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be/go.mod h1:N/0e6XlmueqKjAG
 golang.org/x/oauth2 v0.0.0-20181017192945-9dcd33a902f4/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=
 golang.org/x/oauth2 v0.0.0-20181203162652-d668ce993890 h1:uESlIz09WIHT2I+pasSXcpLYqYK8wHcdCetU3VuMBJE=
 golang.org/x/oauth2 v0.0.0-20181203162652-d668ce993890/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=
-golang.org/x/oauth2 v0.0.0-20190219183015-4b83411ed2b3 h1:OFrJ/rEn4wUq1PbIHcIdfOGIy3uCTe5XOealV2ngn/w=
-golang.org/x/oauth2 v0.0.0-20190219183015-4b83411ed2b3/go.mod h1:gOpvHmFTYa4IltrdGE7lF6nIHvwfUNPOp7c8zoXwtLw=
+golang.org/x/oauth2 v0.0.0-20190220154721-9b3c75971fc9 h1:pfyU+l9dEu0vZzDDMsdAKa1gZbJYEn6urYXj/+Xkz7s=
+golang.org/x/oauth2 v0.0.0-20190220154721-9b3c75971fc9/go.mod h1:gOpvHmFTYa4IltrdGE7lF6nIHvwfUNPOp7c8zoXwtLw=
 golang.org/x/perf v0.0.0-20180704124530-6e6d33e29852/go.mod h1:JLpeXjPJfIyPr5TlbXLkXWLhP8nz10XfvxElABhCtcw=
 golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20181108010431-42b317875d0f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
@@ -193,8 +193,8 @@ golang.org/x/sys v0.0.0-20180909124046-d0be0721c37e/go.mod h1:STP8DvDyc/dI5b8T5h
 golang.org/x/sys v0.0.0-20181029174526-d69651ed3497/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20181217223516-dcdaa6325bcb/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20181218192612-074acd46bca6/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
-golang.org/x/sys v0.0.0-20190219203350-90b0e4468f99 h1:mlL4HvR5ojTCLdWRydhoj7jto5SXLsxLc0b1r/3DNlE=
-golang.org/x/sys v0.0.0-20190219203350-90b0e4468f99/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
+golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223 h1:DH4skfRX4EBpamg7iV4ZlCpblAHI6s6TDM39bFZumv8=
+golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2 h1:z99zHgr7hKfrUcX/KsoJk5FJfjTceCKIp96+biqP4To=
 golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
