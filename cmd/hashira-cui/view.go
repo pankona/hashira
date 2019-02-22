@@ -132,12 +132,12 @@ func (v *View) moveTaskPlaceTo(t *KeyedTask, pane *Pane, insertTo int) error {
 	// remove specified task from the task originally belonged to
 	err = oldhaunt.tasks.RemoveByKey(t.Id)
 	if err != nil {
-		log.Printf("failed to remove a task [%s] from [%s]", t.Id, oldhaunt.name)
+		log.Printf("failed to remove a task [%s] from [%s]: %v", t.Id, oldhaunt.name, err)
 	}
 
 	err = pane.tasks.Insert(t, insertTo)
 	if err != nil {
-		return fmt.Errorf("failed to insert [%s] to [%s]. fatal", t.Name, pane.name)
+		log.Printf("failed to insert [%s] to [%s]. fatal: %v", t.Name, pane.name, err)
 	}
 
 	v.priorities[oldhaunt.place.String()].Ids = oldhaunt.tasks.Order()
@@ -280,7 +280,8 @@ func (v *View) selectFocusedTask() error {
 
 // FocusedTask returns a task that is focused by cursor
 func (v *View) FocusedTask() *KeyedTask {
-	if v.focusedIndex < 0 {
+	if v.focusedIndex < 0 ||
+		v.cursor.focusedPane.tasks.Len() <= v.focusedIndex {
 		return nil
 	}
 	t := v.cursor.focusedPane.tasks.GetByIndex(v.focusedIndex)
@@ -415,7 +416,6 @@ func (v *View) Quit(g *gocui.Gui, _ *gocui.View) error {
 // Layout renders panes on screen
 func (v *View) Layout(g *gocui.Gui) error {
 	for _, p := range v.panes {
-
 		focusedIndex := -1
 		if p == v.cursor.focusedPane {
 			if v.focusedIndex < 0 {
