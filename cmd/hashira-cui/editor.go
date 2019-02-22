@@ -15,9 +15,7 @@ func (e *hashiraEditor) Edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Mo
 		v.MoveCursor(+1, 0, false)
 	case gocui.KeyCtrlB:
 		v.MoveCursor(-1, 0, false)
-	case gocui.KeyHome:
-		fallthrough
-	case gocui.KeyCtrlA:
+	case gocui.KeyHome, gocui.KeyCtrlA:
 		// move to start of line
 		_, oy := v.Origin()
 		err := v.SetOrigin(0, oy)
@@ -27,9 +25,7 @@ func (e *hashiraEditor) Edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Mo
 		}
 		maxX, _ := v.Size()
 		v.MoveCursor(-maxX, 0, false)
-	case gocui.KeyEnd:
-		fallthrough
-	case gocui.KeyCtrlE:
+	case gocui.KeyEnd, gocui.KeyCtrlE:
 		// move to end of line
 		_, oy := v.Origin()
 		err := v.SetOrigin(0, oy)
