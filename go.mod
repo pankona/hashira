@@ -11,7 +11,7 @@ require (
 	github.com/asticode/go-bindata v0.0.0-20151023091102-a0ff2567cfb7 // indirect
 	github.com/etcd-io/bbolt v1.3.2
 	github.com/gofrs/uuid v3.2.0+incompatible
-	github.com/golang/protobuf v1.2.0
+	github.com/golang/protobuf v1.3.0
 	github.com/jesseduffield/termbox-go v0.0.0-20180919093808-1e272ff78dcb // indirect
 	github.com/mattn/go-colorable v0.1.0 // indirect
 	github.com/mattn/go-runewidth v0.0.4
