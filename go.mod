@@ -28,6 +28,6 @@ require (
 	golang.org/x/oauth2 v0.0.0-20190220154721-9b3c75971fc9 // indirect
 	golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223 // indirect
 	google.golang.org/genproto v0.0.0-20190219182410-082222b4a5c5 // indirect
-	google.golang.org/grpc v1.19.0
+	google.golang.org/grpc v1.19.1
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 )
