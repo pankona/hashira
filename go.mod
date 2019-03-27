@@ -1,7 +1,7 @@
 module github.com/pankona/hashira
 
 require (
-	cloud.google.com/go v0.37.1
+	cloud.google.com/go v0.37.2
 	github.com/akavel/rsrc v0.0.0-20170831122431-f6a15ece2cfd // indirect
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc // indirect
 	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
