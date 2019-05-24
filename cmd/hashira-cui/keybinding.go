@@ -66,9 +66,14 @@ func (v *View) KeyDelete(*gocui.Gui, *gocui.View) error {
 func (v *View) KeyI(g *gocui.Gui, gv *gocui.View) error {
 	t := v.FocusedTask()
 	if t == nil {
-		log.Printf("focusedTask is nil")
 		return nil
 	}
+
+	if v.selectedTask != nil &&
+		t.Id == v.selectedTask.Id {
+		v.selectedTask = nil
+	}
+
 	return v.moveTaskTo(t, dirRight)
 }
 
@@ -80,9 +85,14 @@ func (v *View) KeyShiftI(g *gocui.Gui, gv *gocui.View) error {
 
 	t := v.FocusedTask()
 	if t == nil {
-		log.Printf("focusedTask is nil")
 		return nil
 	}
+
+	if v.selectedTask != nil &&
+		t.Id == v.selectedTask.Id {
+		v.selectedTask = nil
+	}
+
 	return v.moveTaskTo(t, dirLeft)
 }
 
