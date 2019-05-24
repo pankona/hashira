@@ -3,11 +3,9 @@ module github.com/pankona/hashira
 require (
 	cloud.google.com/go v0.37.2
 	github.com/akavel/rsrc v0.0.0-20170831122431-f6a15ece2cfd // indirect
-	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc // indirect
-	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
+	github.com/asticode/go-astiamqp v1.0.0 // indirect
 	github.com/asticode/go-astilectron v0.8.0
-	github.com/asticode/go-astilectron-bundler v0.0.0-20190221164801-6b22eafb3c85
-	github.com/asticode/go-astitools v1.0.0 // indirect
+	github.com/asticode/go-astilectron-bundler v0.0.0-20190426172205-155c2a10bbb1
 	github.com/asticode/go-bindata v0.0.0-20151023091102-a0ff2567cfb7 // indirect
 	github.com/etcd-io/bbolt v1.3.2
 	github.com/gofrs/uuid v3.2.0+incompatible
@@ -22,12 +20,10 @@ require (
 	github.com/sirupsen/logrus v1.3.0 // indirect
 	github.com/stretchr/testify v1.3.0
 	go.etcd.io/bbolt v1.3.2 // indirect
-	go.opencensus.io v0.19.0 // indirect
-	golang.org/x/crypto v0.0.0-20190219172222-a4c6cb3142f2 // indirect
-	golang.org/x/net v0.0.0-20190213061140-3a22650c66bd
-	golang.org/x/oauth2 v0.0.0-20190220154721-9b3c75971fc9 // indirect
+	golang.org/x/net v0.0.0-20190311183353-d8887717615a
 	golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223 // indirect
-	google.golang.org/genproto v0.0.0-20190219182410-082222b4a5c5 // indirect
 	google.golang.org/grpc v1.19.1
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
+	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
+	gopkg.in/yaml.v2 v2.2.2 // indirect
 )
