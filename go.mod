@@ -22,7 +22,7 @@ require (
 	go.etcd.io/bbolt v1.3.2 // indirect
 	golang.org/x/net v0.0.0-20190311183353-d8887717615a
 	golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223 // indirect
-	google.golang.org/grpc v1.21.0
+	google.golang.org/grpc v1.21.1
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/yaml.v2 v2.2.2 // indirect
