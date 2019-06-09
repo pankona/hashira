@@ -3,6 +3,7 @@ package kvstore
 import (
 	"context"
 	"encoding/json"
+	"log"
 
 	"cloud.google.com/go/datastore"
 )
@@ -13,7 +14,7 @@ const dsProjectName = "hashira-auth"
 type DSStore struct{}
 
 type entity struct {
-	value []byte
+	Value []byte
 }
 
 func (s *DSStore) Store(bucket, k string, v interface{}) {
@@ -21,6 +22,7 @@ func (s *DSStore) Store(bucket, k string, v interface{}) {
 	dsClient, err := datastore.NewClient(ctx, dsProjectName)
 	if err != nil {
 		// Handle error.
+		panic(err)
 	}
 
 	key := datastore.NameKey(bucket, k, nil)
@@ -30,7 +32,7 @@ func (s *DSStore) Store(bucket, k string, v interface{}) {
 		panic(err)
 	}
 
-	e := &entity{value: buf}
+	e := &entity{Value: buf}
 	if _, err := dsClient.Put(ctx, key, e); err != nil {
 		// TODO: error handling
 		panic(err)
@@ -53,9 +55,9 @@ func (s *DSStore) Load(bucket, k string) (interface{}, bool) {
 	}
 
 	var v interface{}
-	if err := json.Unmarshal(e.value, &v); err != nil {
+	if err := json.Unmarshal(e.Value, &v); err != nil {
 		// TODO: error handling
-		panic(err)
+		return nil, false
 	}
 
 	return v, true
