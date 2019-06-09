@@ -7,9 +7,9 @@ import (
 	"net/http"
 
 	"github.com/coreos/go-oidc"
-	"github.com/pankona/hashira-auth/kvstore"
-	"github.com/pankona/hashira-auth/user"
-	"github.com/satori/go.uuid"
+	"github.com/pankona/hashira/kvstore"
+	"github.com/pankona/hashira/user"
+	uuid "github.com/satori/go.uuid"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 )

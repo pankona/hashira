@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/pankona/hashira-auth/google"
-	"github.com/pankona/hashira-auth/kvstore"
-	"github.com/pankona/hashira-auth/twitter"
+	"github.com/pankona/hashira/auth/google"
+	"github.com/pankona/hashira/auth/twitter"
+	"github.com/pankona/hashira/kvstore"
 )
 
 func main() {
