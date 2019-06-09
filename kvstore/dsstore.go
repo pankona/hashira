@@ -3,7 +3,6 @@ package kvstore
 import (
 	"context"
 	"encoding/json"
-	"log"
 
 	"cloud.google.com/go/datastore"
 )

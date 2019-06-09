@@ -10,9 +10,10 @@ PB_GOS = $(PROTOS:%.proto=$(PB_GO_DIR)/%.pb.go)
 BUILD_CMD ?= go build
 
 build:
-	cd $(CURDIR)/cmd/hashira     && $(BUILD_CMD)
-	cd $(CURDIR)/cmd/hashirad    && $(BUILD_CMD)
-	cd $(CURDIR)/cmd/hashira-cui && $(BUILD_CMD)
+	cd $(CURDIR)/cmd/hashira      && $(BUILD_CMD)
+	cd $(CURDIR)/cmd/hashirad     && $(BUILD_CMD)
+	cd $(CURDIR)/cmd/hashira-cui  && $(BUILD_CMD)
+	cd $(CURDIR)/cmd/hashira-auth && $(BUILD_CMD)
 
 install:
 	@BUILD_CMD="go install" make build
@@ -34,7 +35,7 @@ $(PB_GO_DIR)/%.pb.go: $(PROTO_DIR)/%.proto
 	protoc -I $(PROTO_DIR) --go_out=plugins=grpc:$(dir $@) ./$<
 
 golangci-lint:
-	golangci-lint run --deadline 300s --verbose
+	golangci-lint run --deadline 300s ./...
 
 lint:
 	gometalinter \
