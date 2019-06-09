@@ -41,12 +41,11 @@ lint:
 	gometalinter \
 		--vendor \
 		--deadline=300s \
-		--skip=$(CURDIR)/cmd/hashira-gui \
 		--skip=$(CURDIR)/service \
 		$(CURDIR)/...
 
 test:
-	go test -count=1 `go list ./... | grep -v cmd/hashira-gui`
+	go test -count=1 `go list ./...`
 
 clean:
 	rm -rf $(PB_GO_DIR)
