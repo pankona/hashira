@@ -14,6 +14,7 @@ require (
 	github.com/mattn/go-colorable v0.1.0 // indirect
 	github.com/mattn/go-runewidth v0.0.4
 	github.com/pankona/gocui v0.3.1-0.20190107094646-a6233010013f
+	github.com/pankona/hashira-auth v0.0.0-20190526072351-5ab0ba90b063
 	github.com/pankona/orderedmap v0.0.0-20190220081458-0d2a73efbdac
 	github.com/pkg/errors v0.8.1
 	github.com/sam-kamerer/go-plister v0.0.0-20190202124357-57f251aa88ff // indirect
@@ -24,6 +25,5 @@ require (
 	golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223 // indirect
 	google.golang.org/grpc v1.21.1
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
-	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/yaml.v2 v2.2.2 // indirect
 )
