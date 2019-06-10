@@ -19,7 +19,8 @@ type testEntity struct {
 // $ export DATASTORE_EMULATOR_HOST=localhost:8081
 func TestHowToUseDataStore(t *testing.T) {
 	if os.Getenv("DATASTORE_EMULATOR_HOST") == "" {
-		t.Fatalf("Run DataStore emulator and configure environment variable of \"DATASTORE_EMULATOR_HOST\" in advance to run this test.")
+		t.Fatalf("Run DataStore emulator and configure environment variable " +
+			"\"DATASTORE_EMULATOR_HOST\" in advance to run this test.")
 	}
 
 	ctx := context.Background()
