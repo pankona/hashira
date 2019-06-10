@@ -44,7 +44,9 @@ func main() {
 			msg += "<a href=/auth/google>login by google</a><br>"
 			msg += "<a href=/auth/twitter>login by twitter</a><br>"
 			msg += "</html>"
-			w.Write([]byte(msg))
+			if _, e := w.Write([]byte(msg)); e != nil {
+				log.Printf("failed to write response: %v", e)
+			}
 			return
 		}
 
@@ -54,7 +56,9 @@ func main() {
 			msg += "<a href=/auth/google>login by google</a><br>"
 			msg += "<a href=/auth/twitter>login by twitter</a><br>"
 			msg += "</html>"
-			w.Write([]byte(msg))
+			if _, e := w.Write([]byte(msg)); e != nil {
+				log.Printf("failed to write response: %v", e)
+			}
 			return
 		}
 
@@ -64,7 +68,9 @@ func main() {
 			msg += "<a href=/auth/google>login by google</a><br>"
 			msg += "<a href=/auth/twitter>login by twitter</a><br>"
 			msg += "</html>"
-			w.Write([]byte(msg))
+			if _, e := w.Write([]byte(msg)); e != nil {
+				log.Printf("failed to write response: %v", e)
+			}
 			return
 		}
 		msg += fmt.Sprintf("Hello, %s!<br>", u.(map[string]interface{})["Name"])
