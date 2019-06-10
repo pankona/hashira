@@ -89,10 +89,7 @@ func main() {
 	c.SetPublisher(ps)
 	// prepare view
 	v := &View{}
-	err = v.Initialize(g, c)
-	if err != nil {
-		panic(fmt.Sprintf("failed to initialize view: %s", err.Error()))
-	}
+	v.Initialize(g, c)
 	g.SetManager(v)
 
 	err = v.ConfigureKeyBindings(g)

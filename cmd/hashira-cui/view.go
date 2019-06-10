@@ -29,7 +29,7 @@ type View struct {
 }
 
 // Initialize initializes view
-func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
+func (v *View) Initialize(g *gocui.Gui, d Delegater) {
 	// pane display names
 	v.pn = []string{
 		"Backlog",
@@ -85,8 +85,6 @@ func (v *View) Initialize(g *gocui.Gui, d Delegater) error {
 		focusedPane: v.panes[v.pn[0]],
 	}
 	v.editor = &hashiraEditor{}
-
-	return nil
 }
 
 // Left represents action for left key
