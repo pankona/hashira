@@ -16,12 +16,13 @@ import (
 )
 
 type Google struct {
-	id       string
-	secret   string
-	provider *oidc.Provider
-	verifier *oidc.IDTokenVerifier
-	config   oauth2.Config
-	kvstore  kvstore.KVStore
+	id         string
+	secret     string
+	provider   *oidc.Provider
+	verifier   *oidc.IDTokenVerifier
+	config     oauth2.Config
+	kvstore    kvstore.KVStore
+	credential map[string]struct{}
 }
 
 func New(id, secret, callbackURL string, kvstore kvstore.KVStore) *Google {
@@ -43,12 +44,13 @@ func New(id, secret, callbackURL string, kvstore kvstore.KVStore) *Google {
 	}
 
 	return &Google{
-		id:       id,
-		secret:   secret,
-		provider: provider,
-		verifier: verifier,
-		config:   config,
-		kvstore:  kvstore,
+		id:         id,
+		secret:     secret,
+		provider:   provider,
+		verifier:   verifier,
+		config:     config,
+		kvstore:    kvstore,
+		credential: make(map[string]struct{}),
 	}
 }
 
@@ -56,19 +58,25 @@ func (g *Google) Register(pattern string) {
 	http.Handle(pattern, http.StripPrefix(pattern, g))
 }
 
-var state = "foobar" // Don't do this in production.
-
 func (g *Google) handleCode(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, g.config.AuthCodeURL(state), http.StatusFound)
+	id := uuid.NewV4().String()
+	url := g.config.AuthCodeURL(id)
+	g.credential[id] = struct{}{}
+
+	http.Redirect(w, r, url, http.StatusFound)
 }
 
 func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 
-	if r.URL.Query().Get("state") != state {
+	state := r.URL.Query().Get("state")
+	if _, ok := g.credential[state]; !ok {
 		http.Error(w, "state did not match", http.StatusBadRequest)
 		return
 	}
+
+	// TODO: exclude control
+	delete(g.credential, state)
 
 	oauth2Token, err := g.config.Exchange(ctx, r.URL.Query().Get("code"))
 	if err != nil {
