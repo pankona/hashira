@@ -34,15 +34,8 @@ $(PB_GO_DIR)/%.pb.go: $(PROTO_DIR)/%.proto
 	mkdir -p $(dir $@)
 	protoc -I $(PROTO_DIR) --go_out=plugins=grpc:$(dir $@) ./$<
 
-golangci-lint:
-	golangci-lint run --deadline 300s ./...
-
 lint:
-	gometalinter \
-		--vendor \
-		--deadline=300s \
-		--skip=$(CURDIR)/service \
-		$(CURDIR)/...
+	golangci-lint run --deadline 300s ./...
 
 test:
 	go test -count=1 `go list ./...`
