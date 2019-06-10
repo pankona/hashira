@@ -90,7 +90,9 @@ func main() {
 		}
 
 		msg += "</html>"
-		w.Write([]byte(msg))
+		if _, e := w.Write([]byte(msg)); e != nil {
+			log.Printf("failed to write response: %v", e)
+		}
 	})
 
 	http.HandleFunc("/api/v1/accesstoken", func(w http.ResponseWriter, r *http.Request) {
