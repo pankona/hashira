@@ -3,6 +3,7 @@ package twitter
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 
@@ -165,7 +166,10 @@ func fetchPhraseFromMashimashi() (string, error) {
 	}
 	defer func() {
 		if resp != nil {
-			resp.Body.Close()
+			err := resp.Body.Close()
+			if err != nil {
+				log.Printf("failed to close response body: %v", err)
+			}
 		}
 	}()
 
