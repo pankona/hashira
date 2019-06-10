@@ -2,6 +2,7 @@ package google
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -127,7 +128,8 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 			// this user is already registered by other oauth provider
 			v, ok := g.kvstore.Load("userByUserID", uid.(string))
 			if !ok {
-				// fatal
+				// TODO: error handling
+				panic("failed to load user ID. fatal.")
 			}
 			us := v.(user.User)
 			us.GoogleID = idToken.Subject
@@ -147,6 +149,7 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 	username, err := fetchPhraseFromMashimashi()
 	if err != nil {
 		// TODO: error handling
+		panic(fmt.Sprintf("failed to fetch phrase from mashimashi: %v", err))
 	}
 
 	g.kvstore.Store("userIDByIDToken", idToken.Subject, userID.String())
