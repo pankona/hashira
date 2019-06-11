@@ -196,11 +196,9 @@ func fetchPhraseFromMashimashi() (string, error) {
 		return "", err
 	}
 	defer func() {
-		if resp != nil {
-			err := resp.Body.Close()
-			if err != nil {
-				log.Printf("failed to close response body: %v", err)
-			}
+		err := resp.Body.Close()
+		if err != nil {
+			log.Printf("failed to close response body: %v", err)
 		}
 	}()
 
