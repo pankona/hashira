@@ -11,6 +11,12 @@ import (
 	"github.com/pankona/hashira/kvstore"
 )
 
+const indexTemplate = `
+"<a href=/auth/google>login by google</a><br>"
+"<a href=/auth/twitter>login by twitter</a><br>"
+"</html>"
+`
+
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -41,9 +47,7 @@ func main() {
 		if err != nil {
 			msg += fmt.Sprintf("No Authorization info found...<br>")
 			msg += fmt.Sprintf("Cookies: %v<br>", r.Cookies())
-			msg += "<a href=/auth/google>login by google</a><br>"
-			msg += "<a href=/auth/twitter>login by twitter</a><br>"
-			msg += "</html>"
+			msg += indexTemplate
 			if _, e := w.Write([]byte(msg)); e != nil {
 				log.Printf("failed to write response: %v", e)
 			}
@@ -53,9 +57,7 @@ func main() {
 		userID, ok := kvs.Load("userIDByAccessToken", a.Value)
 		if !ok {
 			msg += fmt.Sprintf("UserID that has access token [%s] not found...<br>", a.Value)
-			msg += "<a href=/auth/google>login by google</a><br>"
-			msg += "<a href=/auth/twitter>login by twitter</a><br>"
-			msg += "</html>"
+			msg += indexTemplate
 			if _, e := w.Write([]byte(msg)); e != nil {
 				log.Printf("failed to write response: %v", e)
 			}
@@ -65,9 +67,7 @@ func main() {
 		u, ok := kvs.Load("userByUserID", userID.(string))
 		if !ok {
 			msg += fmt.Sprintf("User that has user ID [%s] not found...<br>", userID.(string))
-			msg += "<a href=/auth/google>login by google</a><br>"
-			msg += "<a href=/auth/twitter>login by twitter</a><br>"
-			msg += "</html>"
+			msg += indexTemplate
 			if _, e := w.Write([]byte(msg)); e != nil {
 				log.Printf("failed to write response: %v", e)
 			}
