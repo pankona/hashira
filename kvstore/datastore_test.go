@@ -17,7 +17,7 @@ type testEntity struct {
 // DATASTORE_EMULATOR_HOST is not set as a environment variable,
 // this function forcibly goes failure.
 // $ export DATASTORE_EMULATOR_HOST=localhost:8081
-func TestHowToUseDataStore(t *testing.T) {
+func testHowToUseDataStore(t *testing.T) {
 	if os.Getenv("DATASTORE_EMULATOR_HOST") == "" {
 		t.Fatalf("Run DataStore emulator and configure environment variable " +
 			"\"DATASTORE_EMULATOR_HOST\" in advance to run this test.")
@@ -59,7 +59,7 @@ func TestHowToUseDataStore(t *testing.T) {
 	}
 }
 
-func TestStoreAndLoad(t *testing.T) {
+func testStoreAndLoad(t *testing.T) {
 	ds := &DSStore{}
 	ds.Store("bucket", "key", "value")
 	v, ok := ds.Load("bucket", "key")
@@ -69,4 +69,15 @@ func TestStoreAndLoad(t *testing.T) {
 	if "value" != v.(string) {
 		t.Fatalf("unexpected result. [want] %s [got] %s", "value", v.(string))
 	}
+}
+
+func TestDataStoreUsage(t *testing.T) {
+	if os.Getenv("DATASTORE_EMULATOR_HOST") == "" {
+		t.Logf("Run DataStore emulator and configure environment variable " +
+			"\"DATASTORE_EMULATOR_HOST\" in advance to run this test.")
+		return
+	}
+
+	testHowToUseDataStore(t)
+	testStoreAndLoad(t)
 }
