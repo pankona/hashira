@@ -18,13 +18,6 @@ build:
 install:
 	@BUILD_CMD="go install" make build
 
-vendor: $(GOPATH)/bin/dep
-	dep ensure
-
-$(GOPATH)/bin/dep:
-	$(error dep is not installed. install dep by following command: \
-		curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh)
-
 all: genproto lint test
 	make build
 
