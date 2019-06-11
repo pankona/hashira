@@ -15,6 +15,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// Google is a struct to provide hashira's OIDC functionality using Google
 type Google struct {
 	id         string
 	secret     string
@@ -25,6 +26,7 @@ type Google struct {
 	credential map[string]struct{}
 }
 
+// New returns Google instance with specified arguments
 func New(id, secret, callbackURL string, kvstore kvstore.KVStore) *Google {
 	provider, err := oidc.NewProvider(context.Background(), "https://accounts.google.com")
 	if err != nil {
@@ -54,6 +56,7 @@ func New(id, secret, callbackURL string, kvstore kvstore.KVStore) *Google {
 	}
 }
 
+// Register registers an endpoint for Google OIDC
 func (g *Google) Register(pattern string) {
 	http.Handle(pattern, http.StripPrefix(pattern, g))
 }

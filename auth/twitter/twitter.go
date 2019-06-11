@@ -14,6 +14,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+// Twitter is a struct to provide hashira's oauth functionality using twitter
 type Twitter struct {
 	consumerKey       string
 	consumerSecret    string
@@ -25,6 +26,7 @@ type Twitter struct {
 	credential        map[string]*oauth.Credentials
 }
 
+// New returns Twitter instance with specified arguments
 func New(consumerKey, consumerSecret,
 	accessToken, accessTokenSecret,
 	callbackURL string, kvstore kvstore.KVStore) *Twitter {
@@ -50,6 +52,7 @@ func New(consumerKey, consumerSecret,
 	return t
 }
 
+// Register registers an endpoint for Twitter oauth
 func (t *Twitter) Register(pattern string) {
 	http.Handle(pattern, http.StripPrefix(pattern, t))
 }

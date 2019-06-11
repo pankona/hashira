@@ -10,12 +10,14 @@ import (
 // TODO: this should not be placed here
 const dsProjectName = "hashira-auth"
 
+// DSStore is an struct that implements KVStore interface using google cloud datastore
 type DSStore struct{}
 
 type entity struct {
 	Value []byte
 }
 
+// Store stores value associated with key to bucket
 func (s *DSStore) Store(bucket, k string, v interface{}) {
 	ctx := context.Background()
 	dsClient, err := datastore.NewClient(ctx, dsProjectName)
@@ -38,6 +40,7 @@ func (s *DSStore) Store(bucket, k string, v interface{}) {
 	}
 }
 
+// Load loads key's value from bucket
 func (s *DSStore) Load(bucket, k string) (interface{}, bool) {
 	ctx := context.Background()
 	dsClient, err := datastore.NewClient(ctx, dsProjectName)
