@@ -11,3 +11,5 @@ cmd/hashira-auth/hashira-auth
 cmd/hashira-auth/secret.yaml
 .idea/
 vendor/
+
+datastore-export-*
