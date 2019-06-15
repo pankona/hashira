@@ -10,7 +10,7 @@ deploy:
 	GO111MODULE=on gcloud app deploy -q --promote --stop-previous-version
 
 datastore-emulator:
-	GO111MODULE=on gcloud beta emulators datastore start --no-store-on-disk
+	GO111MODULE=on gcloud beta emulators datastore start --data-dir=$(CURDIR)
 
 list:
 	gcloud app versions list
