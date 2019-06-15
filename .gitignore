@@ -9,6 +9,8 @@ cmd/hashira-cui/github-release.sh
 cmd/hashira-cui/pkg
 cmd/hashira-auth/hashira-auth
 cmd/hashira-auth/secret.yaml
+cmd/hashira-auth/WEB-INF
+cmd/hashira-auth/env.yaml
 .idea/
 vendor/
 
