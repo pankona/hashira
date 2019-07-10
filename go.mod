@@ -13,7 +13,7 @@ require (
 	github.com/etcd-io/bbolt v1.3.3
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17
 	github.com/gofrs/uuid v3.2.0+incompatible
-	github.com/golang/protobuf v1.3.1
+	github.com/golang/protobuf v1.3.2
 	github.com/googleapis/gax-go/v2 v2.0.5 // indirect
 	github.com/jesseduffield/termbox-go v0.0.0-20180919093808-1e272ff78dcb // indirect
 	github.com/kr/pretty v0.1.0 // indirect
