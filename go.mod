@@ -14,8 +14,7 @@ require (
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17
 	github.com/gofrs/uuid v3.2.0+incompatible
 	github.com/golang/protobuf v1.3.2
-	github.com/googleapis/gax-go/v2 v2.0.5 // indirect
-	github.com/jesseduffield/termbox-go v0.0.0-20180919093808-1e272ff78dcb // indirect
+	github.com/jesseduffield/termbox-go v0.0.0-20190630083001-9dd53af7214e // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mattn/go-runewidth v0.0.4
 	github.com/pankona/gocui v0.3.1-0.20190107094646-a6233010013f
@@ -25,13 +24,11 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.3.0
 	go.etcd.io/bbolt v1.3.3 // indirect
-	go.opencensus.io v0.22.0 // indirect
-	golang.org/x/crypto v0.0.0-20190611184440-5c40567a22f8 // indirect
-	golang.org/x/net v0.0.0-20190613194153-d28f0bde5980
+	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4 // indirect
+	golang.org/x/net v0.0.0-20190628185345-da137c7871d7
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
-	golang.org/x/sys v0.0.0-20190614160838-b47fdc937951 // indirect
-	google.golang.org/appengine v1.6.1 // indirect
-	google.golang.org/genproto v0.0.0-20190611190212-a7e196e89fd3 // indirect
+	golang.org/x/sys v0.0.0-20190712062909-fae7ac547cb7 // indirect
+	google.golang.org/genproto v0.0.0-20190708153700-3bdd9d9f5532 // indirect
 	google.golang.org/grpc v1.22.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
