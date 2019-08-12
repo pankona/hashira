@@ -1,7 +1,7 @@
 module github.com/pankona/hashira
 
 require (
-	cloud.google.com/go v0.44.1
+	cloud.google.com/go/datastore v1.0.0
 	github.com/ChimeraCoder/anaconda v2.0.0+incompatible
 	github.com/ChimeraCoder/tokenbucket v0.0.0-20131201223612-c5a927568de7 // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
@@ -14,8 +14,9 @@ require (
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17
 	github.com/gofrs/uuid v3.2.0+incompatible
 	github.com/golang/protobuf v1.3.2
+	github.com/google/go-cmp v0.3.1 // indirect
+	github.com/hashicorp/golang-lru v0.5.3 // indirect
 	github.com/jesseduffield/termbox-go v0.0.0-20190630083001-9dd53af7214e // indirect
-	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mattn/go-runewidth v0.0.4
 	github.com/pankona/gocui v0.3.1-0.20190107094646-a6233010013f
 	github.com/pankona/orderedmap v0.0.0-20190220081458-0d2a73efbdac
@@ -25,11 +26,13 @@ require (
 	github.com/stretchr/testify v1.3.0
 	go.etcd.io/bbolt v1.3.3 // indirect
 	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4 // indirect
-	golang.org/x/net v0.0.0-20190628185345-da137c7871d7
+	golang.org/x/exp v0.0.0-20190731235908-ec7cb31e5a56 // indirect
+	golang.org/x/net v0.0.0-20190724013045-ca1201d0de80
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
-	golang.org/x/sys v0.0.0-20190712062909-fae7ac547cb7 // indirect
+	golang.org/x/sys v0.0.0-20190813064441-fde4db37ae7a // indirect
+	golang.org/x/tools v0.0.0-20190813034749-528a2984e271 // indirect
 	google.golang.org/grpc v1.22.1
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
-	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/square/go-jose.v2 v2.3.1 // indirect
+	honnef.co/go/tools v0.0.1-2019.2.2 // indirect
 )
