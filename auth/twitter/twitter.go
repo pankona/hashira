@@ -11,6 +11,7 @@ import (
 	"github.com/garyburd/go-oauth/oauth"
 	"github.com/pankona/hashira/kvstore"
 	"github.com/pankona/hashira/user"
+
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -100,7 +101,7 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 			Path:  "/",
 		}
 		http.SetCookie(w, cookie)
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 		return
 	}
 
@@ -150,7 +151,7 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 		Path:  "/",
 	}
 	http.SetCookie(w, cookie)
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 
 }
 

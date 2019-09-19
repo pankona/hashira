@@ -126,7 +126,7 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 			Path:  "/",
 		}
 		http.SetCookie(w, cookie)
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 		return
 	}
 
@@ -146,7 +146,7 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 			us.GoogleID = idToken.Subject
 			g.kvstore.Store("userIDByIDToken", idToken.Subject, us.ID)
 			g.kvstore.Store("userByUserID", us.ID, us)
-			http.Redirect(w, r, "/", http.StatusFound)
+			http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 			return
 		}
 	}
