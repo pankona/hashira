@@ -12,12 +12,6 @@ import (
 	"github.com/pankona/hashira/user"
 )
 
-const indexTemplate = `
-"<a href=/auth/google>login by google</a><br>"
-"<a href=/auth/twitter>login by twitter</a><br>"
-"</html>"
-`
-
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
