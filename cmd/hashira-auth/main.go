@@ -38,7 +38,7 @@ func main() {
 }
 
 func handleAccessToken(w http.ResponseWriter, r *http.Request) {
-	// TODO: implement
+	panic("not implemented")
 	// POST request to generate new access token
 }
 
