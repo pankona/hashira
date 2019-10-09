@@ -11,7 +11,6 @@ interface State {
 export default class App extends Component<Props, State> {
   constructor(props) {
     super(props)
-    console.log("constructor")
     this.state = {
       name: "",
       isConnectedToGoogle:  false,
@@ -20,7 +19,6 @@ export default class App extends Component<Props, State> {
   }
 
   componentDidMount() {
-    console.log("componentDidMount")
     this.getMyInfo()
   }
 
@@ -46,9 +44,9 @@ export default class App extends Component<Props, State> {
     }).then(body => {
       this.setState(prevState => {
         return {
-          "Name": body.Name,
-          "isConnectedToGoogle": body.GoogleID !== "",
-          "isConnectedToTwitter": body.TwitterID !== "",
+          "Name": body.name,
+          "isConnectedToGoogle": body.google_id !== "",
+          "isConnectedToTwitter": body.twitter_id !== "",
         }
       })
     }).catch(error => {
@@ -59,7 +57,7 @@ export default class App extends Component<Props, State> {
   render() {
     return (
       <div>
-        { this.state.Name !== "" ? "Hello, " + this.state.Name + " !" : "" }
+        { this.state.Name ? "Hello, " + this.state.Name + " !" : "Let's login with:" }
         <p><a href="http://localhost:8080/auth/google">login by google</a> {this.state.isConnectedToGoogle ? 'Connected!' : ''}</p>
         <p><a href="http://localhost:8080/auth/twitter">login by twitter</a> {this.state.isConnectedToTwitter ? 'Connected!' : ''}</p>
       </div>
