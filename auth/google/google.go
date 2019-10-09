@@ -142,7 +142,15 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 				// TODO: error handling
 				panic("failed to load user ID. fatal.")
 			}
-			us := v.(user.User)
+			buf, err := json.Marshal(v)
+			if err != nil {
+				panic(err)
+			}
+			us := user.User{}
+			if err = json.Unmarshal(buf, &us); err != nil {
+				panic(err)
+			}
+
 			us.GoogleID = idToken.Subject
 			g.kvstore.Store("userIDByIDToken", idToken.Subject, us.ID)
 			g.kvstore.Store("userByUserID", us.ID, us)
@@ -177,7 +185,7 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 		Path:  "/",
 	}
 	http.SetCookie(w, cookie)
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 }
 
 func (g *Google) ServeHTTP(w http.ResponseWriter, r *http.Request) {
