@@ -1,6 +1,7 @@
 package twitter
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -11,6 +12,7 @@ import (
 	"github.com/garyburd/go-oauth/oauth"
 	"github.com/pankona/hashira/kvstore"
 	"github.com/pankona/hashira/user"
+
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -100,7 +102,7 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 			Path:  "/",
 		}
 		http.SetCookie(w, cookie)
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 		return
 	}
 
@@ -116,11 +118,19 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 				// TODO: error handling
 				panic("failed to load user ID. fatal.")
 			}
-			us := v.(map[string]interface{})
-			us["TwitterID"] = u.IdStr
-			t.kvstore.Store("userIDByIDToken", u.IdStr, us["ID"])
-			t.kvstore.Store("userByUserID", us["ID"].(string), us)
-			http.Redirect(w, r, "/", http.StatusFound)
+			buf, err := json.Marshal(v)
+			if err != nil {
+				panic(err)
+			}
+			us := user.User{}
+			if err = json.Unmarshal(buf, &us); err != nil {
+				panic(err)
+			}
+
+			us.TwitterID = u.IdStr
+			t.kvstore.Store("userIDByIDToken", u.IdStr, us.ID)
+			t.kvstore.Store("userByUserID", us.ID, us)
+			http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 			return
 		}
 	}
@@ -150,7 +160,7 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 		Path:  "/",
 	}
 	http.SetCookie(w, cookie)
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 
 }
 

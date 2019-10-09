@@ -8,6 +8,7 @@ PROTOS = $(shell find $(PROTO_DIR) | grep proto$$)
 PB_GOS = $(PROTOS:%.proto=$(PB_GO_DIR)/%.pb.go)
 
 BUILD_CMD ?= go build
+UPDATE_DEPENDENCIES_CMD ?= go get -u && go mod tidy
 
 build:
 	cd $(CURDIR)/cmd/hashira      && $(BUILD_CMD)
@@ -26,6 +27,12 @@ genproto: $(PB_GOS)
 $(PB_GO_DIR)/%.pb.go: $(PROTO_DIR)/%.proto
 	mkdir -p $(dir $@)
 	protoc -I $(PROTO_DIR) --go_out=plugins=grpc:$(dir $@) ./$<
+
+update-dependencies:
+	cd $(CURDIR)/cmd/hashira      && $(UPDATE_DEPENDENCIES_CMD)
+	cd $(CURDIR)/cmd/hashirad     && $(UPDATE_DEPENDENCIES_CMD)
+	cd $(CURDIR)/cmd/hashira-cui  && $(UPDATE_DEPENDENCIES_CMD)
+	cd $(CURDIR)/cmd/hashira-auth && $(UPDATE_DEPENDENCIES_CMD)
 
 lint:
 	golangci-lint run --deadline 300s ./...
