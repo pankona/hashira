@@ -9,7 +9,6 @@ import (
 	"github.com/pankona/hashira/auth/google"
 	"github.com/pankona/hashira/auth/twitter"
 	"github.com/pankona/hashira/kvstore"
-	"github.com/pankona/hashira/user"
 )
 
 func main() {
@@ -64,6 +63,7 @@ func handleMe(w http.ResponseWriter, r *http.Request) {
 		_, err := w.Write([]byte("no authorization info found"))
 		if err != nil {
 			log.Printf("failed to write response: %v", err)
+			w.WriteHeader(500)
 		}
 		return
 	}
@@ -82,42 +82,21 @@ func handleMe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	m, ok := u.(map[string]interface{})
-	if !ok {
-		w.WriteHeader(500)
-		return
-	}
-	me := user.User{
-		ID:   m["ID"].(string),
-		Name: m["Name"].(string),
-		GoogleID: func() string {
-			if m["GoogleID"] != "" {
-				return "***"
-			}
-			return ""
-		}(),
-		TwitterID: func() string {
-			if m["GoogleID"] != "" {
-				return "***"
-			}
-			return ""
-		}(),
-	}
-
-	buf, err := json.Marshal(me)
+	buf, err := json.Marshal(u)
 	if err != nil {
-		// Internal server error
 		w.WriteHeader(500)
 		return
 	}
 
+	w.WriteHeader(200)
 	_, err = w.Write(buf)
 	if err != nil {
 		// failed write response. Just logging
 		log.Printf("failed to write response: %v", err)
+		w.WriteHeader(500)
+		return
 	}
 
-	w.WriteHeader(200)
 }
 
 func registerGoogle(kvs kvstore.KVStore, servingBaseURL string) {
