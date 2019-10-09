@@ -67,7 +67,10 @@ func handleMe(w http.ResponseWriter, r *http.Request) {
 	if auth == "" {
 		// No Authorization info found
 		w.WriteHeader(404)
-		w.Write([]byte("no authorization info found"))
+		_, err := w.Write([]byte("no authorization info found"))
+		if err != nil {
+			log.Printf("failed to write response: %v", err)
+		}
 		return
 	}
 
