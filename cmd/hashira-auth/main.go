@@ -31,18 +31,18 @@ func main() {
 	registerGoogle(kvs, servingBaseURL)
 	registerTwitter(kvs, servingBaseURL)
 
-	http.HandleFunc("/api/v1/accesstoken", handleAccessToken)
-	http.HandleFunc("/api/v1/me", handleMe)
+	mux := http.NewServeMux()
+	mux.Handle("/api/v1/me", &Me{kvs: kvs})
+	mux.Handle("/api/v1/accesstoken", &AccessToken{})
 
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Fatal(http.ListenAndServe(":"+port, mux))
 }
 
-func handleAccessToken(w http.ResponseWriter, r *http.Request) {
-	panic("not implemented")
-	// POST request to generate new access token
+type Me struct {
+	kvs kvstore.KVStore
 }
 
-func handleMe(w http.ResponseWriter, r *http.Request) {
+func (m *Me) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
@@ -96,7 +96,13 @@ func handleMe(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(500)
 		return
 	}
+}
 
+type AccessToken struct{}
+
+func (a *AccessToken) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	panic("not implemented")
+	// POST request to generate new access token
 }
 
 func registerGoogle(kvs kvstore.KVStore, servingBaseURL string) {
