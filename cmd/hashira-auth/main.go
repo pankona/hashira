@@ -49,8 +49,6 @@ func (m *Me) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "origin,x-requested-with,content-type,accept,authorization")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 
-	kvs := &kvstore.DSStore{}
-
 	if r.Method == "OPTIONS" {
 		w.WriteHeader(200)
 		return
@@ -68,14 +66,14 @@ func (m *Me) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, ok := kvs.Load("userIDByAccessToken", auth)
+	userID, ok := m.kvs.Load("userIDByAccessToken", auth)
 	if !ok {
 		// UserID that has specified access token not found
 		w.WriteHeader(404)
 		return
 	}
 
-	u, ok := kvs.Load("userByUserID", userID.(string))
+	u, ok := m.kvs.Load("userByUserID", userID.(string))
 	if !ok {
 		// User that has specified User ID not found
 		w.WriteHeader(404)
