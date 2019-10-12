@@ -38,6 +38,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+port, mux))
 }
 
+// Me is a struct that implements http.Handler for /api/v1/me
 type Me struct {
 	kvs kvstore.KVStore
 }
@@ -96,6 +97,7 @@ func (m *Me) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// AccessToken is a struct that implements http.Handler for /api/v1/accesstoken
 type AccessToken struct{}
 
 func (a *AccessToken) ServeHTTP(w http.ResponseWriter, r *http.Request) {
