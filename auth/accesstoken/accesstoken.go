@@ -1,3 +1,4 @@
+// Package accesstoken is a package that has responsibility for resource accesstoken
 package accesstoken
 
 import "net/http"

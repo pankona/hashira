@@ -1,3 +1,4 @@
+// Package me is a package that has responsibility for resource me
 package me
 
 import (
