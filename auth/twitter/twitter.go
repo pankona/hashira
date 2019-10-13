@@ -29,8 +29,7 @@ type Twitter struct {
 }
 
 // New returns Twitter instance with specified arguments
-func New(consumerKey, consumerSecret,
-	accessToken, accessTokenSecret,
+func New(consumerKey, consumerSecret, accessToken, accessTokenSecret,
 	callbackURL string, kvstore kvstore.KVStore) *Twitter {
 	if consumerKey == "" || consumerSecret == "" ||
 		accessToken == "" || accessTokenSecret == "" ||
@@ -47,6 +46,7 @@ func New(consumerKey, consumerSecret,
 		callbackURL:       callbackURL,
 		credential:        make(map[string]*oauth.Credentials),
 	}
+
 	t.client = anaconda.NewTwitterApiWithCredentials(
 		accessToken, accessTokenSecret,
 		consumerKey, consumerSecret)
@@ -166,7 +166,7 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 
 func (t *Twitter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
-	case "callback":
+	case "/callback":
 		t.handleAccessToken(w, r)
 	default:
 		t.handleRequestToken(w, r)

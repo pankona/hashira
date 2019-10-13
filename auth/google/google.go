@@ -56,11 +56,6 @@ func New(id, secret, callbackURL string, kvstore kvstore.KVStore) *Google {
 	}
 }
 
-// Register registers an endpoint for Google OIDC
-func (g *Google) Register(pattern string) {
-	http.Handle(pattern, http.StripPrefix(pattern, g))
-}
-
 func (g *Google) handleCode(w http.ResponseWriter, r *http.Request) {
 	id := uuid.NewV4().String()
 	url := g.config.AuthCodeURL(id)
@@ -190,7 +185,7 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 
 func (g *Google) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
-	case "callback":
+	case "/callback":
 		g.handleIDToken(w, r)
 	default:
 		g.handleCode(w, r)
