@@ -31,25 +31,24 @@ func main() {
 	registerGoogle(kvs, servingBaseURL)
 	registerTwitter(kvs, servingBaseURL)
 
-	http.HandleFunc("/api/v1/accesstoken", handleAccessToken)
-	http.HandleFunc("/api/v1/me", handleMe)
+	mux := http.NewServeMux()
+	mux.Handle("/api/v1/me", &Me{kvs: kvs})
+	mux.Handle("/api/v1/accesstoken", &AccessToken{})
 
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Fatal(http.ListenAndServe(":"+port, mux))
 }
 
-func handleAccessToken(w http.ResponseWriter, r *http.Request) {
-	panic("not implemented")
-	// POST request to generate new access token
+// Me is a struct that implements http.Handler for /api/v1/me
+type Me struct {
+	kvs kvstore.KVStore
 }
 
-func handleMe(w http.ResponseWriter, r *http.Request) {
+func (m *Me) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Access-Control-Allow-Headers", "origin,x-requested-with,content-type,accept,authorization")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-
-	kvs := &kvstore.DSStore{}
 
 	if r.Method == "OPTIONS" {
 		w.WriteHeader(200)
@@ -68,14 +67,14 @@ func handleMe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, ok := kvs.Load("userIDByAccessToken", auth)
+	userID, ok := m.kvs.Load("userIDByAccessToken", auth)
 	if !ok {
 		// UserID that has specified access token not found
 		w.WriteHeader(404)
 		return
 	}
 
-	u, ok := kvs.Load("userByUserID", userID.(string))
+	u, ok := m.kvs.Load("userByUserID", userID.(string))
 	if !ok {
 		// User that has specified User ID not found
 		w.WriteHeader(404)
@@ -96,7 +95,14 @@ func handleMe(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(500)
 		return
 	}
+}
 
+// AccessToken is a struct that implements http.Handler for /api/v1/accesstoken
+type AccessToken struct{}
+
+func (a *AccessToken) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	panic("not implemented")
+	// POST request to generate new access token
 }
 
 func registerGoogle(kvs kvstore.KVStore, servingBaseURL string) {
