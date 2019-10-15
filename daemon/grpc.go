@@ -222,7 +222,7 @@ func (d *Daemon) retrievePriority() (map[string]*service.Priority, error) {
 	for _, priority := range priorities {
 		for _, id := range priority.Ids {
 			if lookupTaskByID(tasks, id) == nil {
-				priority.Ids, _ = remove(priority.Ids, id)
+				priority.Ids = remove(priority.Ids, id)
 			}
 		}
 	}
@@ -266,25 +266,23 @@ func repair(dst []string, tasks map[string]*service.Task) {
 		// must remove extra IDs
 		for _, v := range dst {
 			if _, ok := m[v]; !ok {
-				dst, _ = remove(dst, v)
+				dst = remove(dst, v)
 			}
 		}
 	}
 }
 
-func remove(ids []string, id string) ([]string, bool) {
-	var removed bool
+func remove(ids []string, id string) []string {
 	ret := make([]string, len(ids))
 	var index int
 	for _, v := range ids {
 		if v == id {
-			removed = true
 			continue
 		}
 		ret[index] = v
 		index++
 	}
-	return ret[:index], removed
+	return ret[:index]
 }
 
 func (d *Daemon) retrievePriorityMap() (map[string]*service.Priority, error) {
