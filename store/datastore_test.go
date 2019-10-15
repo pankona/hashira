@@ -1,8 +1,7 @@
-package kvstore
+package store
 
 import (
 	"context"
-	"encoding/json"
 	"os"
 	"testing"
 
@@ -10,7 +9,7 @@ import (
 )
 
 type testEntity struct {
-	Value []byte
+	Value string
 }
 
 // Launch DataStore emulator in advance to run this test.
@@ -30,15 +29,10 @@ func testHowToUseDataStore(t *testing.T) {
 	}
 
 	key := datastore.NameKey("testkind", "testkey", nil)
-	testStr := "hogehoge"
+	e1 := &testEntity{Value: "hogehoge"}
 
-	buf, err := json.Marshal(testStr)
-	if err != nil {
-		t.Fatalf("failed to marshal: %v", err)
-	}
-
-	e := &testEntity{Value: buf}
-	if _, err := dsClient.Put(ctx, key, e); err != nil {
+	// Thus dsClient.Put takes interface{}, pointer types can be accepted
+	if _, err := dsClient.Put(ctx, key, e1); err != nil {
 		// TODO: error handling
 		t.Fatalf("failed to put: %v", err)
 	}
@@ -48,14 +42,8 @@ func testHowToUseDataStore(t *testing.T) {
 		t.Fatalf("failed to get: %v", err)
 	}
 
-	var ret interface{}
-	err = json.Unmarshal(e2.Value, &ret)
-	if err != nil {
-		t.Fatalf("failed to unmarshal: %v", err)
-	}
-
-	if ret != testStr {
-		t.Fatalf("unexpected value returned from Get: %v, expected: %v", ret, testStr)
+	if e1.Value != e2.Value {
+		t.Fatalf("unexpected value returned from Get: %v, expected: %v", e1.Value, e2.Value)
 	}
 }
 
