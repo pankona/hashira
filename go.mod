@@ -1,6 +1,7 @@
 module github.com/pankona/hashira
 
 require (
+	cloud.google.com/go v0.47.0 // indirect
 	cloud.google.com/go/datastore v1.0.0
 	cloud.google.com/go/storage v1.1.0 // indirect
 	github.com/ChimeraCoder/anaconda v2.0.0+incompatible
@@ -28,16 +29,14 @@ require (
 	github.com/stretchr/testify v1.4.0
 	go.etcd.io/bbolt v1.3.3 // indirect
 	go.opencensus.io v0.22.1 // indirect
-	golang.org/x/crypto v0.0.0-20191002192127-34f69633bfdc // indirect
-	golang.org/x/exp v0.0.0-20191002040644-a1355ae1e2c3 // indirect
-	golang.org/x/lint v0.0.0-20190930215403-16217165b5de // indirect
-	golang.org/x/net v0.0.0-20191007182048-72f939374954
+	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550 // indirect
+	golang.org/x/exp v0.0.0-20191014171548-69215a2ee97e // indirect
+	golang.org/x/net v0.0.0-20191014212845-da9a3fd4c582
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
-	golang.org/x/sys v0.0.0-20191008105621-543471e840be // indirect
-	golang.org/x/tools v0.0.0-20191007185444-6536af71d98a // indirect
+	golang.org/x/sys v0.0.0-20191010194322-b09406accb47 // indirect
+	golang.org/x/tools v0.0.0-20191014205221-18e3458ac98b // indirect
 	google.golang.org/api v0.11.0 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
-	google.golang.org/genproto v0.0.0-20191007204434-a023cd5227bd // indirect
 	google.golang.org/grpc v1.24.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gopkg.in/square/go-jose.v2 v2.3.1 // indirect
