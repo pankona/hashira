@@ -9,9 +9,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: go get
-          command: go get
-      - run:
           name: test
           command: make test
       - run:
