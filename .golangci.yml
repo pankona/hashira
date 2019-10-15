@@ -4,6 +4,7 @@ linters:
     - godox
     - wsl
     - whitespace
+    - funlen
 
 issues:
   exclude-use-default: true
