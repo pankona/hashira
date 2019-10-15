@@ -8,12 +8,12 @@ import (
 	"github.com/pankona/hashira/auth/google"
 	"github.com/pankona/hashira/auth/me"
 	"github.com/pankona/hashira/auth/twitter"
-	"github.com/pankona/hashira/kvstore"
+	"github.com/pankona/hashira/store"
 )
 
 type router struct {
 	mux            *http.ServeMux
-	kvs            kvstore.KVStore
+	store          store.Store
 	servingBaseURL string
 }
 
@@ -27,7 +27,7 @@ func (r *router) route() {
 func (r *router) handleMe(path string) {
 	r.mux.Handle(
 		path,
-		http.StripPrefix(path, me.New(r.kvs)))
+		http.StripPrefix(path, me.New(r.store)))
 }
 
 func (r *router) handleAccessToken(path string) {
@@ -41,7 +41,7 @@ func (r *router) handleGoogleOAuth(servingBaseURL, path string) {
 		os.Getenv("GOOGLE_OAUTH2_CLIENT_ID"),
 		os.Getenv("GOOGLE_OAUTH2_CLIENT_SECRET"),
 		servingBaseURL+path+"/callback",
-		r.kvs)
+		r.store)
 
 	r.mux.Handle(
 		path,
@@ -59,7 +59,7 @@ func (r *router) handleTwitterOAuth(servingBaseURL, path string) {
 		os.Getenv("TWITTER_API_ACCESS_TOKEN"),
 		os.Getenv("TWITTER_API_ACCESS_TOKEN_SECRET"),
 		servingBaseURL+path+"/callback",
-		r.kvs)
+		r.store)
 
 	r.mux.Handle(
 		path,
