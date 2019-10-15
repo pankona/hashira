@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/pankona/hashira/kvstore"
+	"github.com/pankona/hashira/store"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 
 	r := router{
 		mux:            http.DefaultServeMux,
-		kvs:            &kvstore.DSStore{},
+		store:          &store.DSStore{},
 		servingBaseURL: servingBaseURL,
 	}
 	r.route()

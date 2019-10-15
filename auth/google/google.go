@@ -8,7 +8,7 @@ import (
 	"net/http"
 
 	"github.com/coreos/go-oidc"
-	"github.com/pankona/hashira/kvstore"
+	"github.com/pankona/hashira/store"
 	"github.com/pankona/hashira/user"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/net/context"
@@ -22,12 +22,12 @@ type Google struct {
 	provider   *oidc.Provider
 	verifier   *oidc.IDTokenVerifier
 	config     oauth2.Config
-	kvstore    kvstore.KVStore
+	store      store.Store
 	credential map[string]struct{}
 }
 
 // New returns Google instance with specified arguments
-func New(id, secret, callbackURL string, kvstore kvstore.KVStore) *Google {
+func New(id, secret, callbackURL string, store store.Store) *Google {
 	provider, err := oidc.NewProvider(context.Background(), "https://accounts.google.com")
 	if err != nil {
 		log.Fatal(err)
@@ -51,7 +51,7 @@ func New(id, secret, callbackURL string, kvstore kvstore.KVStore) *Google {
 		provider:   provider,
 		verifier:   verifier,
 		config:     config,
-		kvstore:    kvstore,
+		store:      store,
 		credential: make(map[string]struct{}),
 	}
 }
@@ -111,10 +111,10 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// check if the user already exists
-	uid, ok := g.kvstore.Load("userIDByIDToken", idToken.Subject)
+	uid, ok := g.store.Load("userIDByIDToken", idToken.Subject)
 	if ok {
 		token := uuid.NewV4()
-		g.kvstore.Store("userIDByAccessToken", token.String(), uid)
+		g.store.Store("userIDByAccessToken", token.String(), uid)
 		cookie := &http.Cookie{
 			Name:  "Authorization",
 			Value: token.String(),
@@ -129,10 +129,10 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 	a, err := r.Cookie("Authorization")
 	if err == nil {
 		// has Authorization
-		uid, ok = g.kvstore.Load("userIDByAccessToken", a.Value)
+		uid, ok = g.store.Load("userIDByAccessToken", a.Value)
 		if ok {
 			// this user is already registered by other oauth provider
-			v, ok := g.kvstore.Load("userByUserID", uid.(string))
+			v, ok := g.store.Load("userByUserID", uid.(string))
 			if !ok {
 				// TODO: error handling
 				panic("failed to load user ID. fatal.")
@@ -147,8 +147,8 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 			}
 
 			us.GoogleID = idToken.Subject
-			g.kvstore.Store("userIDByIDToken", idToken.Subject, us.ID)
-			g.kvstore.Store("userByUserID", us.ID, us)
+			g.store.Store("userIDByIDToken", idToken.Subject, us.ID)
+			g.store.Store("userByUserID", us.ID, us)
 			http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 			return
 		}
@@ -166,13 +166,13 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 		panic(fmt.Sprintf("failed to fetch phrase from mashimashi: %v", err))
 	}
 
-	g.kvstore.Store("userIDByIDToken", idToken.Subject, userID.String())
-	g.kvstore.Store("userByUserID", userID.String(), user.User{
+	g.store.Store("userIDByIDToken", idToken.Subject, userID.String())
+	g.store.Store("userByUserID", userID.String(), user.User{
 		ID:       userID.String(),
 		Name:     username,
 		GoogleID: idToken.Subject,
 	})
-	g.kvstore.Store("userIDByAccessToken", token.String(), userID.String())
+	g.store.Store("userIDByAccessToken", token.String(), userID.String())
 
 	cookie := &http.Cookie{
 		Name:  "Authorization",

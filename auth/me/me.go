@@ -6,18 +6,18 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/pankona/hashira/kvstore"
+	"github.com/pankona/hashira/store"
 )
 
 // Me is a struct that implements http.Handler for resource "me"
 type Me struct {
-	kvs kvstore.KVStore
+	store store.Store
 }
 
 // New returns a struct that implements http.handler for resource "me"
-func New(kvs kvstore.KVStore) *Me {
+func New(s store.Store) *Me {
 	return &Me{
-		kvs: kvs,
+		store: s,
 	}
 }
 
@@ -45,14 +45,14 @@ func (m *Me) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, ok := m.kvs.Load("userIDByAccessToken", auth)
+	userID, ok := m.store.Load("userIDByAccessToken", auth)
 	if !ok {
 		// UserID that has specified access token not found
 		w.WriteHeader(404)
 		return
 	}
 
-	u, ok := m.kvs.Load("userByUserID", userID.(string))
+	u, ok := m.store.Load("userByUserID", userID.(string))
 	if !ok {
 		// User that has specified User ID not found
 		w.WriteHeader(404)

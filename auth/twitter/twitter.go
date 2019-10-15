@@ -10,7 +10,7 @@ import (
 
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/garyburd/go-oauth/oauth"
-	"github.com/pankona/hashira/kvstore"
+	"github.com/pankona/hashira/store"
 	"github.com/pankona/hashira/user"
 
 	uuid "github.com/satori/go.uuid"
@@ -23,14 +23,14 @@ type Twitter struct {
 	accessToken       string
 	accessTokenSecret string
 	client            *anaconda.TwitterApi
-	kvstore           kvstore.KVStore
+	store             store.Store
 	callbackURL       string
 	credential        map[string]*oauth.Credentials
 }
 
 // New returns Twitter instance with specified arguments
 func New(consumerKey, consumerSecret, accessToken, accessTokenSecret,
-	callbackURL string, kvstore kvstore.KVStore) *Twitter {
+	callbackURL string, store store.Store) *Twitter {
 	if consumerKey == "" || consumerSecret == "" ||
 		accessToken == "" || accessTokenSecret == "" ||
 		callbackURL == "" {
@@ -42,7 +42,7 @@ func New(consumerKey, consumerSecret, accessToken, accessTokenSecret,
 		consumerSecret:    consumerSecret,
 		accessToken:       accessToken,
 		accessTokenSecret: accessTokenSecret,
-		kvstore:           kvstore,
+		store:             store,
 		callbackURL:       callbackURL,
 		credential:        make(map[string]*oauth.Credentials),
 	}
@@ -92,10 +92,10 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// check if the user already exists
-	uid, ok := t.kvstore.Load("userIDByIDToken", u.IdStr)
+	uid, ok := t.store.Load("userIDByIDToken", u.IdStr)
 	if ok {
 		token := uuid.NewV4()
-		t.kvstore.Store("userIDByAccessToken", token.String(), uid)
+		t.store.Store("userIDByAccessToken", token.String(), uid)
 		cookie := &http.Cookie{
 			Name:  "Authorization",
 			Value: token.String(),
@@ -110,10 +110,10 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 	a, err := r.Cookie("Authorization")
 	if err == nil {
 		// has Authorization
-		uid, ok = t.kvstore.Load("userIDByAccessToken", a.Value)
+		uid, ok = t.store.Load("userIDByAccessToken", a.Value)
 		if ok {
 			// this user is already registered by other oauth provider
-			v, ok := t.kvstore.Load("userByUserID", uid.(string))
+			v, ok := t.store.Load("userByUserID", uid.(string))
 			if !ok {
 				// TODO: error handling
 				panic("failed to load user ID. fatal.")
@@ -128,8 +128,8 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 			}
 
 			us.TwitterID = u.IdStr
-			t.kvstore.Store("userIDByIDToken", u.IdStr, us.ID)
-			t.kvstore.Store("userByUserID", us.ID, us)
+			t.store.Store("userIDByIDToken", u.IdStr, us.ID)
+			t.store.Store("userByUserID", us.ID, us)
 			http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 			return
 		}
@@ -146,13 +146,13 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 		// TODO: error handling
 		panic(fmt.Sprintf("failed to fetch phrase from mashimashi: %v", err))
 	}
-	t.kvstore.Store("userIDByIDToken", u.IdStr, userID.String())
-	t.kvstore.Store("userByUserID", userID.String(), user.User{
+	t.store.Store("userIDByIDToken", u.IdStr, userID.String())
+	t.store.Store("userByUserID", userID.String(), user.User{
 		ID:        userID.String(),
 		Name:      username,
 		TwitterID: u.IdStr,
 	})
-	t.kvstore.Store("userIDByAccessToken", token.String(), userID.String())
+	t.store.Store("userIDByAccessToken", token.String(), userID.String())
 
 	cookie := &http.Cookie{
 		Name:  "Authorization",
