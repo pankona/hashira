@@ -35,7 +35,7 @@ update-dependencies:
 	cd $(CURDIR)/cmd/hashira-auth && $(UPDATE_DEPENDENCIES_CMD)
 
 lint:
-	golangci-lint run --deadline 300s ./...
+	golangci-lint run ./...
 
 test:
 	go test -count=1 `go list ./...`

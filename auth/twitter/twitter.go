@@ -161,7 +161,6 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 	}
 	http.SetCookie(w, cookie)
 	http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
-
 }
 
 func (t *Twitter) ServeHTTP(w http.ResponseWriter, r *http.Request) {

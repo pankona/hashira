@@ -54,7 +54,7 @@ func testStoreAndLoad(t *testing.T) {
 	if !ok {
 		t.Fatalf("failed to load. fatal.")
 	}
-	if "value" != v.(string) {
+	if v.(string) != "value" {
 		t.Fatalf("unexpected result. [want] %s [got] %s", "value", v.(string))
 	}
 }

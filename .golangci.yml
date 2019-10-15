@@ -1,8 +1,15 @@
 linters:
   enable-all: true
+  disable:
+    - godox
+    - wsl
+    - whitespace
 
 issues:
-  exclude-use-default: false
+  exclude-use-default: true
 
 output:
   print-issued-lines: false
+
+run:
+  timeout: 5m
