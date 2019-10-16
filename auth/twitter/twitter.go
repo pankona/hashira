@@ -1,7 +1,6 @@
 package twitter
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -10,11 +9,18 @@ import (
 
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/garyburd/go-oauth/oauth"
-	"github.com/pankona/hashira/store"
 	"github.com/pankona/hashira/user"
 
 	uuid "github.com/satori/go.uuid"
 )
+
+type UserStore interface {
+	Store(user *user.User) error
+	Fetch(userID string) (*user.User, error)
+	FetchByAccessToken(accesstoken string) (*user.User, error)
+
+	FetchByTwitterIDToken(idtoken string) (*user.User, error)
+}
 
 // Twitter is a struct to provide hashira's oauth functionality using twitter
 type Twitter struct {
@@ -23,14 +29,15 @@ type Twitter struct {
 	accessToken       string
 	accessTokenSecret string
 	client            *anaconda.TwitterApi
-	store             store.Store
 	callbackURL       string
 	credential        map[string]*oauth.Credentials
+
+	userStore UserStore
 }
 
 // New returns Twitter instance with specified arguments
 func New(consumerKey, consumerSecret, accessToken, accessTokenSecret,
-	callbackURL string, store store.Store) *Twitter {
+	callbackURL string, store UserStore) *Twitter {
 	if consumerKey == "" || consumerSecret == "" ||
 		accessToken == "" || accessTokenSecret == "" ||
 		callbackURL == "" {
@@ -42,7 +49,7 @@ func New(consumerKey, consumerSecret, accessToken, accessTokenSecret,
 		consumerSecret:    consumerSecret,
 		accessToken:       accessToken,
 		accessTokenSecret: accessTokenSecret,
-		store:             store,
+		userStore:         store,
 		callbackURL:       callbackURL,
 		credential:        make(map[string]*oauth.Credentials),
 	}
@@ -92,13 +99,15 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// check if the user already exists
-	uid, ok := t.store.Load("userIDByIDToken", u.IdStr)
-	if ok {
-		token := uuid.NewV4()
-		t.store.Store("userIDByAccessToken", token.String(), uid)
+	us, err := t.userStore.FetchByTwitterIDToken(u.IdStr)
+	if err != nil {
+		panic(err)
+	}
+
+	if us != nil {
 		cookie := &http.Cookie{
 			Name:  "Authorization",
-			Value: token.String(),
+			Value: us.AccessToken,
 			Path:  "/",
 		}
 		http.SetCookie(w, cookie)
@@ -110,26 +119,22 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 	a, err := r.Cookie("Authorization")
 	if err == nil {
 		// has Authorization
-		uid, ok = t.store.Load("userIDByAccessToken", a.Value)
-		if ok {
+		us, err := t.userStore.FetchByAccessToken(a.Value)
+		if err != nil {
+			panic(err)
+		}
+
+		if us != nil {
 			// this user is already registered by other oauth provider
-			v, ok := t.store.Load("userByUserID", uid.(string))
-			if !ok {
-				// TODO: error handling
-				panic("failed to load user ID. fatal.")
-			}
-			buf, err := json.Marshal(v)
+			// update user to indicate oauth by twitter has been connected
+			us.TwitterID = u.IdStr
+			t.userStore.Store(us)
+
+			err = t.userStore.Store(us)
 			if err != nil {
-				panic(err)
-			}
-			us := user.User{}
-			if err = json.Unmarshal(buf, &us); err != nil {
-				panic(err)
+				panic(fmt.Sprintf("failed to store user. fatal: %v", err))
 			}
 
-			us.TwitterID = u.IdStr
-			t.store.Store("userIDByIDToken", u.IdStr, us.ID)
-			t.store.Store("userByUserID", us.ID, us)
 			http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 			return
 		}
@@ -143,22 +148,22 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 
 	username, err := fetchPhraseFromMashimashi()
 	if err != nil {
-		// TODO: error handling
 		panic(fmt.Sprintf("failed to fetch phrase from mashimashi: %v", err))
 	}
-	t.store.Store("userIDByIDToken", u.IdStr, userID.String())
-	t.store.Store("userByUserID", userID.String(), user.User{
-		ID:        userID.String(),
-		Name:      username,
-		TwitterID: u.IdStr,
+
+	t.userStore.Store(&user.User{
+		ID:          userID.String(),
+		Name:        username,
+		TwitterID:   u.IdStr,
+		AccessToken: token.String(),
 	})
-	t.store.Store("userIDByAccessToken", token.String(), userID.String())
 
 	cookie := &http.Cookie{
 		Name:  "Authorization",
 		Value: token.String(),
 		Path:  "/",
 	}
+
 	http.SetCookie(w, cookie)
 	http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 }
