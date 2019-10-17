@@ -6,18 +6,22 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/pankona/hashira/store"
+	"github.com/pankona/hashira/user"
 )
+
+type UserStore interface {
+	FetchByAccessToken(accesstoken string) (*user.User, error)
+}
 
 // Me is a struct that implements http.Handler for resource "me"
 type Me struct {
-	store store.Store
+	userStore UserStore
 }
 
 // New returns a struct that implements http.handler for resource "me"
-func New(s store.Store) *Me {
+func New(s UserStore) *Me {
 	return &Me{
-		store: s,
+		userStore: s,
 	}
 }
 
@@ -45,16 +49,13 @@ func (m *Me) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, ok := m.store.Load("userIDByAccessToken", auth)
-	if !ok {
-		// UserID that has specified access token not found
-		w.WriteHeader(404)
-		return
+	u, err := m.userStore.FetchByAccessToken(auth)
+	if err != nil {
+		panic(err)
 	}
 
-	u, ok := m.store.Load("userByUserID", userID.(string))
-	if !ok {
-		// User that has specified User ID not found
+	if u == nil {
+		// user that has specified access token not found
 		w.WriteHeader(404)
 		return
 	}
