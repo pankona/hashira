@@ -9,4 +9,5 @@ type User struct {
 	AccessToken string `json:"access_tokens"`
 
 	TwitterIDToken string `json:"twitter_id_token"`
+	GoogleIDToken  string `json:"google_id_token"`
 }
