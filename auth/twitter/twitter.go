@@ -149,12 +149,15 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 		panic(fmt.Sprintf("failed to fetch phrase from mashimashi: %v", err))
 	}
 
-	t.userStore.Store(&user.User{
+	err = t.userStore.Store(&user.User{
 		ID:          userID.String(),
 		Name:        username,
 		TwitterID:   u.IdStr,
 		AccessToken: token.String(),
 	})
+	if err != nil {
+		panic(fmt.Errorf("failed store user: %v", err))
+	}
 
 	cookie := &http.Cookie{
 		Name:  "Authorization",

@@ -169,12 +169,15 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 		panic(fmt.Sprintf("failed to fetch phrase from mashimashi: %v", err))
 	}
 
-	g.userStore.Store(&user.User{
+	err = g.userStore.Store(&user.User{
 		ID:          userID.String(),
 		Name:        username,
 		GoogleID:    idToken.Subject,
 		AccessToken: token.String(),
 	})
+	if err != nil {
+		panic(fmt.Errorf("failed store user: %v", err))
+	}
 
 	cookie := &http.Cookie{
 		Name:  "Authorization",
