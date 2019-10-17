@@ -8,13 +8,15 @@ import (
 	"github.com/pankona/hashira/auth/google"
 	"github.com/pankona/hashira/auth/me"
 	"github.com/pankona/hashira/auth/twitter"
-	"github.com/pankona/hashira/store"
 )
 
 type router struct {
 	mux            *http.ServeMux
-	store          store.Store
 	servingBaseURL string
+
+	meStore      me.UserStore
+	googleStore  google.UserStore
+	twitterStore twitter.UserStore
 }
 
 func (r *router) route() {
@@ -27,7 +29,7 @@ func (r *router) route() {
 func (r *router) handleMe(path string) {
 	r.mux.Handle(
 		path,
-		http.StripPrefix(path, me.New(r.store)))
+		http.StripPrefix(path, me.New(r.meStore)))
 }
 
 func (r *router) handleAccessToken(path string) {
@@ -41,15 +43,9 @@ func (r *router) handleGoogleOAuth(servingBaseURL, path string) {
 		os.Getenv("GOOGLE_OAUTH2_CLIENT_ID"),
 		os.Getenv("GOOGLE_OAUTH2_CLIENT_SECRET"),
 		servingBaseURL+path+"/callback",
-		r.store)
-
-	r.mux.Handle(
-		path,
-		http.StripPrefix(path, g))
-
-	r.mux.Handle(
-		path+"/callback",
-		http.StripPrefix(path, g))
+		r.googleStore)
+	r.mux.Handle(path, http.StripPrefix(path, g))
+	r.mux.Handle(path+"/callback", http.StripPrefix(path, g))
 }
 
 func (r *router) handleTwitterOAuth(servingBaseURL, path string) {
@@ -59,13 +55,7 @@ func (r *router) handleTwitterOAuth(servingBaseURL, path string) {
 		os.Getenv("TWITTER_API_ACCESS_TOKEN"),
 		os.Getenv("TWITTER_API_ACCESS_TOKEN_SECRET"),
 		servingBaseURL+path+"/callback",
-		r.store)
-
-	r.mux.Handle(
-		path,
-		http.StripPrefix(path, t))
-
-	r.mux.Handle(
-		path+"/callback",
-		http.StripPrefix(path, t))
+		r.twitterStore)
+	r.mux.Handle(path, http.StripPrefix(path, t))
+	r.mux.Handle(path+"/callback", http.StripPrefix(path, t))
 }

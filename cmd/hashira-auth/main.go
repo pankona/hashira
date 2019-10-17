@@ -26,7 +26,9 @@ func main() {
 
 	r := router{
 		mux:            http.DefaultServeMux,
-		store:          &store.DSStore{},
+		meStore:        &store.MemStore{},
+		googleStore:    &store.MemStore{},
+		twitterStore:   &store.MemStore{},
 		servingBaseURL: servingBaseURL,
 	}
 	r.route()

@@ -40,3 +40,12 @@ func (m *MemStore) FetchByTwitterIDToken(idtoken string) (*user.User, error) {
 	}
 	return nil, nil
 }
+
+func (m *MemStore) FetchByGoogleIDToken(idtoken string) (*user.User, error) {
+	for _, v := range m.users {
+		if v.GoogleIDToken == idtoken {
+			return v, nil
+		}
+	}
+	return nil, nil
+}
