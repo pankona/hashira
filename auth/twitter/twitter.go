@@ -128,8 +128,6 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 			// this user is already registered by other oauth provider
 			// update user to indicate oauth by twitter has been connected
 			us.TwitterID = u.IdStr
-			t.userStore.Store(us)
-
 			err = t.userStore.Store(us)
 			if err != nil {
 				panic(fmt.Sprintf("failed to store user. fatal: %v", err))
