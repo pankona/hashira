@@ -77,13 +77,6 @@ func main() {
 	}
 
 	r.route()
-	//r.mux.Handle("/", &root{})
 
 	log.Fatal(http.ListenAndServe(":"+port, r.mux))
-}
-
-type root struct{}
-
-func (ro *root) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Printf("r.URL.Path: %v", r.URL.Path)
 }
