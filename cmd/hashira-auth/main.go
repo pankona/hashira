@@ -24,11 +24,12 @@ func main() {
 	log.Printf("GAE_ENV: %v", env)
 	log.Printf("servingBaseURL: %v", servingBaseURL)
 
+	ms := store.NewMemStore()
 	r := router{
 		mux:            http.DefaultServeMux,
-		meStore:        &store.MemStore{},
-		googleStore:    &store.MemStore{},
-		twitterStore:   &store.MemStore{},
+		meStore:        ms,
+		googleStore:    ms,
+		twitterStore:   ms,
 		servingBaseURL: servingBaseURL,
 	}
 	r.route()

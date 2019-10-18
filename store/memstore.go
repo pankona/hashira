@@ -10,6 +10,12 @@ type MemStore struct {
 	users map[string]*user.User
 }
 
+func NewMemStore() *MemStore {
+	return &MemStore{
+		users: make(map[string]*user.User),
+	}
+}
+
 func (m *MemStore) Store(u *user.User) error {
 	if u.ID == "" {
 		return fmt.Errorf("failed to store user. user.ID must be specified. user.ID: %v", u.ID)
