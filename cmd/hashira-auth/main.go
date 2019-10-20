@@ -8,8 +8,8 @@ import (
 	"github.com/pankona/hashira/auth/accesstoken"
 	"github.com/pankona/hashira/auth/google"
 	"github.com/pankona/hashira/auth/me"
+	"github.com/pankona/hashira/auth/store"
 	"github.com/pankona/hashira/auth/twitter"
-	"github.com/pankona/hashira/store"
 )
 
 func main() {

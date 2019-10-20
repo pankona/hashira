@@ -9,7 +9,7 @@ import (
 
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/garyburd/go-oauth/oauth"
-	"github.com/pankona/hashira/user"
+	"github.com/pankona/hashira/auth/user"
 
 	uuid "github.com/satori/go.uuid"
 )

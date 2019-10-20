@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/pankona/hashira/user"
+	"github.com/pankona/hashira/auth/user"
 )
 
 type UserStore interface {
