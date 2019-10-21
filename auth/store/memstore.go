@@ -3,7 +3,7 @@ package store
 import (
 	"fmt"
 
-	"github.com/pankona/hashira/user"
+	"github.com/pankona/hashira/auth/user"
 )
 
 type MemStore struct {
