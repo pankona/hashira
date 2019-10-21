@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -10,6 +11,7 @@ import (
 	"github.com/pankona/hashira/auth/me"
 	"github.com/pankona/hashira/auth/store"
 	"github.com/pankona/hashira/auth/twitter"
+	"gopkg.in/yaml.v2"
 )
 
 func main() {
@@ -28,19 +30,30 @@ func main() {
 	log.Printf("GAE_ENV: %v", env)
 	log.Printf("servingBaseURL: %v", servingBaseURL)
 
+	buf, err := ioutil.ReadFile("secret.yaml")
+	if err != nil {
+		panic(err)
+	}
+
+	config := map[string]string{}
+	err = yaml.Unmarshal(buf, &config)
+	if err != nil {
+		panic(err)
+	}
+
 	ms := store.NewMemStore()
 
 	googleOAuthHandler := google.New(
-		os.Getenv("GOOGLE_OAUTH2_CLIENT_ID"),
-		os.Getenv("GOOGLE_OAUTH2_CLIENT_SECRET"),
+		config["GOOGLE_OAUTH2_CLIENT_ID"],
+		config["GOOGLE_OAUTH2_CLIENT_SECRET"],
 		servingBaseURL+"/auth/google/callback",
 		ms)
 
 	twitterOAuthHandler := twitter.New(
-		os.Getenv("TWITTER_API_TOKEN"),
-		os.Getenv("TWITTER_API_SECRET"),
-		os.Getenv("TWITTER_API_ACCESS_TOKEN"),
-		os.Getenv("TWITTER_API_ACCESS_TOKEN_SECRET"),
+		config["TWITTER_API_TOKEN"],
+		config["TWITTER_API_SECRET"],
+		config["TWITTER_API_ACCESS_TOKEN"],
+		config["TWITTER_API_ACCESS_TOKEN_SECRET"],
 		servingBaseURL+"/auth/twitter/callback",
 		ms)
 
