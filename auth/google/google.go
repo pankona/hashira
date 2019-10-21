@@ -8,12 +8,19 @@ import (
 	"net/http"
 
 	"github.com/coreos/go-oidc"
-	"github.com/pankona/hashira/store"
 	"github.com/pankona/hashira/user"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 )
+
+type UserStore interface {
+	Store(user *user.User) error
+	Fetch(userID string) (*user.User, error)
+	FetchByAccessToken(accesstoken string) (*user.User, error)
+
+	FetchByGoogleIDToken(idtoken string) (*user.User, error)
+}
 
 // Google is a struct to provide hashira's OIDC functionality using Google
 type Google struct {
@@ -22,12 +29,13 @@ type Google struct {
 	provider   *oidc.Provider
 	verifier   *oidc.IDTokenVerifier
 	config     oauth2.Config
-	store      store.Store
 	credential map[string]struct{}
+
+	userStore UserStore
 }
 
 // New returns Google instance with specified arguments
-func New(id, secret, callbackURL string, store store.Store) *Google {
+func New(id, secret, callbackURL string, store UserStore) *Google {
 	provider, err := oidc.NewProvider(context.Background(), "https://accounts.google.com")
 	if err != nil {
 		log.Fatal(err)
@@ -51,7 +59,7 @@ func New(id, secret, callbackURL string, store store.Store) *Google {
 		provider:   provider,
 		verifier:   verifier,
 		config:     config,
-		store:      store,
+		userStore:  store,
 		credential: make(map[string]struct{}),
 	}
 }
@@ -111,13 +119,15 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// check if the user already exists
-	uid, ok := g.store.Load("userIDByIDToken", idToken.Subject)
-	if ok {
-		token := uuid.NewV4()
-		g.store.Store("userIDByAccessToken", token.String(), uid)
+	us, err := g.userStore.FetchByGoogleIDToken(idToken.Subject)
+	if err != nil {
+		panic(err)
+	}
+
+	if us != nil {
 		cookie := &http.Cookie{
 			Name:  "Authorization",
-			Value: token.String(),
+			Value: us.AccessToken,
 			Path:  "/",
 		}
 		http.SetCookie(w, cookie)
@@ -129,26 +139,20 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 	a, err := r.Cookie("Authorization")
 	if err == nil {
 		// has Authorization
-		uid, ok = g.store.Load("userIDByAccessToken", a.Value)
-		if ok {
+		us, err := g.userStore.FetchByAccessToken(a.Value)
+		if err != nil {
+			panic(err)
+		}
+
+		if us != nil {
 			// this user is already registered by other oauth provider
-			v, ok := g.store.Load("userByUserID", uid.(string))
-			if !ok {
-				// TODO: error handling
-				panic("failed to load user ID. fatal.")
-			}
-			buf, err := json.Marshal(v)
+			// update user to indicate oauth by google has been connected
+			us.GoogleID = idToken.Subject
+			err = g.userStore.Store(us)
 			if err != nil {
-				panic(err)
-			}
-			us := user.User{}
-			if err = json.Unmarshal(buf, &us); err != nil {
-				panic(err)
+				panic(fmt.Sprintf("failed to store user. fatal: %v", err))
 			}
 
-			us.GoogleID = idToken.Subject
-			g.store.Store("userIDByIDToken", idToken.Subject, us.ID)
-			g.store.Store("userByUserID", us.ID, us)
 			http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 			return
 		}
@@ -162,23 +166,25 @@ func (g *Google) handleIDToken(w http.ResponseWriter, r *http.Request) {
 
 	username, err := fetchPhraseFromMashimashi()
 	if err != nil {
-		// TODO: error handling
 		panic(fmt.Sprintf("failed to fetch phrase from mashimashi: %v", err))
 	}
 
-	g.store.Store("userIDByIDToken", idToken.Subject, userID.String())
-	g.store.Store("userByUserID", userID.String(), user.User{
-		ID:       userID.String(),
-		Name:     username,
-		GoogleID: idToken.Subject,
+	err = g.userStore.Store(&user.User{
+		ID:          userID.String(),
+		Name:        username,
+		GoogleID:    idToken.Subject,
+		AccessToken: token.String(),
 	})
-	g.store.Store("userIDByAccessToken", token.String(), userID.String())
+	if err != nil {
+		panic(fmt.Errorf("failed store user: %v", err))
+	}
 
 	cookie := &http.Cookie{
 		Name:  "Authorization",
 		Value: token.String(),
 		Path:  "/",
 	}
+
 	http.SetCookie(w, cookie)
 	http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
 }
