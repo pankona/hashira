@@ -20,7 +20,7 @@ require (
 	github.com/google/go-cmp v0.3.1 // indirect
 	github.com/jesseduffield/termbox-go v0.0.0-20190630083001-9dd53af7214e // indirect
 	github.com/jstemmer/go-junit-report v0.9.1 // indirect
-	github.com/mattn/go-runewidth v0.0.5
+	github.com/mattn/go-runewidth v0.0.6
 	github.com/pankona/gocui v0.3.1-0.20190107094646-a6233010013f
 	github.com/pankona/orderedmap v0.0.0-20190220081458-0d2a73efbdac
 	github.com/pkg/errors v0.8.1
