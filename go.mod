@@ -23,7 +23,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.7
 	github.com/pankona/gocui v0.3.1-0.20190107094646-a6233010013f
 	github.com/pankona/orderedmap v0.0.0-20190220081458-0d2a73efbdac
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.0
 	github.com/pquerna/cachecontrol v0.0.0-20180517163645-1555304b9b35 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.4.0
