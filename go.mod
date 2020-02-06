@@ -37,7 +37,7 @@ require (
 	golang.org/x/tools v0.0.0-20191018212557-ed542cd5b28a // indirect
 	google.golang.org/api v0.11.0 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
-	google.golang.org/grpc v1.27.0
+	google.golang.org/grpc v1.27.1
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gopkg.in/square/go-jose.v2 v2.3.1 // indirect
 )
