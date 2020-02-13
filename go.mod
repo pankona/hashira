@@ -2,7 +2,7 @@ module github.com/pankona/hashira
 
 require (
 	cloud.google.com/go v0.47.0 // indirect
-	cloud.google.com/go/datastore v1.0.0
+	cloud.google.com/go/datastore v1.1.0
 	cloud.google.com/go/storage v1.1.0 // indirect
 	github.com/ChimeraCoder/anaconda v2.0.0+incompatible
 	github.com/ChimeraCoder/tokenbucket v0.0.0-20131201223612-c5a927568de7 // indirect
