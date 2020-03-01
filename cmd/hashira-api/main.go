@@ -40,7 +40,7 @@ func (s *taskStore) SaveTasks(userID string, ts api.Tasks) error {
 		taskMap[v.ID] = api.Task{
 			ID:        v.ID,
 			Name:      v.Name,
-			Place:     api.Place(v.Place),
+			Place:     v.Place,
 			IsDeleted: v.IsDeleted,
 		}
 	}
@@ -69,7 +69,7 @@ func (s *taskStore) SavePriority(userID string, p api.Priority) error {
 	}
 
 	for place, IDs := range p {
-		priority[api.Place(place)] = api.Priority{place: IDs}
+		priority[place] = api.Priority{place: IDs}
 	}
 
 	buf, err := json.Marshal(priority)
