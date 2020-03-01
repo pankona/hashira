@@ -3,6 +3,8 @@ package api
 type TaskStore interface {
 	SaveTasks(userID string, tasks Tasks) error
 	SavePriority(userID string, priority Priority) error
+	LoadTasks(userID string) (Tasks, error)
+	LoadPriority(userID string) (Priority, error)
 }
 
 type Place string
@@ -21,7 +23,7 @@ type Task struct {
 	IsDeleted bool
 }
 
-type Tasks []Task
+type Tasks map[string]Task
 
 type Priority map[Place][]string
 
@@ -35,4 +37,16 @@ func (a *API) Upload(userID string, tasks Tasks, p Priority) error {
 		return err
 	}
 	return a.TaskStore.SavePriority(userID, p)
+}
+
+func (a *API) Download(userID string) (Tasks, Priority, error) {
+	tasks, err := a.TaskStore.LoadTasks(userID)
+	if err != nil {
+		return Tasks{}, Priority{}, err
+	}
+	priority, err := a.TaskStore.LoadPriority(userID)
+	if err != nil {
+		return Tasks{}, Priority{}, err
+	}
+	return tasks, priority, nil
 }
