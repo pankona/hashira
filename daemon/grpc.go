@@ -53,6 +53,7 @@ func (d *Daemon) Update(ctx context.Context, com *service.CommandUpdate) (*servi
 		return nil, errors.New("failed to update a task because specified task is nil")
 	}
 
+	com.Task.IsDirty = true
 	buf, err := json.Marshal(com.Task)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal specified task: %s", err.Error())
@@ -103,7 +104,6 @@ func (d *Daemon) Retrieve(ctx context.Context, com *service.CommandRetrieve) (*s
 	deletedItem := deletedItem(excludeDeleted)
 	if !com.ExcludeDeleted {
 		deletedItem = includeDeleted
-
 	}
 	tasks, err := d.retrieve(deletedItem)
 	if err != nil {
