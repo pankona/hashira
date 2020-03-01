@@ -100,6 +100,9 @@ func sync(daemonPort int) {
 
 	tasks := make([]Task, 0, len(ts))
 	for _, v := range ts {
+		if !v.IsDirty {
+			continue
+		}
 		tasks = append(tasks, Task{
 			ID:        v.Id,
 			Name:      v.Name,
@@ -107,6 +110,14 @@ func sync(daemonPort int) {
 			IsDeleted: v.IsDeleted,
 		})
 	}
+	if len(tasks) == 0 {
+		// there's no task to upload
+		log.Println("no task to upload to sync")
+		return
+	}
+
+	log.Printf("%d tasks will upload to sync", len(tasks))
+
 	priority := Priority{}
 	for k, v := range p {
 		priority[k] = v.Ids
