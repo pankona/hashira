@@ -56,6 +56,7 @@ func (s *taskStore) SaveTasks(userID string, ts api.Tasks) error {
 	}
 
 	log.Printf("len of tasks: %v", len(taskMap))
+	log.Printf("%v", taskMap)
 
 	return nil
 }
