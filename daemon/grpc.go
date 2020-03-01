@@ -84,6 +84,7 @@ func (d *Daemon) Delete(ctx context.Context, com *service.CommandDelete) (*servi
 	}
 
 	t.IsDeleted = true
+	t.IsDirty = true
 	buf, err = json.Marshal(t)
 	if err != nil {
 		return nil, err
