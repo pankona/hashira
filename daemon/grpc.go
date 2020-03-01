@@ -18,6 +18,7 @@ const (
 // Create creates a new task
 func (d *Daemon) Create(ctx context.Context, com *service.CommandCreate) (*service.ResultCreate, error) {
 	t := com.Task
+	t.IsDirty = true
 	buf, err := json.Marshal(t)
 	if err != nil {
 		return nil, errors.New("failed to create a new task: " + err.Error())
@@ -53,6 +54,7 @@ func (d *Daemon) Update(ctx context.Context, com *service.CommandUpdate) (*servi
 		return nil, errors.New("failed to update a task because specified task is nil")
 	}
 
+	com.Task.IsDirty = true
 	buf, err := json.Marshal(com.Task)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal specified task: %s", err.Error())
@@ -82,6 +84,7 @@ func (d *Daemon) Delete(ctx context.Context, com *service.CommandDelete) (*servi
 	}
 
 	t.IsDeleted = true
+	t.IsDirty = true
 	buf, err = json.Marshal(t)
 	if err != nil {
 		return nil, err
@@ -103,7 +106,6 @@ func (d *Daemon) Retrieve(ctx context.Context, com *service.CommandRetrieve) (*s
 	deletedItem := deletedItem(excludeDeleted)
 	if !com.ExcludeDeleted {
 		deletedItem = includeDeleted
-
 	}
 	tasks, err := d.retrieve(deletedItem)
 	if err != nil {
