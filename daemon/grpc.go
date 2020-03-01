@@ -91,9 +91,21 @@ func (d *Daemon) Delete(ctx context.Context, com *service.CommandDelete) (*servi
 	return &service.ResultDelete{Task: t}, err
 }
 
-// Retrieve retrieves all existing tasks
+type deletedItem int
+
+const (
+	excludeDeleted = iota
+	includeDeleted
+)
+
+// Retrieve retrieves all existing tasks (but not deleted tasks)
 func (d *Daemon) Retrieve(ctx context.Context, com *service.CommandRetrieve) (*service.ResultRetrieve, error) {
-	tasks, err := d.retrieve()
+	deletedItem := deletedItem(excludeDeleted)
+	if !com.ExcludeDeleted {
+		deletedItem = includeDeleted
+
+	}
+	tasks, err := d.retrieve(deletedItem)
 	if err != nil {
 		return nil, errors.New("failed to retrieve tasks: " + err.Error())
 	}
@@ -105,7 +117,7 @@ func (d *Daemon) Retrieve(ctx context.Context, com *service.CommandRetrieve) (*s
 	return result, err
 }
 
-func (d *Daemon) retrieve() (map[string]*service.Task, error) {
+func (d *Daemon) retrieve(deletedItem deletedItem) (map[string]*service.Task, error) {
 	tasks := make(map[string]*service.Task)
 
 	err := d.DB.ForEach(taskBucket, func(k, v []byte) error {
@@ -115,7 +127,7 @@ func (d *Daemon) retrieve() (map[string]*service.Task, error) {
 			return errors.New("failed to retrieve tasks: " + err.Error())
 		}
 
-		if t.IsDeleted {
+		if deletedItem == excludeDeleted && t.IsDeleted {
 			return nil
 		}
 
