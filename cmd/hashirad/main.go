@@ -52,11 +52,11 @@ func main() {
 		DB:   db,
 	}
 
-	syncPeriod := 10 * time.Second
+	const syncPeriod = 10
 	go func() {
 		for {
 			sync(port)
-			<-time.After(syncPeriod)
+			<-time.After(syncPeriod * time.Second)
 		}
 	}()
 
