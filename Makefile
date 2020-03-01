@@ -15,6 +15,7 @@ build:
 	cd $(CURDIR)/cmd/hashirad     && $(BUILD_CMD)
 	cd $(CURDIR)/cmd/hashira-cui  && $(BUILD_CMD)
 	cd $(CURDIR)/cmd/hashira-auth && $(BUILD_CMD)
+	cd $(CURDIR)/cmd/hashira-api  && $(BUILD_CMD)
 
 install:
 	@BUILD_CMD="go install" make build

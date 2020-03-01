@@ -52,13 +52,16 @@ func main() {
 		DB:   db,
 	}
 
-	const syncPeriod = 10
-	go func() {
-		for {
-			sync(port)
-			<-time.After(syncPeriod * time.Second)
-		}
-	}()
+	// temporary disable sync feature
+	if false {
+		const syncPeriod = 10
+		go func() {
+			for {
+				sync(port)
+				<-time.After(syncPeriod * time.Second)
+			}
+		}()
+	}
 
 	if err = d.Run(); err != nil {
 		fmt.Printf("failed to start hashira daemon: %s\n", err.Error())
