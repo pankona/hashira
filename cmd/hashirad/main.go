@@ -83,8 +83,8 @@ type Priority map[string][]string
 // priority's key should be one of following strings:
 // "BACKLOG", "TODO", "DOING", "DONE"
 type UploadRequest struct {
-	Tasks    []Task   `json:"tasks"`
-	Priority Priority `json:"priority"`
+	Tasks    map[string]Task `json:"tasks"`
+	Priority Priority        `json:"priority"`
 }
 
 func sync(daemonPort int) {
@@ -98,17 +98,17 @@ func sync(daemonPort int) {
 		log.Println(err)
 	}
 
-	tasks := make([]Task, 0, len(ts))
-	for _, v := range ts {
+	tasks := map[string]Task{}
+	for k, v := range ts {
 		if !v.IsDirty {
 			continue
 		}
-		tasks = append(tasks, Task{
+		tasks[k] = Task{
 			ID:        v.Id,
 			Name:      v.Name,
 			Place:     v.Place.String(),
 			IsDeleted: v.IsDeleted,
-		})
+		}
 	}
 	if len(tasks) == 0 {
 		// there's no task to upload
