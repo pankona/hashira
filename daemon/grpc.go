@@ -18,6 +18,7 @@ const (
 // Create creates a new task
 func (d *Daemon) Create(ctx context.Context, com *service.CommandCreate) (*service.ResultCreate, error) {
 	t := com.Task
+	t.IsDirty = true
 	buf, err := json.Marshal(t)
 	if err != nil {
 		return nil, errors.New("failed to create a new task: " + err.Error())
