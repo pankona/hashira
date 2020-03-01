@@ -122,6 +122,8 @@ func sync(daemonPort int) {
 		priority[k] = v.Ids
 	}
 
+	// nolint: gosec
+	// this is temporary accesstoken
 	const accesstoken = "09c86189-d824-4617-9675-ed0195e1e233"
 	err = upload(accesstoken, tasks, priority)
 	if err != nil {
@@ -130,7 +132,11 @@ func sync(daemonPort int) {
 	}
 
 	tasks, priority, err = download(accesstoken)
-	log.Printf("downloaded tasks: %v", tasks)
+	if err != nil {
+		log.Printf("failed to download: %v", err)
+		return
+	}
+
 	for _, v := range tasks {
 		err = cli.Update(context.Background(), &service.Task{
 			Id:        v.ID,
