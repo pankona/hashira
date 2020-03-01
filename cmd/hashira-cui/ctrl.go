@@ -60,19 +60,34 @@ func (c *Ctrl) eventDispatch(ctx context.Context, event delegateEvent, data []in
 
 	switch event {
 	case AddTask:
-		err = c.m.hashirac.Create(ctx, (*service.Task)(data[0].(*KeyedTask)))
+		task := (*service.Task)(data[0].(*KeyedTask))
+		task.IsDirty = true
+
+		err = c.m.hashirac.Create(ctx, task)
 	case UpdateTask:
-		err = c.m.hashirac.Update(ctx, (*service.Task)(data[0].(*KeyedTask)))
+		task := (*service.Task)(data[0].(*KeyedTask))
+		task.IsDirty = true
+
+		err = c.m.hashirac.Update(ctx, task)
 	case DeleteTask:
-		err = c.m.hashirac.Delete(ctx, (*service.Task)(data[0].(*KeyedTask)).Id)
+		task := (*service.Task)(data[0].(*KeyedTask))
+		task.IsDirty = true
+
+		err = c.m.hashirac.Delete(ctx, task.Id)
 	case UpdatePriority:
-		_, err = c.m.hashirac.UpdatePriority(ctx, data[0].(map[string]*service.Priority))
+		priority := data[0].(map[string]*service.Priority)
+
+		_, err = c.m.hashirac.UpdatePriority(ctx, priority)
 	case UpdateBulk:
-		err = c.m.hashirac.Update(ctx, (*service.Task)(data[0].(*KeyedTask)))
+		task := (*service.Task)(data[0].(*KeyedTask))
+		task.IsDirty = true
+		priority := data[1].(map[string]*service.Priority)
+
+		err = c.m.hashirac.Update(ctx, task)
 		if err != nil {
 			c.errChan <- err
 		}
-		_, err = c.m.hashirac.UpdatePriority(ctx, data[1].(map[string]*service.Priority))
+		_, err = c.m.hashirac.UpdatePriority(ctx, priority)
 	default:
 		panic(fmt.Sprintf("unknown delegateCommand: %v", event))
 	}

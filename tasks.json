@@ -1,0 +1,998 @@
+{
+  "01b8088a-f174-4967-9f8f-675f4d4defb8": {
+    "ID": "01b8088a-f174-4967-9f8f-675f4d4defb8",
+    "Name": "hezby さんのコード見る",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "01ee999c-f6cb-4e5f-886d-949d86fcc37e": {
+    "ID": "01ee999c-f6cb-4e5f-886d-949d86fcc37e",
+    "Name": "https://docs.google.com/forms/d/1I9sezrnPI4cMTVCHV8VrhYtzNW1yjAreCfbB3av9OQU/edit",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "0358f63c-2890-462a-ac98-0bc9888d755f": {
+    "ID": "0358f63c-2890-462a-ac98-0bc9888d755f",
+    "Name": "#hashira ローカルでの開発環境構築",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "0892e777-ff58-4b19-837c-9819c15120dd": {
+    "ID": "0892e777-ff58-4b19-837c-9819c15120dd",
+    "Name": "middleware リファクタリング",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "08cf2585-f1f5-4efa-8094-f5c1c7c6a155": {
+    "ID": "08cf2585-f1f5-4efa-8094-f5c1c7c6a155",
+    "Name": "#hashira クラウド対応",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "0c595532-0093-4257-b98d-312ebf0f2bac": {
+    "ID": "0c595532-0093-4257-b98d-312ebf0f2bac",
+    "Name": "#misc happy path test やってみる",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "0e8c8c06-9053-4d64-8b23-c67b030c2880": {
+    "ID": "0e8c8c06-9053-4d64-8b23-c67b030c2880",
+    "Name": "こあがりの普段の清掃について聞きたい",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "10b8d793-35c5-4ef0-be36-6dcde9498fa9": {
+    "ID": "10b8d793-35c5-4ef0-be36-6dcde9498fa9",
+    "Name": "#blog kokizami",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "127715a8-dec3-4084-beb9-18193991345c": {
+    "ID": "127715a8-dec3-4084-beb9-18193991345c",
+    "Name": "360 フィードバック ~2020-02-21",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "135312ae-8242-4b8d-b6f1-70182bccc75d": {
+    "ID": "135312ae-8242-4b8d-b6f1-70182bccc75d",
+    "Name": "https://github.com/quipper/aya-issues/issues/27309",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "15b86e8d-e48a-4db9-b0fb-c96070abdfeb": {
+    "ID": "15b86e8d-e48a-4db9-b0fb-c96070abdfeb",
+    "Name": "#work GitHub Actions でレビュアーアサイン",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "15d870b2-843c-42a8-b553-8a426faedfd5": {
+    "ID": "15d870b2-843c-42a8-b553-8a426faedfd5",
+    "Name": "for coaches react release 作業",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "1dfef2a7-fed3-4932-81d2-897c5c104d22": {
+    "ID": "1dfef2a7-fed3-4932-81d2-897c5c104d22",
+    "Name": "Qiita アドカレ書く",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "1e2acb0e-ebf9-432a-b2db-6d08e44c83bd": {
+    "ID": "1e2acb0e-ebf9-432a-b2db-6d08e44c83bd",
+    "Name": "洗い出した issue に sp 振る",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "23347808-4024-4594-aadf-d2e2e4c0a3c4": {
+    "ID": "23347808-4024-4594-aadf-d2e2e4c0a3c4",
+    "Name": "#work 10/02 リモート",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "239be87e-87ab-4a76-b806-a02b78ac391a": {
+    "ID": "239be87e-87ab-4a76-b806-a02b78ac391a",
+    "Name": "#read https://railsguides.jp/",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "294df0d5-7ba9-4eb1-a0cc-ae8be000250a": {
+    "ID": "294df0d5-7ba9-4eb1-a0cc-ae8be000250a",
+    "Name": "360 kachick",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "2adc34d9-15ff-45b7-bff3-2531c71bb2a4": {
+    "ID": "2adc34d9-15ff-45b7-bff3-2531c71bb2a4",
+    "Name": "#review quipper/monorepo/pull/6300",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "2c04d899-1ffe-4041-b823-341835043194": {
+    "ID": "2c04d899-1ffe-4041-b823-341835043194",
+    "Name": "hoge",
+    "Place": "DONE",
+    "IsDeleted": false
+  },
+  "2e705b12-356e-4eb6-a620-902e7b5f71a4": {
+    "ID": "2e705b12-356e-4eb6-a620-902e7b5f71a4",
+    "Name": "#ddd https://hori-ryota.com/blog/starting-development-with-ddd/",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "3067eb20-4870-4508-bc10-388af72d20c6": {
+    "ID": "3067eb20-4870-4508-bc10-388af72d20c6",
+    "Name": "https://github.com/quipper/aya-issues/issues/26433",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "325aa702-a4ef-4844-a0d3-c6e12eb5e866": {
+    "ID": "325aa702-a4ef-4844-a0d3-c6e12eb5e866",
+    "Name": "#vr キャストする方法",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "33d8ee8f-a256-4b07-bbec-b5b91e089030": {
+    "ID": "33d8ee8f-a256-4b07-bbec-b5b91e089030",
+    "Name": "assesment 書く 〜12/27",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "35ceedd0-d20e-44ab-bc7d-0480717fe744": {
+    "ID": "35ceedd0-d20e-44ab-bc7d-0480717fe744",
+    "Name": "#kkzm on-going のやつハイフンにする",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "35d531de-3cff-455f-bb4d-9260b0ff40da": {
+    "ID": "35d531de-3cff-455f-bb4d-9260b0ff40da",
+    "Name": "#neta モブスターウェブ版作成",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "382fa8e1-82d5-4f52-9656-7fcf0fec3269": {
+    "ID": "382fa8e1-82d5-4f52-9656-7fcf0fec3269",
+    "Name": "#misc 目標設定",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "3980beba-e77b-4be5-9873-21886dde9e38": {
+    "ID": "3980beba-e77b-4be5-9873-21886dde9e38",
+    "Name": "mopp さんのブログレビュー",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "3abec4ff-7f60-464a-aa17-2f2b62748f68": {
+    "ID": "3abec4ff-7f60-464a-aa17-2f2b62748f68",
+    "Name": "MongoDB アップデート関連 Back-Office のテスト項目追加",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "3b1ae9e5-baa3-4780-b603-959b633939b5": {
+    "ID": "3b1ae9e5-baa3-4780-b603-959b633939b5",
+    "Name": "hoge",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "3b5a446c-77d8-4cd4-bf2b-3abd00a45665": {
+    "ID": "3b5a446c-77d8-4cd4-bf2b-3abd00a45665",
+    "Name": "#360 ohbarye",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "3bc22a24-7459-4331-b8b7-013738cf12b7": {
+    "ID": "3bc22a24-7459-4331-b8b7-013738cf12b7",
+    "Name": "HTML5/CSS3モダンコーディング 進捗: 82/259",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "3d71540c-5d13-4a7c-bffd-1495c79d7c7d": {
+    "ID": "3d71540c-5d13-4a7c-bffd-1495c79d7c7d",
+    "Name": "MongoDB アップデート時に作ったアカウント解約する",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "41e1bb40-8305-4bd3-a556-c9afcc0de825": {
+    "ID": "41e1bb40-8305-4bd3-a556-c9afcc0de825",
+    "Name": "#onboarding 環境構築続き",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "42b3ccde-4faa-43b5-aae2-14549d935066": {
+    "ID": "42b3ccde-4faa-43b5-aae2-14549d935066",
+    "Name": "#game 7 days to die",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "44d6216a-9919-4adb-ba6f-21ad623a7e1f": {
+    "ID": "44d6216a-9919-4adb-ba6f-21ad623a7e1f",
+    "Name": "#work CODEOWNERS 設定見直す",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "4559cf94-bf7c-460e-a718-e55fe66c01ca": {
+    "ID": "4559cf94-bf7c-460e-a718-e55fe66c01ca",
+    "Name": "#misc insta360 調査",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "45a18590-73c1-4c53-9d2b-aa5fe7fcc2c1": {
+    "ID": "45a18590-73c1-4c53-9d2b-aa5fe7fcc2c1",
+    "Name": "#misc キーボードとマウス購買",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "4815e8df-274d-4b7b-b291-92c77ed61a5d": {
+    "ID": "4815e8df-274d-4b7b-b291-92c77ed61a5d",
+    "Name": "#work 10/09 リモート",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "4a93b5fc-7597-492b-8d0d-dfc96deebf3c": {
+    "ID": "4a93b5fc-7597-492b-8d0d-dfc96deebf3c",
+    "Name": "#25431 複数 conversation 調査",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "4ca4f456-17ed-4657-8447-b73507f1a4b7": {
+    "ID": "4ca4f456-17ed-4657-8447-b73507f1a4b7",
+    "Name": "hoge",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "4d59e550-82f7-44e8-bee3-5fada31e62ac": {
+    "ID": "4d59e550-82f7-44e8-bee3-5fada31e62ac",
+    "Name": "#release https://github.com/quipper/aya-issues/issues/25167",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "4eb27fb9-9d3d-4875-8aec-6f6470aa9d05": {
+    "ID": "4eb27fb9-9d3d-4875-8aec-6f6470aa9d05",
+    "Name": "#game Vainglory",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "50ac84d1-d6a6-4106-b1f4-20587659ad48": {
+    "ID": "50ac84d1-d6a6-4106-b1f4-20587659ad48",
+    "Name": "#misc qall の bin/setup 修正マージ",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "50fe31fb-c2f2-4efb-bb9c-f67fb816f5e8": {
+    "ID": "50fe31fb-c2f2-4efb-bb9c-f67fb816f5e8",
+    "Name": "#neta 子のためのゲーム作り",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "53fb394c-4f89-4b43-ace4-2ef3069a584d": {
+    "ID": "53fb394c-4f89-4b43-ace4-2ef3069a584d",
+    "Name": "#360 kachick",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "54839b97-b541-420d-ab94-19a6f37d94da": {
+    "ID": "54839b97-b541-420d-ab94-19a6f37d94da",
+    "Name": "#read たのしい Ruby",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "555d6259-d033-4b66-a6a1-766180b009ee": {
+    "ID": "555d6259-d033-4b66-a6a1-766180b009ee",
+    "Name": "#kumamon ソースレビュー",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "56150bbf-b741-40ea-b072-99a6ed0a8b63": {
+    "ID": "56150bbf-b741-40ea-b072-99a6ed0a8b63",
+    "Name": "#hashira 認証フロント実装",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "57a7ddd8-e7bb-46c7-a3f7-3bc4d317e755": {
+    "ID": "57a7ddd8-e7bb-46c7-a3f7-3bc4d317e755",
+    "Name": "年末調整書類を出す",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "5866f8eb-e1bd-4b0e-9882-38cb3299b80f": {
+    "ID": "5866f8eb-e1bd-4b0e-9882-38cb3299b80f",
+    "Name": "デイリーミーティング資料埋める",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "586f7b2b-d766-40b3-bbf5-40a3ed4bfa53": {
+    "ID": "586f7b2b-d766-40b3-bbf5-40a3ed4bfa53",
+    "Name": "Production Readiness Check のテンプレ Sentry のところ加筆",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "5897771a-a3fc-4d2e-85af-6856a029696a": {
+    "ID": "5897771a-a3fc-4d2e-85af-6856a029696a",
+    "Name": "golangci-lint 更新",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "58b93bd9-811a-4fcb-a830-e3a64c717ebd": {
+    "ID": "58b93bd9-811a-4fcb-a830-e3a64c717ebd",
+    "Name": "blog 直す",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "5b9be84b-e248-4343-ba84-62f82bfdf277": {
+    "ID": "5b9be84b-e248-4343-ba84-62f82bfdf277",
+    "Name": "#hashira golangci-lint free",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "5ce8be9a-532b-4cb8-a698-5d8820657dba": {
+    "ID": "5ce8be9a-532b-4cb8-a698-5d8820657dba",
+    "Name": "blog 書く",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "5efca2d5-6395-496b-a54b-84ed87c13942": {
+    "ID": "5efca2d5-6395-496b-a54b-84ed87c13942",
+    "Name": "#game Night cry",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "612b58b4-5929-4164-9261-7b29d6de426d": {
+    "ID": "612b58b4-5929-4164-9261-7b29d6de426d",
+    "Name": "#misc ディスプレイ勝手にメニュー出ちゃう問題",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "673d72a8-0629-459f-a847-d3e6e30b8399": {
+    "ID": "673d72a8-0629-459f-a847-d3e6e30b8399",
+    "Name": "#work GitHub Actions でメンションを Slack のメンションに変換？",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "675f9466-fc17-42f4-81ec-7381d37f2f12": {
+    "ID": "675f9466-fc17-42f4-81ec-7381d37f2f12",
+    "Name": "7 days to die 調整さん",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "67d4013d-f2b6-42e5-8a40-f02fa49243ce": {
+    "ID": "67d4013d-f2b6-42e5-8a40-f02fa49243ce",
+    "Name": "#misc Go研のレポート",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "686e7944-28d7-4893-9517-0171965b3070": {
+    "ID": "686e7944-28d7-4893-9517-0171965b3070",
+    "Name": "hoge",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "68cf52b6-0c28-4930-9e66-42b1fa954c69": {
+    "ID": "68cf52b6-0c28-4930-9e66-42b1fa954c69",
+    "Name": "LT 準備 11/05 (火)",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "6a069c1e-4794-43bb-8d8c-811ad4d2721d": {
+    "ID": "6a069c1e-4794-43bb-8d8c-811ad4d2721d",
+    "Name": "#wails 試す",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "6a8b398c-8121-4e2e-b15b-b5edb3db0f38": {
+    "ID": "6a8b398c-8121-4e2e-b15b-b5edb3db0f38",
+    "Name": "#game Satisfactory",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "6b50dfe0-ad50-4d9f-8720-480e6d5fd79b": {
+    "ID": "6b50dfe0-ad50-4d9f-8720-480e6d5fd79b",
+    "Name": "#blog hashira",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "6b6ca0ab-f654-4fa3-949c-a911669108a0": {
+    "ID": "6b6ca0ab-f654-4fa3-949c-a911669108a0",
+    "Name": "issue 整理時のやつ",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "6da996b3-ea9f-47f7-a1c6-a3478965b200": {
+    "ID": "6da996b3-ea9f-47f7-a1c6-a3478965b200",
+    "Name": "ダミーデータ足す",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "717869ce-eca5-4d20-92d4-1ff8a057f758": {
+    "ID": "717869ce-eca5-4d20-92d4-1ff8a057f758",
+    "Name": "mopp さんに append の嘘を釈明する",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "76cff3c0-8744-484a-af21-7207cafb9c2e": {
+    "ID": "76cff3c0-8744-484a-af21-7207cafb9c2e",
+    "Name": "easy-mark target 動かないの直す",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "791a1189-9ef1-41ff-8d4e-c5ea0810ec16": {
+    "ID": "791a1189-9ef1-41ff-8d4e-c5ea0810ec16",
+    "Name": "#neta elm を学ぶ",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "7c33e6b6-88bb-434c-93c9-4df8e14e7a7a": {
+    "ID": "7c33e6b6-88bb-434c-93c9-4df8e14e7a7a",
+    "Name": "#360 ujihisa",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "7ed6ec2a-fbf5-468c-bf5d-d066b9aea314": {
+    "ID": "7ed6ec2a-fbf5-468c-bf5d-d066b9aea314",
+    "Name": "CS の方からシェアいただいた資料を issue に",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "874f4ce3-265b-4920-a240-2f8a17f1c73a": {
+    "ID": "874f4ce3-265b-4920-a240-2f8a17f1c73a",
+    "Name": "https://news.livedoor.com/article/detail/17760339/",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "898b7010-9626-4e2b-a067-5d99ad9f2e1c": {
+    "ID": "898b7010-9626-4e2b-a067-5d99ad9f2e1c",
+    "Name": "当たり前品質",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "8a140a8c-dbe9-48e3-aa0a-d9e3053b5111": {
+    "ID": "8a140a8c-dbe9-48e3-aa0a-d9e3053b5111",
+    "Name": "#work Good bye Rails 4 に言い訳書く",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "8a4ce220-4d5d-4cc1-b92c-c3984aba8742": {
+    "ID": "8a4ce220-4d5d-4cc1-b92c-c3984aba8742",
+    "Name": "KPT のリマインダ直す",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "8ad37c00-d72b-43c4-b1b9-1c1ee447cfdc": {
+    "ID": "8ad37c00-d72b-43c4-b1b9-1c1ee447cfdc",
+    "Name": "aya-payment のワーカー動いてなかった問題サマリ記載",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "8b5cfe86-d32f-423b-8ed2-77f4c14d1d07": {
+    "ID": "8b5cfe86-d32f-423b-8ed2-77f4c14d1d07",
+    "Name": "#work Onboarding 準備",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "8c1f7796-fc58-4ff8-b656-86bbfdf93a05": {
+    "ID": "8c1f7796-fc58-4ff8-b656-86bbfdf93a05",
+    "Name": "#misc Mac の AC アダプター買い足し",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "8e0af310-adfe-4f2e-88be-95f21cdf1eff": {
+    "ID": "8e0af310-adfe-4f2e-88be-95f21cdf1eff",
+    "Name": "#misc RealForce + Mac お試し",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "8e7d5733-142a-45d1-bf7f-0d132d6c8067": {
+    "ID": "8e7d5733-142a-45d1-bf7f-0d132d6c8067",
+    "Name": "mongo db の mccs モデル消す",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "8f0b030c-6991-43f4-9a86-7ce057c684c7": {
+    "ID": "8f0b030c-6991-43f4-9a86-7ce057c684c7",
+    "Name": "#hashira #auth フロントとバックエンド分離",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "8fe9eab3-74e0-48d0-b75a-d080bdfef8d8": {
+    "ID": "8fe9eab3-74e0-48d0-b75a-d080bdfef8d8",
+    "Name": "ruby 勉強会宿題やる",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "92ca9442-0bbd-47ae-bc4a-47ca261fa288": {
+    "ID": "92ca9442-0bbd-47ae-bc4a-47ca261fa288",
+    "Name": "#360 motorollerscalatron",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "93c69e3d-d4d9-43c8-85ca-e73006d5dd38": {
+    "ID": "93c69e3d-d4d9-43c8-85ca-e73006d5dd38",
+    "Name": "ウェルカムランチの手配 (金曜日)",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "948aa4ad-863b-4906-a363-b200bb2c5f31": {
+    "ID": "948aa4ad-863b-4906-a363-b200bb2c5f31",
+    "Name": "#work GitHub コメントを Slack メンションに変換",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "95411f02-c216-4dc7-b063-971bbe8d8eeb": {
+    "ID": "95411f02-c216-4dc7-b063-971bbe8d8eeb",
+    "Name": "hoge",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "964b5919-7fdb-44bf-9eb9-e68e0fe79e74": {
+    "ID": "964b5919-7fdb-44bf-9eb9-e68e0fe79e74",
+    "Name": "#work STARTセットのお披露目動線確認",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "9732c876-5e09-46e4-8f65-a289558bddb4": {
+    "ID": "9732c876-5e09-46e4-8f65-a289558bddb4",
+    "Name": "CI/CD アンケートに答える",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "97ce3435-bb38-4bc1-a1cc-1a37d8d5d841": {
+    "ID": "97ce3435-bb38-4bc1-a1cc-1a37d8d5d841",
+    "Name": ")h",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "9805d393-ddc2-48a1-8cf7-c788e463f77a": {
+    "ID": "9805d393-ddc2-48a1-8cf7-c788e463f77a",
+    "Name": "easy-mark 残タスクを issue に",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "99c5894d-3e1f-4149-83bc-328c4270621e": {
+    "ID": "99c5894d-3e1f-4149-83bc-328c4270621e",
+    "Name": "Define interface to check topic existence #334",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "99fb55a4-cc3a-492c-bf8a-29d132fe8e59": {
+    "ID": "99fb55a4-cc3a-492c-bf8a-29d132fe8e59",
+    "Name": "#neta Go 依存関係可視化ツール",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "9d41062d-8291-4deb-87ca-005edd7527d2": {
+    "ID": "9d41062d-8291-4deb-87ca-005edd7527d2",
+    "Name": "ソースレビュー数件",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "a06edb03-5fc3-415a-8efb-df987406c9a6": {
+    "ID": "a06edb03-5fc3-415a-8efb-df987406c9a6",
+    "Name": "DevSupport https://github.com/quipper/aya-issues/issues/29615",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "a0cf6534-85a4-44fa-8497-55bf0dfff511": {
+    "ID": "a0cf6534-85a4-44fa-8497-55bf0dfff511",
+    "Name": "#onboarding 環境構築続き",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "a0e90c0d-b1aa-42eb-b520-4a6261130841": {
+    "ID": "a0e90c0d-b1aa-42eb-b520-4a6261130841",
+    "Name": "CI のタスクを issue を切る",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "a16d1ed7-bb0a-459a-a840-d1cca1bcacfa": {
+    "ID": "a16d1ed7-bb0a-459a-a840-d1cca1bcacfa",
+    "Name": "#work ライトニングトーク準備",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "a1d1ccb6-c255-42f3-abcd-40a969837433": {
+    "ID": "a1d1ccb6-c255-42f3-abcd-40a969837433",
+    "Name": "MongoDB アップデート関連 issue 立てる",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "a4511776-538e-421e-9101-0cf578ae415b": {
+    "ID": "a4511776-538e-421e-9101-0cf578ae415b",
+    "Name": "#blog comatome",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "a51f3ab1-0646-46ed-b6b2-18d3e8694359": {
+    "ID": "a51f3ab1-0646-46ed-b6b2-18d3e8694359",
+    "Name": "GAS が動かない件を直す",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "a571eaf2-86ef-4a51-9001-2d2183cd3f2a": {
+    "ID": "a571eaf2-86ef-4a51-9001-2d2183cd3f2a",
+    "Name": "#misc Oculus Quest 購買申請",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "a628f5ca-abfd-4cdc-82ba-edb2739f7256": {
+    "ID": "a628f5ca-abfd-4cdc-82ba-edb2739f7256",
+    "Name": "#timesheet https://bit.ly/2Wide06",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "a72164d1-d048-4ec4-8be2-70ae95d56429": {
+    "ID": "a72164d1-d048-4ec4-8be2-70ae95d56429",
+    "Name": "hoge",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "a8cb3503-0df1-4846-ab95-46bd729273fe": {
+    "ID": "a8cb3503-0df1-4846-ab95-46bd729273fe",
+    "Name": "sentry_environment 修正",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "ab2704cd-f22d-4087-8172-b36934678450": {
+    "ID": "ab2704cd-f22d-4087-8172-b36934678450",
+    "Name": "EG 採点業務仕様を書く wiki 作る",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "ab50d5c3-80f3-414f-bbf2-b1c6a218e445": {
+    "ID": "ab50d5c3-80f3-414f-bbf2-b1c6a218e445",
+    "Name": "vimconf のアウトプット",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "ac48b94c-6d5a-4cf3-9b49-310e3dc27c55": {
+    "ID": "ac48b94c-6d5a-4cf3-9b49-310e3dc27c55",
+    "Name": "#vr スクショとる方法",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "acacadf1-6503-4bb8-b896-f1307249d492": {
+    "ID": "acacadf1-6503-4bb8-b896-f1307249d492",
+    "Name": "vim-doc 翻訳",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "acd0afbf-2c34-41b8-9ac5-44e2abc02da3": {
+    "ID": "acd0afbf-2c34-41b8-9ac5-44e2abc02da3",
+    "Name": "openapi のドキュメント書こう",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "b1581420-785b-4197-9d94-11cc6c03c1f5": {
+    "ID": "b1581420-785b-4197-9d94-11cc6c03c1f5",
+    "Name": "VPN 申請 or 自宅 IP 連絡",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "b4790a19-7dc8-4b1c-a7ba-62367fd371f5": {
+    "ID": "b4790a19-7dc8-4b1c-a7ba-62367fd371f5",
+    "Name": "ujihisa さんの宿題",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "b4d37b86-1b22-4348-acb1-7b15f02a2abc": {
+    "ID": "b4d37b86-1b22-4348-acb1-7b15f02a2abc",
+    "Name": "gomobile ビルドエラー修正",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "b6c8640a-b50b-4f5f-9984-e32e733df0a7": {
+    "ID": "b6c8640a-b50b-4f5f-9984-e32e733df0a7",
+    "Name": "hogehoge",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "b738d2b3-7e07-459d-a83d-e467f6b7a99e": {
+    "ID": "b738d2b3-7e07-459d-a83d-e467f6b7a99e",
+    "Name": "qall env ファイルの CI",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "b7c9beed-2b26-412c-82a7-220c638ec2e3": {
+    "ID": "b7c9beed-2b26-412c-82a7-220c638ec2e3",
+    "Name": "https://github.com/quipper/aya-issues/issues/30442",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "b9603fdf-1709-4cd5-a8ee-c093fa4ad31f": {
+    "ID": "b9603fdf-1709-4cd5-a8ee-c093fa4ad31f",
+    "Name": "https://store.workman.co.jp/item/item.html?i=5368",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "b9ebaf4f-57f2-49c6-9e58-bdff2160f5b0": {
+    "ID": "b9ebaf4f-57f2-49c6-9e58-bdff2160f5b0",
+    "Name": "#misc parallels 解約",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "bae10b62-86f0-4c6c-b684-7062539a2efe": {
+    "ID": "bae10b62-86f0-4c6c-b684-7062539a2efe",
+    "Name": "ストレスチェック",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "bf45d8ca-9186-497e-81c9-f91430f884ab": {
+    "ID": "bf45d8ca-9186-497e-81c9-f91430f884ab",
+    "Name": "データ指向アプリケーションデザイン 進捗: 168/660",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "bfe27805-a0f5-4b64-a3d9-23ac76a5129e": {
+    "ID": "bfe27805-a0f5-4b64-a3d9-23ac76a5129e",
+    "Name": "#misc Recty 入れる",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "c133b3d1-62b1-44a6-bf10-2f987047dc9c": {
+    "ID": "c133b3d1-62b1-44a6-bf10-2f987047dc9c",
+    "Name": "studysapuri リリース番長",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "c3ea3157-f8cb-42e0-b14e-d2a1f04b41e4": {
+    "ID": "c3ea3157-f8cb-42e0-b14e-d2a1f04b41e4",
+    "Name": "#neta ボドゲリーダーボード",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "c5e1fdc3-5c8e-43d6-bda5-e9fadb8a4655": {
+    "ID": "c5e1fdc3-5c8e-43d6-bda5-e9fadb8a4655",
+    "Name": "hoge",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "c6d59392-c35b-4722-9a86-e674a376ab74": {
+    "ID": "c6d59392-c35b-4722-9a86-e674a376ab74",
+    "Name": "ウェルカムランチの手配",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "c77d9ada-ecff-4248-8e8f-13b0ff1cc6eb": {
+    "ID": "c77d9ada-ecff-4248-8e8f-13b0ff1cc6eb",
+    "Name": "forCoaches リリース番長業務",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "c8a825a2-05e8-4d3d-a427-f202d00eaaca": {
+    "ID": "c8a825a2-05e8-4d3d-a427-f202d00eaaca",
+    "Name": "simple-api-talk の open api 自動生成",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "ca18d663-1eac-478d-98ef-544195e818c4": {
+    "ID": "ca18d663-1eac-478d-98ef-544195e818c4",
+    "Name": "#gomo-simra dep 使ってるところ消す",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "ca514912-0611-4f31-a2f6-280a1abc2820": {
+    "ID": "ca514912-0611-4f31-a2f6-280a1abc2820",
+    "Name": "https://github.com/quipper/aya-issues/issues/28003",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "ce442416-9a00-433c-896d-1b2145ea49e5": {
+    "ID": "ce442416-9a00-433c-896d-1b2145ea49e5",
+    "Name": "#onboarding issue template 修正",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "ce5c456c-c9e8-4081-8abf-dc8541540646": {
+    "ID": "ce5c456c-c9e8-4081-8abf-dc8541540646",
+    "Name": "リリース手順をすぎどまりさんと共有",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "d0421649-524c-4787-9801-9a7c58a465dc": {
+    "ID": "d0421649-524c-4787-9801-9a7c58a465dc",
+    "Name": "http://www.betterspecs.org/jp/",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "d111fd40-6469-4183-a933-d672a6123033": {
+    "ID": "d111fd40-6469-4183-a933-d672a6123033",
+    "Name": "hogehoge",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "d1ae0cbf-df85-4d6d-99ec-60745512109b": {
+    "ID": "d1ae0cbf-df85-4d6d-99ec-60745512109b",
+    "Name": "#work 通勤交通費増税",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "d51780e5-23a4-442e-89d1-a5bd513984c9": {
+    "ID": "d51780e5-23a4-442e-89d1-a5bd513984c9",
+    "Name": "monorepo#11086 レビュー",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "d5f8756b-e5d4-42c8-9efb-afd9ea8ba795": {
+    "ID": "d5f8756b-e5d4-42c8-9efb-afd9ea8ba795",
+    "Name": "#onboarding https://github.com/quipper/aya-issues/issues/24269",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "d932b2d7-0f67-4f02-9452-d4a5f0262af2": {
+    "ID": "d932b2d7-0f67-4f02-9452-d4a5f0262af2",
+    "Name": "#misc sat0yu さんに返信",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "d95cad35-ed52-434e-a588-ddcbdd6c1347": {
+    "ID": "d95cad35-ed52-434e-a588-ddcbdd6c1347",
+    "Name": "#work Back-Office invoice の件続き",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "d9763eea-c2d7-49e8-981c-adbbf797dcac": {
+    "ID": "d9763eea-c2d7-49e8-981c-adbbf797dcac",
+    "Name": "#misc conversation 複数問題 issue 分割？",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "dbb6cb82-58e9-4eff-b2ab-104827a3b09f": {
+    "ID": "dbb6cb82-58e9-4eff-b2ab-104827a3b09f",
+    "Name": "アセスメントのネタを考える 〜11/06",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "e04d3641-e440-400a-8c8a-53c9994deb46": {
+    "ID": "e04d3641-e440-400a-8c8a-53c9994deb46",
+    "Name": "#read https://railstutorial.jp/",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "e06f4a3b-0a6a-46a9-85af-473fbf15977c": {
+    "ID": "e06f4a3b-0a6a-46a9-85af-473fbf15977c",
+    "Name": "来週のリリース番長どうなるのか確認",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "e199923b-0abe-4f1a-be57-4c103007ca3f": {
+    "ID": "e199923b-0abe-4f1a-be57-4c103007ca3f",
+    "Name": "#kkzm リスト表示の改善",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "e2b1ba35-be78-4733-86b1-d77381ef2a5d": {
+    "ID": "e2b1ba35-be78-4733-86b1-d77381ef2a5d",
+    "Name": "aya-devs-handbook のビルドエラー確認続き",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "e389c6c6-e58a-406b-85ae-e843a2a26315": {
+    "ID": "e389c6c6-e58a-406b-85ae-e843a2a26315",
+    "Name": "hoge",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "e442f25e-357c-4f1e-9d5a-3bf1fd631397": {
+    "ID": "e442f25e-357c-4f1e-9d5a-3bf1fd631397",
+    "Name": "#onboarding リリース手順にレビュー依頼のフローを記載する",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "e8cb73c6-cff7-4410-a817-08c0513751da": {
+    "ID": "e8cb73c6-cff7-4410-a817-08c0513751da",
+    "Name": "#neta SlackDeck",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "e9b9940b-7fbd-4d8c-bb35-07877530dab7": {
+    "ID": "e9b9940b-7fbd-4d8c-bb35-07877530dab7",
+    "Name": "https://docs.google.com/spreadsheets/d/1i_C47JW0P3sOnAKFmS7SaDRIbU5VOptyDC7Zw8yrDeg/edit#gid=1413435424",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "e9e0080c-1686-47f3-92b5-e9d236e2d70b": {
+    "ID": "e9e0080c-1686-47f3-92b5-e9d236e2d70b",
+    "Name": "洗い出した issue 切る",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "ea2e0417-36ea-41b2-bbea-0b42647b77f9": {
+    "ID": "ea2e0417-36ea-41b2-bbea-0b42647b77f9",
+    "Name": "hoge",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "ed2c2ddb-1604-4a2d-80d9-a703f59a509c": {
+    "ID": "ed2c2ddb-1604-4a2d-80d9-a703f59a509c",
+    "Name": "目標ちょっと更新",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "ed3052e9-7423-451f-a4cc-12b756c5265c": {
+    "ID": "ed3052e9-7423-451f-a4cc-12b756c5265c",
+    "Name": "#neta GitHub Action で CI",
+    "Place": "BACKLOG",
+    "IsDeleted": false
+  },
+  "edb8ddd0-afad-41ad-8832-0269f7ef4103": {
+    "ID": "edb8ddd0-afad-41ad-8832-0269f7ef4103",
+    "Name": "https://www.youtube.com/watch?v=VFmLqWuGtPk",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "ef5c7cc4-6893-4196-a3c5-9f7a5c0a905d": {
+    "ID": "ef5c7cc4-6893-4196-a3c5-9f7a5c0a905d",
+    "Name": "ウェルカムランチの手配 (木曜日)",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "f023925a-1838-460c-91ac-df981ff73bbd": {
+    "ID": "f023925a-1838-460c-91ac-df981ff73bbd",
+    "Name": "#onboarding devs-handbook 修正",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "f0c4da32-c332-422e-baf5-19ded68656db": {
+    "ID": "f0c4da32-c332-422e-baf5-19ded68656db",
+    "Name": "新サービス立てる方法のまとめ",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "f16c098c-48bd-476f-b551-0c8fcdc11ea0": {
+    "ID": "f16c098c-48bd-476f-b551-0c8fcdc11ea0",
+    "Name": "qmonolith-service production readiness",
+    "Place": "TODO",
+    "IsDeleted": false
+  },
+  "f29f5659-3b86-4817-9ea0-23a2c5d08739": {
+    "ID": "f29f5659-3b86-4817-9ea0-23a2c5d08739",
+    "Name": "#work performance-api Go 1.13.1 上げる",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "f31d91ce-28bc-4336-945a-d31c75c7643c": {
+    "ID": "f31d91ce-28bc-4336-945a-d31c75c7643c",
+    "Name": "hoge",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "f604b680-deae-423c-9375-3ea363fba170": {
+    "ID": "f604b680-deae-423c-9375-3ea363fba170",
+    "Name": "Ruby + Go",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "f6c3924f-3d9b-4573-8f17-8edd06da0aa6": {
+    "ID": "f6c3924f-3d9b-4573-8f17-8edd06da0aa6",
+    "Name": "#misc Oculus Quest の issue にコメント",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "f73a1832-a85c-4e8d-9743-d7980017107c": {
+    "ID": "f73a1832-a85c-4e8d-9743-d7980017107c",
+    "Name": "#onboarding https://github.com/quipper/aya-issues/issues/24776",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "f7a3064d-cef0-4a6b-8fb2-d4cc5191f794": {
+    "ID": "f7a3064d-cef0-4a6b-8fb2-d4cc5191f794",
+    "Name": "#360 yskttm",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "f95b7a0b-d506-4970-bdc7-dc6c1f83992d": {
+    "ID": "f95b7a0b-d506-4970-bdc7-dc6c1f83992d",
+    "Name": "hoge",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "face5281-1da4-4127-add0-3ef110eae581": {
+    "ID": "face5281-1da4-4127-add0-3ef110eae581",
+    "Name": "スタートセットテキストの件",
+    "Place": "DONE",
+    "IsDeleted": true
+  },
+  "fc8e00c3-6daf-4692-a636-de58878d76f0": {
+    "ID": "fc8e00c3-6daf-4692-a636-de58878d76f0",
+    "Name": "aya-jobs、aya-jenkins-jobs gem 上げる",
+    "Place": "DONE",
+    "IsDeleted": true
+  }
+}
