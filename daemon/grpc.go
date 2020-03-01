@@ -18,7 +18,6 @@ const (
 // Create creates a new task
 func (d *Daemon) Create(ctx context.Context, com *service.CommandCreate) (*service.ResultCreate, error) {
 	t := com.Task
-	t.IsDirty = true
 	buf, err := json.Marshal(t)
 	if err != nil {
 		return nil, errors.New("failed to create a new task: " + err.Error())
@@ -54,7 +53,6 @@ func (d *Daemon) Update(ctx context.Context, com *service.CommandUpdate) (*servi
 		return nil, errors.New("failed to update a task because specified task is nil")
 	}
 
-	com.Task.IsDirty = true
 	buf, err := json.Marshal(com.Task)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal specified task: %s", err.Error())
@@ -84,7 +82,6 @@ func (d *Daemon) Delete(ctx context.Context, com *service.CommandDelete) (*servi
 	}
 
 	t.IsDeleted = true
-	t.IsDirty = true
 	buf, err = json.Marshal(t)
 	if err != nil {
 		return nil, err
@@ -248,15 +245,15 @@ func (d *Daemon) retrievePriority() (map[string]*service.Priority, error) {
 				Ids: make([]string, 0),
 			}
 		}
-		repair(priorities[k].Ids, tasks[k])
+		priorities[k].Ids = repair(priorities[k].Ids, tasks[k])
 	}
 
 	return priorities, nil
 }
 
-func repair(dst []string, tasks map[string]*service.Task) {
+func repair(dst []string, tasks map[string]*service.Task) []string {
 	if len(dst) == len(tasks) {
-		return
+		return dst
 	}
 
 	m := make(map[string]struct{})
@@ -284,6 +281,8 @@ func repair(dst []string, tasks map[string]*service.Task) {
 			}
 		}
 	}
+
+	return dst
 }
 
 func remove(ids []string, id string) []string {
@@ -310,6 +309,10 @@ func (d *Daemon) retrievePriorityMap() (map[string]*service.Priority, error) {
 	err = json.Unmarshal(buf, &m)
 	if err != nil {
 		log.Printf("failed to unmarshal loaded data into service.Priority: %s", err.Error())
+	}
+
+	if len(m) == 0 {
+		return map[string]*service.Priority{}, nil
 	}
 
 	return m, nil

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -17,6 +18,7 @@ import (
 	hc "github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
+	"github.com/pankona/hashira/service"
 )
 
 func initializeDB() (database.Databaser, error) {
@@ -83,8 +85,8 @@ type Priority map[string][]string
 // priority's key should be one of following strings:
 // "BACKLOG", "TODO", "DOING", "DONE"
 type UploadRequest struct {
-	Tasks    []Task   `json:"tasks"`
-	Priority Priority `json:"priority"`
+	Tasks    map[string]Task `json:"tasks"`
+	Priority Priority        `json:"priority"`
 }
 
 func sync(daemonPort int) {
@@ -98,30 +100,70 @@ func sync(daemonPort int) {
 		log.Println(err)
 	}
 
-	tasks := make([]Task, 0, len(ts))
-	for _, v := range ts {
+	tasks := map[string]Task{}
+	for k, v := range ts {
 		if !v.IsDirty {
 			continue
 		}
-		tasks = append(tasks, Task{
+		tasks[k] = Task{
 			ID:        v.Id,
 			Name:      v.Name,
 			Place:     v.Place.String(),
 			IsDeleted: v.IsDeleted,
-		})
+		}
 	}
 	if len(tasks) == 0 {
 		// there's no task to upload
 		log.Println("no task to upload to sync")
 		return
 	}
-
-	log.Printf("%d tasks will upload to sync", len(tasks))
-
 	priority := Priority{}
 	for k, v := range p {
 		priority[k] = v.Ids
 	}
+
+	// nolint: gosec
+	// this is temporary accesstoken
+	const accesstoken = "09c86189-d824-4617-9675-ed0195e1e233"
+	err = upload(accesstoken, tasks, priority)
+	if err != nil {
+		log.Printf("failed to upload sync: %v", err)
+		return
+	}
+
+	tasks, priority, err = download(accesstoken)
+	if err != nil {
+		log.Printf("failed to download: %v", err)
+		return
+	}
+
+	for _, v := range tasks {
+		err = cli.Update(context.Background(), &service.Task{
+			Id:        v.ID,
+			Name:      v.Name,
+			Place:     service.Place(service.Place_value[v.Place]),
+			IsDeleted: v.IsDeleted,
+			IsDirty:   false,
+		})
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	p = map[string]*service.Priority{}
+	for k, v := range priority {
+		p[k] = &service.Priority{Ids: v}
+	}
+
+	log.Printf("downloaded priorities: %v", p)
+	_, err = cli.UpdatePriority(context.Background(), p)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func upload(accesstoken string, tasks map[string]Task, priority Priority) error {
+	log.Printf("%d tasks will upload to sync", len(tasks))
 
 	ur := &UploadRequest{
 		Tasks:    tasks,
@@ -137,12 +179,44 @@ func sync(daemonPort int) {
 	if err != nil {
 		log.Println(err)
 	}
-	req.Header["Authorization"] = []string{"09c86189-d824-4617-9675-ed0195e1e233"}
+	req.Header["Authorization"] = []string{accesstoken}
 
 	httpcli := http.Client{}
 	resp, err := httpcli.Do(req)
 	if err != nil {
-		log.Println(err)
+		return err
 	}
 	defer resp.Body.Close()
+
+	return nil
+}
+
+type DownloadResponse UploadRequest
+
+func download(accesstoken string) (map[string]Task, Priority, error) {
+	req, err := http.NewRequest(http.MethodGet, apiServiceURI+"/download", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	req.Header["Authorization"] = []string{accesstoken}
+
+	httpcli := http.Client{}
+	resp, err := httpcli.Do(req)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer resp.Body.Close()
+
+	buf, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	dr := DownloadResponse{}
+	err = json.Unmarshal(buf, &dr)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return dr.Tasks, dr.Priority, nil
 }

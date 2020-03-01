@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -12,11 +13,12 @@ import (
 func main() {
 	taskStore := &taskStore{
 		taskMapByUserID:  map[string]map[string]api.Task{},
-		priorityByUserID: map[string]map[api.Place]api.Priority{},
+		priorityByUserID: map[string]api.Priority{},
 	}
 	api := &api.API{TaskStore: taskStore}
 
 	http.Handle("/api/v1/upload", &upload{api: api})
+	http.Handle("/api/v1/download", &download{api: api})
 
 	if err := http.ListenAndServe(":8081", nil); err != nil {
 		log.Fatal(err)
@@ -25,7 +27,7 @@ func main() {
 
 type taskStore struct {
 	taskMapByUserID  map[string]map[string]api.Task
-	priorityByUserID map[string]map[api.Place]api.Priority
+	priorityByUserID map[string]api.Priority
 }
 
 func (s *taskStore) SaveTasks(userID string, ts api.Tasks) error {
@@ -65,12 +67,12 @@ func (s *taskStore) SavePriority(userID string, p api.Priority) error {
 	priority, ok := s.priorityByUserID[userID]
 	if !ok {
 		// create a new priority array for specified user
-		s.priorityByUserID[userID] = map[api.Place]api.Priority{}
+		s.priorityByUserID[userID] = api.Priority{}
 		priority = s.priorityByUserID[userID]
 	}
 
 	for place, IDs := range p {
-		priority[place] = api.Priority{place: IDs}
+		priority[place] = IDs
 	}
 
 	buf, err := json.Marshal(priority)
@@ -86,6 +88,22 @@ func (s *taskStore) SavePriority(userID string, p api.Priority) error {
 	log.Printf("len of priority: %v", len(priority))
 
 	return nil
+}
+
+func (s *taskStore) LoadTasks(userID string) (api.Tasks, error) {
+	tasks, ok := s.taskMapByUserID[userID]
+	if !ok {
+		return api.Tasks{}, fmt.Errorf("tasks of [%s] not found", userID)
+	}
+	return tasks, nil
+}
+
+func (s *taskStore) LoadPriority(userID string) (api.Priority, error) {
+	priority, ok := s.priorityByUserID[userID]
+	if !ok {
+		return api.Priority{}, fmt.Errorf("priority of [%s] not found", userID)
+	}
+	return priority, nil
 }
 
 type upload struct {
@@ -104,8 +122,8 @@ type Priority map[string][]string
 // priority's key should be one of following strings:
 // "BACKLOG", "TODO", "DOING", "DONE"
 type UploadRequest struct {
-	Tasks    []Task   `json:"tasks"`
-	Priority Priority `json:"priority"`
+	Tasks    map[string]Task `json:"tasks"`
+	Priority Priority        `json:"priority"`
 }
 
 func (u *upload) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -141,14 +159,14 @@ func (u *upload) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		tasks := make(api.Tasks, 0, len(req.Tasks))
-		for _, v := range req.Tasks {
-			tasks = append(tasks, api.Task{
+		tasks := api.Tasks{}
+		for k, v := range req.Tasks {
+			tasks[k] = api.Task{
 				ID:        v.ID,
 				Name:      v.Name,
 				Place:     api.Place(v.Place),
 				IsDeleted: v.IsDeleted,
-			})
+			}
 		}
 
 		priority := api.Priority{}
@@ -165,6 +183,75 @@ func (u *upload) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	default:
 		// unsupported
+		w.WriteHeader(http.StatusNotImplemented)
+	}
+}
+
+type download struct {
+	api *api.API
+}
+
+type DownloadResponse UploadRequest
+
+func (d *download) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		accesstoken, ok := r.Header["Authorization"]
+		if !ok || len(accesstoken) == 0 {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		log.Printf("Authorization: %v", accesstoken)
+
+		me, err := GetMe(accesstoken[0])
+		if err != nil {
+			log.Printf("failed to get user info from auth service: %v", err)
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		tasks, priority, err := d.api.Download(me.ID)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		resp := DownloadResponse{
+			Tasks: func() map[string]Task {
+				ret := map[string]Task{}
+				for k, v := range tasks {
+					ret[k] = Task{
+						ID:        v.ID,
+						Name:      v.Name,
+						Place:     string(v.Place),
+						IsDeleted: v.IsDeleted,
+					}
+				}
+				return ret
+			}(),
+			Priority: func() Priority {
+				ret := Priority{}
+				for k, v := range priority {
+					ret[string(k)] = v
+				}
+				return ret
+			}(),
+		}
+
+		buf, err := json.Marshal(resp)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		_, err = w.Write(buf)
+		if err != nil {
+			log.Print(err)
+		}
+
+	default:
 		w.WriteHeader(http.StatusNotImplemented)
 	}
 }
