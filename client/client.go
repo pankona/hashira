@@ -85,7 +85,26 @@ func (c *Client) Retrieve(
 
 	err := c.withClient(
 		func(hc service.HashiraClient) error {
-			com := &service.CommandRetrieve{}
+			com := &service.CommandRetrieve{ExcludeDeleted: true}
+			result, err := hc.Retrieve(ctx, com)
+			if err != nil {
+				return errors.New("Retrieve failed: " + err.Error())
+			}
+			tasks = result.Tasks
+			return nil
+		})
+
+	return tasks, err
+}
+
+// Retrieve retrieves all tasks
+func (c *Client) RetrieveAll(
+	ctx context.Context) (map[string]*service.Task, error) {
+	var tasks map[string]*service.Task
+
+	err := c.withClient(
+		func(hc service.HashiraClient) error {
+			com := &service.CommandRetrieve{ExcludeDeleted: false}
 			result, err := hc.Retrieve(ctx, com)
 			if err != nil {
 				return errors.New("Retrieve failed: " + err.Error())

@@ -42,6 +42,7 @@ message CommandDelete {
 }
 
 message CommandRetrieve {
+    bool excludeDeleted = 1;
 }
 
 message CommandUpdatePriority {
