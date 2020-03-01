@@ -23,6 +23,7 @@ message Task {
     string name      = 2;
     Place  place     = 3;
     bool   isDeleted = 4;
+    bool   isDirty   = 5;
 }
 
 message Priority {
