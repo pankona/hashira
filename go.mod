@@ -25,7 +25,7 @@ require (
 	go.etcd.io/bbolt v1.3.3 // indirect
 	golang.org/x/net v0.0.0-20200202094626-16171245cfb2
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
-	google.golang.org/grpc v1.27.1
+	google.golang.org/grpc v1.28.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gopkg.in/square/go-jose.v2 v2.3.1 // indirect
 	gopkg.in/yaml.v2 v2.2.8
