@@ -3,8 +3,8 @@ package database
 import (
 	"fmt"
 
-	bolt "github.com/etcd-io/bbolt"
 	"github.com/gofrs/uuid"
+	bolt "go.etcd.io/bbolt"
 )
 
 // BoltDB provides API for using BoltDB

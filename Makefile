@@ -34,6 +34,7 @@ update-dependencies:
 	cd $(CURDIR)/cmd/hashirad     && $(UPDATE_DEPENDENCIES_CMD)
 	cd $(CURDIR)/cmd/hashira-cui  && $(UPDATE_DEPENDENCIES_CMD)
 	cd $(CURDIR)/cmd/hashira-auth && $(UPDATE_DEPENDENCIES_CMD)
+	cd $(CURDIR)/cmd/hashira-api  && $(BUILD_CMD)
 
 lint:
 	golangci-lint run ./...
