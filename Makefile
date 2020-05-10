@@ -44,3 +44,9 @@ test:
 
 clean:
 	rm -rf $(PB_GO_DIR)
+
+launch:
+	cd $(CURDIR)/cmd/hashira-auth && ./hashira-auth &
+	cd $(CURDIR)/cmd/hashira-api && ./hashira-api &
+	cd $(CURDIR)/cmd/hashira-auth-front && yarn start
+
