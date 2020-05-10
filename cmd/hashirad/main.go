@@ -153,14 +153,6 @@ func initialSync(daemonPort int, accesstoken string) {
 		p[k] = &service.Priority{Ids: v}
 	}
 
-	log.Printf("downloaded priorities:")
-	for k, v := range p {
-		fmt.Printf("%s:\n", k)
-		for _, id := range v.GetIds() {
-			fmt.Printf("%s, ", tasks[id].Name)
-		}
-		fmt.Printf("\n")
-	}
 	_, err = cli.UpdatePriority(context.Background(), p)
 	if err != nil {
 		log.Println(err)
@@ -232,14 +224,6 @@ func sync(daemonPort int, accesstoken string) {
 		p[k] = &service.Priority{Ids: v}
 	}
 
-	log.Printf("downloaded priorities:")
-	for k, v := range p {
-		fmt.Printf("%s:\n", k)
-		for _, id := range v.GetIds() {
-			fmt.Printf("%s, ", tasks[id].Name)
-		}
-		fmt.Printf("\n")
-	}
 	_, err = cli.UpdatePriority(context.Background(), p)
 	if err != nil {
 		log.Println(err)
@@ -252,15 +236,6 @@ func upload(accesstoken string, tasks map[string]Task, priority Priority) error 
 	ur := &UploadRequest{
 		Tasks:    tasks,
 		Priority: priority,
-	}
-
-	log.Printf("uploading priorities:")
-	for k, v := range priority {
-		fmt.Printf("%s:\n", k)
-		for _, id := range v {
-			fmt.Printf("%s, ", tasks[id].Name)
-		}
-		fmt.Printf("\n")
 	}
 
 	body, err := json.Marshal(ur)
