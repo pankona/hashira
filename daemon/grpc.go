@@ -306,9 +306,14 @@ func (d *Daemon) retrievePriorityMap() (map[string]*service.Priority, error) {
 		return nil, err
 	}
 
+	// DB loaded but it is empty. treat as regular case.
+	if len(buf) == 0 {
+		return map[string]*service.Priority{}, nil
+	}
+
 	err = json.Unmarshal(buf, &m)
 	if err != nil {
-		log.Printf("failed to unmarshal loaded data into service.Priority: %s", err.Error())
+		log.Printf("failed to unmarshal loaded data into service.Priority: %v", err)
 	}
 
 	if len(m) == 0 {
