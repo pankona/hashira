@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/pankona/hashira/auth/accesstoken"
 	"github.com/pankona/hashira/auth/google"
@@ -15,20 +14,8 @@ import (
 )
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-		log.Printf("Defaulting to port %s", port)
-	}
-
-	env := os.Getenv("GAE_ENV")
-	servingBaseURL := "http://localhost:8080"
-	if env != "" {
-		servingBaseURL = "https://hashira-auth.appspot.com"
-	}
-
-	log.Printf("GAE_ENV: %v", env)
-	log.Printf("servingBaseURL: %v", servingBaseURL)
+	port := "8080"
+	servingBaseURL := "http://localhost:" + port
 
 	buf, err := ioutil.ReadFile("secret.yaml")
 	if err != nil {

@@ -11,6 +11,8 @@ import (
 )
 
 func main() {
+	port := "8081"
+
 	taskStore := &taskStore{
 		taskMapByUserID:  map[string]map[string]api.Task{},
 		priorityByUserID: map[string]api.Priority{},
@@ -20,7 +22,7 @@ func main() {
 	http.Handle("/api/v1/upload", &upload{api: api})
 	http.Handle("/api/v1/download", &download{api: api})
 
-	if err := http.ListenAndServe(":8081", nil); err != nil {
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal(err)
 	}
 }
