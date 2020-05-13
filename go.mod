@@ -29,7 +29,7 @@ require (
 	google.golang.org/grpc v1.29.1
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gopkg.in/square/go-jose.v2 v2.3.1 // indirect
-	gopkg.in/yaml.v2 v2.2.8
+	gopkg.in/yaml.v2 v2.3.0
 )
 
 go 1.14
