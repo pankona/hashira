@@ -48,5 +48,5 @@ clean:
 launch:
 	cd $(CURDIR)/cmd/hashira-auth && ./hashira-auth &
 	cd $(CURDIR)/cmd/hashira-api && ./hashira-api &
-	cd $(CURDIR)/cmd/hashira-auth-front && yarn start
+	cd $(CURDIR)/cmd/hashira-frontend && yarn start
 
