@@ -77,7 +77,14 @@ func main() {
 	}
 }
 
-const apiServiceURI = "http://localhost:8081/api/v1"
+var apiServiceURI = func() string {
+	p := os.Getenv("HASHIRA_API_SERVER_PORT")
+	if p == "" {
+		p = "8081"
+		log.Printf("HASHIRA_API_SERVERPORT is not specified. Use default port: %s", p)
+	}
+	return "http://localhost:" + p + "/api/v1"
+}()
 
 type Task struct {
 	ID        string

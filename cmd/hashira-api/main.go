@@ -11,13 +11,16 @@ import (
 	"github.com/pankona/hashira/api"
 )
 
-func main() {
-	port := os.Getenv("HASHIRA_API_SERVER_PORT")
-	if port == "" {
-		port = "18082"
-		log.Printf("HASHIRA_AUTH_PORT is not specified. Use default port: %s", port)
+var port = func() string {
+	p := os.Getenv("HASHIRA_API_SERVER_PORT")
+	if p == "" {
+		p = "18082"
+		log.Printf("HASHIRA_AUTH_PORT is not specified. Use default port: %s", p)
 	}
+	return p
+}()
 
+func main() {
 	taskStore := &taskStore{
 		taskMapByUserID:  map[string]map[string]api.Task{},
 		priorityByUserID: map[string]api.Priority{},
@@ -273,9 +276,8 @@ type User struct {
 	GoogleIDToken  string `json:"google_id_token"`
 }
 
-const authServiceURI = "http://localhost:8080/api/v1"
-
 func GetMe(accesstoken string) (User, error) {
+	const authServiceURI = "http://localhost:+port+/api/v1"
 	req, err := http.NewRequest(http.MethodGet, authServiceURI+"/me", nil)
 	if err != nil {
 		return User{}, err
