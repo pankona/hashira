@@ -77,14 +77,14 @@ func main() {
 	}
 }
 
-var apiServiceURI = func() string {
+func apiServiceURI() string {
 	p := os.Getenv("HASHIRA_API_SERVER_PORT")
 	if p == "" {
 		p = "8081"
 		log.Printf("HASHIRA_API_SERVERPORT is not specified. Use default port: %s", p)
 	}
 	return "http://localhost:" + p + "/api/v1"
-}()
+}
 
 type Task struct {
 	ID        string
@@ -250,7 +250,7 @@ func upload(accesstoken string, tasks map[string]Task, priority Priority) error 
 		log.Println(err)
 	}
 
-	req, err := http.NewRequest(http.MethodPost, apiServiceURI+"/upload", bytes.NewBuffer(body))
+	req, err := http.NewRequest(http.MethodPost, apiServiceURI()+"/upload", bytes.NewBuffer(body))
 	if err != nil {
 		log.Println(err)
 	}
@@ -269,7 +269,7 @@ func upload(accesstoken string, tasks map[string]Task, priority Priority) error 
 type DownloadResponse UploadRequest
 
 func download(accesstoken string) (map[string]Task, Priority, error) {
-	req, err := http.NewRequest(http.MethodGet, apiServiceURI+"/download", nil)
+	req, err := http.NewRequest(http.MethodGet, apiServiceURI()+"/download", nil)
 	if err != nil {
 		return nil, nil, err
 	}
