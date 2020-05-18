@@ -6,12 +6,17 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/pankona/hashira/api"
 )
 
 func main() {
-	port := "8081"
+	port := os.Getenv("HASHIRA_API_SERVER_PORT")
+	if port == "" {
+		port = "18082"
+		log.Printf("HASHIRA_AUTH_PORT is not specified. Use default port: %s", port)
+	}
 
 	taskStore := &taskStore{
 		taskMapByUserID:  map[string]map[string]api.Task{},

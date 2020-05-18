@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/pankona/hashira/auth/accesstoken"
 	"github.com/pankona/hashira/auth/google"
@@ -14,7 +15,12 @@ import (
 )
 
 func main() {
-	port := "8080"
+	port := os.Getenv("HASHIRA_AUTH_SERVER_PORT")
+	if port == "" {
+		port = "18081"
+		log.Printf("HASHIRA_AUTH_PORT is not specified. Use default port: %s", port)
+	}
+
 	servingBaseURL := "http://localhost:" + port
 
 	buf, err := ioutil.ReadFile("secret.yaml")
