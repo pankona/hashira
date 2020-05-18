@@ -17,7 +17,7 @@ import (
 func main() {
 	port := os.Getenv("HASHIRA_AUTH_SERVER_PORT")
 	if port == "" {
-		port = "18081"
+		port = "8080"
 		log.Printf("HASHIRA_AUTH_PORT is not specified. Use default port: %s", port)
 	}
 
