@@ -6,12 +6,17 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/pankona/hashira/api"
 )
 
 func main() {
-	port := "8081"
+	port := os.Getenv("HASHIRA_API_SERVER_PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("HASHIRA_AUTH_PORT is not specified. Use default port: %s", port)
+	}
 
 	taskStore := &taskStore{
 		taskMapByUserID:  map[string]map[string]api.Task{},
@@ -268,9 +273,9 @@ type User struct {
 	GoogleIDToken  string `json:"google_id_token"`
 }
 
-const authServiceURI = "http://localhost:8080/api/v1"
-
 func GetMe(accesstoken string) (User, error) {
+	// TODO: port number should be passed via environment variables
+	const authServiceURI = "http://localhost:8082/api/v1"
 	req, err := http.NewRequest(http.MethodGet, authServiceURI+"/me", nil)
 	if err != nil {
 		return User{}, err

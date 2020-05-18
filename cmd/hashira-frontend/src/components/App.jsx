@@ -31,7 +31,7 @@ export default class App extends Component<Props, State> {
         'Origin': 'http://localhost:3000',
       })
 
-    fetch('http://localhost:8080/api/v1/me', {
+    fetch('http://localhost:8082/api/v1/me', {
       method: 'GET',
       credentials: 'include',
       headers: headers,
@@ -58,8 +58,8 @@ export default class App extends Component<Props, State> {
     return (
       <div>
         { this.state.Name ? "Hello, " + this.state.Name + " !" : "Let's login with:" }
-        <p><a href="http://localhost:8080/auth/google">login by google</a> {this.state.isConnectedToGoogle ? 'Connected!' : ''}</p>
-        <p><a href="http://localhost:8080/auth/twitter">login by twitter</a> {this.state.isConnectedToTwitter ? 'Connected!' : ''}</p>
+        <p><a href="http://localhost:8082/auth/google">login by google</a> {this.state.isConnectedToGoogle ? 'Connected!' : ''}</p>
+        <p><a href="http://localhost:8082/auth/twitter">login by twitter</a> {this.state.isConnectedToTwitter ? 'Connected!' : ''}</p>
       </div>
     )
   }
