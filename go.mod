@@ -1,7 +1,7 @@
 module github.com/pankona/hashira
 
 require (
-	cloud.google.com/go/datastore v1.1.0
+	cloud.google.com/go/datastore v1.2.0
 	github.com/ChimeraCoder/anaconda v2.0.0+incompatible
 	github.com/ChimeraCoder/tokenbucket v0.0.0-20131201223612-c5a927568de7 // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
@@ -22,10 +22,8 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.6.1
 	go.etcd.io/bbolt v1.3.4
-	golang.org/x/net v0.0.0-20200506145744-7e3656a0809f
+	golang.org/x/net v0.0.0-20200520182314-0ba52f642ac2
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
-	golang.org/x/sys v0.0.0-20200509044756-6aff5f38e54f // indirect
-	google.golang.org/genproto v0.0.0-20200507105951-43844f6eee31 // indirect
 	google.golang.org/grpc v1.29.1
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gopkg.in/square/go-jose.v2 v2.3.1 // indirect
