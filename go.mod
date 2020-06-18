@@ -21,7 +21,7 @@ require (
 	github.com/pquerna/cachecontrol v0.0.0-20180517163645-1555304b9b35 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.6.1
-	go.etcd.io/bbolt v1.3.4
+	go.etcd.io/bbolt v1.3.5
 	golang.org/x/net v0.0.0-20200520182314-0ba52f642ac2
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	google.golang.org/grpc v1.29.1
