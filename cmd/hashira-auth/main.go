@@ -21,7 +21,7 @@ func main() {
 		log.Printf("HASHIRA_AUTH_PORT is not specified. Use default port: %s", port)
 	}
 
-	servingBaseURL := "http://localhost:" + port
+	servingBaseURL := "http://localhost:8080"
 
 	buf, err := ioutil.ReadFile("secret.yaml")
 	if err != nil {
@@ -54,26 +54,26 @@ func main() {
 		mux: http.DefaultServeMux,
 		routes: map[http.Handler]*routes{
 			me.New(ms): {
-				"/api/v1/me",
+				"/v1/me",
 				[]string{
 					"",
 				},
 			},
 			accesstoken.New(): {
-				"/api/v1/accesstoken",
+				"/v1/accesstoken",
 				[]string{
 					"",
 				},
 			},
 			googleOAuthHandler: {
-				"/auth/google",
+				"/google",
 				[]string{
 					"",
 					"/callback",
 				},
 			},
 			twitterOAuthHandler: {
-				"/auth/twitter",
+				"/twitter",
 				[]string{
 					"",
 					"/callback",

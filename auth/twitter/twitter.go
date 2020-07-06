@@ -111,7 +111,7 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 			Path:  "/",
 		}
 		http.SetCookie(w, cookie)
-		http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
+		http.Redirect(w, r, "http://localhost:8080", http.StatusFound)
 		return
 	}
 
@@ -133,7 +133,7 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 				panic(fmt.Sprintf("failed to store user. fatal: %v", err))
 			}
 
-			http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
+			http.Redirect(w, r, "http://localhost:8080", http.StatusFound)
 			return
 		}
 	}
@@ -166,7 +166,7 @@ func (t *Twitter) handleAccessToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, cookie)
-	http.Redirect(w, r, "http://localhost:3000", http.StatusFound)
+	http.Redirect(w, r, "http://localhost:8080", http.StatusFound)
 }
 
 func (t *Twitter) ServeHTTP(w http.ResponseWriter, r *http.Request) {

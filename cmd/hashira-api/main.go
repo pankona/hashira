@@ -15,7 +15,7 @@ func main() {
 	port := os.Getenv("HASHIRA_API_SERVER_PORT")
 	if port == "" {
 		port = "8080"
-		log.Printf("HASHIRA_AUTH_PORT is not specified. Use default port: %s", port)
+		log.Printf("HASHIRA_API_SERVER_PORT is not specified. Use default port: %s", port)
 	}
 
 	taskStore := &taskStore{
