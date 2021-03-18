@@ -12,7 +12,7 @@ require (
 	github.com/dustin/gojson v0.0.0-20160307161227-2e71ec9dd5ad // indirect
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17
 	github.com/gofrs/uuid v3.4.0+incompatible
-	github.com/golang/protobuf v1.4.3
+	github.com/golang/protobuf v1.5.1
 	github.com/jesseduffield/termbox-go v0.0.0-20190630083001-9dd53af7214e // indirect
 	github.com/mattn/go-runewidth v0.0.10
 	github.com/pankona/gocui v0.3.1-0.20190107094646-a6233010013f
