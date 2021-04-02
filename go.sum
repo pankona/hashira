@@ -192,6 +192,7 @@ github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
 github.com/mattn/go-runewidth v0.0.9 h1:Lm995f3rfxdpd6TSmuVCHVb/QhupuXlYr8sCI/QdE+0=
 github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
 github.com/mattn/go-runewidth v0.0.10/go.mod h1:RAqKPSqVFrSLVXbA8x7dzmKdmGzieGRCM46jaSJTDAk=
+github.com/mattn/go-runewidth v0.0.12/go.mod h1:RAqKPSqVFrSLVXbA8x7dzmKdmGzieGRCM46jaSJTDAk=
 github.com/pankona/gocui v0.3.1-0.20190107094646-a6233010013f h1:ZwehUafR4jFo7qao6Hu8LTclXew2lBb+2J9aSpEgf9A=
 github.com/pankona/gocui v0.3.1-0.20190107094646-a6233010013f/go.mod h1:YbpnnaXew8rp90mxIrWZhP7FNJoXGaiChttkzIiVRB0=
 github.com/pankona/orderedmap v0.0.0-20190220081458-0d2a73efbdac h1:Zlmj1OVbpfO6YBT0+j9JArbMkCJaGr9jA+5dKnY6Byg=
