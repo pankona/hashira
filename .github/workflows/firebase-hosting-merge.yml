@@ -2,6 +2,7 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to Firebase Hosting on merge
+
 'on':
   push:
     branches:
@@ -23,6 +24,7 @@ jobs:
       - run: go run .
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
+          entryPoint: hashira-web
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_HASHIRA_WEB }}'
           channelId: live
