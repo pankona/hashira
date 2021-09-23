@@ -14,8 +14,6 @@ build:
 	cd $(CURDIR)/cmd/hashira      && $(BUILD_CMD)
 	cd $(CURDIR)/cmd/hashirad     && $(BUILD_CMD)
 	cd $(CURDIR)/cmd/hashira-cui  && $(BUILD_CMD)
-	cd $(CURDIR)/cmd/hashira-auth && $(BUILD_CMD)
-	cd $(CURDIR)/cmd/hashira-api  && $(BUILD_CMD)
 
 install:
 	@BUILD_CMD="go install" make build
@@ -33,8 +31,6 @@ update-dependencies:
 	cd $(CURDIR)/cmd/hashira      && $(UPDATE_DEPENDENCIES_CMD)
 	cd $(CURDIR)/cmd/hashirad     && $(UPDATE_DEPENDENCIES_CMD)
 	cd $(CURDIR)/cmd/hashira-cui  && $(UPDATE_DEPENDENCIES_CMD)
-	cd $(CURDIR)/cmd/hashira-auth && $(UPDATE_DEPENDENCIES_CMD)
-	cd $(CURDIR)/cmd/hashira-api  && $(BUILD_CMD)
 
 lint:
 	golangci-lint run ./...
@@ -44,9 +40,3 @@ test:
 
 clean:
 	rm -rf $(PB_GO_DIR)
-
-launch:
-	cd $(CURDIR)/cmd/hashira-auth && ./hashira-auth &
-	cd $(CURDIR)/cmd/hashira-api && ./hashira-api &
-	cd $(CURDIR)/cmd/hashira-frontend && yarn start
-
