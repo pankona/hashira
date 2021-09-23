@@ -11,18 +11,18 @@ import (
 
 func main() {
 	var (
-		serve bool
-		clean bool
+		flagWatch bool
+		flagClean bool
 	)
 
-	flag.BoolVar(&serve, "serve", false, "start development server")
-	flag.BoolVar(&clean, "clean", false, "clean artifacts")
+	flag.BoolVar(&flagWatch, "watch", false, "watch the directory and build on change")
+	flag.BoolVar(&flagClean, "clean", false, "clean artifacts")
 
 	flag.Parse()
 
 	outdir := filepath.Join("public", "assets")
 
-	if clean {
+	if flagClean {
 		log.Printf("clean started\n")
 		if err := cleanArtifacts(outdir); err != nil {
 			log.Printf("clean failed: %v", err)
@@ -47,41 +47,19 @@ func main() {
 		},
 	}
 
-	if serve {
-		startDevServer(buildOptions)
+	if flagWatch {
+		watch(buildOptions)
 		return
 	}
 
 	build(buildOptions)
-
-	done := make(chan struct{})
-	<-done
 }
 
 func cleanArtifacts(dir string) error {
 	return os.RemoveAll(dir)
 }
 
-func startDevServer(opts api.BuildOptions) error {
-	log.Println("starting dev server")
-
-	server, err := api.Serve(api.ServeOptions{
-		Servedir: filepath.Join("public"),
-		Port:     8000,
-	}, opts)
-	if err != nil {
-		log.Printf("failed to start development server: %v", err)
-		os.Exit(1)
-	}
-
-	log.Printf("development server started with: %v:%v", server.Host, server.Port)
-
-	return nil
-}
-
-func build(opts api.BuildOptions) error {
-	log.Printf("build started\n")
-
+func watch(opts api.BuildOptions) error {
 	opts.Watch = &api.WatchMode{
 		OnRebuild: func(result api.BuildResult) {
 			if len(result.Errors) > 0 {
@@ -90,6 +68,22 @@ func build(opts api.BuildOptions) error {
 			}
 		},
 	}
+
+	if err := build(opts); err != nil {
+		log.Printf("failed to build: %v", err)
+	}
+
+	log.Println("start to watch the directory")
+
+	// keep watching
+	done := make(chan struct{})
+	<-done
+
+	return nil
+}
+
+func build(opts api.BuildOptions) error {
+	log.Printf("build started\n")
 
 	result := api.Build(opts)
 
