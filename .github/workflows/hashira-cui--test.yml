@@ -1,4 +1,4 @@
-name: hashira-cui / test
+name: hashira-cui
 
 on:
   pull_request:
