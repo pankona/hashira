@@ -2,4 +2,4 @@ test:
 	go test -count=1 ./...
 
 deploy:
-	gcloud functions deploy TestAccessToken --runtime go116 --trigger-http --allow-unauthenticated --region asia-northeast1
+	gcloud functions deploy test-access-token --entry-point TestAccessToken --runtime go116 --memory 128MB --trigger-http --allow-unauthenticated --region asia-northeast1 --max-instances 10
