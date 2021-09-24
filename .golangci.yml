@@ -1,16 +1,1 @@
-linters:
-  enable-all: true
-  disable:
-    - godox
-    - wsl
-    - whitespace
-    - funlen
 
-issues:
-  exclude-use-default: true
-
-output:
-  print-issued-lines: false
-
-run:
-  timeout: 5m
