@@ -13,7 +13,6 @@ import (
 	"os/user"
 	"path/filepath"
 	"strconv"
-	"time"
 
 	hc "github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/daemon"
@@ -54,22 +53,24 @@ func main() {
 		DB:   db,
 	}
 
-	accesstoken := os.Getenv("HASHIRA_ACCESSTOKEN")
+	/*
+		accesstoken := os.Getenv("HASHIRA_ACCESSTOKEN")
 
-	if len(accesstoken) != 0 {
-		const syncPeriod = 10
+		if len(accesstoken) != 0 {
+			const syncPeriod = 10
 
-		go func() {
-			<-time.After(syncPeriod * time.Second)
-			initialSync(port, accesstoken)
-
-			// TODO: don't enter infinite loop if accesstoken is invalid
-			for {
+			go func() {
 				<-time.After(syncPeriod * time.Second)
-				sync(port, accesstoken)
-			}
-		}()
-	}
+				initialSync(port, accesstoken)
+
+				// TODO: don't enter infinite loop if accesstoken is invalid
+				for {
+					<-time.After(syncPeriod * time.Second)
+					sync(port, accesstoken)
+				}
+			}()
+		}
+	*/
 
 	if err = d.Run(); err != nil {
 		fmt.Printf("failed to start hashira daemon: %s\n", err.Error())
