@@ -1,23 +1,14 @@
 package main
 
 import (
-	"bytes"
-	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"log"
-	"net/http"
 	"os"
 	"os/user"
 	"path/filepath"
-	"strconv"
 
-	hc "github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
-	"github.com/pankona/hashira/service"
 )
 
 func initializeDB() (database.Databaser, error) {
@@ -53,31 +44,13 @@ func main() {
 		DB:   db,
 	}
 
-	/*
-		accesstoken := os.Getenv("HASHIRA_ACCESSTOKEN")
-
-		if len(accesstoken) != 0 {
-			const syncPeriod = 10
-
-			go func() {
-				<-time.After(syncPeriod * time.Second)
-				initialSync(port, accesstoken)
-
-				// TODO: don't enter infinite loop if accesstoken is invalid
-				for {
-					<-time.After(syncPeriod * time.Second)
-					sync(port, accesstoken)
-				}
-			}()
-		}
-	*/
-
 	if err = d.Run(); err != nil {
 		fmt.Printf("failed to start hashira daemon: %s\n", err.Error())
 		os.Exit(1)
 	}
 }
 
+/*
 func apiServiceURI() string {
 	p := os.Getenv("HASHIRA_API_SERVER_PORT")
 	if p == "" {
@@ -86,7 +59,9 @@ func apiServiceURI() string {
 	}
 	return "http://localhost:" + p + "/api/v1"
 }
+*/
 
+/*
 type Task struct {
 	ID        string
 	Name      string
@@ -102,7 +77,9 @@ type UploadRequest struct {
 	Tasks    map[string]Task `json:"tasks"`
 	Priority Priority        `json:"priority"`
 }
+*/
 
+/*
 func initialSync(daemonPort int, accesstoken string) {
 	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(daemonPort)}
 	ts, err := cli.RetrieveAll(context.Background())
@@ -166,7 +143,9 @@ func initialSync(daemonPort int, accesstoken string) {
 		log.Println(err)
 	}
 }
+*/
 
+/*
 func sync(daemonPort int, accesstoken string) {
 	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(daemonPort)}
 	ts, err := cli.RetrieveAll(context.Background())
@@ -237,7 +216,9 @@ func sync(daemonPort int, accesstoken string) {
 		log.Println(err)
 	}
 }
+*/
 
+/*
 func upload(accesstoken string, tasks map[string]Task, priority Priority) error {
 	log.Printf("%d tasks will upload to sync", len(tasks))
 
@@ -266,7 +247,9 @@ func upload(accesstoken string, tasks map[string]Task, priority Priority) error 
 
 	return nil
 }
+*/
 
+/*
 type DownloadResponse UploadRequest
 
 func download(accesstoken string) (map[string]Task, Priority, error) {
@@ -296,3 +279,4 @@ func download(accesstoken string) (map[string]Task, Priority, error) {
 
 	return dr.Tasks, dr.Priority, nil
 }
+*/
