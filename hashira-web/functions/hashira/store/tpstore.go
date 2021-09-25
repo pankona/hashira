@@ -33,3 +33,25 @@ func (t *TaskAndPriorityStore) Save(ctx context.Context, uid string, tp hashira.
 
 	return nil
 }
+
+func (t *TaskAndPriorityStore) Load(ctx context.Context, uid string) (hashira.TaskAndPriority, error) {
+	client, err := firestore.NewClient(ctx, "hashira-web")
+	if err != nil {
+		return hashira.TaskAndPriority{}, fmt.Errorf("failed to create firebase client: %w", err)
+	}
+
+	ds, err := client.Collection("tasksAndPriorities").Doc(uid).Get(ctx)
+	if err != nil {
+		return hashira.TaskAndPriority{}, fmt.Errorf("failed to write documents: %w", err)
+	}
+
+	buf := &bytes.Buffer{}
+	if err := json.NewEncoder(buf).Encode(ds.Data()); err != nil {
+		return hashira.TaskAndPriority{}, fmt.Errorf("failed to encode data: %w", err)
+	}
+
+	var ret hashira.TaskAndPriority
+	json.NewDecoder(buf).Decode(&ret)
+
+	return ret, nil
+}

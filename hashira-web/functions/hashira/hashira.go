@@ -18,6 +18,7 @@ type AccessTokenStore interface {
 
 type TaskAndPriorityStore interface {
 	Save(ctx context.Context, uid string, tp TaskAndPriority) error
+	Load(ctx context.Context, uid string) (TaskAndPriority, error)
 }
 
 type Hashira struct {
@@ -110,6 +111,35 @@ func (h *Hashira) Upload(w http.ResponseWriter, r *http.Request) {
 	if err := h.TaskAndPriorityStore.Save(r.Context(), uid, tp); err != nil {
 		log.Printf("failed to save tasks and priorities: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *Hashira) Download(w http.ResponseWriter, r *http.Request) {
+	accesstoken, err := h.retrieveAccessTokenFromHeader(r.Context(), r.Header)
+	if err != nil {
+		log.Printf("failed to retrieve accesstoken from header: %v", err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	uid, err := h.AccessTokenStore.FindUidByAccessToken(r.Context(), accesstoken)
+	if err != nil {
+		log.Printf("could not find a user who has the accesstoken %v: %v", accesstoken, err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	tp, err := h.TaskAndPriorityStore.Load(r.Context(), uid)
+	if err != nil {
+		log.Printf("failed to load tasks and priorities: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(tp); err != nil {
+		log.Printf("failed to write response body: %v", err)
 		return
 	}
 }
