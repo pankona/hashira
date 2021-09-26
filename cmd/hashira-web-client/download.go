@@ -42,12 +42,35 @@ func download(accesstoken string) {
 		priorities[k] = &service.Priority{Ids: v}
 	}
 
+	oldPriorities, err := cli.RetrievePriority(context.Background())
+	if err != nil {
+		log.Printf("failed to retrieve old priorities: %v", err)
+	}
+
+	for k, v := range oldPriorities {
+		priorities[k].Ids = append(v.Ids, priorities[k].Ids...)
+		priorities[k].Ids = unique(priorities[k].Ids)
+	}
+
 	_, err = cli.UpdatePriority(context.Background(), priorities)
 	if err != nil {
 		log.Printf("failed to update priority: %v", err)
 	}
 
 	log.Println("download completed")
+}
+
+func unique(ss []string) []string {
+	keys := make(map[string]struct{})
+	ids := []string{}
+
+	for _, id := range ss {
+		if _, ok := keys[id]; !ok {
+			keys[id] = struct{}{}
+			ids = append(ids, id)
+		}
+	}
+	return ids
 }
 
 type DownloadResult UploadRequest
