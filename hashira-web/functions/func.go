@@ -16,3 +16,8 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	h := hashira.New(store.NewAccessTokenStore(), store.NewTaskAndPriorityStore())
 	h.Upload(w, r)
 }
+
+func Download(w http.ResponseWriter, r *http.Request) {
+	h := hashira.New(store.NewAccessTokenStore(), store.NewTaskAndPriorityStore())
+	h.Download(w, r)
+}
