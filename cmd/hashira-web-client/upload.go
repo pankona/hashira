@@ -13,6 +13,8 @@ import (
 )
 
 func upload(accesstoken string) {
+	log.Println("upload started")
+
 	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(daemonPort)}
 	ts, err := cli.RetrieveAll(context.Background())
 	if err != nil {
@@ -49,6 +51,8 @@ func upload(accesstoken string) {
 		log.Printf("failed to upload sync: %v", err)
 		return
 	}
+
+	log.Println("upload completed")
 }
 
 // priority's key should be one of following strings:
@@ -59,7 +63,7 @@ type UploadRequest struct {
 }
 
 func execUpload(accesstoken string, tasks map[string]Task, priority Priority) error {
-	log.Printf("%d tasks will upload to sync", len(tasks))
+	log.Printf("%d tasks will be uploaded", len(tasks))
 
 	ur := &UploadRequest{
 		Tasks:    tasks,

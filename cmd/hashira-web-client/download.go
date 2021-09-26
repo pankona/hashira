@@ -13,11 +13,15 @@ import (
 )
 
 func download(accesstoken string) {
+	log.Println("download started")
+
 	result, err := execDownload(accesstoken)
 	if err != nil {
 		log.Printf("failed to download task and priority: %v", err)
 		return
 	}
+
+	log.Printf("%d tasks downloaded", len(result.Tasks))
 
 	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(daemonPort)}
 	for _, task := range result.Tasks {
@@ -42,13 +46,13 @@ func download(accesstoken string) {
 	if err != nil {
 		log.Printf("failed to update priority: %v", err)
 	}
+
+	log.Println("download completed")
 }
 
 type DownloadResult UploadRequest
 
 func execDownload(accesstoken string) (DownloadResult, error) {
-	log.Println("download started")
-
 	req, err := http.NewRequest(http.MethodGet, "https://asia-northeast1-hashira-web.cloudfunctions.net/download", nil)
 	if err != nil {
 		return DownloadResult{}, fmt.Errorf("failed to prepare request: %w", err)
