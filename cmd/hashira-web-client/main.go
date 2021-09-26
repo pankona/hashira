@@ -14,6 +14,7 @@ func main() {
 	)
 
 	flag.BoolVar(&flagUpload, "upload", false, "upload tasks and priorities to hashira-web")
+	flag.BoolVar(&flagDownload, "download", false, "download tasks and priorities from hashira-web")
 	flag.BoolVar(&flagTest, "test", false, "test the hashira-web works")
 	flag.Parse()
 
@@ -27,7 +28,7 @@ func main() {
 	case flagUpload:
 		upload(accesstoken)
 	case flagDownload:
-		// TODO: implement
+		download(accesstoken)
 	case flagTest:
 		fallthrough
 	default:
