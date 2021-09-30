@@ -116,6 +116,30 @@ func (b *BoltDB) Load(bucket, id string) ([]byte, error) {
 	return ret, err
 }
 
+func (b *BoltDB) PhysicalDelete(bucket, id string) error {
+	return b.withDBOpenClose(
+		func() error {
+			err := b.db.Update(
+				func(tx *bolt.Tx) error {
+					if tx == nil {
+						return nil
+					}
+					b := tx.Bucket([]byte(bucket))
+					if b == nil {
+						return nil
+					}
+					if err := b.Delete([]byte(id)); err != nil {
+						return fmt.Errorf("failed to physical delete from db: %w", err)
+					}
+					return nil
+				})
+			if err != nil {
+				return fmt.Errorf("failed to physical delete: %v", err)
+			}
+			return nil
+		})
+}
+
 // ForEach loops for all items already saved and invoke specified function
 func (b *BoltDB) ForEach(bucket string, f func(k, v []byte) error) error {
 	err := b.withDBOpenClose(

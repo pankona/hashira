@@ -1,11 +1,14 @@
 syntax = "proto3";
 
+option go_package = "github.com/pankona/hashira/service";
+
 package service;
 
 service Hashira {
     rpc Create(CommandCreate) returns (ResultCreate) {}
     rpc Update(CommandUpdate) returns (ResultUpdate) {}
     rpc Delete(CommandDelete) returns (ResultDelete) {}
+    rpc PhysicalDelete(CommandPhysicalDelete) returns (ResultPhysicalDelete) {}
     rpc Retrieve(CommandRetrieve) returns (ResultRetrieve) {}
     rpc UpdatePriority(CommandUpdatePriority) returns (ResultUpdatePriority) {}
     rpc RetrievePriority(CommandRetrievePriority) returns (ResultRetrievePriority) {}
@@ -42,6 +45,10 @@ message CommandDelete {
     string id = 1;
 }
 
+message CommandPhysicalDelete {
+    string id = 1;
+}
+
 message CommandRetrieve {
     bool excludeDeleted = 1;
 }
@@ -63,6 +70,9 @@ message ResultUpdate {
 
 message ResultDelete {
     Task task = 1;
+}
+
+message ResultPhysicalDelete {
 }
 
 message ResultRetrieve {

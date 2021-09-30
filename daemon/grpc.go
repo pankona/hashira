@@ -91,6 +91,18 @@ func (d *Daemon) Delete(ctx context.Context, com *service.CommandDelete) (*servi
 	return &service.ResultDelete{Task: t}, err
 }
 
+// Delete deletes an existing task
+func (d *Daemon) PhysicalDelete(ctx context.Context, com *service.CommandPhysicalDelete) (*service.ResultPhysicalDelete, error) {
+	err := d.DB.PhysicalDelete(taskBucket, com.Id)
+	if err != nil {
+		return nil, err
+	}
+	return &service.ResultPhysicalDelete{}, nil
+}
+
+func (d *Daemon) mustEmbedUnimplementedHashiraServer() {
+}
+
 type deletedItem int
 
 const (

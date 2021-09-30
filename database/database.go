@@ -6,5 +6,6 @@ type Databaser interface {
 	Finalize() error
 	Save(bucket, id string, value []byte) (string, error)
 	Load(bucket, id string) ([]byte, error)
+	PhysicalDelete(bucket, id string) error
 	ForEach(bucket string, f func(k, v []byte) error) error
 }

@@ -25,7 +25,13 @@ genproto: $(PB_GOS)
 
 $(PB_GO_DIR)/%.pb.go: $(PROTO_DIR)/%.proto
 	mkdir -p $(dir $@)
-	protoc -I $(PROTO_DIR) --go_out=plugins=grpc:$(dir $@) ./$<
+	protoc \
+		-I $(PROTO_DIR) \
+		--go_out=. \
+		--go_opt=module=github.com/pankona/hashira \
+		--go-grpc_out=. \
+		--go-grpc_opt=module=github.com/pankona/hashira \
+		./$<
 
 update-dependencies:
 	cd $(CURDIR)/cmd/hashira      && $(UPDATE_DEPENDENCIES_CMD)
