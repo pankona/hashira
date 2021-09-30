@@ -1,1 +1,3 @@
-
+skip-dirs:
+  - service
+  - hashira-web/

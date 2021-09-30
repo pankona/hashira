@@ -100,9 +100,6 @@ func (d *Daemon) PhysicalDelete(ctx context.Context, com *service.CommandPhysica
 	return &service.ResultPhysicalDelete{}, nil
 }
 
-func (d *Daemon) mustEmbedUnimplementedHashiraServer() {
-}
-
 type deletedItem int
 
 const (
