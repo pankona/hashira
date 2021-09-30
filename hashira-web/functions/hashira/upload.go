@@ -42,6 +42,12 @@ func (h *Hashira) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	for k, task := range tp.Tasks {
+		if task.IsDeleted {
+			delete(tp.Tasks, k)
+		}
+	}
+
 	if err := h.TaskAndPriorityStore.Save(r.Context(), uid, tp); err != nil {
 		log.Printf("failed to save tasks and priorities: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)

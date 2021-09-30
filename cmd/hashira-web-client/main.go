@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"time"
 
 	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
@@ -37,6 +38,8 @@ func main() {
 	go func() {
 		launchHashirad(done)
 	}()
+
+	time.Sleep(1 * time.Second)
 
 	switch {
 	case flagSync:

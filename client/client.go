@@ -78,6 +78,22 @@ func (c *Client) Delete(ctx context.Context, id string) error {
 		})
 }
 
+// Delete marks specified task as deleted
+func (c *Client) PhysicalDelete(ctx context.Context, id string) error {
+	return c.withClient(
+		func(hc service.HashiraClient) error {
+			com := &service.CommandPhysicalDelete{
+				Id: id,
+			}
+			result, err := hc.PhysicalDelete(ctx, com)
+			if err != nil {
+				return errors.New("PhysicalDelete failed: " + err.Error())
+			}
+			result.ProtoMessage()
+			return nil
+		})
+}
+
 // Retrieve retrieves all tasks
 func (c *Client) Retrieve(
 	ctx context.Context) (map[string]*service.Task, error) {

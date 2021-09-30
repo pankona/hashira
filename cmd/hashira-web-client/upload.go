@@ -23,7 +23,7 @@ func upload(accesstoken string, uploadTarget UploadTarget) {
 	log.Println("upload started")
 
 	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(daemonPort)}
-	ts, err := cli.RetrieveAll(context.Background())
+	allTasks, err := cli.RetrieveAll(context.Background())
 	if err != nil {
 		log.Println(err)
 	}
@@ -33,7 +33,7 @@ func upload(accesstoken string, uploadTarget UploadTarget) {
 	}
 
 	tasks := map[string]Task{}
-	for k, v := range ts {
+	for k, v := range allTasks {
 		if uploadTarget == UploadDirtyOnly && !v.IsDirty {
 			continue
 		}
@@ -60,6 +60,16 @@ func upload(accesstoken string, uploadTarget UploadTarget) {
 	if err != nil {
 		log.Printf("failed to upload: %v", err)
 		return
+	}
+
+	for _, task := range allTasks {
+		if !task.IsDeleted {
+			continue
+		}
+		if err := cli.PhysicalDelete(context.Background(), task.Id); err != nil {
+			log.Printf("failed to physical delete a task: %v", err)
+		}
+		log.Printf("task [%s] is deleted physically", task.Id)
 	}
 
 	log.Println("upload completed")

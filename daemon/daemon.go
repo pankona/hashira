@@ -16,6 +16,8 @@ type Daemon struct {
 	Port   int
 	DB     database.Databaser
 	server *grpc.Server
+
+	service.UnimplementedHashiraServer
 }
 
 // Run starts hashira daemon (as gRPC server)
