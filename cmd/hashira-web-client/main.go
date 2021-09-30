@@ -41,9 +41,9 @@ func main() {
 	switch {
 	case flagSync:
 		download(accesstoken)
-		upload(accesstoken)
+		upload(accesstoken, UploadAll)
 	case flagUpload:
-		upload(accesstoken)
+		upload(accesstoken, UploadDirtyOnly)
 	case flagDownload:
 		download(accesstoken)
 	case flagTest:

@@ -12,7 +12,14 @@ import (
 	hc "github.com/pankona/hashira/client"
 )
 
-func upload(accesstoken string) {
+type UploadTarget int
+
+const (
+	UploadAll UploadTarget = iota
+	UploadDirtyOnly
+)
+
+func upload(accesstoken string, uploadTarget UploadTarget) {
 	log.Println("upload started")
 
 	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(daemonPort)}
@@ -27,6 +34,9 @@ func upload(accesstoken string) {
 
 	tasks := map[string]Task{}
 	for k, v := range ts {
+		if uploadTarget == UploadDirtyOnly && !v.IsDirty {
+			continue
+		}
 		tasks[k] = Task{
 			ID:        v.Id,
 			Name:      v.Name,
@@ -37,7 +47,7 @@ func upload(accesstoken string) {
 
 	if len(tasks) == 0 {
 		// there's no task to upload
-		log.Println("no task to upload to sync")
+		log.Println("no task to upload")
 		return
 	}
 
@@ -48,7 +58,7 @@ func upload(accesstoken string) {
 
 	err = execUpload(accesstoken, tasks, priority)
 	if err != nil {
-		log.Printf("failed to upload sync: %v", err)
+		log.Printf("failed to upload: %v", err)
 		return
 	}
 

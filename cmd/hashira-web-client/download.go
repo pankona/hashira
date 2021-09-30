@@ -37,9 +37,9 @@ func download(accesstoken string) {
 		}
 	}
 
-	priorities := map[string]*service.Priority{}
+	newPriorities := map[string]*service.Priority{}
 	for k, v := range result.Priority {
-		priorities[k] = &service.Priority{Ids: v}
+		newPriorities[k] = &service.Priority{Ids: v}
 	}
 
 	oldPriorities, err := cli.RetrievePriority(context.Background())
@@ -47,10 +47,7 @@ func download(accesstoken string) {
 		log.Printf("failed to retrieve old priorities: %v", err)
 	}
 
-	for k, v := range oldPriorities {
-		priorities[k].Ids = append(v.Ids, priorities[k].Ids...)
-		priorities[k].Ids = unique(priorities[k].Ids)
-	}
+	priorities := mergePriorities(newPriorities, oldPriorities)
 
 	_, err = cli.UpdatePriority(context.Background(), priorities)
 	if err != nil {
@@ -58,6 +55,17 @@ func download(accesstoken string) {
 	}
 
 	log.Println("download completed")
+}
+
+func mergePriorities(newPriorities, oldPriorities map[string]*service.Priority) map[string]*service.Priority {
+	ret := map[string]*service.Priority{}
+	for k, oldPriority := range oldPriorities {
+		ret[k] = &service.Priority{
+			Ids: append(newPriorities[k].Ids, oldPriority.Ids...),
+		}
+		ret[k].Ids = unique(ret[k].Ids)
+	}
+	return ret
 }
 
 func unique(ss []string) []string {
