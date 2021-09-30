@@ -29,9 +29,62 @@ func (h *Hashira) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	oldtp, err := h.TaskAndPriorityStore.Load(r.Context(), uid)
+	if err != nil {
+		log.Printf("failed to load task and priorities: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if tp, err = mergeTaskAndPriorities(tp, oldtp); err != nil {
+		log.Printf("failed to merge task and priorities: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	if err := h.TaskAndPriorityStore.Save(r.Context(), uid, tp); err != nil {
 		log.Printf("failed to save tasks and priorities: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+}
+
+func mergeTaskAndPriorities(newtp, oldtp TaskAndPriority) (TaskAndPriority, error) {
+	ret := map[string]Task{}
+
+	for k, v := range oldtp.Tasks {
+		ret[k] = v
+	}
+	for k, v := range newtp.Tasks {
+		ret[k] = v
+	}
+
+	priorities := mergePriorities(newtp.Priority, oldtp.Priority)
+
+	return TaskAndPriority{
+		Tasks:    ret,
+		Priority: priorities,
+	}, nil
+}
+
+func mergePriorities(newPriorities, oldPriorities map[string][]string) map[string][]string {
+	ret := map[string][]string{}
+	for k, oldPriority := range oldPriorities {
+		ret[k] = append(newPriorities[k], oldPriority...)
+		ret[k] = unique(ret[k])
+	}
+	return ret
+}
+
+func unique(ss []string) []string {
+	keys := make(map[string]struct{})
+	ids := []string{}
+
+	for _, id := range ss {
+		if _, ok := keys[id]; !ok {
+			keys[id] = struct{}{}
+			ids = append(ids, id)
+		}
+	}
+	return ids
 }
