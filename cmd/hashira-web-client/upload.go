@@ -1,15 +1,13 @@
 package main
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
-	"fmt"
 	"log"
-	"net/http"
 	"strconv"
 
 	hc "github.com/pankona/hashira/client"
+	"github.com/pankona/hashira/service"
+	"github.com/pankona/hashira/syncclient"
 )
 
 type UploadTarget int
@@ -19,25 +17,16 @@ const (
 	UploadDirtyOnly
 )
 
-func upload(accesstoken string, uploadTarget UploadTarget) {
-	log.Println("upload started")
-
-	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(daemonPort)}
-	allTasks, err := cli.RetrieveAll(context.Background())
-	if err != nil {
-		log.Println(err)
-	}
-	p, err := cli.RetrievePriority(context.Background())
-	if err != nil {
-		log.Println(err)
+func newUploadRequest(tasks map[string]*service.Task, priorities map[string]*service.Priority, uploadTarget UploadTarget) syncclient.UploadRequest {
+	ur := syncclient.UploadRequest{
+		Tasks: map[string]syncclient.Task{},
 	}
 
-	tasks := map[string]Task{}
-	for k, v := range allTasks {
+	for k, v := range tasks {
 		if uploadTarget == UploadDirtyOnly && !v.IsDirty {
 			continue
 		}
-		tasks[k] = Task{
+		ur.Tasks[k] = syncclient.Task{
 			ID:        v.Id,
 			Name:      v.Name,
 			Place:     v.Place.String(),
@@ -45,18 +34,37 @@ func upload(accesstoken string, uploadTarget UploadTarget) {
 		}
 	}
 
-	if len(tasks) == 0 {
-		// there's no task to upload
-		log.Println("no task to upload")
+	for k, v := range priorities {
+		ur.Priority[k] = v.Ids
+	}
+
+	return ur
+}
+
+func upload(accesstoken string, uploadTarget UploadTarget) {
+	log.Println("upload started")
+
+	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(daemonPort)}
+	allTasks, err := cli.RetrieveAll(context.Background())
+	if err != nil {
+		log.Printf("failed to retrieve tasks: %v", err)
+		return
+	}
+	allPriorities, err := cli.RetrievePriority(context.Background())
+	if err != nil {
+		log.Printf("failed to retrieve priorities: %v", err)
 		return
 	}
 
-	priority := Priority{}
-	for k, v := range p {
-		priority[k] = v.Ids
+	ur := newUploadRequest(allTasks, allPriorities, uploadTarget)
+	if len(ur.Tasks) == 0 {
+		// there's no task to upload
+		log.Println("there's no dirty task. no task to upload")
+		return
 	}
 
-	err = execUpload(accesstoken, tasks, priority)
+	sc := syncclient.New()
+	err = sc.Upload(accesstoken, ur)
 	if err != nil {
 		log.Printf("failed to upload: %v", err)
 		return
@@ -73,40 +81,4 @@ func upload(accesstoken string, uploadTarget UploadTarget) {
 	}
 
 	log.Println("upload completed")
-}
-
-// priority's key should be one of following strings:
-// "BACKLOG", "TODO", "DOING", "DONE"
-type UploadRequest struct {
-	Tasks    map[string]Task `json:"tasks"`
-	Priority Priority        `json:"priority"`
-}
-
-func execUpload(accesstoken string, tasks map[string]Task, priority Priority) error {
-	log.Printf("%d tasks will be uploaded", len(tasks))
-
-	ur := &UploadRequest{
-		Tasks:    tasks,
-		Priority: priority,
-	}
-
-	body, err := json.Marshal(ur)
-	if err != nil {
-		log.Println(err)
-	}
-
-	req, err := http.NewRequest(http.MethodPost, "https://asia-northeast1-hashira-web.cloudfunctions.net/upload", bytes.NewBuffer(body))
-	if err != nil {
-		log.Println(err)
-	}
-	req.Header.Add("Authorization", fmt.Sprintf("bearer %s", accesstoken))
-
-	httpcli := http.Client{}
-	resp, err := httpcli.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	return nil
 }
