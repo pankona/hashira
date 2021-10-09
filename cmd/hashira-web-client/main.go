@@ -102,12 +102,3 @@ func launchHashirad(done <-chan struct{}) {
 		os.Exit(1)
 	}
 }
-
-type Task struct {
-	ID        string
-	Name      string
-	Place     string
-	IsDeleted bool
-}
-
-type Priority map[string][]string
