@@ -2,20 +2,19 @@ package main
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"log"
-	"net/http"
 	"strconv"
 
 	hc "github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/service"
+	"github.com/pankona/hashira/syncclient"
 )
 
 func download(accesstoken string) {
 	log.Println("download started")
 
-	result, err := execDownload(accesstoken)
+	sc := syncclient.New()
+	result, err := sc.Download(accesstoken)
 	if err != nil {
 		log.Printf("failed to download task and priority: %v", err)
 		return
@@ -79,28 +78,4 @@ func unique(ss []string) []string {
 		}
 	}
 	return ids
-}
-
-type DownloadResult UploadRequest
-
-func execDownload(accesstoken string) (DownloadResult, error) {
-	req, err := http.NewRequest(http.MethodGet, "https://asia-northeast1-hashira-web.cloudfunctions.net/download", nil)
-	if err != nil {
-		return DownloadResult{}, fmt.Errorf("failed to prepare request: %w", err)
-	}
-	req.Header.Add("Authorization", fmt.Sprintf("bearer %s", accesstoken))
-
-	httpcli := http.Client{}
-	resp, err := httpcli.Do(req)
-	if err != nil {
-		return DownloadResult{}, fmt.Errorf("failed to download tasks and priorities: %w", err)
-	}
-	defer resp.Body.Close()
-
-	var ret DownloadResult
-
-	if err := json.NewDecoder(resp.Body).Decode(&ret); err != nil {
-		return DownloadResult{}, fmt.Errorf("failed to decode response body: %w", err)
-	}
-	return ret, nil
 }
