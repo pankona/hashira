@@ -69,11 +69,14 @@ func mergeTaskAndPriorities(newtp, oldtp TaskAndPriority) (TaskAndPriority, erro
 
 	// Remove priorities if the place is not matched to task's place
 	for k, p := range priorities {
-		for i, id := range p {
-			if ret[id].Place != k {
-				priorities[k] = append(p[:i], p[i+1:]...)
+		for i := 0; i < len(p); i++ {
+			taskID := p[i]
+			if ret[taskID].Place != k {
+				p = append(p[:i], p[i+1:]...)
+				i -= 1
 			}
 		}
+		priorities[k] = p
 	}
 
 	return TaskAndPriority{

@@ -155,6 +155,45 @@ func TestMergeTaskAndPriorities(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "c",
+			inNewTP: TaskAndPriority{
+				Tasks: map[string]Task{
+					"task1": {ID: "task1", Name: "task1", Place: "TODO", IsDeleted: false},
+					"task2": {ID: "task2", Name: "task2", Place: "TODO", IsDeleted: false},
+					"task3": {ID: "task3", Name: "task3", Place: "TODO", IsDeleted: false},
+					"task4": {ID: "task4", Name: "task4", Place: "TODO", IsDeleted: false},
+				},
+				Priority: map[string][]string{
+					"TODO": {"task1", "task2", "task3", "task4"},
+				},
+			},
+			inOldTP: TaskAndPriority{
+				Tasks: map[string]Task{
+					"task1": {ID: "task1", Name: "task1", Place: "BACKLOG", IsDeleted: false},
+					"task2": {ID: "task2", Name: "task2", Place: "BACKLOG", IsDeleted: false},
+					"task3": {ID: "task3", Name: "task3", Place: "BACKLOG", IsDeleted: false},
+					"task4": {ID: "task4", Name: "task4", Place: "BACKLOG", IsDeleted: false},
+				},
+				Priority: map[string][]string{
+					"BACKLOG": {"task1", "task2", "task3", "task4"},
+				},
+			},
+			wantTP: TaskAndPriority{
+				Tasks: map[string]Task{
+					"task1": {ID: "task1", Name: "task1", Place: "TODO", IsDeleted: false},
+					"task2": {ID: "task2", Name: "task2", Place: "TODO", IsDeleted: false},
+					"task3": {ID: "task3", Name: "task3", Place: "TODO", IsDeleted: false},
+					"task4": {ID: "task4", Name: "task4", Place: "TODO", IsDeleted: false},
+				},
+				Priority: map[string][]string{
+					"BACKLOG": {},
+					"TODO":    {"task1", "task2", "task3", "task4"},
+					"DOING":   {},
+					"DONE":    {},
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {
