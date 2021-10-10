@@ -34,6 +34,7 @@ func newUploadRequest(tasks map[string]*service.Task, priorities map[string]*ser
 		}
 	}
 
+	ur.Priority = syncclient.Priority{}
 	for k, v := range priorities {
 		ur.Priority[k] = v.Ids
 	}

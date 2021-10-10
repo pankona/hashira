@@ -49,7 +49,7 @@ func main() {
 		DB:   db,
 	}
 
-	accesstoken, ok := os.LookupEnv("HASHIRA_ACCESSTOKEN")
+	accesstoken, ok := os.LookupEnv("HASHIRA_ACCESS_TOKEN")
 	if ok {
 		if err := startSync(context.Background(), port, accesstoken); err != nil {
 			log.Printf("failed to start synchronization: %v", err)
