@@ -67,6 +67,15 @@ func mergeTaskAndPriorities(newtp, oldtp TaskAndPriority) (TaskAndPriority, erro
 
 	priorities := mergePriorities(newtp.Priority, oldtp.Priority)
 
+	// Remove priorities if the place is not matched to task's place
+	for k, p := range priorities {
+		for i, id := range p {
+			if ret[id].Place != k {
+				priorities[k] = append(p[:i], p[i+1:]...)
+			}
+		}
+	}
+
 	return TaskAndPriority{
 		Tasks:    ret,
 		Priority: priorities,
@@ -74,9 +83,9 @@ func mergeTaskAndPriorities(newtp, oldtp TaskAndPriority) (TaskAndPriority, erro
 }
 
 func mergePriorities(newPriorities, oldPriorities map[string][]string) map[string][]string {
-	ret := map[string][]string{}
-	for k, oldPriority := range oldPriorities {
-		ret[k] = append(newPriorities[k], oldPriority...)
+	ret := map[string][]string{"BACKLOG": {}, "TODO": {}, "DOING": {}, "DONE": {}}
+	for k := range ret {
+		ret[k] = append(newPriorities[k], oldPriorities[k]...)
 		ret[k] = unique(ret[k])
 	}
 	return ret
