@@ -76,12 +76,18 @@ func (c *Ctrl) eventDispatch(ctx context.Context, event delegateEvent, data []in
 		err = c.m.hashirac.Delete(ctx, task.Id)
 	case UpdatePriority:
 		priority := data[0].(map[string]*service.Priority)
+		for k := range priority {
+			priority[k].IsDirty = true
+		}
 
 		_, err = c.m.hashirac.UpdatePriority(ctx, priority)
 	case UpdateBulk:
 		task := (*service.Task)(data[0].(*KeyedTask))
 		task.IsDirty = true
 		priority := data[1].(map[string]*service.Priority)
+		for k := range priority {
+			priority[k].IsDirty = true
+		}
 
 		err = c.m.hashirac.Update(ctx, task)
 		if err != nil {
