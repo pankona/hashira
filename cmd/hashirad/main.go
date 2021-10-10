@@ -1,14 +1,19 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"os/user"
 	"path/filepath"
+	"time"
 
 	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
+	"github.com/pankona/hashira/syncclient"
+	"github.com/pankona/hashira/syncutil"
 )
 
 func initializeDB() (database.Databaser, error) {
@@ -44,239 +49,41 @@ func main() {
 		DB:   db,
 	}
 
+	accesstoken, ok := os.LookupEnv("HASHIRA_ACCESSTOKEN")
+	if ok {
+		if err := startSync(context.Background(), port, accesstoken); err != nil {
+			log.Printf("failed to start synchronization: %v", err)
+		}
+	}
+
 	if err = d.Run(); err != nil {
 		fmt.Printf("failed to start hashira daemon: %s\n", err.Error())
 		os.Exit(1)
 	}
 }
 
-/*
-func apiServiceURI() string {
-	p := os.Getenv("HASHIRA_API_SERVER_PORT")
-	if p == "" {
-		p = "8081"
-		log.Printf("HASHIRA_API_SERVERPORT is not specified. Use default port: %s", p)
-	}
-	return "http://localhost:" + p + "/api/v1"
-}
-*/
-
-/*
-type Task struct {
-	ID        string
-	Name      string
-	Place     string
-	IsDeleted bool
-}
-
-type Priority map[string][]string
-
-// priority's key should be one of following strings:
-// "BACKLOG", "TODO", "DOING", "DONE"
-type UploadRequest struct {
-	Tasks    map[string]Task `json:"tasks"`
-	Priority Priority        `json:"priority"`
-}
-*/
-
-/*
-func initialSync(daemonPort int, accesstoken string) {
-	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(daemonPort)}
-	ts, err := cli.RetrieveAll(context.Background())
+func startSync(ctx context.Context, daemonPort int, accesstoken string) error {
+	sc := syncclient.New()
+	err := sc.TestAccessToken(accesstoken)
 	if err != nil {
-		log.Println(err)
-	}
-	p, err := cli.RetrievePriority(context.Background())
-	if err != nil {
-		log.Println(err)
+		return fmt.Errorf("HASHIRA_ACCESSTOKEN is invalid. Synchronization is not started: %w", err)
 	}
 
-	tasks := map[string]Task{}
-	for k, v := range ts {
-		tasks[k] = Task{
-			ID:        v.Id,
-			Name:      v.Name,
-			Place:     v.Place.String(),
-			IsDeleted: v.IsDeleted,
+	const syncInterval = 10 * time.Minute
+
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				break
+			default:
+				sc := syncutil.Client{DaemonPort: daemonPort}
+				sc.Upload(accesstoken, syncutil.UploadDirtyOnly)
+				sc.Download(accesstoken)
+				<-time.After(syncInterval)
+			}
 		}
-	}
-
-	priority := Priority{}
-	if len(tasks) != 0 {
-		for k, v := range p {
-			priority[k] = v.Ids
-		}
-
-		err = upload(accesstoken, tasks, priority)
-		if err != nil {
-			log.Printf("failed to upload sync: %v", err)
-			return
-		}
-	}
-
-	tasks, priority, err = download(accesstoken)
-	if err != nil {
-		log.Printf("failed to download: %v", err)
-		return
-	}
-
-	for _, v := range tasks {
-		err = cli.Update(context.Background(), &service.Task{
-			Id:        v.ID,
-			Name:      v.Name,
-			Place:     service.Place(service.Place_value[v.Place]),
-			IsDeleted: v.IsDeleted,
-			IsDirty:   false,
-		})
-		if err != nil {
-			log.Println(err)
-		}
-	}
-
-	p = map[string]*service.Priority{}
-	for k, v := range priority {
-		p[k] = &service.Priority{Ids: v}
-	}
-
-	_, err = cli.UpdatePriority(context.Background(), p)
-	if err != nil {
-		log.Println(err)
-	}
-}
-*/
-
-/*
-func sync(daemonPort int, accesstoken string) {
-	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(daemonPort)}
-	ts, err := cli.RetrieveAll(context.Background())
-	if err != nil {
-		log.Println(err)
-	}
-	p, err := cli.RetrievePriority(context.Background())
-	if err != nil {
-		log.Println(err)
-	}
-
-	tasks := map[string]Task{}
-	for k, v := range ts {
-		if !v.IsDirty {
-			continue
-		}
-		tasks[k] = Task{
-			ID:        v.Id,
-			Name:      v.Name,
-			Place:     v.Place.String(),
-			IsDeleted: v.IsDeleted,
-		}
-	}
-
-	if len(tasks) == 0 {
-		// there's no task to upload
-		log.Println("no task to upload to sync")
-		return
-	}
-
-	priority := Priority{}
-	for k, v := range p {
-		priority[k] = v.Ids
-	}
-
-	err = upload(accesstoken, tasks, priority)
-	if err != nil {
-		log.Printf("failed to upload sync: %v", err)
-		return
-	}
-
-	tasks, priority, err = download(accesstoken)
-	if err != nil {
-		log.Printf("failed to download: %v", err)
-		return
-	}
-
-	for _, v := range tasks {
-		err = cli.Update(context.Background(), &service.Task{
-			Id:        v.ID,
-			Name:      v.Name,
-			Place:     service.Place(service.Place_value[v.Place]),
-			IsDeleted: v.IsDeleted,
-			IsDirty:   false,
-		})
-		if err != nil {
-			log.Println(err)
-		}
-	}
-
-	p = map[string]*service.Priority{}
-	for k, v := range priority {
-		p[k] = &service.Priority{Ids: v}
-	}
-
-	_, err = cli.UpdatePriority(context.Background(), p)
-	if err != nil {
-		log.Println(err)
-	}
-}
-*/
-
-/*
-func upload(accesstoken string, tasks map[string]Task, priority Priority) error {
-	log.Printf("%d tasks will upload to sync", len(tasks))
-
-	ur := &UploadRequest{
-		Tasks:    tasks,
-		Priority: priority,
-	}
-
-	body, err := json.Marshal(ur)
-	if err != nil {
-		log.Println(err)
-	}
-
-	req, err := http.NewRequest(http.MethodPost, apiServiceURI()+"/upload", bytes.NewBuffer(body))
-	if err != nil {
-		log.Println(err)
-	}
-	req.Header["Authorization"] = []string{accesstoken}
-
-	httpcli := http.Client{}
-	resp, err := httpcli.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
+	}()
 
 	return nil
 }
-*/
-
-/*
-type DownloadResponse UploadRequest
-
-func download(accesstoken string) (map[string]Task, Priority, error) {
-	req, err := http.NewRequest(http.MethodGet, apiServiceURI()+"/download", nil)
-	if err != nil {
-		return nil, nil, err
-	}
-	req.Header["Authorization"] = []string{accesstoken}
-
-	httpcli := http.Client{}
-	resp, err := httpcli.Do(req)
-	if err != nil {
-		return nil, nil, err
-	}
-	defer resp.Body.Close()
-
-	buf, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	dr := DownloadResponse{}
-	err = json.Unmarshal(buf, &dr)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return dr.Tasks, dr.Priority, nil
-}
-*/

@@ -12,7 +12,10 @@ import (
 
 	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
+	"github.com/pankona/hashira/syncutil"
 )
+
+const daemonPort = 50058
 
 func main() {
 	var (
@@ -41,18 +44,20 @@ func main() {
 
 	time.Sleep(1 * time.Second)
 
+	sc := syncutil.Client{DaemonPort: daemonPort}
+
 	switch {
 	case flagSync:
-		download(accesstoken)
-		upload(accesstoken, UploadAll)
+		sc.Download(accesstoken)
+		sc.Upload(accesstoken, syncutil.UploadAll)
 	case flagUpload:
-		upload(accesstoken, UploadDirtyOnly)
+		sc.Upload(accesstoken, syncutil.UploadDirtyOnly)
 	case flagDownload:
-		download(accesstoken)
+		sc.Download(accesstoken)
 	case flagTest:
 		fallthrough
 	default:
-		testAccessToken(accesstoken)
+		sc.TestAccessToken(accesstoken)
 	}
 
 	done <- struct{}{}
@@ -77,8 +82,6 @@ func initializeDB() (database.Databaser, error) {
 	}
 	return db, nil
 }
-
-const daemonPort = 50058
 
 func launchHashirad(done <-chan struct{}) {
 	db, err := initializeDB()
