@@ -1,4 +1,4 @@
-package main
+package syncutil
 
 import (
 	"log"
@@ -6,7 +6,7 @@ import (
 	"github.com/pankona/hashira/syncclient"
 )
 
-func testAccessToken(accesstoken string) {
+func (c *Client) TestAccessToken(accesstoken string) {
 	sc := syncclient.New()
 	if err := sc.TestAccessToken(accesstoken); err != nil {
 		log.Printf("test access token failed: %v", err)

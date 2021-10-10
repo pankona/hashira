@@ -1,4 +1,4 @@
-package main
+package syncutil
 
 import (
 	"context"
@@ -41,10 +41,10 @@ func newUploadRequest(tasks map[string]*service.Task, priorities map[string]*ser
 	return ur
 }
 
-func upload(accesstoken string, uploadTarget UploadTarget) {
+func (c *Client) Upload(accesstoken string, uploadTarget UploadTarget) {
 	log.Println("upload started")
 
-	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(daemonPort)}
+	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(c.DaemonPort)}
 	allTasks, err := cli.RetrieveAll(context.Background())
 	if err != nil {
 		log.Printf("failed to retrieve tasks: %v", err)

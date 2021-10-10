@@ -1,4 +1,4 @@
-package main
+package syncutil
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	"github.com/pankona/hashira/syncclient"
 )
 
-func download(accesstoken string) {
+func (c *Client) Download(accesstoken string) {
 	log.Println("download started")
 
 	sc := syncclient.New()
@@ -22,7 +22,7 @@ func download(accesstoken string) {
 
 	log.Printf("%d tasks downloaded", len(result.Tasks))
 
-	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(daemonPort)}
+	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(c.DaemonPort)}
 	for _, task := range result.Tasks {
 		err = cli.Update(context.Background(), &service.Task{
 			Id:        task.ID,
