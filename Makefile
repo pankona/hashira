@@ -44,7 +44,7 @@ lint:
 	golangci-lint run ./...
 
 test:
-	go test -count=1 `go list ./...`
+	go test -race ./...
 
 clean:
 	rm -rf $(PB_GO_DIR)
