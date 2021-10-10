@@ -58,7 +58,8 @@ func (c *Client) Upload(accesstoken string, uploadTarget UploadTarget) {
 	}
 
 	ur := newUploadRequest(allTasks, allPriorities, uploadTarget)
-	if len(ur.Tasks) == 0 {
+
+	if len(ur.Tasks) == 0 && !isPriorityDirty(allPriorities) {
 		// there's no task to upload
 		log.Println("there's no dirty task. no task to upload")
 		return
@@ -82,4 +83,13 @@ func (c *Client) Upload(accesstoken string, uploadTarget UploadTarget) {
 	}
 
 	log.Println("upload completed")
+}
+
+func isPriorityDirty(p map[string]*service.Priority) bool {
+	for _, v := range p {
+		if v.IsDirty {
+			return true
+		}
+	}
+	return false
 }

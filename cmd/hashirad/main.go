@@ -33,6 +33,7 @@ func initializeDB() (database.Databaser, error) {
 	if err != nil {
 		return nil, errors.New("failed to initialize db: " + err.Error())
 	}
+
 	return db, nil
 }
 
@@ -63,11 +64,14 @@ func main() {
 }
 
 func startSync(ctx context.Context, daemonPort int, accesstoken string) error {
+	fmt.Printf("start synchronization...\n")
+
 	sc := syncclient.New()
 	err := sc.TestAccessToken(accesstoken)
 	if err != nil {
 		return fmt.Errorf("HASHIRA_ACCESSTOKEN is invalid. Synchronization is not started: %w", err)
 	}
+	fmt.Printf("HASHIRA_ACCESSTOKEN is valid. hashira-web will work!\n")
 
 	const syncInterval = 10 * time.Minute
 

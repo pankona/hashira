@@ -31,6 +31,7 @@ message Task {
 
 message Priority {
     repeated string ids = 1;
+    bool            isDirty = 2;
 }
 
 message CommandCreate {

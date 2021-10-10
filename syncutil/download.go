@@ -38,7 +38,7 @@ func (c *Client) Download(accesstoken string) {
 
 	newPriorities := map[string]*service.Priority{}
 	for k, v := range result.Priority {
-		newPriorities[k] = &service.Priority{Ids: v}
+		newPriorities[k] = &service.Priority{Ids: v, IsDirty: false}
 	}
 
 	oldPriorities, err := cli.RetrievePriority(context.Background())
