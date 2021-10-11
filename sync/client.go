@@ -1,4 +1,4 @@
-package syncclient
+package sync
 
 import (
 	"bytes"
@@ -10,7 +10,7 @@ import (
 
 type Client struct{}
 
-func New() *Client {
+func NewClient() *Client {
 	return &Client{}
 }
 

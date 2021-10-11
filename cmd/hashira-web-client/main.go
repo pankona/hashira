@@ -12,7 +12,7 @@ import (
 
 	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
-	"github.com/pankona/hashira/syncutil"
+	"github.com/pankona/hashira/sync/syncutil"
 )
 
 const daemonPort = 50058
