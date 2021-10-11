@@ -11,13 +11,28 @@ import (
 )
 
 func (c *Client) Download(accesstoken string) error {
+	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(c.DaemonPort)}
+
+	allTasks, err := cli.RetrieveAll(context.Background())
+	if err != nil {
+		return fmt.Errorf("failed to retrieve tasks: %w", err)
+	}
+	allPriorities, err := cli.RetrievePriority(context.Background())
+	if err != nil {
+		return fmt.Errorf("failed to retrieve priorities: %w", err)
+	}
+
+	if dirtyTaskOrPriorityExists(allTasks, allPriorities) {
+		// don't download and overwrite tasks and priorities since there're some dirty task
+		return nil
+	}
+
 	sc := sync.NewClient()
 	result, err := sc.Download(accesstoken)
 	if err != nil {
 		return fmt.Errorf("failed to download task and priority: %w", err)
 	}
 
-	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(c.DaemonPort)}
 	for _, task := range result.Tasks {
 		err = cli.Update(context.Background(), &service.Task{
 			Id:        task.ID,
@@ -73,4 +88,18 @@ func unique(ss []string) []string {
 		}
 	}
 	return ids
+}
+
+func dirtyTaskOrPriorityExists(tasks map[string]*service.Task, priorities map[string]*service.Priority) bool {
+	for _, v := range tasks {
+		if v.IsDirty {
+			return true
+		}
+	}
+	for _, v := range priorities {
+		if v.IsDirty {
+			return true
+		}
+	}
+	return false
 }

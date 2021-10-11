@@ -9,7 +9,6 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
-	"time"
 
 	"github.com/pankona/gocui"
 	hashirac "github.com/pankona/hashira/client"
@@ -68,16 +67,6 @@ func main() {
 		d.Stop()
 	}()
 
-	// Start synchronization with cloud if HASHIRA_ACCESS_TOKEN is set
-	accesstoken, ok := os.LookupEnv("HASHIRA_ACCESS_TOKEN")
-	var isAccessTokenValid bool
-	if ok {
-		if err := startSync(context.Background(), daemonPort, accesstoken); err != nil {
-			log.Printf("failed to start synchronization: %v", err)
-		}
-		isAccessTokenValid = true
-	}
-
 	// initialize gocui
 	// specify false means: supportOverlaps = false
 	g, err := gocui.NewGui(gocui.OutputNormal, false)
@@ -90,8 +79,22 @@ func main() {
 	hashirac := &hashirac.Client{Address: fmt.Sprintf("localhost:%d", daemonPort)}
 	syncclient := &syncutil.Client{DaemonPort: daemonPort}
 	m := NewModel(hashirac, syncclient)
-	if isAccessTokenValid {
+
+	// Start synchronization with cloud if HASHIRA_ACCESS_TOKEN is set
+	accesstoken, ok := os.LookupEnv("HASHIRA_ACCESS_TOKEN")
+
+	if ok {
+		sc := syncutil.Client{DaemonPort: daemonPort}
+		err := sc.TestAccessToken(accesstoken)
+		if err != nil {
+			log.Printf("HASHIRA_ACCESSTOKEN is invalid. Synchronization is not started: %v", err)
+		}
 		m.SetAccessToken(accesstoken)
+		go func() {
+			if err := m.SyncOnNotify(context.Background()); err != nil {
+				log.Printf("sync on notify finished: %v", err)
+			}
+		}()
 	}
 
 	// prepare controller
@@ -125,36 +128,4 @@ func main() {
 	if err != nil && err != gocui.ErrQuit {
 		log.Panicln(err)
 	}
-}
-
-func startSync(ctx context.Context, daemonPort int, accesstoken string) error {
-	log.Printf("start synchronization...\n")
-
-	sc := syncutil.Client{DaemonPort: daemonPort}
-	err := sc.TestAccessToken(accesstoken)
-	if err != nil {
-		return fmt.Errorf("HASHIRA_ACCESSTOKEN is invalid. Synchronization is not started: %w", err)
-	}
-	log.Printf("HASHIRA_ACCESSTOKEN is valid. hashira-web will work!\n")
-
-	const syncInterval = 10 * time.Minute
-
-	go func() {
-		for {
-			select {
-			case <-ctx.Done():
-				break
-			default:
-				if err := sc.Upload(accesstoken, syncutil.UploadDirtyOnly); err != nil {
-					log.Printf("failed to upload: %v", err)
-				}
-				if err := sc.Download(accesstoken); err != nil {
-					log.Printf("failed to download: %v", err)
-				}
-				<-time.After(syncInterval)
-			}
-		}
-	}()
-
-	return nil
 }
