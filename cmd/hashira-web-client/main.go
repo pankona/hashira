@@ -57,7 +57,11 @@ func main() {
 	case flagTest:
 		fallthrough
 	default:
-		sc.TestAccessToken(accesstoken)
+		if err := sc.TestAccessToken(accesstoken); err != nil {
+			log.Printf("test access token failed: %v", err)
+		} else {
+			log.Println("The accesstoken is valid. hashira-web will work!")
+		}
 	}
 
 	done <- struct{}{}
