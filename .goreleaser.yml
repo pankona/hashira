@@ -1,11 +1,12 @@
-project_name: hashira-cui
+project_name: hashira
 env:
   - GO111MODULE=on
 before:
   hooks:
     - go mod tidy
 builds:
-  - main: ./cmd/hashira-cui
+  - id: hashira-cui
+    main: ./cmd/hashira-cui
     binary: hashira-cui
     ldflags:
       - -s -w
@@ -13,7 +14,8 @@ builds:
       - -X main.Revision={{.ShortCommit}}
     env:
       - CGO_ENABLED=0
-  - main: ./cmd/hashira-web-client
+  - id: hashira-web-client
+    main: ./cmd/hashira-web-client
     binary: hashira-web-client
     ldflags:
       - -s -w
