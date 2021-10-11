@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"flag"
 	"fmt"
 	"log"
 	"log/syslog"
@@ -15,6 +16,11 @@ import (
 	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
 	"github.com/pankona/hashira/sync/syncutil"
+)
+
+var (
+	Version  = "unset"
+	Revision = "unset"
 )
 
 func initializeDB() (database.Databaser, error) {
@@ -38,6 +44,17 @@ func initializeDB() (database.Databaser, error) {
 }
 
 func main() {
+	var (
+		flagVersion bool
+	)
+	flag.BoolVar(&flagVersion, "version", false, "show version")
+	flag.Parse()
+
+	if flagVersion {
+		fmt.Printf("hashira-cui version: %s, Revision: %s\n", Version, Revision)
+		return
+	}
+
 	logger, err := syslog.New(syslog.LOG_INFO|syslog.LOG_LOCAL0, "hashira-cui")
 	if err != nil {
 		log.Printf("failed to connect to logger but continue to work: %v", err)

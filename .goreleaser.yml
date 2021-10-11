@@ -1,0 +1,24 @@
+project_name: hashira-cui
+env:
+  - GO111MODULE=on
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - main: .
+    binary: hashira-cui
+    ldflags:
+      - -s -w
+      - -X github.com/pankona/hashira/cmd/hashira-cui/main.Version={{.Version}}
+      - -X github.com/pankona/hashira/cmd/hashira-cui/main.Revision={{.ShortCommit}}
+    env:
+      - CGO_ENABLED=0
+archives:
+  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    replacements:
+      darwin: darwin
+      linux: linux
+      386: i386
+      amd64: x86_64
+release:
+  prerelease: auto
