@@ -2,7 +2,7 @@ package syncutil
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"strconv"
 
 	hc "github.com/pankona/hashira/client"
@@ -42,34 +42,28 @@ func newUploadRequest(tasks map[string]*service.Task, priorities map[string]*ser
 	return ur
 }
 
-func (c *Client) Upload(accesstoken string, uploadTarget UploadTarget) {
-	log.Println("upload started")
-
+func (c *Client) Upload(accesstoken string, uploadTarget UploadTarget) error {
 	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(c.DaemonPort)}
 	allTasks, err := cli.RetrieveAll(context.Background())
 	if err != nil {
-		log.Printf("failed to retrieve tasks: %v", err)
-		return
+		return fmt.Errorf("failed to retrieve tasks: %w", err)
 	}
 	allPriorities, err := cli.RetrievePriority(context.Background())
 	if err != nil {
-		log.Printf("failed to retrieve priorities: %v", err)
-		return
+		return fmt.Errorf("failed to retrieve priorities: %w", err)
 	}
 
 	ur := newUploadRequest(allTasks, allPriorities, uploadTarget)
 
 	if len(ur.Tasks) == 0 && !isPriorityDirty(allPriorities) {
 		// there's no task to upload
-		log.Println("there's no dirty task. no task to upload")
-		return
+		return fmt.Errorf("there's no dirty task. no task to upload")
 	}
 
 	sc := sync.NewClient()
 	err = sc.Upload(accesstoken, ur)
 	if err != nil {
-		log.Printf("failed to upload: %v", err)
-		return
+		return fmt.Errorf("failed to upload: %w", err)
 	}
 
 	for _, task := range allTasks {
@@ -77,12 +71,11 @@ func (c *Client) Upload(accesstoken string, uploadTarget UploadTarget) {
 			continue
 		}
 		if err := cli.PhysicalDelete(context.Background(), task.Id); err != nil {
-			log.Printf("failed to physical delete a task: %v", err)
+			return fmt.Errorf("failed to physical delete a task: %w", err)
 		}
-		log.Printf("task [%s] is deleted physically", task.Id)
 	}
 
-	log.Println("upload completed")
+	return nil
 }
 
 func isPriorityDirty(p map[string]*service.Priority) bool {

@@ -80,8 +80,12 @@ func startSync(ctx context.Context, daemonPort int, accesstoken string) error {
 			case <-ctx.Done():
 				break
 			default:
-				sc.Upload(accesstoken, syncutil.UploadDirtyOnly)
-				sc.Download(accesstoken)
+				if err := sc.Upload(accesstoken, syncutil.UploadDirtyOnly); err != nil {
+					log.Printf("failed to upload: %v", err)
+				}
+				if err := sc.Download(accesstoken); err != nil {
+					log.Printf("failed to download: %v", err)
+				}
 				<-time.After(syncInterval)
 			}
 		}

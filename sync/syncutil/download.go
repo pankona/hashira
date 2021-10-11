@@ -2,7 +2,7 @@ package syncutil
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"strconv"
 
 	hc "github.com/pankona/hashira/client"
@@ -10,17 +10,12 @@ import (
 	"github.com/pankona/hashira/sync"
 )
 
-func (c *Client) Download(accesstoken string) {
-	log.Println("download started")
-
+func (c *Client) Download(accesstoken string) error {
 	sc := sync.NewClient()
 	result, err := sc.Download(accesstoken)
 	if err != nil {
-		log.Printf("failed to download task and priority: %v", err)
-		return
+		return fmt.Errorf("failed to download task and priority: %w", err)
 	}
-
-	log.Printf("%d tasks downloaded", len(result.Tasks))
 
 	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(c.DaemonPort)}
 	for _, task := range result.Tasks {
@@ -32,7 +27,7 @@ func (c *Client) Download(accesstoken string) {
 			IsDirty:   false,
 		})
 		if err != nil {
-			log.Printf("failed to update task: %v", err)
+			return fmt.Errorf("failed to update task: %w", err)
 		}
 	}
 
@@ -43,17 +38,17 @@ func (c *Client) Download(accesstoken string) {
 
 	oldPriorities, err := cli.RetrievePriority(context.Background())
 	if err != nil {
-		log.Printf("failed to retrieve old priorities: %v", err)
+		return fmt.Errorf("failed to retrieve old priorities: %w", err)
 	}
 
 	priorities := mergePriorities(newPriorities, oldPriorities)
 
 	_, err = cli.UpdatePriority(context.Background(), priorities)
 	if err != nil {
-		log.Printf("failed to update priority: %v", err)
+		return fmt.Errorf("failed to update priority: %w", err)
 	}
 
-	log.Println("download completed")
+	return nil
 }
 
 func mergePriorities(newPriorities, oldPriorities map[string]*service.Priority) map[string]*service.Priority {

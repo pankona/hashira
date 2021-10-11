@@ -48,12 +48,24 @@ func main() {
 
 	switch {
 	case flagSync:
-		sc.Download(accesstoken)
-		sc.Upload(accesstoken, syncutil.UploadAll)
+		if err := sc.Download(accesstoken); err != nil {
+			log.Printf("failed to download: %v", err)
+		}
+		log.Printf("download completed")
+		if err := sc.Upload(accesstoken, syncutil.UploadAll); err != nil {
+			log.Printf("failed to upload: %v", err)
+		}
+		log.Printf("upload completed")
 	case flagUpload:
-		sc.Upload(accesstoken, syncutil.UploadDirtyOnly)
+		if err := sc.Upload(accesstoken, syncutil.UploadDirtyOnly); err != nil {
+			log.Printf("failed to upload: %v", err)
+		}
+		log.Printf("upload completed")
 	case flagDownload:
-		sc.Download(accesstoken)
+		if err := sc.Download(accesstoken); err != nil {
+			log.Printf("failed to download: %v", err)
+		}
+		log.Printf("download completed")
 	case flagTest:
 		fallthrough
 	default:
