@@ -26,6 +26,7 @@
     "uuid": "^8.3.2"
   },
   "resolutions": {
-    "pac-resolver": "^5.0.0"
+    "pac-resolver": "^5.0.0",
+    "ansi-regex": ">=5.0.1"
   }
 }

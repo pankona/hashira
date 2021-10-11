@@ -1,7 +1,10 @@
 name: hashira-cui
 
-'on': pull_request
-
+on:
+  pull_request:
+    paths:
+      - '**'
+      - '!hashira-web/**'
 jobs:
   build:
     runs-on: ubuntu-latest
