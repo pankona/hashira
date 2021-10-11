@@ -3,7 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /accesstokens/{document=**} {
       allow create: if request.auth != null
-      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow read, delete: if request.auth != null && resource.data.uid == request.auth.uid;
     }
     match /upload/{uid} {
       allow create, update: if request.auth != null && request.auth.uid == uid

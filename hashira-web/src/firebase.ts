@@ -10,6 +10,8 @@ import {
 import {
   addDoc,
   collection,
+  deleteDoc,
+  doc,
   DocumentData,
   FieldValue,
   getDocs,
@@ -91,4 +93,25 @@ export const fetchAccessTokens = async (uid: string): Promise<string[]> => {
     .map((a: accesstoken) => {
       return a.accesstoken;
     });
+};
+
+export const RevokeAccessTokens = async (
+  uid: string,
+  accesstokens: string[]
+) => {
+  const db = getFirestore();
+
+  for (const accesstoken of accesstokens) {
+    const querySnapshot = await getDocs(
+      query(
+        collection(db, "accesstokens"),
+        where("uid", "==", uid),
+        where("accesstoken", "==", accesstoken)
+      )
+    );
+
+    for (const doc of querySnapshot.docs) {
+      await deleteDoc(doc.ref);
+    }
+  }
 };
