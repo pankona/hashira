@@ -7,7 +7,7 @@ import (
 
 	hc "github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/service"
-	"github.com/pankona/hashira/syncclient"
+	"github.com/pankona/hashira/sync"
 )
 
 type UploadTarget int
@@ -17,16 +17,16 @@ const (
 	UploadDirtyOnly
 )
 
-func newUploadRequest(tasks map[string]*service.Task, priorities map[string]*service.Priority, uploadTarget UploadTarget) syncclient.UploadRequest {
-	ur := syncclient.UploadRequest{
-		Tasks: map[string]syncclient.Task{},
+func newUploadRequest(tasks map[string]*service.Task, priorities map[string]*service.Priority, uploadTarget UploadTarget) sync.UploadRequest {
+	ur := sync.UploadRequest{
+		Tasks: map[string]sync.Task{},
 	}
 
 	for k, v := range tasks {
 		if uploadTarget == UploadDirtyOnly && !v.IsDirty {
 			continue
 		}
-		ur.Tasks[k] = syncclient.Task{
+		ur.Tasks[k] = sync.Task{
 			ID:        v.Id,
 			Name:      v.Name,
 			Place:     v.Place.String(),
@@ -34,7 +34,7 @@ func newUploadRequest(tasks map[string]*service.Task, priorities map[string]*ser
 		}
 	}
 
-	ur.Priority = syncclient.Priority{}
+	ur.Priority = sync.Priority{}
 	for k, v := range priorities {
 		ur.Priority[k] = v.Ids
 	}
@@ -65,7 +65,7 @@ func (c *Client) Upload(accesstoken string, uploadTarget UploadTarget) {
 		return
 	}
 
-	sc := syncclient.New()
+	sc := sync.NewClient()
 	err = sc.Upload(accesstoken, ur)
 	if err != nil {
 		log.Printf("failed to upload: %v", err)

@@ -12,8 +12,7 @@ import (
 
 	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
-	"github.com/pankona/hashira/syncclient"
-	"github.com/pankona/hashira/syncutil"
+	"github.com/pankona/hashira/sync/syncutil"
 )
 
 func initializeDB() (database.Databaser, error) {
@@ -66,7 +65,7 @@ func main() {
 func startSync(ctx context.Context, daemonPort int, accesstoken string) error {
 	fmt.Printf("start synchronization...\n")
 
-	sc := syncclient.New()
+	sc := syncutil.Client{DaemonPort: daemonPort}
 	err := sc.TestAccessToken(accesstoken)
 	if err != nil {
 		return fmt.Errorf("HASHIRA_ACCESSTOKEN is invalid. Synchronization is not started: %w", err)
@@ -81,7 +80,6 @@ func startSync(ctx context.Context, daemonPort int, accesstoken string) error {
 			case <-ctx.Done():
 				break
 			default:
-				sc := syncutil.Client{DaemonPort: daemonPort}
 				sc.Upload(accesstoken, syncutil.UploadDirtyOnly)
 				sc.Download(accesstoken)
 				<-time.After(syncInterval)

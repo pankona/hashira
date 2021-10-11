@@ -7,13 +7,13 @@ import (
 
 	hc "github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/service"
-	"github.com/pankona/hashira/syncclient"
+	"github.com/pankona/hashira/sync"
 )
 
 func (c *Client) Download(accesstoken string) {
 	log.Println("download started")
 
-	sc := syncclient.New()
+	sc := sync.NewClient()
 	result, err := sc.Download(accesstoken)
 	if err != nil {
 		log.Printf("failed to download task and priority: %v", err)

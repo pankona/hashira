@@ -12,7 +12,7 @@ import (
 
 	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
-	"github.com/pankona/hashira/syncutil"
+	"github.com/pankona/hashira/sync/syncutil"
 )
 
 const daemonPort = 50058
@@ -57,7 +57,11 @@ func main() {
 	case flagTest:
 		fallthrough
 	default:
-		sc.TestAccessToken(accesstoken)
+		if err := sc.TestAccessToken(accesstoken); err != nil {
+			log.Printf("test access token failed: %v", err)
+		} else {
+			log.Println("The accesstoken is valid. hashira-web will work!")
+		}
 	}
 
 	done <- struct{}{}
