@@ -1,16 +1,26 @@
-project_name: hashira-cui
+project_name: hashira
 env:
   - GO111MODULE=on
 before:
   hooks:
     - go mod tidy
 builds:
-  - main: .
+  - id: hashira-cui
+    main: ./cmd/hashira-cui
     binary: hashira-cui
     ldflags:
       - -s -w
-      - -X github.com/pankona/hashira/cmd/hashira-cui/main.Version={{.Version}}
-      - -X github.com/pankona/hashira/cmd/hashira-cui/main.Revision={{.ShortCommit}}
+      - -X main.Version={{.Version}}
+      - -X main.Revision={{.ShortCommit}}
+    env:
+      - CGO_ENABLED=0
+  - id: hashira-web-client
+    main: ./cmd/hashira-web-client
+    binary: hashira-web-client
+    ldflags:
+      - -s -w
+      - -X main.Version={{.Version}}
+      - -X main.Revision={{.ShortCommit}}
     env:
       - CGO_ENABLED=0
 archives:
