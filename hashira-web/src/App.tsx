@@ -6,7 +6,6 @@ const App: React.VFC = () => {
   const [accesstokens, setAccessTokens] = React.useState<string[]>([]);
 
   React.useEffect(() => {
-    console.log("effect");
     firebase.onAuthStateChanged((user: firebase.User | null) => {
       setUser(user);
       if (user) {

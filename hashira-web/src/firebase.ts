@@ -9,19 +9,14 @@ import {
 } from "firebase/auth";
 import {
   addDoc,
-  arrayUnion,
   collection,
-  doc,
   DocumentData,
   FieldValue,
   getDocs,
   getFirestore,
-  orderBy,
   query,
   QueryDocumentSnapshot,
-  QuerySnapshot,
   serverTimestamp,
-  setDoc,
   where,
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
