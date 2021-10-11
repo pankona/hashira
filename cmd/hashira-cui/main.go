@@ -70,10 +70,12 @@ func main() {
 
 	// Start synchronization with cloud if HASHIRA_ACCESS_TOKEN is set
 	accesstoken, ok := os.LookupEnv("HASHIRA_ACCESS_TOKEN")
+	var isAccessTokenValid bool
 	if ok {
 		if err := startSync(context.Background(), daemonPort, accesstoken); err != nil {
 			log.Printf("failed to start synchronization: %v", err)
 		}
+		isAccessTokenValid = true
 	}
 
 	// initialize gocui
@@ -88,6 +90,9 @@ func main() {
 	hashirac := &hashirac.Client{Address: fmt.Sprintf("localhost:%d", daemonPort)}
 	syncclient := &syncutil.Client{DaemonPort: daemonPort}
 	m := NewModel(hashirac, syncclient)
+	if isAccessTokenValid {
+		m.SetAccessToken(accesstoken)
+	}
 
 	// prepare controller
 	ps := &PubSub{}
@@ -140,8 +145,12 @@ func startSync(ctx context.Context, daemonPort int, accesstoken string) error {
 			case <-ctx.Done():
 				break
 			default:
-				sc.Upload(accesstoken, syncutil.UploadDirtyOnly)
-				sc.Download(accesstoken)
+				if err := sc.Upload(accesstoken, syncutil.UploadDirtyOnly); err != nil {
+					log.Printf("failed to upload: %v", err)
+				}
+				if err := sc.Download(accesstoken); err != nil {
+					log.Printf("failed to download: %v", err)
+				}
 				<-time.After(syncInterval)
 			}
 		}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	hashirac "github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/service"
@@ -12,6 +13,9 @@ import (
 type Model struct {
 	hashirac   *hashirac.Client
 	syncclient *syncutil.Client
+
+	// TODO: remove if accesstoken is held by syncclient
+	accesstoken string
 }
 
 func NewModel(hc *hashirac.Client, sc *syncutil.Client) *Model {
@@ -19,11 +23,6 @@ func NewModel(hc *hashirac.Client, sc *syncutil.Client) *Model {
 		hashirac:   hc,
 		syncclient: sc,
 	}
-}
-
-// SetHashiraClient sets hashira client
-func (m *Model) SetHashiraClient(cli *hashirac.Client) {
-	m.hashirac = cli
 }
 
 // List retrieves task list using hashira client
@@ -38,17 +37,60 @@ func (m *Model) RetrievePriority(ctx context.Context) (map[string]*service.Prior
 
 // UpdatePriority updates priorities using hashira client
 func (m *Model) UpdatePriority(ctx context.Context, p map[string]*service.Priority) (map[string]*service.Priority, error) {
-	return m.hashirac.UpdatePriority(ctx, p)
+	p, err := m.hashirac.UpdatePriority(ctx, p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update priority: %w", err)
+	}
+	if err := m.sync(context.Background()); err != nil {
+		return nil, fmt.Errorf("failed to sync: %w", err)
+	}
+
+	return p, nil
 }
 
 func (m *Model) Create(ctx context.Context, task *service.Task) error {
-	return m.hashirac.Create(ctx, task)
+	if err := m.hashirac.Create(ctx, task); err != nil {
+		return fmt.Errorf("failed to create a new task: %w", err)
+	}
+	if err := m.sync(context.Background()); err != nil {
+		return fmt.Errorf("failed to sync: %w", err)
+	}
+	return nil
 }
 
 func (m *Model) Update(ctx context.Context, task *service.Task) error {
-	return m.hashirac.Update(ctx, task)
+	if err := m.hashirac.Update(ctx, task); err != nil {
+		return fmt.Errorf("failed to update a task: %w", err)
+	}
+	if err := m.sync(context.Background()); err != nil {
+		return fmt.Errorf("failed to sync: %w", err)
+	}
+	return nil
 }
 
 func (m *Model) Delete(ctx context.Context, id string) error {
-	return m.hashirac.Delete(ctx, id)
+	if err := m.hashirac.Delete(ctx, id); err != nil {
+		return fmt.Errorf("failed to delete a task: %w", err)
+	}
+	if err := m.sync(context.Background()); err != nil {
+		return fmt.Errorf("failed to sync: %w", err)
+	}
+	return nil
+}
+
+func (m *Model) SetAccessToken(accesstoken string) {
+	m.accesstoken = accesstoken
+}
+
+func (m *Model) sync(ctx context.Context) error {
+	if m.accesstoken == "" {
+		return nil
+	}
+	if err := m.syncclient.Upload(m.accesstoken, syncutil.UploadDirtyOnly); err != nil {
+		return fmt.Errorf("failed to upload tasks: %w", err)
+	}
+	if err := m.syncclient.Download(m.accesstoken); err != nil {
+		return fmt.Errorf("failed to download tasks: %w", err)
+	}
+	return nil
 }
