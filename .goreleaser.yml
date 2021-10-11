@@ -5,12 +5,12 @@ before:
   hooks:
     - go mod tidy
 builds:
-  - main: .
+  - main: ./cmd/hashira-cui
     binary: hashira-cui
     ldflags:
       - -s -w
-      - -X github.com/pankona/hashira/cmd/hashira-cui/main.Version={{.Version}}
-      - -X github.com/pankona/hashira/cmd/hashira-cui/main.Revision={{.ShortCommit}}
+      - -X main.Version={{.Version}}
+      - -X main.Revision={{.ShortCommit}}
     env:
       - CGO_ENABLED=0
 archives:
