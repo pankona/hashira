@@ -15,6 +15,11 @@ import (
 	"github.com/pankona/hashira/sync/syncutil"
 )
 
+var (
+	Version  = "unset"
+	Revision = "unset"
+)
+
 const daemonPort = 50058
 
 func main() {
@@ -23,13 +28,20 @@ func main() {
 		flagUpload   bool
 		flagDownload bool
 		flagTest     bool
+		flagVersion  bool
 	)
 
+	flag.BoolVar(&flagVersion, "version", false, "show version")
 	flag.BoolVar(&flagSync, "sync", false, "sync (download and upload) tasks and priorities with hashira-web")
 	flag.BoolVar(&flagUpload, "upload", false, "upload tasks and priorities to hashira-web")
 	flag.BoolVar(&flagDownload, "download", false, "download tasks and priorities from hashira-web")
 	flag.BoolVar(&flagTest, "test", false, "test the hashira-web works")
 	flag.Parse()
+
+	if flagVersion {
+		fmt.Printf("hashira-web-client version: %s, Revision: %s\n", Version, Revision)
+		return
+	}
 
 	accesstoken := os.Getenv("HASHIRA_ACCESS_TOKEN")
 	if accesstoken == "" {

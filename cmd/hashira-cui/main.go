@@ -23,26 +23,6 @@ var (
 	Revision = "unset"
 )
 
-func initializeDB() (database.Databaser, error) {
-	db := &database.BoltDB{}
-	usr, err := user.Current()
-	if err != nil {
-		return nil, errors.New("failed to current user: " + err.Error())
-	}
-
-	configDir := filepath.Join(usr.HomeDir, ".config", "hashira")
-	err = os.MkdirAll(configDir, 0700)
-	if err != nil {
-		return nil, errors.New("failed to create config directory: " + err.Error())
-	}
-
-	err = db.Initialize(filepath.Join(configDir, "db"))
-	if err != nil {
-		return nil, errors.New("failed to initialize db: " + err.Error())
-	}
-	return db, nil
-}
-
 func main() {
 	var (
 		flagVersion bool
@@ -148,4 +128,24 @@ func main() {
 	if err != nil && err != gocui.ErrQuit {
 		log.Panicln(err)
 	}
+}
+
+func initializeDB() (database.Databaser, error) {
+	db := &database.BoltDB{}
+	usr, err := user.Current()
+	if err != nil {
+		return nil, errors.New("failed to current user: " + err.Error())
+	}
+
+	configDir := filepath.Join(usr.HomeDir, ".config", "hashira")
+	err = os.MkdirAll(configDir, 0700)
+	if err != nil {
+		return nil, errors.New("failed to create config directory: " + err.Error())
+	}
+
+	err = db.Initialize(filepath.Join(configDir, "db"))
+	if err != nil {
+		return nil, errors.New("failed to initialize db: " + err.Error())
+	}
+	return db, nil
 }
