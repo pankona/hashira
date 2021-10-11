@@ -76,11 +76,6 @@ func main() {
 		}
 	}
 
-	var (
-		m  = &Model{}
-		ps = &PubSub{}
-	)
-
 	// initialize gocui
 	// specify false means: supportOverlaps = false
 	g, err := gocui.NewGui(gocui.OutputNormal, false)
@@ -90,12 +85,12 @@ func main() {
 	defer g.Close()
 
 	// prepare model
-	hashirac := &hashirac.Client{
-		Address: "localhost:50056",
-	}
-	m.SetHashiraClient(hashirac)
+	hashirac := &hashirac.Client{Address: fmt.Sprintf("localhost:%d", daemonPort)}
+	syncclient := &syncutil.Client{DaemonPort: daemonPort}
+	m := NewModel(hashirac, syncclient)
 
 	// prepare controller
+	ps := &PubSub{}
 	c := &Ctrl{
 		m:   m,
 		pub: ps,

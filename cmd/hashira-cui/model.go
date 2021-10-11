@@ -5,11 +5,20 @@ import (
 
 	hashirac "github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/service"
+	"github.com/pankona/hashira/sync/syncutil"
 )
 
 // Model represents model of hashira's mvc
 type Model struct {
-	hashirac *hashirac.Client
+	hashirac   *hashirac.Client
+	syncclient *syncutil.Client
+}
+
+func NewModel(hc *hashirac.Client, sc *syncutil.Client) *Model {
+	return &Model{
+		hashirac:   hc,
+		syncclient: sc,
+	}
 }
 
 // SetHashiraClient sets hashira client
@@ -34,4 +43,16 @@ func (m *Model) UpdatePriority(
 	ctx context.Context,
 	p map[string]*service.Priority) (map[string]*service.Priority, error) {
 	return m.hashirac.UpdatePriority(ctx, p)
+}
+
+func (m *Model) Create(ctx context.Context, task *service.Task) error {
+	return m.hashirac.Create(ctx, task)
+}
+
+func (m *Model) Update(ctx context.Context, task *service.Task) error {
+	return m.hashirac.Update(ctx, task)
+}
+
+func (m *Model) Delete(ctx context.Context, id string) error {
+	return m.hashirac.Delete(ctx, id)
 }
