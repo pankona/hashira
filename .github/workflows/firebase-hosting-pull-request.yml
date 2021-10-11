@@ -5,6 +5,7 @@ name: Deploy to Firebase Hosting on PR
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
     paths:
       - 'hashira-web/**'
 
@@ -14,7 +15,7 @@ defaults:
 
 jobs:
   build_and_preview:
-    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
+    if: contains(github.event.pull_request.labels.*.name, 'ok to test')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
