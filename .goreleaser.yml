@@ -14,6 +14,8 @@ builds:
       - -X main.Revision={{.ShortCommit}}
     env:
       - CGO_ENABLED=0
+    goarch:
+      - amd64
   - id: hashira-web-client
     main: ./cmd/hashira-web-client
     binary: hashira-web-client
@@ -23,8 +25,11 @@ builds:
       - -X main.Revision={{.ShortCommit}}
     env:
       - CGO_ENABLED=0
+    goarch:
+      - amd64
+
 archives:
-  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ end }}'
     replacements:
       darwin: darwin
       linux: linux
