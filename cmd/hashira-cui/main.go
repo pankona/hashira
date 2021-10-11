@@ -84,16 +84,19 @@ func main() {
 	accesstoken, ok := os.LookupEnv("HASHIRA_ACCESS_TOKEN")
 
 	if ok {
-		sc := syncutil.Client{DaemonPort: daemonPort}
-		err := sc.TestAccessToken(accesstoken)
-		if err != nil {
-			log.Printf("HASHIRA_ACCESSTOKEN is invalid. Synchronization is not started: %v", err)
-		}
-		m.SetAccessToken(accesstoken)
 		go func() {
+			sc := syncutil.Client{DaemonPort: daemonPort}
+			err := sc.TestAccessToken(accesstoken)
+			if err != nil {
+				log.Printf("HASHIRA_ACCESSTOKEN is invalid. Synchronization is not started: %v", err)
+			}
+			m.SetAccessToken(accesstoken)
 			if err := m.SyncOnNotify(context.Background()); err != nil {
 				log.Printf("sync on notify finished: %v", err)
 			}
+
+			// sync on launch
+			m.NotifySync()
 		}()
 	}
 
