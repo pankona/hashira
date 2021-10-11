@@ -58,7 +58,7 @@ func (c *Client) Upload(accesstoken string, uploadTarget UploadTarget) error {
 
 	if len(ur.Tasks) == 0 && !isPriorityDirty(allPriorities) {
 		// there's no task to upload
-		return fmt.Errorf("there's no dirty task. no task to upload")
+		return nil
 	}
 
 	sc := sync.NewClient()

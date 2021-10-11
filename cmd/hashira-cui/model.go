@@ -20,6 +20,8 @@ type Model struct {
 	// TODO: remove if accesstoken is held by syncclient
 	accesstoken string
 	syncChan    chan struct{}
+
+	pub Publisher
 }
 
 func NewModel(hc *hashirac.Client, sc *syncutil.Client) *Model {
@@ -82,6 +84,10 @@ func (m *Model) SetAccessToken(accesstoken string) {
 	m.accesstoken = accesstoken
 }
 
+func (m *Model) SetPublisher(p Publisher) {
+	m.pub = p
+}
+
 func (m *Model) NotifySync() {
 	select {
 	case m.syncChan <- struct{}{}:
@@ -122,6 +128,23 @@ func (m *Model) SyncOnNotify(ctx context.Context) error {
 						log.Printf("failed to download tasks: %v", err)
 					}
 
+					// publish to notify update of tasks and priorities
+					tasks, err := m.List(ctx)
+					if err != nil {
+						log.Printf("failed to retrieve tasks: %v", err)
+					}
+
+					priorities, err := m.RetrievePriority(ctx)
+					if err != nil {
+						log.Printf("failed to retrieve priorities: %v", err)
+					}
+
+					ktasks := make(map[string]*KeyedTask)
+					for k, v := range tasks {
+						ktasks[k] = (*KeyedTask)(v)
+					}
+
+					m.pub.Publish("update", ktasks, priorities)
 				}
 			}(ctx)
 		}
