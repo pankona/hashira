@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"flag"
 	"fmt"
 	"log"
 	"log/syslog"
@@ -38,6 +39,17 @@ func initializeDB() (database.Databaser, error) {
 }
 
 func main() {
+	var (
+		flagVersion bool
+	)
+	flag.BoolVar(&flagVersion, "version", false, "show version")
+	flag.Parse()
+
+	if flagVersion {
+		fmt.Printf("hashira-cui v1.7.4\n")
+		return
+	}
+
 	logger, err := syslog.New(syslog.LOG_INFO|syslog.LOG_LOCAL0, "hashira-cui")
 	if err != nil {
 		log.Printf("failed to connect to logger but continue to work: %v", err)
