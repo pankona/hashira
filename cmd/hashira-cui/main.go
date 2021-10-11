@@ -9,11 +9,13 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"time"
 
 	"github.com/pankona/gocui"
 	hashirac "github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
+	"github.com/pankona/hashira/sync/syncutil"
 )
 
 func initializeDB() (database.Databaser, error) {
@@ -49,8 +51,10 @@ func main() {
 		os.Exit(1)
 	}
 
+	const daemonPort = 50056
+
 	d := &daemon.Daemon{
-		Port: 50056,
+		Port: daemonPort,
 		DB:   db,
 	}
 
@@ -63,6 +67,14 @@ func main() {
 	defer func() {
 		d.Stop()
 	}()
+
+	// Start synchronization with cloud if HASHIRA_ACCESS_TOKEN is set
+	accesstoken, ok := os.LookupEnv("HASHIRA_ACCESS_TOKEN")
+	if ok {
+		if err := startSync(context.Background(), daemonPort, accesstoken); err != nil {
+			log.Printf("failed to start synchronization: %v", err)
+		}
+	}
 
 	var (
 		m  = &Model{}
@@ -113,4 +125,32 @@ func main() {
 	if err != nil && err != gocui.ErrQuit {
 		log.Panicln(err)
 	}
+}
+
+func startSync(ctx context.Context, daemonPort int, accesstoken string) error {
+	log.Printf("start synchronization...\n")
+
+	sc := syncutil.Client{DaemonPort: daemonPort}
+	err := sc.TestAccessToken(accesstoken)
+	if err != nil {
+		return fmt.Errorf("HASHIRA_ACCESSTOKEN is invalid. Synchronization is not started: %w", err)
+	}
+	log.Printf("HASHIRA_ACCESSTOKEN is valid. hashira-web will work!\n")
+
+	const syncInterval = 10 * time.Minute
+
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				break
+			default:
+				sc.Upload(accesstoken, syncutil.UploadDirtyOnly)
+				sc.Download(accesstoken)
+				<-time.After(syncInterval)
+			}
+		}
+	}()
+
+	return nil
 }
