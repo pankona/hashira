@@ -18,6 +18,11 @@ import (
 	"github.com/pankona/hashira/sync/syncutil"
 )
 
+var (
+	Version  = "unset"
+	Revision = "unset"
+)
+
 func initializeDB() (database.Databaser, error) {
 	db := &database.BoltDB{}
 	usr, err := user.Current()
@@ -46,7 +51,7 @@ func main() {
 	flag.Parse()
 
 	if flagVersion {
-		fmt.Printf("hashira-cui v1.7.4\n")
+		fmt.Printf("hashira-cui version: %s, Revision: %s\n", Version, Revision)
 		return
 	}
 
