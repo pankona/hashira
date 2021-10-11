@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"time"
 
 	"github.com/pankona/gocui"
 	hashirac "github.com/pankona/hashira/client"
@@ -88,17 +89,26 @@ func main() {
 				log.Printf("HASHIRA_ACCESSTOKEN is invalid. Synchronization is not started: %v", err)
 			}
 			m.SetAccessToken(accesstoken)
+
 			if err := m.SyncOnNotify(context.Background()); err != nil {
 				log.Printf("sync on notify finished: %v", err)
 			}
 
-			// sync on launch
-			m.NotifySync()
+		}()
+
+		go func() {
+			// start polling
+			for {
+				m.NotifySync()
+				<-time.After(2 * time.Minute)
+			}
 		}()
 	}
 
 	// prepare controller
 	ps := &PubSub{}
+	m.SetPublisher(ps)
+
 	c := &Ctrl{
 		m:   m,
 		pub: ps,
