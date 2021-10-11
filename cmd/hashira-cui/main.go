@@ -90,7 +90,11 @@ func main() {
 			log.Printf("HASHIRA_ACCESSTOKEN is invalid. Synchronization is not started: %v", err)
 		}
 		m.SetAccessToken(accesstoken)
-		go m.SyncOnNotify(context.Background())
+		go func() {
+			if err := m.SyncOnNotify(context.Background()); err != nil {
+				log.Printf("sync on notify finished: %v", err)
+			}
+		}()
 	}
 
 	// prepare controller

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"time"
@@ -88,6 +89,8 @@ func (m *Model) NotifySync() {
 	}
 }
 
+var errSyncOnNotifyCanceled = errors.New("sync on notify has been canceled")
+
 func (m *Model) SyncOnNotify(ctx context.Context) error {
 	if m.accesstoken == "" {
 		return nil
@@ -98,7 +101,7 @@ func (m *Model) SyncOnNotify(ctx context.Context) error {
 	for {
 		select {
 		case <-ctx.Done():
-			return nil
+			return errSyncOnNotifyCanceled
 		case <-m.syncChan:
 			if cancelFunc != nil {
 				cancelFunc()
