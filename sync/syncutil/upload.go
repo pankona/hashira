@@ -44,6 +44,7 @@ func newUploadRequest(tasks map[string]*service.Task, priorities map[string]*ser
 
 func (c *Client) Upload(accesstoken string, uploadTarget UploadTarget) error {
 	cli := &hc.Client{Address: "localhost:" + strconv.Itoa(c.DaemonPort)}
+
 	allTasks, err := cli.RetrieveAll(context.Background())
 	if err != nil {
 		return fmt.Errorf("failed to retrieve tasks: %w", err)
@@ -73,6 +74,31 @@ func (c *Client) Upload(accesstoken string, uploadTarget UploadTarget) error {
 		if err := cli.PhysicalDelete(context.Background(), task.Id); err != nil {
 			return fmt.Errorf("failed to physical delete a task: %w", err)
 		}
+	}
+
+	// make all tasks and priorities clean since uploading is completed
+	for _, task := range allTasks {
+		if !task.IsDirty {
+			continue
+		}
+		err = cli.Update(context.Background(), &service.Task{
+			Id:        task.Id,
+			Name:      task.Name,
+			Place:     task.Place,
+			IsDeleted: task.IsDeleted,
+			IsDirty:   false,
+		})
+		if err != nil {
+			return fmt.Errorf("failed to update task: %w", err)
+		}
+	}
+
+	for _, priority := range allPriorities {
+		priority.IsDirty = false
+	}
+	_, err = cli.UpdatePriority(context.Background(), allPriorities)
+	if err != nil {
+		return fmt.Errorf("failed to update priority: %w", err)
 	}
 
 	return nil
