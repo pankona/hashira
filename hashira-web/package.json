@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/react": "^17.0.29",
+    "@types/react": "^17.0.30",
     "@types/react-dom": "^17.0.9",
     "@types/uuid": "^8.3.1",
     "ansi-regex": "6.0.1",
