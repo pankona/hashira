@@ -7,6 +7,7 @@ const App: React.VFC = () => {
   const [checkedTokens, setCheckedTokens] = React.useState<{
     [key: string]: boolean;
   }>({});
+  const [task, setTask] = React.useState<string>("");
 
   React.useEffect(() => {
     firebase.onAuthStateChanged((user: firebase.User | null) => {
@@ -27,6 +28,30 @@ const App: React.VFC = () => {
       {user ? (
         <>
           <div>{`Hello, ${user?.displayName!}!`}</div>
+          <form>
+            <label>
+              Add a todo&nbsp;
+              <input
+                type="text"
+                name="todo"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setTask(e.target.value);
+                }}
+                value={task}
+                autoFocus={true}
+              />
+            </label>
+            <input
+              type="submit"
+              value="Submit"
+              disabled={task === ""}
+              onClick={(e: React.FormEvent<HTMLInputElement>) => {
+                e.preventDefault();
+                firebase.UploadTasks(task);
+                setTask("");
+              }}
+            />
+          </form>
           <button
             onClick={async () => {
               await firebase.claimNewAccessToken(user.uid);

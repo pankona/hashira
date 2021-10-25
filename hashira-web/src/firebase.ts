@@ -11,7 +11,6 @@ import {
   addDoc,
   collection,
   deleteDoc,
-  doc,
   DocumentData,
   FieldValue,
   getDocs,
@@ -21,6 +20,8 @@ import {
   serverTimestamp,
   where,
 } from "firebase/firestore";
+import * as functions from "firebase/functions";
+
 import { v4 as uuidv4 } from "uuid";
 
 const firebaseConfig = {
@@ -113,5 +114,30 @@ export const RevokeAccessTokens = async (
     for (const doc of querySnapshot.docs) {
       await deleteDoc(doc.ref);
     }
+  }
+};
+
+export const UploadTasks = async (task: string) => {
+  const taskId = uuidv4();
+
+  try {
+    await functions.httpsCallable(
+      functions.getFunctions(undefined, "asia-northeast1"),
+      "upload"
+    )({
+      tasks: {
+        [taskId]: {
+          ID: taskId,
+          IsDeleted: false,
+          Name: task,
+          Place: "BACKLOG",
+        },
+      },
+      priority: {
+        BACKLOG: [taskId],
+      },
+    });
+  } catch (e) {
+    console.log(e);
   }
 };
