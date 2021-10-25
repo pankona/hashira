@@ -2,6 +2,23 @@ import React from "react";
 import * as firebase from "./firebase";
 import styled from "styled-components";
 
+const TaskListItem = styled.li`
+  white-space: nowrap;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const TaskList = styled.div`
+  width: 300px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: solid;
+`;
+
 const App: React.VFC = () => {
   const [user, setUser] = React.useState<firebase.User | null>(null);
   const [accesstokens, setAccessTokens] = React.useState<string[]>([]);
@@ -12,23 +29,6 @@ const App: React.VFC = () => {
   const [tasksAndPriorities, setTasksAndPriorities] = React.useState<
     any | undefined
   >(undefined);
-
-  const TaskListItem = styled.li`
-    white-space: nowrap;
-    overflow-y: scroll;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    ::-webkit-scrollbar {
-      display: none;
-    }
-  `;
-
-  const TaskList = styled.div`
-    width: 300px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: solid;
-  `;
 
   React.useEffect(() => {
     firebase.onAuthStateChanged((user: firebase.User | null) => {
@@ -70,15 +70,15 @@ const App: React.VFC = () => {
               type="submit"
               value="Submit"
               disabled={task === ""}
-              onClick={(e: React.FormEvent<HTMLInputElement>) => {
+              onClick={async (e: React.FormEvent<HTMLInputElement>) => {
                 e.preventDefault();
-                firebase.uploadTasks(task);
+                const taskToAdd = task;
                 setTask("");
+                await firebase.uploadTasks(taskToAdd);
 
                 // refresh tasks and priorities
-                const tasksAndPriorities = firebase.fetchTaskAndPriorities(
-                  user.uid
-                );
+                const tasksAndPriorities =
+                  await firebase.fetchTaskAndPriorities(user.uid);
                 setTasksAndPriorities(tasksAndPriorities);
               }}
             />

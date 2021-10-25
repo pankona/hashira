@@ -140,6 +140,9 @@ export const uploadTasks = async (task: string) => {
       },
     });
   } catch (e) {
+    // FIXME:
+    // currently cloud functions doesn't return appropriate response
+    // that fits httpsCallable protocol even if the function succeeded.
     console.log("error:", e);
   }
 };
