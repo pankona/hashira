@@ -7,7 +7,7 @@ const App: React.VFC = () => {
   const [checkedTokens, setCheckedTokens] = React.useState<{
     [key: string]: boolean;
   }>({});
-  const [todo, setTodo] = React.useState<string>("");
+  const [task, setTask] = React.useState<string>("");
 
   React.useEffect(() => {
     firebase.onAuthStateChanged((user: firebase.User | null) => {
@@ -35,17 +35,20 @@ const App: React.VFC = () => {
                 type="text"
                 name="todo"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setTodo(e.target.value);
+                  setTask(e.target.value);
                 }}
+                value={task}
+                autoFocus={true}
               />
             </label>
             <input
               type="submit"
               value="Submit"
-              disabled={todo === ""}
+              disabled={task === ""}
               onClick={(e: React.FormEvent<HTMLInputElement>) => {
                 e.preventDefault();
-                firebase.UploadToDos(todo);
+                firebase.UploadTasks(task);
+                setTask("");
               }}
             />
           </form>

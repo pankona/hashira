@@ -117,23 +117,27 @@ export const RevokeAccessTokens = async (
   }
 };
 
-export const UploadToDos = async (todo: string) => {
+export const UploadTasks = async (task: string) => {
   const taskId = uuidv4();
-  const response: any = await functions.httpsCallable(
-    functions.getFunctions(undefined, "asia-northeast1"),
-    "upload"
-  )({
-    tasks: {
-      taskId: {
-        ID: taskId,
-        IsDeleted: false,
-        Name: todo,
-        Place: "BACKLOG",
+
+  try {
+    await functions.httpsCallable(
+      functions.getFunctions(undefined, "asia-northeast1"),
+      "upload"
+    )({
+      tasks: {
+        [taskId]: {
+          ID: taskId,
+          IsDeleted: false,
+          Name: task,
+          Place: "BACKLOG",
+        },
       },
-    },
-    priority: {
-      BACKLOG: [taskId],
-    },
-  });
-  console.log(response.data);
+      priority: {
+        BACKLOG: [taskId],
+      },
+    });
+  } catch (e) {
+    console.log(e);
+  }
 };

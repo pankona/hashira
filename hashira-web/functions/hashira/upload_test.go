@@ -12,6 +12,69 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
+func TestUploadWithRawBody(t *testing.T) {
+	t.Parallel()
+
+	var (
+		defaultMockSave = func(ctx context.Context, uid string, tp TaskAndPriority) error { return nil }
+		defaultMockLoad = func(ctx context.Context, uid string) (TaskAndPriority, error) { return TaskAndPriority{}, nil }
+	)
+
+	tests := []struct {
+		name       string
+		inBody     []byte
+		wantStatus int
+		mockSave   func(ctx context.Context, uid string, tp TaskAndPriority) error
+		mockLoad   func(ctx context.Context, uid string) (TaskAndPriority, error)
+	}{
+		{
+			name:       "regular case with data field",
+			inBody:     []byte(`{"data":{"tasks":{"taskID":{"ID":"taskID","IsDeleted":false,"Name":"test","Place":"BACKLOG"}},"priority":{"BACKLOG":["taskID"]}}}`),
+			wantStatus: http.StatusOK,
+			mockSave:   defaultMockSave,
+			mockLoad:   defaultMockLoad,
+		},
+		{
+			name:       "regular case without data field",
+			inBody:     []byte(`{"tasks":{"taskID":{"ID":"taskID","IsDeleted":false,"Name":"test","Place":"BACKLOG"}},"priority":{"BACKLOG":["taskID"]}}`),
+			wantStatus: http.StatusOK,
+			mockSave:   defaultMockSave,
+			mockLoad:   defaultMockLoad,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			rec := httptest.NewRecorder()
+			req := httptest.NewRequest(http.MethodPost, "/", bytes.NewBuffer(tt.inBody))
+			req.Header.Add("Authorization", "bearer 123")
+
+			h := &Hashira{
+				AccessTokenStore: &mockAccessTokenStore{
+					mockFindUidByAccessToken: func(ctx context.Context, accesstoken string) (string, error) {
+						return "dummy_uid", nil
+					},
+				},
+				TaskAndPriorityStore: &mockTaskAndPriorityStore{
+					mockSave: tt.mockSave,
+					mockLoad: tt.mockLoad,
+				},
+			}
+
+			h.Upload(rec, req)
+
+			result := rec.Result()
+			if result.StatusCode != tt.wantStatus {
+				t.Errorf("unexpected result: [got] %d [want] %d", result.StatusCode, tt.wantStatus)
+			}
+		})
+	}
+
+}
+
 func TestUpload(t *testing.T) {
 	t.Parallel()
 

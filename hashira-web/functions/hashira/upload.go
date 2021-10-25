@@ -2,6 +2,7 @@ package hashira
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -21,8 +22,31 @@ func (h *Hashira) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	buf, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Printf("failed to read body: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	m := map[string]interface{}{}
+	if err := json.Unmarshal(buf, &m); err != nil {
+		log.Printf("failed to unmarshal: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	_, ok := m["data"]
+	if ok {
+		buf, err = json.Marshal(m["data"])
+		if err != nil {
+			log.Printf("failed to marshal: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+	}
+
 	var tp TaskAndPriority
-	err = json.NewDecoder(r.Body).Decode(&tp)
+	err = json.Unmarshal(buf, &tp)
 	if err != nil {
 		log.Printf("failed to read body: %v", err)
 		w.WriteHeader(http.StatusBadRequest)
