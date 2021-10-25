@@ -1,10 +1,10 @@
-name: hashira-cui / release
+name: hashira-cui
 on:
   push:
     tags:
     - "v[0-9]+.[0-9]+.[0-9]+"
 jobs:
-  goreleaser:
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
