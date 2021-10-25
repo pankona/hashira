@@ -11,8 +11,10 @@ import {
   addDoc,
   collection,
   deleteDoc,
+  doc,
   DocumentData,
   FieldValue,
+  getDoc,
   getDocs,
   getFirestore,
   query,
@@ -96,7 +98,7 @@ export const fetchAccessTokens = async (uid: string): Promise<string[]> => {
     });
 };
 
-export const RevokeAccessTokens = async (
+export const revokeAccessTokens = async (
   uid: string,
   accesstokens: string[]
 ) => {
@@ -117,7 +119,7 @@ export const RevokeAccessTokens = async (
   }
 };
 
-export const UploadTasks = async (task: string) => {
+export const uploadTasks = async (task: string) => {
   const taskId = uuidv4();
 
   try {
@@ -138,6 +140,13 @@ export const UploadTasks = async (task: string) => {
       },
     });
   } catch (e) {
-    console.log(e);
+    console.log("error:", e);
   }
+};
+
+export const fetchTaskAndPriorities = async (uid: string) => {
+  const db = getFirestore();
+  const docRef = doc(db, "tasksAndPriorities", uid);
+  const docSnapshot = await getDoc(docRef);
+  return docSnapshot.data();
 };

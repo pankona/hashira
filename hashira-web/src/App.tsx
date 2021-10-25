@@ -1,5 +1,6 @@
 import React from "react";
 import * as firebase from "./firebase";
+import styled from "styled-components";
 
 const App: React.VFC = () => {
   const [user, setUser] = React.useState<firebase.User | null>(null);
@@ -8,6 +9,26 @@ const App: React.VFC = () => {
     [key: string]: boolean;
   }>({});
   const [task, setTask] = React.useState<string>("");
+  const [tasksAndPriorities, setTasksAndPriorities] = React.useState<
+    any | undefined
+  >(undefined);
+
+  const TaskListItem = styled.li`
+    white-space: nowrap;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  `;
+
+  const TaskList = styled.div`
+    width: 300px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: solid;
+  `;
 
   React.useEffect(() => {
     firebase.onAuthStateChanged((user: firebase.User | null) => {
@@ -16,6 +37,11 @@ const App: React.VFC = () => {
         (async () => {
           const ret = await firebase.fetchAccessTokens(user.uid);
           setAccessTokens(ret);
+          const tasksAndPriorities = await firebase.fetchTaskAndPriorities(
+            user.uid
+          );
+          console.log(tasksAndPriorities);
+          setTasksAndPriorities(tasksAndPriorities);
         })();
       }
     });
@@ -47,11 +73,58 @@ const App: React.VFC = () => {
               disabled={task === ""}
               onClick={(e: React.FormEvent<HTMLInputElement>) => {
                 e.preventDefault();
-                firebase.UploadTasks(task);
+                firebase.uploadTasks(task);
                 setTask("");
               }}
             />
           </form>
+          {tasksAndPriorities ? (
+            <div
+              className="TaskAndPriorities"
+              style={{
+                display: "flex",
+                overflow: "auto",
+                width: "min-content",
+              }}
+            >
+              <TaskList>
+                {tasksAndPriorities["Priority"]["BACKLOG"].map((p: string) => {
+                  return (
+                    <TaskListItem key={p}>
+                      {tasksAndPriorities["Tasks"][p].Name}
+                    </TaskListItem>
+                  );
+                })}
+              </TaskList>
+              <TaskList>
+                {tasksAndPriorities["Priority"]["TODO"].map((p: string) => {
+                  return (
+                    <TaskListItem key={p}>
+                      {tasksAndPriorities["Tasks"][p].Name}
+                    </TaskListItem>
+                  );
+                })}
+              </TaskList>
+              <TaskList>
+                {tasksAndPriorities["Priority"]["DOING"].map((p: string) => {
+                  return (
+                    <TaskListItem key={p}>
+                      {tasksAndPriorities["Tasks"][p].Name}
+                    </TaskListItem>
+                  );
+                })}
+              </TaskList>
+              <TaskList>
+                {tasksAndPriorities["Priority"]["DONE"].map((p: string) => {
+                  return (
+                    <TaskListItem key={p}>
+                      {tasksAndPriorities["Tasks"][p].Name}
+                    </TaskListItem>
+                  );
+                })}
+              </TaskList>
+            </div>
+          ) : undefined}
           <button
             onClick={async () => {
               await firebase.claimNewAccessToken(user.uid);
@@ -77,7 +150,7 @@ const App: React.VFC = () => {
                 accesstokens.push(v);
               }
 
-              await firebase.RevokeAccessTokens(user.uid, accesstokens);
+              await firebase.revokeAccessTokens(user.uid, accesstokens);
 
               const ret = await firebase.fetchAccessTokens(user.uid);
               setAccessTokens(ret);
