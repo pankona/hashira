@@ -8,13 +8,15 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn reload -d ./public/ -p 8000 -n 0.0.0.0 -v",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "deploy-firebase-rules": "firebase deploy --only firestore:rules"
   },
   "devDependencies": {
     "@types/react": "^17.0.29",
     "@types/react-dom": "^17.0.9",
     "@types/uuid": "^8.3.1",
     "ansi-regex": "6.0.1",
+    "firebase-tools": "^9.21.0",
     "prettier": "^2.4.1",
     "reload": "^3.2.0",
     "ts-node": "^10.3.0",
