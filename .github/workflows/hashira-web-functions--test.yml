@@ -1,0 +1,21 @@
+name: hashira-web-functions
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/hashira-web-functions--test.yml"
+      - "hashira-web/functions/**"
+
+defaults:
+  run:
+    working-directory: ./hashira-web/functions
+
+jobs:
+  functions-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "^1.17.1"
+      - run: go test ./...

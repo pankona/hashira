@@ -16,7 +16,8 @@ func TestUpload(t *testing.T) {
 	t.Parallel()
 
 	var (
-		defaultMockFunc = func(ctx context.Context, uid string, tp TaskAndPriority) error { return nil }
+		defaultMockSave = func(ctx context.Context, uid string, tp TaskAndPriority) error { return nil }
+		defaultMockLoad = func(ctx context.Context, uid string) (TaskAndPriority, error) { return TaskAndPriority{}, nil }
 		defaultBody     = TaskAndPriority{
 			Tasks: map[string]Task{
 				"task1": {ID: "task1", Name: "task", Place: "Backlog", IsDeleted: false},
@@ -31,19 +32,22 @@ func TestUpload(t *testing.T) {
 		name       string
 		inBody     TaskAndPriority
 		wantStatus int
-		mockFunc   func(ctx context.Context, uid string, tp TaskAndPriority) error
+		mockSave   func(ctx context.Context, uid string, tp TaskAndPriority) error
+		mockLoad   func(ctx context.Context, uid string) (TaskAndPriority, error)
 	}{
 		{
 			name:       "regular case",
 			inBody:     defaultBody,
 			wantStatus: http.StatusOK,
-			mockFunc:   defaultMockFunc,
+			mockSave:   defaultMockSave,
+			mockLoad:   defaultMockLoad,
 		},
 		{
 			name:       "failed to save",
 			inBody:     defaultBody,
 			wantStatus: http.StatusInternalServerError,
-			mockFunc:   func(ctx context.Context, uid string, tp TaskAndPriority) error { return errors.New("dummy error") },
+			mockSave:   func(ctx context.Context, uid string, tp TaskAndPriority) error { return errors.New("dummy error") },
+			mockLoad:   defaultMockLoad,
 		},
 	}
 
@@ -68,7 +72,8 @@ func TestUpload(t *testing.T) {
 					},
 				},
 				TaskAndPriorityStore: &mockTaskAndPriorityStore{
-					mockSave: tt.mockFunc,
+					mockSave: tt.mockSave,
+					mockLoad: tt.mockLoad,
 				},
 			}
 

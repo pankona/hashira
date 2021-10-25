@@ -1,5 +1,5 @@
 test:
-	go test -count=1 ./...
+	go test ./...
 
 deploy-all:
 	make deploy-upload
