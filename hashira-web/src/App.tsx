@@ -40,7 +40,6 @@ const App: React.VFC = () => {
           const tasksAndPriorities = await firebase.fetchTaskAndPriorities(
             user.uid
           );
-          console.log(tasksAndPriorities);
           setTasksAndPriorities(tasksAndPriorities);
         })();
       }
@@ -75,6 +74,12 @@ const App: React.VFC = () => {
                 e.preventDefault();
                 firebase.uploadTasks(task);
                 setTask("");
+
+                // refresh tasks and priorities
+                const tasksAndPriorities = firebase.fetchTaskAndPriorities(
+                  user.uid
+                );
+                setTasksAndPriorities(tasksAndPriorities);
               }}
             />
           </form>
