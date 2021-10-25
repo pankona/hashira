@@ -89,7 +89,6 @@ const App: React.VFC = () => {
               style={{
                 display: "flex",
                 overflow: "auto",
-                width: "min-content",
               }}
             >
               <TaskList>
