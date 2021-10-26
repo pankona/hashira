@@ -1,5 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Normalize } from "styled-normalize";
+
 import App from "./App";
 
-ReactDOM.render(<App />, document.getElementById("app"));
+const Root = () => (
+  <React.Fragment>
+    <Normalize />
+    <App />
+  </React.Fragment>
+);
+
+ReactDOM.render(<Root />, document.getElementById("app"));
