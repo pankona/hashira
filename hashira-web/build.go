@@ -45,6 +45,7 @@ func main() {
 			{Name: api.EngineChrome, Version: "58"},
 			{Name: api.EngineFirefox, Version: "57"},
 		},
+		Sourcemap: api.SourceMapInline,
 	}
 
 	if flagWatch {

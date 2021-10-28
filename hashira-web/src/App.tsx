@@ -92,40 +92,48 @@ const App: React.VFC = () => {
               }}
             >
               <TaskList>
-                {tasksAndPriorities["Priority"]["BACKLOG"].map((p: string) => {
-                  return (
-                    <TaskListItem key={p}>
-                      {tasksAndPriorities["Tasks"][p].Name}
-                    </TaskListItem>
-                  );
-                })}
+                {tasksAndPriorities["Priority"]["BACKLOG"]
+                  .filter((v: any) => tasksAndPriorities["Tasks"][v])
+                  .map((p: string) => {
+                    return (
+                      <TaskListItem key={p}>
+                        {tasksAndPriorities["Tasks"][p].Name}
+                      </TaskListItem>
+                    );
+                  })}
               </TaskList>
               <TaskList>
-                {tasksAndPriorities["Priority"]["TODO"].map((p: string) => {
-                  return (
-                    <TaskListItem key={p}>
-                      {tasksAndPriorities["Tasks"][p].Name}
-                    </TaskListItem>
-                  );
-                })}
+                {tasksAndPriorities["Priority"]["TODO"]
+                  .filter((v: any) => tasksAndPriorities["Tasks"][v])
+                  .map((p: string) => {
+                    return (
+                      <TaskListItem key={p}>
+                        {tasksAndPriorities["Tasks"][p].Name}
+                      </TaskListItem>
+                    );
+                  })}
               </TaskList>
               <TaskList>
-                {tasksAndPriorities["Priority"]["DOING"].map((p: string) => {
-                  return (
-                    <TaskListItem key={p}>
-                      {tasksAndPriorities["Tasks"][p].Name}
-                    </TaskListItem>
-                  );
-                })}
+                {tasksAndPriorities["Priority"]["DOING"]
+                  .filter((v: any) => tasksAndPriorities["Tasks"][v])
+                  .map((p: string) => {
+                    return (
+                      <TaskListItem key={p}>
+                        {tasksAndPriorities["Tasks"][p].Name}
+                      </TaskListItem>
+                    );
+                  })}
               </TaskList>
               <TaskList>
-                {tasksAndPriorities["Priority"]["DONE"].map((p: string) => {
-                  return (
-                    <TaskListItem key={p}>
-                      {tasksAndPriorities["Tasks"][p].Name}
-                    </TaskListItem>
-                  );
-                })}
+                {tasksAndPriorities["Priority"]["DONE"]
+                  .filter((v: any) => tasksAndPriorities["Tasks"][v])
+                  .map((p: string) => {
+                    return (
+                      <TaskListItem key={p}>
+                        {tasksAndPriorities["Tasks"][p].Name}
+                      </TaskListItem>
+                    );
+                  })}
               </TaskList>
             </div>
           ) : undefined}
