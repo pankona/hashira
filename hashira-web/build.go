@@ -66,6 +66,7 @@ func watch(opts api.BuildOptions) error {
 				log.Printf("build error: %+v", result.Errors)
 				return
 			}
+			log.Printf("rebuild succeeded")
 		},
 	}
 
