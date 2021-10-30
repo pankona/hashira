@@ -29,6 +29,7 @@ const App: React.VFC = () => {
   const [tasksAndPriorities, setTasksAndPriorities] = React.useState<
     any | undefined
   >(undefined);
+  const [isUploading, setIsUploading] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     firebase.onAuthStateChanged((user: firebase.User | null) => {
@@ -37,6 +38,8 @@ const App: React.VFC = () => {
         (async () => {
           const ret = await firebase.fetchAccessTokens(user.uid);
           setAccessTokens(ret);
+        })();
+        (async () => {
           const tasksAndPriorities = await firebase.fetchTaskAndPriorities(
             user.uid
           );
@@ -69,17 +72,20 @@ const App: React.VFC = () => {
             <input
               type="submit"
               value="Submit"
-              disabled={task === ""}
+              disabled={task === "" || isUploading}
               onClick={async (e: React.FormEvent<HTMLInputElement>) => {
                 e.preventDefault();
                 const taskToAdd = task;
                 setTask("");
+                setIsUploading(true);
                 await firebase.uploadTasks(taskToAdd);
 
                 // refresh tasks and priorities
                 const tasksAndPriorities =
                   await firebase.fetchTaskAndPriorities(user.uid);
                 setTasksAndPriorities(tasksAndPriorities);
+
+                setIsUploading(false);
               }}
             />
           </form>
