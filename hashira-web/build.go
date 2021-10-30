@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -46,6 +47,7 @@ func main() {
 			{Name: api.EngineFirefox, Version: "57"},
 		},
 		Sourcemap: api.SourceMapInline,
+		Define:    map[string]string{"process.env.REVISION": revision()},
 	}
 
 	if flagWatch {
@@ -54,6 +56,13 @@ func main() {
 	}
 
 	build(buildOptions)
+}
+
+func revision() string {
+	if rev, ok := os.LookupEnv("REVISION"); ok {
+		return fmt.Sprintf("\"%s\"", rev)
+	}
+	return "\"unknown revision\""
 }
 
 func cleanArtifacts(dir string) error {
