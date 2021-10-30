@@ -1,6 +1,7 @@
 import React from "react";
 import * as firebase from "./firebase";
 import styled from "styled-components";
+import { revision } from "./revision";
 
 const TaskListItem = styled.li`
   white-space: nowrap;
@@ -51,6 +52,7 @@ const App: React.VFC = () => {
 
   return (
     <div>
+      <div>hashira web {revision()}</div>
       <button onClick={firebase.login}>Login</button>
       <button onClick={firebase.logout}>Logout</button>
       {user ? (
