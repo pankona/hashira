@@ -34,19 +34,19 @@ const App: React.VFC = () => {
 
   React.useEffect(() => {
     firebase.onAuthStateChanged((user: firebase.User | null) => {
-      setUser(user);
-      if (user) {
-        (async () => {
-          const ret = await firebase.fetchAccessTokens(user.uid);
-          setAccessTokens(ret);
-        })();
-        (async () => {
-          const tasksAndPriorities = await firebase.fetchTaskAndPriorities(
-            user.uid
-          );
-          setTasksAndPriorities(tasksAndPriorities);
-        })();
+      if (!user) {
+        setUser(null);
+        return;
       }
+
+      Promise.all<string[], any>([
+        firebase.fetchAccessTokens(user.uid),
+        firebase.fetchTaskAndPriorities(user.uid),
+      ]).then(([accesstokens, tasksAndPriorities]) => {
+        setUser(user);
+        setAccessTokens(accesstokens);
+        setTasksAndPriorities(tasksAndPriorities);
+      });
     });
   }, []);
 
@@ -199,7 +199,9 @@ const App: React.VFC = () => {
             );
           })}
         </>
-      ) : undefined}
+      ) : (
+        <div>Loading...</div>
+      )}
     </div>
   );
 };
