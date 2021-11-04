@@ -17,7 +17,7 @@ require (
 	golang.org/x/sys v0.0.0-20210923061019-b8560ed6a9b7 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/genproto v0.0.0-20210924002016-3dee208752a0 // indirect
-	google.golang.org/grpc v1.41.0
+	google.golang.org/grpc v1.42.0
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
