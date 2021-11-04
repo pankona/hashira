@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@types/react": "^17.0.34",
-    "@types/react-dom": "^17.0.10",
+    "@types/react-dom": "^17.0.11",
     "@types/styled-components": "^5.1.15",
     "@types/uuid": "^8.3.1",
     "ansi-regex": "6.0.1",
