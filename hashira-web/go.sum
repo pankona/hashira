@@ -1,4 +1,4 @@
-github.com/evanw/esbuild v0.13.12 h1:q8fmywXq1vIKlbA6XSxdU9LCLzMdrsD3wfM2gz2d8JU=
-github.com/evanw/esbuild v0.13.12/go.mod h1:GG+zjdi59yh3ehDn4ZWfPcATxjPDUH53iU4ZJbp7dkY=
+github.com/evanw/esbuild v0.13.13 h1:KfO9yqcgsiRIPj8j0pgzxW28xFz2Jjg3RhNYOmqwclk=
+github.com/evanw/esbuild v0.13.13/go.mod h1:GG+zjdi59yh3ehDn4ZWfPcATxjPDUH53iU4ZJbp7dkY=
 golang.org/x/sys v0.0.0-20210908233432-aa78b53d3365 h1:6wSTsvPddg9gc/mVEEyk9oOAoxn+bT4Z9q1zx+4RwA4=
 golang.org/x/sys v0.0.0-20210908233432-aa78b53d3365/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
