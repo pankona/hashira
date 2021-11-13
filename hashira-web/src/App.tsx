@@ -55,42 +55,46 @@ const App: React.VFC = () => {
       <div>hashira web {revision()}</div>
       <button onClick={firebase.login}>Login</button>
       <button onClick={firebase.logout}>Logout</button>
+      <form>
+        <label>
+          Add a todo&nbsp;
+          <input
+            type="text"
+            name="todo"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setTask(e.target.value);
+            }}
+            value={task}
+            autoFocus={true}
+          />
+        </label>
+        <input
+          type="submit"
+          value="Submit"
+          disabled={task === "" || isUploading || !user}
+          onClick={async (e: React.FormEvent<HTMLInputElement>) => {
+            e.preventDefault();
+            if (!user) {
+              return;
+            }
+            const taskToAdd = task;
+            setTask("");
+            setIsUploading(true);
+            await firebase.uploadTasks(taskToAdd);
+
+            // refresh tasks and priorities
+            const tasksAndPriorities = await firebase.fetchTaskAndPriorities(
+              user.uid
+            );
+            setTasksAndPriorities(tasksAndPriorities);
+
+            setIsUploading(false);
+          }}
+        />
+      </form>
+
       {user ? (
         <>
-          <div>{`Hello, ${user?.displayName!}!`}</div>
-          <form>
-            <label>
-              Add a todo&nbsp;
-              <input
-                type="text"
-                name="todo"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setTask(e.target.value);
-                }}
-                value={task}
-                autoFocus={true}
-              />
-            </label>
-            <input
-              type="submit"
-              value="Submit"
-              disabled={task === "" || isUploading}
-              onClick={async (e: React.FormEvent<HTMLInputElement>) => {
-                e.preventDefault();
-                const taskToAdd = task;
-                setTask("");
-                setIsUploading(true);
-                await firebase.uploadTasks(taskToAdd);
-
-                // refresh tasks and priorities
-                const tasksAndPriorities =
-                  await firebase.fetchTaskAndPriorities(user.uid);
-                setTasksAndPriorities(tasksAndPriorities);
-
-                setIsUploading(false);
-              }}
-            />
-          </form>
           {tasksAndPriorities ? (
             <div
               className="TaskAndPriorities"
