@@ -119,7 +119,7 @@ export const revokeAccessTokens = async (
   }
 };
 
-export const uploadTasks = async (task: string) => {
+export const uploadTask = async (task: string) => {
   const taskId = uuidv4();
 
   try {
@@ -137,6 +137,39 @@ export const uploadTasks = async (task: string) => {
       },
       priority: {
         BACKLOG: [taskId],
+      },
+    });
+  } catch (e) {
+    // FIXME:
+    // currently cloud functions doesn't return appropriate response
+    // that fits httpsCallable protocol even if the function succeeded.
+    console.log("error:", e);
+  }
+};
+
+export const uploadTasks = async (tasks: string[]) => {
+  const tasksObject: any = {};
+  const priorities: string[] = [];
+
+  tasks.forEach((v: string) => {
+    const taskId = uuidv4();
+    tasksObject[taskId] = {
+      ID: taskId,
+      IsDeleted: false,
+      Name: v,
+      Place: "BACKLOG",
+    };
+    priorities.push(taskId);
+  });
+
+  try {
+    await functions.httpsCallable(
+      functions.getFunctions(undefined, "asia-northeast1"),
+      "add"
+    )({
+      tasks: tasksObject,
+      priority: {
+        BACKLOG: priorities,
       },
     });
   } catch (e) {
