@@ -2,23 +2,7 @@ import React from "react";
 import * as firebase from "./firebase";
 import styled from "styled-components";
 import { revision } from "./revision";
-
-const TaskListItem = styled.li`
-  white-space: nowrap;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  ::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const TaskList = styled.div`
-  width: 300px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border: solid;
-`;
+import { TaskList } from "./TaskList";
 
 const App: React.VFC = () => {
   const [user, setUser] = React.useState<firebase.User | null>(null);
@@ -27,6 +11,9 @@ const App: React.VFC = () => {
     [key: string]: boolean;
   }>({});
   const [tasks, setTasks] = React.useState<string[]>([]);
+  const [checkedTasks, setCheckedTasks] = React.useState<{
+    [key: string]: boolean;
+  }>({});
   const [tasksAndPriorities, setTasksAndPriorities] = React.useState<
     any | undefined
   >(undefined);
@@ -91,6 +78,16 @@ const App: React.VFC = () => {
           }}
         />
       </form>
+      <input
+        type="button"
+        value="Mark as Done"
+        onClick={async (e: React.FormEvent<HTMLInputElement>) => {
+          e.preventDefault();
+          if (!user) {
+            return;
+          }
+        }}
+      />
 
       {user ? (
         <>
@@ -102,50 +99,30 @@ const App: React.VFC = () => {
                 overflow: "auto",
               }}
             >
-              <TaskList>
-                {tasksAndPriorities["Priority"]["BACKLOG"]
-                  .filter((v: any) => tasksAndPriorities["Tasks"][v])
-                  .map((p: string) => {
-                    return (
-                      <TaskListItem key={p}>
-                        {tasksAndPriorities["Tasks"][p].Name}
-                      </TaskListItem>
-                    );
-                  })}
-              </TaskList>
-              <TaskList>
-                {tasksAndPriorities["Priority"]["TODO"]
-                  .filter((v: any) => tasksAndPriorities["Tasks"][v])
-                  .map((p: string) => {
-                    return (
-                      <TaskListItem key={p}>
-                        {tasksAndPriorities["Tasks"][p].Name}
-                      </TaskListItem>
-                    );
-                  })}
-              </TaskList>
-              <TaskList>
-                {tasksAndPriorities["Priority"]["DOING"]
-                  .filter((v: any) => tasksAndPriorities["Tasks"][v])
-                  .map((p: string) => {
-                    return (
-                      <TaskListItem key={p}>
-                        {tasksAndPriorities["Tasks"][p].Name}
-                      </TaskListItem>
-                    );
-                  })}
-              </TaskList>
-              <TaskList>
-                {tasksAndPriorities["Priority"]["DONE"]
-                  .filter((v: any) => tasksAndPriorities["Tasks"][v])
-                  .map((p: string) => {
-                    return (
-                      <TaskListItem key={p}>
-                        {tasksAndPriorities["Tasks"][p].Name}
-                      </TaskListItem>
-                    );
-                  })}
-              </TaskList>
+              <TaskList
+                place={"BACKLOG"}
+                tasksAndPriorities={tasksAndPriorities}
+                checkedTasks={checkedTasks}
+                setCheckedTasks={setCheckedTasks}
+              />
+              <TaskList
+                place={"TODO"}
+                tasksAndPriorities={tasksAndPriorities}
+                checkedTasks={checkedTasks}
+                setCheckedTasks={setCheckedTasks}
+              />
+              <TaskList
+                place={"DOING"}
+                tasksAndPriorities={tasksAndPriorities}
+                checkedTasks={checkedTasks}
+                setCheckedTasks={setCheckedTasks}
+              />
+              <TaskList
+                place={"DONE"}
+                tasksAndPriorities={tasksAndPriorities}
+                checkedTasks={checkedTasks}
+                setCheckedTasks={setCheckedTasks}
+              />
             </div>
           ) : undefined}
           <button

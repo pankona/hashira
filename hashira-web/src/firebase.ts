@@ -147,7 +147,7 @@ export const uploadTask = async (task: string) => {
   }
 };
 
-const Place = ["BACKLOG", "TODO", "DOING", "DONE"] as const;
+export const Place = ["BACKLOG", "TODO", "DOING", "DONE"] as const;
 
 export const uploadTasks = async (tasks: string[]) => {
   const tasksObject: {
