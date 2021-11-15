@@ -26,7 +26,7 @@ const App: React.VFC = () => {
   const [checkedTokens, setCheckedTokens] = React.useState<{
     [key: string]: boolean;
   }>({});
-  const [task, setTask] = React.useState<string>("");
+  const [tasks, setTasks] = React.useState<string[]>([]);
   const [tasksAndPriorities, setTasksAndPriorities] = React.useState<
     any | undefined
   >(undefined);
@@ -57,30 +57,29 @@ const App: React.VFC = () => {
       <button onClick={firebase.logout}>Logout</button>
       <form>
         <label>
-          Add a todo&nbsp;
-          <input
-            type="text"
-            name="todo"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setTask(e.target.value);
+          Add todos&nbsp;
+          <textarea
+            value={tasks.join("\n")}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+              setTasks(e.target.value.split("\n"));
             }}
-            value={task}
-            autoFocus={true}
-          />
+          ></textarea>
         </label>
         <input
           type="submit"
           value="Submit"
-          disabled={task === "" || isUploading || !user}
+          autoFocus={true}
+          disabled={tasks.length === 0 || isUploading || !user}
           onClick={async (e: React.FormEvent<HTMLInputElement>) => {
             e.preventDefault();
             if (!user) {
               return;
             }
-            const taskToAdd = task;
-            setTask("");
+
+            const tasksToAdd = tasks;
+            setTasks([]);
             setIsUploading(true);
-            await firebase.uploadTasks(taskToAdd);
+            await firebase.uploadTasks(tasksToAdd);
 
             // refresh tasks and priorities
             const tasksAndPriorities = await firebase.fetchTaskAndPriorities(
