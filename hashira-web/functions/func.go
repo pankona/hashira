@@ -40,6 +40,17 @@ func Download(w http.ResponseWriter, r *http.Request) {
 	h.Download(w, r)
 }
 
+func Add(w http.ResponseWriter, r *http.Request) {
+	setHeadersForCORS(w)
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	h := hashira.New(store.NewAccessTokenStore(), store.NewTaskAndPriorityStore())
+	h.Add(w, r)
+}
+
 func setHeadersForCORS(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST")

@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func (h *Hashira) Upload(w http.ResponseWriter, r *http.Request) {
+func (h *Hashira) Add(w http.ResponseWriter, r *http.Request) {
 	accesstoken, err := h.retrieveAccessTokenFromHeader(r.Context(), r.Header)
 	if err != nil {
 		log.Printf("failed to retrieve accesstoken from header: %v", err)
@@ -60,7 +60,7 @@ func (h *Hashira) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if tp, err = mergeTaskAndPriorities(tp, oldtp); err != nil {
+	if tp, err = addTaskAndPriorities(tp, oldtp); err != nil {
 		log.Printf("failed to merge task and priorities: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -79,7 +79,7 @@ func (h *Hashira) Upload(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func mergeTaskAndPriorities(newtp, oldtp TaskAndPriority) (TaskAndPriority, error) {
+func addTaskAndPriorities(newtp, oldtp TaskAndPriority) (TaskAndPriority, error) {
 	ret := map[string]Task{}
 
 	for k, v := range oldtp.Tasks {
@@ -89,7 +89,7 @@ func mergeTaskAndPriorities(newtp, oldtp TaskAndPriority) (TaskAndPriority, erro
 		ret[k] = v
 	}
 
-	priorities := mergePriorities(newtp.Priority, oldtp.Priority)
+	priorities := appendPriorities(newtp.Priority, oldtp.Priority)
 
 	// Remove priorities if the place is not matched to task's place
 	for k, p := range priorities {
@@ -109,10 +109,10 @@ func mergeTaskAndPriorities(newtp, oldtp TaskAndPriority) (TaskAndPriority, erro
 	}, nil
 }
 
-func mergePriorities(newPriorities, oldPriorities map[string][]string) map[string][]string {
+func appendPriorities(newPriorities, oldPriorities map[string][]string) map[string][]string {
 	ret := map[string][]string{"BACKLOG": {}, "TODO": {}, "DOING": {}, "DONE": {}}
 	for k := range ret {
-		ret[k] = mergeStringSlice(newPriorities[k], oldPriorities[k])
+		ret[k] = append(newPriorities[k], oldPriorities[k]...)
 	}
 	return ret
 }
