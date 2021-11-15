@@ -112,8 +112,7 @@ func mergeTaskAndPriorities(newtp, oldtp TaskAndPriority) (TaskAndPriority, erro
 func mergePriorities(newPriorities, oldPriorities map[string][]string) map[string][]string {
 	ret := map[string][]string{"BACKLOG": {}, "TODO": {}, "DOING": {}, "DONE": {}}
 	for k := range ret {
-		ret[k] = append(newPriorities[k], oldPriorities[k]...)
-		ret[k] = unique(ret[k])
+		ret[k] = mergeStringSlice(newPriorities[k], oldPriorities[k])
 	}
 	return ret
 }
