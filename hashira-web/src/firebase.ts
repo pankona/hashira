@@ -147,8 +147,17 @@ export const uploadTask = async (task: string) => {
   }
 };
 
+const Place = ["BACKLOG", "TODO", "DOING", "DONE"] as const;
+
 export const uploadTasks = async (tasks: string[]) => {
-  const tasksObject: any = {};
+  const tasksObject: {
+    [key: string]: {
+      ID: string;
+      IsDeleted: boolean;
+      Name: string;
+      Place: typeof Place[number];
+    };
+  } = {};
   const priorities: string[] = [];
 
   tasks.forEach((v: string) => {
