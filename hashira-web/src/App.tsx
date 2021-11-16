@@ -1,6 +1,5 @@
 import React from "react";
 import * as firebase from "./firebase";
-import styled from "styled-components";
 import { revision } from "./revision";
 import { TaskList } from "./TaskList";
 
@@ -66,13 +65,12 @@ const App: React.VFC = () => {
             const tasksToAdd = tasks;
             setTasks([]);
             setIsUploading(true);
+
             await firebase.uploadTasks(tasksToAdd);
 
             // refresh tasks and priorities
-            const tasksAndPriorities = await firebase.fetchTaskAndPriorities(
-              user.uid
-            );
-            setTasksAndPriorities(tasksAndPriorities);
+            const tp = await firebase.fetchTaskAndPriorities(user.uid);
+            setTasksAndPriorities(tp);
 
             setIsUploading(false);
           }}
@@ -80,12 +78,36 @@ const App: React.VFC = () => {
       </form>
       <input
         type="button"
-        value="Mark as Done"
+        value={"Mark as Done"}
         onClick={async (e: React.FormEvent<HTMLInputElement>) => {
           e.preventDefault();
           if (!user) {
             return;
           }
+
+          const tasksToMarkAsDone: firebase.TasksObject = {};
+          for (const v in checkedTasks) {
+            if (checkedTasks[v]) {
+              const task = tasksAndPriorities["Tasks"][v];
+              tasksToMarkAsDone[v] = {
+                ID: task.ID,
+                IsDeleted: task.Place === "DONE",
+                Name: task.Name,
+                Place: "DONE",
+              };
+            }
+          }
+
+          setIsUploading(true);
+
+          await firebase.updateTasks(tasksToMarkAsDone);
+
+          // refresh tasks and priorities
+          const tp = await firebase.fetchTaskAndPriorities(user.uid);
+          setTasksAndPriorities(tp);
+          setCheckedTasks({});
+
+          setIsUploading(false);
         }}
       />
 
