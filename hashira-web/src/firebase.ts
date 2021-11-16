@@ -119,35 +119,7 @@ export const revokeAccessTokens = async (
   }
 };
 
-export const uploadTask = async (task: string) => {
-  const taskId = uuidv4();
-
-  try {
-    await functions.httpsCallable(
-      functions.getFunctions(undefined, "asia-northeast1"),
-      "upload"
-    )({
-      tasks: {
-        [taskId]: {
-          ID: taskId,
-          IsDeleted: false,
-          Name: task,
-          Place: "BACKLOG",
-        },
-      },
-      priority: {
-        BACKLOG: [taskId],
-      },
-    });
-  } catch (e) {
-    // FIXME:
-    // currently cloud functions doesn't return appropriate response
-    // that fits httpsCallable protocol even if the function succeeded.
-    console.log("error:", e);
-  }
-};
-
-const Place = ["BACKLOG", "TODO", "DOING", "DONE"] as const;
+export const Place = ["BACKLOG", "TODO", "DOING", "DONE"] as const;
 
 export const uploadTasks = async (tasks: string[]) => {
   const tasksObject: {
@@ -180,6 +152,44 @@ export const uploadTasks = async (tasks: string[]) => {
       priority: {
         BACKLOG: priorities,
       },
+    });
+  } catch (e) {
+    // FIXME:
+    // currently cloud functions doesn't return appropriate response
+    // that fits httpsCallable protocol even if the function succeeded.
+    console.log("error:", e);
+  }
+};
+
+export interface TasksObject {
+  [key: string]: {
+    ID: string;
+    IsDeleted: boolean;
+    Name: string;
+    Place: typeof Place[number];
+  };
+}
+
+export const updateTasks = async (tasksObject: TasksObject) => {
+  const priorities: {
+    [key: string]: string[];
+  } = {};
+
+  Place.forEach((v) => {
+    priorities[v] = [];
+  });
+
+  for (const v in tasksObject) {
+    priorities[tasksObject[v].Place].push(tasksObject[v].ID);
+  }
+
+  try {
+    await functions.httpsCallable(
+      functions.getFunctions(undefined, "asia-northeast1"),
+      "add"
+    )({
+      tasks: tasksObject,
+      priority: priorities,
     });
   } catch (e) {
     // FIXME:
