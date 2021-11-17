@@ -121,6 +121,8 @@ export const revokeAccessTokens = async (
 
 export const Place = ["BACKLOG", "TODO", "DOING", "DONE"] as const;
 
+// uploadTasks
+// 複数の task を受け取って、全部 BACKLOG の一番上に積む
 export const uploadTasks = async (tasks: string[]) => {
   const tasksObject: {
     [key: string]: {
@@ -170,6 +172,9 @@ export interface TasksObject {
   };
 }
 
+// updateTasks
+// task の状態を変えるために用いる。変更があった task はそれぞれのレーンの一番上に積まれる。
+// もっぱら、タスクの状態を変更する (横移動する) ために用いる。
 export const updateTasks = async (tasksObject: TasksObject) => {
   const priorities: {
     [key: string]: string[];
@@ -190,6 +195,25 @@ export const updateTasks = async (tasksObject: TasksObject) => {
     )({
       tasks: tasksObject,
       priority: priorities,
+    });
+  } catch (e) {
+    // FIXME:
+    // currently cloud functions doesn't return appropriate response
+    // that fits httpsCallable protocol even if the function succeeded.
+    console.log("error:", e);
+  }
+};
+
+// updateTasks2
+// task の状態を変更するために用いる。変更があった task の場所はそのまま維持される。
+// もっぱら、task の中身を編集するときに用いられる。
+export const updateTasks2 = async (tasksObject: TasksObject) => {
+  try {
+    await functions.httpsCallable(
+      functions.getFunctions(undefined, "asia-northeast1"),
+      "add"
+    )({
+      tasks: tasksObject,
     });
   } catch (e) {
     // FIXME:
