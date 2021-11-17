@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Place } from "./firebase";
 
-const List = styled.div`
+const StyledList = styled.div`
   min-width: 300px;
   max-width: 300px;
   padding-left: 10px;
@@ -10,8 +10,7 @@ const List = styled.div`
   border: solid;
 `;
 
-const ListItem = styled.li`
-  list-style: none;
+const StyledListContent = styled.div`
   white-space: nowrap;
   overflow-y: scroll;
   -ms-overflow-style: none;
@@ -21,8 +20,13 @@ const ListItem = styled.li`
   }
 `;
 
-const Checkbox = styled.input.attrs({ type: "checkbox" })`
+const StyledCheckbox = styled.input.attrs({ type: "checkbox" })`
   margin-right: 8px;
+`;
+
+const StyledListItem = styled.div`
+  display: flex;
+  min-height: 24px;
 `;
 
 export const TaskList: React.VFC<{
@@ -32,13 +36,13 @@ export const TaskList: React.VFC<{
   setCheckedTasks: (a: { [key: string]: boolean }) => void;
 }> = ({ place, tasksAndPriorities, checkedTasks, setCheckedTasks }) => {
   return (
-    <List>
+    <StyledList>
       {tasksAndPriorities["Priority"][place]
         .filter((v: any) => tasksAndPriorities["Tasks"][v])
         .map((p: string) => {
           return (
-            <ListItem key={tasksAndPriorities["Tasks"][p].ID}>
-              <Checkbox
+            <StyledListItem key={tasksAndPriorities["Tasks"][p].ID}>
+              <StyledCheckbox
                 id={tasksAndPriorities["Tasks"][p].ID}
                 value={tasksAndPriorities["Tasks"][p].Name}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,10 +52,12 @@ export const TaskList: React.VFC<{
                   });
                 }}
               />
-              {tasksAndPriorities["Tasks"][p].Name}
-            </ListItem>
+              <StyledListContent key={tasksAndPriorities["Tasks"][p].ID}>
+                {tasksAndPriorities["Tasks"][p].Name}
+              </StyledListContent>
+            </StyledListItem>
           );
         })}
-    </List>
+    </StyledList>
   );
 };
