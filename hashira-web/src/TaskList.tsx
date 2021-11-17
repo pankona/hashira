@@ -5,12 +5,22 @@ import { Place } from "./firebase";
 const StyledList = styled.div`
   min-width: 300px;
   max-width: 300px;
+  max-height: 80vh;
+  overflow-y: auto;
   padding-left: 10px;
   padding-right: 10px;
   border: solid;
 `;
 
+const StyledListItem = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const StyledListContent = styled.div`
+  display: flex;
+  align-items: center;
+  min-height: 24px;
   white-space: nowrap;
   overflow-y: scroll;
   -ms-overflow-style: none;
@@ -22,11 +32,6 @@ const StyledListContent = styled.div`
 
 const StyledCheckbox = styled.input.attrs({ type: "checkbox" })`
   margin-right: 8px;
-`;
-
-const StyledListItem = styled.div`
-  display: flex;
-  min-height: 24px;
 `;
 
 export const TaskList: React.VFC<{
