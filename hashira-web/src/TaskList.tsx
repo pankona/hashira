@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Place } from "./firebase";
+import * as firebase from "./firebase";
 
 const StyledList = styled.div`
   min-width: 300px;
@@ -17,12 +17,14 @@ const StyledListItem = styled.div`
   align-items: center;
 `;
 
-const StyledListContent = styled.div`
+const StyledListContent = styled.input.attrs({ type: "text" })`
   display: flex;
   align-items: center;
   min-height: 24px;
+  width: 100%;
   white-space: nowrap;
   overflow-y: scroll;
+  border: none;
   -ms-overflow-style: none;
   scrollbar-width: none;
   ::-webkit-scrollbar {
@@ -35,21 +37,36 @@ const StyledCheckbox = styled.input.attrs({ type: "checkbox" })`
 `;
 
 export const TaskList: React.VFC<{
-  place: typeof Place[number];
+  user: firebase.User;
+  place: typeof firebase.Place[number];
   tasksAndPriorities: any;
   checkedTasks: { [key: string]: boolean };
   setCheckedTasks: (a: { [key: string]: boolean }) => void;
-}> = ({ place, tasksAndPriorities, checkedTasks, setCheckedTasks }) => {
+  setTasksAndPriorities: (tp: any | undefined) => void;
+  setIsUploading: (b: boolean) => void;
+}> = ({
+  user,
+  place,
+  tasksAndPriorities,
+  checkedTasks,
+  setCheckedTasks,
+  setTasksAndPriorities,
+}) => {
+  const [updatedTasks, setUpdatedTasks] = React.useState<{
+    [key: string]: string;
+  }>({});
   return (
     <StyledList>
       {tasksAndPriorities["Priority"][place]
         .filter((v: any) => tasksAndPriorities["Tasks"][v])
         .map((p: string) => {
+          const taskId = tasksAndPriorities["Tasks"][p].ID;
+          const taskName = tasksAndPriorities["Tasks"][p].Name;
           return (
-            <StyledListItem key={tasksAndPriorities["Tasks"][p].ID}>
+            <StyledListItem key={taskId}>
               <StyledCheckbox
-                id={tasksAndPriorities["Tasks"][p].ID}
-                value={tasksAndPriorities["Tasks"][p].Name}
+                id={taskId}
+                value={taskName}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setCheckedTasks({
                     ...checkedTasks,
@@ -57,9 +74,49 @@ export const TaskList: React.VFC<{
                   });
                 }}
               />
-              <StyledListContent key={tasksAndPriorities["Tasks"][p].ID}>
-                {tasksAndPriorities["Tasks"][p].Name}
-              </StyledListContent>
+              <StyledListContent
+                id={taskId}
+                key={taskId}
+                value={
+                  updatedTasks[taskId] !== undefined
+                    ? updatedTasks[taskId]
+                    : taskName
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setUpdatedTasks({
+                    ...updatedTasks,
+                    [e.target.id]: e.target.value,
+                  });
+                }}
+                onBlur={async (_e: React.ChangeEvent<HTMLInputElement>) => {
+                  const tasksToUpdate: firebase.TasksObject = {};
+                  for (const v in updatedTasks) {
+                    if (updatedTasks[v] === "") {
+                      delete updatedTasks[v];
+                      setUpdatedTasks({
+                        ...updatedTasks,
+                      });
+                      return;
+                    }
+
+                    const task = tasksAndPriorities["Tasks"][v];
+                    tasksToUpdate[v] = {
+                      ID: task.ID,
+                      IsDeleted: false,
+                      Name: updatedTasks[v] !== "" ? updatedTasks[v] : taskName,
+                      Place: task.Place,
+                    };
+                  }
+
+                  await firebase.updateTasks2(tasksToUpdate);
+
+                  // refresh tasks and priorities
+                  const tp = await firebase.fetchTaskAndPriorities(user.uid);
+                  setTasksAndPriorities(tp);
+
+                  setUpdatedTasks({});
+                }}
+              />
             </StyledListItem>
           );
         })}

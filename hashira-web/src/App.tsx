@@ -134,28 +134,40 @@ const App: React.VFC = () => {
               }}
             >
               <TaskList
+                user={user}
                 place={"BACKLOG"}
                 tasksAndPriorities={tasksAndPriorities}
                 checkedTasks={checkedTasks}
                 setCheckedTasks={setCheckedTasks}
+                setTasksAndPriorities={setTasksAndPriorities}
+                setIsUploading={setIsUploading}
               />
               <TaskList
+                user={user}
                 place={"TODO"}
                 tasksAndPriorities={tasksAndPriorities}
                 checkedTasks={checkedTasks}
                 setCheckedTasks={setCheckedTasks}
+                setTasksAndPriorities={setTasksAndPriorities}
+                setIsUploading={setIsUploading}
               />
               <TaskList
+                user={user}
                 place={"DOING"}
                 tasksAndPriorities={tasksAndPriorities}
                 checkedTasks={checkedTasks}
                 setCheckedTasks={setCheckedTasks}
+                setTasksAndPriorities={setTasksAndPriorities}
+                setIsUploading={setIsUploading}
               />
               <TaskList
+                user={user}
                 place={"DONE"}
                 tasksAndPriorities={tasksAndPriorities}
                 checkedTasks={checkedTasks}
                 setCheckedTasks={setCheckedTasks}
+                setTasksAndPriorities={setTasksAndPriorities}
+                setIsUploading={setIsUploading}
               />
             </div>
           ) : undefined}
