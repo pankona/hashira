@@ -25,7 +25,7 @@ const TaskInput: React.VFC<{
           value="Submit"
           autoFocus={true}
           disabled={tasks.length === 0 || disabled}
-          onClick={async (e: React.FormEvent<HTMLInputElement>) => {
+          onClick={(e: React.FormEvent<HTMLInputElement>) => {
             e.preventDefault();
             onSubmitTasks(tasks);
             setTasks([]);
