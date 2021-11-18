@@ -1,15 +1,17 @@
 import React from "react";
 import * as firebase from "./firebase";
-import { revision } from "./revision";
+import Header from "./Header";
 import { TaskList } from "./TaskList";
+import TaskInput from "./TaskInput";
 
 const App: React.VFC = () => {
-  const [user, setUser] = React.useState<firebase.User | null>(null);
+  const [user, setUser] = React.useState<firebase.User | null | undefined>(
+    undefined
+  );
   const [accesstokens, setAccessTokens] = React.useState<string[]>([]);
   const [checkedTokens, setCheckedTokens] = React.useState<{
     [key: string]: boolean;
   }>({});
-  const [tasks, setTasks] = React.useState<string[]>([]);
   const [checkedTasks, setCheckedTasks] = React.useState<{
     [key: string]: boolean;
   }>({});
@@ -17,6 +19,23 @@ const App: React.VFC = () => {
     any | undefined
   >(undefined);
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
+
+  const onSubmitTasks = (tasks: string[]) => {
+    if (!user) {
+      return;
+    }
+
+    const tasksToAdd = tasks;
+    setIsUploading(true);
+
+    firebase.uploadTasks(tasksToAdd);
+
+    // refresh tasks and priorities
+    const tp = firebase.fetchTaskAndPriorities(user.uid);
+    setTasksAndPriorities(tp);
+
+    setIsUploading(false);
+  };
 
   React.useEffect(() => {
     firebase.onAuthStateChanged((user: firebase.User | null) => {
@@ -38,45 +57,11 @@ const App: React.VFC = () => {
 
   return (
     <div>
-      <div>hashira web {revision()}</div>
-      <button onClick={firebase.login}>Login</button>
-      <button onClick={firebase.logout}>Logout</button>
-      <form>
-        <label>
-          Add todos&nbsp;
-          <textarea
-            value={tasks.join("\n")}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-              setTasks(e.target.value.split("\n"));
-            }}
-          ></textarea>
-        </label>
-        <input
-          type="submit"
-          value="Submit"
-          autoFocus={true}
-          disabled={tasks.length === 0 || isUploading || !user}
-          onClick={async (e: React.FormEvent<HTMLInputElement>) => {
-            e.preventDefault();
-            if (!user) {
-              return;
-            }
-
-            const tasksToAdd = tasks;
-            setTasks([]);
-            setIsUploading(true);
-
-            await firebase.uploadTasks(tasksToAdd);
-
-            // refresh tasks and priorities
-            const tp = await firebase.fetchTaskAndPriorities(user.uid);
-            setTasksAndPriorities(tp);
-
-            setIsUploading(false);
-          }}
-        />
-      </form>
-
+      <Header user={user} />
+      <TaskInput
+        onSubmitTasks={onSubmitTasks}
+        disabled={isUploading || !user}
+      />
       {user ? (
         <>
           <input
