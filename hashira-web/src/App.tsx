@@ -20,7 +20,7 @@ const App: React.VFC = () => {
   >(undefined);
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
 
-  const onSubmitTasks = (tasks: string[]) => {
+  const onSubmitTasks = async (tasks: string[]) => {
     if (!user) {
       return;
     }
@@ -28,10 +28,10 @@ const App: React.VFC = () => {
     const tasksToAdd = tasks;
     setIsUploading(true);
 
-    firebase.uploadTasks(tasksToAdd);
+    await firebase.uploadTasks(tasksToAdd);
 
     // refresh tasks and priorities
-    const tp = firebase.fetchTaskAndPriorities(user.uid);
+    const tp = await firebase.fetchTaskAndPriorities(user.uid);
     setTasksAndPriorities(tp);
 
     setIsUploading(false);
