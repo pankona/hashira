@@ -44,7 +44,7 @@ const App: React.VFC = () => {
         return;
       }
 
-      Promise.all<string[], any>([
+      Promise.all([
         firebase.fetchAccessTokens(user.uid),
         firebase.fetchTaskAndPriorities(user.uid),
       ]).then(([accesstokens, tasksAndPriorities]) => {
