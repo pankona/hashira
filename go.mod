@@ -3,7 +3,7 @@ module github.com/pankona/hashira
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/alecthomas/units v0.0.0-20210912230133-d1bdfacee922 // indirect
-	github.com/gofrs/uuid v4.1.0+incompatible
+	github.com/gofrs/uuid v4.2.0+incompatible
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/jesseduffield/termbox-go v0.0.0-20200823212418-a2289ed6aafe // indirect
 	github.com/kr/pretty v0.1.0 // indirect
