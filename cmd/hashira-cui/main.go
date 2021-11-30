@@ -90,17 +90,21 @@ func main() {
 			}
 			m.SetAccessToken(accesstoken)
 
+			go func() {
+				// sync on launch immediately
+				if err := m.SyncNow(context.Background()); err != nil {
+					log.Printf("failed to sync: %v", err)
+				}
+
+				// start polling
+				for {
+					m.NotifySync()
+					<-time.After(2 * time.Minute)
+				}
+			}()
+
 			if err := m.SyncOnNotify(context.Background()); err != nil {
 				log.Printf("sync on notify finished: %v", err)
-			}
-
-		}()
-
-		go func() {
-			// start polling
-			for {
-				m.NotifySync()
-				<-time.After(2 * time.Minute)
 			}
 		}()
 	}

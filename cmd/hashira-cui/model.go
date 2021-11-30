@@ -121,32 +121,48 @@ func (m *Model) SyncOnNotify(ctx context.Context) error {
 				case <-ctx.Done():
 					// do nothing
 				case <-time.After(1 * time.Minute):
-					if err := m.syncclient.Upload(m.accesstoken, syncutil.UploadDirtyOnly); err != nil {
-						log.Printf("failed to upload tasks: %v", err)
+					if err := m.sync(ctx); err != nil {
+						log.Printf("failed to sync: %v", err)
 					}
-					if err := m.syncclient.Download(m.accesstoken); err != nil {
-						log.Printf("failed to download tasks: %v", err)
-					}
-
-					// publish to notify update of tasks and priorities
-					tasks, err := m.List(ctx)
-					if err != nil {
-						log.Printf("failed to retrieve tasks: %v", err)
-					}
-
-					priorities, err := m.RetrievePriority(ctx)
-					if err != nil {
-						log.Printf("failed to retrieve priorities: %v", err)
-					}
-
-					ktasks := make(map[string]*KeyedTask)
-					for k, v := range tasks {
-						ktasks[k] = (*KeyedTask)(v)
-					}
-
-					m.pub.Publish("update", ktasks, priorities)
 				}
 			}(ctx)
 		}
 	}
+}
+
+func (m *Model) SyncNow(ctx context.Context) error {
+	return m.sync(ctx)
+}
+
+func (m *Model) sync(ctx context.Context) error {
+	if m.accesstoken == "" {
+		return nil
+	}
+
+	if err := m.syncclient.Upload(m.accesstoken, syncutil.UploadDirtyOnly); err != nil {
+		return fmt.Errorf("failed to upload tasks: %w", err)
+	}
+	if err := m.syncclient.Download(m.accesstoken); err != nil {
+		return fmt.Errorf("failed to download tasks: %w", err)
+	}
+
+	// publish to notify update of tasks and priorities
+	tasks, err := m.List(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to retrieve tasks: %w", err)
+	}
+
+	priorities, err := m.RetrievePriority(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to retrieve priorities: %w", err)
+	}
+
+	ktasks := make(map[string]*KeyedTask)
+	for k, v := range tasks {
+		ktasks[k] = (*KeyedTask)(v)
+	}
+
+	m.pub.Publish("update", ktasks, priorities)
+
+	return nil
 }
