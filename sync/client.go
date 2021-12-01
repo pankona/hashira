@@ -103,6 +103,10 @@ func (c *Client) Download(accesstoken string) (DownloadResult, error) {
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode >= 400 {
+		return DownloadResult{}, fmt.Errorf("download request failed: status code: %d", resp.StatusCode)
+	}
+
 	var ret DownloadResult
 	if err := json.NewDecoder(resp.Body).Decode(&ret); err != nil {
 		return DownloadResult{}, fmt.Errorf("failed to decode response body: %w", err)
