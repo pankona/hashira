@@ -207,6 +207,7 @@ export const updateTasks = async (tasksObject: TasksObject) => {
 // updateTasks2
 // task の状態を変更するために用いる。変更があった task の場所はそのまま維持される。
 // もっぱら、task の中身を編集するときに用いられる。
+// FIXME: 名前がひどいので直すこと
 export const updateTasks2 = async (tasksObject: TasksObject) => {
   try {
     await functions.httpsCallable(
