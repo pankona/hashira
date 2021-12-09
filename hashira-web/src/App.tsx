@@ -5,6 +5,14 @@ import { TaskList } from "./TaskList";
 import TaskInput from "./TaskInput";
 import styled from "styled-components";
 import { StyledHorizontalSpacer, StyledVerticalSpacer } from "./styles";
+import {
+  useAddTasks,
+  useFetchAccessTokens,
+  useFetchTasksAndPriorities,
+  useUpdateTasks,
+  useUpdateTasks2,
+  useUser,
+} from "./hooks";
 
 const StyledBody = styled.div`
   padding-left: 8px;
@@ -12,96 +20,122 @@ const StyledBody = styled.div`
 `;
 
 const App: React.VFC = () => {
-  const [user, setUser] = React.useState<firebase.User | null | undefined>(
-    undefined
-  );
-  const [accesstokens, setAccessTokens] = React.useState<string[]>([]);
   const [checkedTokens, setCheckedTokens] = React.useState<{
     [key: string]: boolean;
   }>({});
   const [checkedTasks, setCheckedTasks] = React.useState<{
     [key: string]: boolean;
   }>({});
-  const [tasksAndPriorities, setTasksAndPriorities] = React.useState<
-    any | undefined
-  >(undefined);
-  const [isUploading, setIsUploading] = React.useState<boolean>(false);
   const [mode, setMode] = React.useState<"move" | "select">("select");
 
-  const onSubmitTasks = async (tasks: string[]) => {
-    if (!user) {
-      return;
-    }
+  const user = useUser();
+  const [addTasksState, addTasks] = useAddTasks();
+  const [updateTasksState, updateTasks] = useUpdateTasks();
+  const [updateTasks2State, updateTasks2] = useUpdateTasks2();
+  const [fetchAccessTokenState, fetchAccessTokens] = useFetchAccessTokens();
+  const [fetchTasksAndPrioritiesState, fetchTasksAndPriorities] =
+    useFetchTasksAndPriorities();
 
-    const tasksToAdd = tasks;
-    setIsUploading(true);
+  const accesstokens = fetchAccessTokenState.data;
+  const tasksAndPriorities = fetchTasksAndPrioritiesState.data;
+  const isLoading =
+    addTasksState.isLoading ||
+    updateTasksState.isLoading ||
+    updateTasks2State.isLoading ||
+    fetchTasksAndPrioritiesState.isLoading;
 
-    await firebase.uploadTasks(tasksToAdd);
-
-    // refresh tasks and priorities
-    const tp = await firebase.fetchTaskAndPriorities(user.uid);
-    setTasksAndPriorities(tp);
-
-    setIsUploading(false);
-  };
-
-  const onMoveTask = async (taskId: string, direction: "left" | "right") => {
-    if (!user) {
-      return;
-    }
-    const tasksToMove: firebase.TasksObject = {};
-    const task = tasksAndPriorities["Tasks"][taskId];
-    const currentIndex = firebase.Place.indexOf(task.Place);
-    const nextIndex = ((): number => {
-      if (direction === "left") {
-        if (currentIndex === 0) {
-          return firebase.Place.length - 1;
+  const onSubmitTasks = React.useCallback(
+    (tasks: string[]) => {
+      return new Promise<void>(async (resolve, reject) => {
+        if (!user) {
+          resolve();
+          return;
         }
-        return currentIndex - 1;
-      }
 
-      if (currentIndex === firebase.Place.length - 1) {
-        return 0;
-      }
-      return currentIndex + 1;
-    })();
+        try {
+          await addTasks(tasks);
+          // refresh tasks and priorities
+          await fetchTasksAndPriorities(user.uid);
+          resolve();
+        } catch (e) {
+          reject(e);
+        }
+      });
+    },
+    [user]
+  );
 
-    tasksToMove[taskId] = {
-      ID: task.ID,
-      IsDeleted: false,
-      Name: task.Name,
-      Place: firebase.Place[nextIndex],
-    };
+  const onMoveTask = React.useCallback(
+    (taskId: string, direction: "left" | "right") => {
+      return new Promise<void>(async (resolve, reject) => {
+        if (!user) {
+          resolve();
+          return;
+        }
+        const tasksToMove: firebase.TasksObject = {};
+        const task = tasksAndPriorities["Tasks"][taskId];
+        const currentIndex = firebase.Place.indexOf(task.Place);
+        const nextIndex = ((): number => {
+          if (direction === "left") {
+            if (currentIndex === 0) {
+              return firebase.Place.length - 1;
+            }
+            return currentIndex - 1;
+          }
 
-    setIsUploading(true);
+          if (currentIndex === firebase.Place.length - 1) {
+            return 0;
+          }
+          return currentIndex + 1;
+        })();
 
-    await firebase.updateTasks(tasksToMove);
+        tasksToMove[taskId] = {
+          ID: task.ID,
+          IsDeleted: false,
+          Name: task.Name,
+          Place: firebase.Place[nextIndex],
+        };
 
-    // refresh tasks and priorities
-    const tp = await firebase.fetchTaskAndPriorities(user.uid);
-    setTasksAndPriorities(tp);
-    setCheckedTasks({});
+        try {
+          await updateTasks(tasksToMove);
+          await fetchTasksAndPriorities(user.uid);
+          resolve();
+        } catch (e) {
+          reject(e);
+        }
+      });
+    },
+    [user, tasksAndPriorities]
+  );
 
-    setIsUploading(false);
-  };
+  const onEditTasks = React.useCallback(
+    (tasks: firebase.TasksObject) => {
+      return new Promise<void>(async (resolve, reject) => {
+        if (!user) {
+          resolve();
+          return;
+        }
+        try {
+          await updateTasks2(tasks);
+          // refresh tasks and priorities
+          await fetchTasksAndPriorities(user.uid);
+          resolve();
+        } catch (e) {
+          reject(e);
+        }
+      });
+    },
+    [user]
+  );
 
   React.useEffect(() => {
-    firebase.onAuthStateChanged((user: firebase.User | null) => {
-      if (!user) {
-        setUser(null);
-        return;
-      }
-
+    if (user) {
       Promise.all([
-        firebase.fetchAccessTokens(user.uid),
-        firebase.fetchTaskAndPriorities(user.uid),
-      ]).then(([accesstokens, tasksAndPriorities]) => {
-        setUser(user);
-        setAccessTokens(accesstokens);
-        setTasksAndPriorities(tasksAndPriorities);
-      });
-    });
-  }, []);
+        fetchAccessTokens(user.uid),
+        fetchTasksAndPriorities(user.uid),
+      ]);
+    }
+  }, [user]);
 
   return (
     <div>
@@ -109,10 +143,10 @@ const App: React.VFC = () => {
       <StyledBody>
         <TaskInput
           onSubmitTasks={onSubmitTasks}
-          disabled={isUploading || !user}
+          disabled={isLoading || !user}
         />
         <StyledVerticalSpacer />
-        {user ? (
+        {user && accesstokens && tasksAndPriorities ? (
           <>
             <div style={{ display: "flex" }}>
               <input
@@ -120,7 +154,7 @@ const App: React.VFC = () => {
                 value={"Mark as Done"}
                 style={{ minWidth: "128px" }}
                 disabled={
-                  isUploading ||
+                  isLoading ||
                   ((): boolean => {
                     for (const v in checkedTasks) {
                       if (checkedTasks[v]) {
@@ -149,16 +183,10 @@ const App: React.VFC = () => {
                     }
                   }
 
-                  setIsUploading(true);
-
-                  await firebase.updateTasks(tasksToMarkAsDone);
-
+                  await updateTasks(tasksToMarkAsDone);
                   // refresh tasks and priorities
-                  const tp = await firebase.fetchTaskAndPriorities(user.uid);
-                  setTasksAndPriorities(tp);
+                  await fetchTasksAndPriorities(user.uid);
                   setCheckedTasks({});
-
-                  setIsUploading(false);
                 }}
               />
               <StyledHorizontalSpacer />
@@ -166,7 +194,7 @@ const App: React.VFC = () => {
                 type="button"
                 value={mode === "move" ? "Finish moving" : "Move"}
                 style={{ minWidth: "128px" }}
-                disabled={isUploading}
+                disabled={isLoading}
                 onClick={() => {
                   setMode((prev) => {
                     if (prev === "move") {
@@ -188,42 +216,38 @@ const App: React.VFC = () => {
                 }}
               >
                 <TaskList
-                  user={user}
                   place={"BACKLOG"}
                   tasksAndPriorities={tasksAndPriorities}
                   checkedTasks={checkedTasks}
                   setCheckedTasks={setCheckedTasks}
-                  setTasksAndPriorities={setTasksAndPriorities}
+                  onEditTasks={onEditTasks}
                   mode={mode}
                   onMoveTask={onMoveTask}
                 />
                 <TaskList
-                  user={user}
                   place={"TODO"}
                   tasksAndPriorities={tasksAndPriorities}
                   checkedTasks={checkedTasks}
                   setCheckedTasks={setCheckedTasks}
-                  setTasksAndPriorities={setTasksAndPriorities}
+                  onEditTasks={onEditTasks}
                   mode={mode}
                   onMoveTask={onMoveTask}
                 />
                 <TaskList
-                  user={user}
                   place={"DOING"}
                   tasksAndPriorities={tasksAndPriorities}
                   checkedTasks={checkedTasks}
                   setCheckedTasks={setCheckedTasks}
-                  setTasksAndPriorities={setTasksAndPriorities}
+                  onEditTasks={onEditTasks}
                   mode={mode}
                   onMoveTask={onMoveTask}
                 />
                 <TaskList
-                  user={user}
                   place={"DONE"}
                   tasksAndPriorities={tasksAndPriorities}
                   checkedTasks={checkedTasks}
                   setCheckedTasks={setCheckedTasks}
-                  setTasksAndPriorities={setTasksAndPriorities}
+                  onEditTasks={onEditTasks}
                   mode={mode}
                   onMoveTask={onMoveTask}
                 />
@@ -232,9 +256,7 @@ const App: React.VFC = () => {
             <button
               onClick={async () => {
                 await firebase.claimNewAccessToken(user.uid);
-
-                const ret = await firebase.fetchAccessTokens(user.uid);
-                setAccessTokens(ret);
+                await fetchAccessTokens(user.uid);
               }}
             >
               Generate new access token
@@ -255,9 +277,7 @@ const App: React.VFC = () => {
                 }
 
                 await firebase.revokeAccessTokens(user.uid, accesstokens);
-
-                const ret = await firebase.fetchAccessTokens(user.uid);
-                setAccessTokens(ret);
+                await fetchAccessTokens(user.uid);
               }}
             >
               Revoke access token

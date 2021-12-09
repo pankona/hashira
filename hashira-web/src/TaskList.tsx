@@ -52,21 +52,19 @@ const StyledArrow = styled.div`
 `;
 
 export const TaskList: React.VFC<{
-  user: firebase.User;
   place: typeof firebase.Place[number];
   tasksAndPriorities: any;
   checkedTasks: { [key: string]: boolean };
   setCheckedTasks: (a: { [key: string]: boolean }) => void;
-  setTasksAndPriorities: (tp: any | undefined) => void;
+  onEditTasks: (tasks: firebase.TasksObject) => Promise<void>;
   mode: "move" | "select";
-  onMoveTask: (taskId: string, direction: "left" | "right") => void;
+  onMoveTask: (taskId: string, direction: "left" | "right") => Promise<void>;
 }> = ({
-  user,
   place,
   tasksAndPriorities,
   checkedTasks,
   setCheckedTasks,
-  setTasksAndPriorities,
+  onEditTasks,
   mode,
   onMoveTask,
 }) => {
@@ -122,14 +120,7 @@ export const TaskList: React.VFC<{
                         };
                       }
 
-                      await firebase.updateTasks2(tasksToUpdate);
-
-                      // refresh tasks and priorities
-                      const tp = await firebase.fetchTaskAndPriorities(
-                        user.uid
-                      );
-                      setTasksAndPriorities(tp);
-
+                      await onEditTasks(tasksToUpdate);
                       setUpdatedTasks({});
                     }}
                   />
