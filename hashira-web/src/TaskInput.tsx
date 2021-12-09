@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { StyledHorizontalSpacer } from "./App";
 
 const StyledInputForm = styled.form`
   display: flex;
@@ -20,6 +21,7 @@ const TaskInput: React.VFC<{
           setTasks(e.target.value.split("\n"));
         }}
       ></textarea>
+      <StyledHorizontalSpacer />
       <input
         type="submit"
         value="Submit"
