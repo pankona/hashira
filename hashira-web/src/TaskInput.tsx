@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { StyledHorizontalSpacer } from "./App";
+import { StyledHorizontalSpacer } from "./styles";
 
 const StyledInputForm = styled.form`
   display: flex;

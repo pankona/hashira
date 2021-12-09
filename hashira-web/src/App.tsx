@@ -4,14 +4,7 @@ import Header from "./Header";
 import { TaskList } from "./TaskList";
 import TaskInput from "./TaskInput";
 import styled from "styled-components";
-
-export const StyledVerticalSpacer = styled.div`
-  min-height: 8px;
-`;
-
-export const StyledHorizontalSpacer = styled.div`
-  min-width: 8px;
-`;
+import { StyledHorizontalSpacer, StyledVerticalSpacer } from "./styles";
 
 const StyledBody = styled.div`
   padding-left: 8px;
