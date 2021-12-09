@@ -1,8 +1,9 @@
 import React from "react";
-import * as firebase from "./firebase";
 import styled from "styled-components";
 
-const StyledInputForm = styled.div``;
+const StyledInputForm = styled.form`
+  display: flex;
+`;
 
 const TaskInput: React.VFC<{
   onSubmitTasks: (tasks: string[]) => void;
@@ -12,26 +13,24 @@ const TaskInput: React.VFC<{
 
   return (
     <StyledInputForm>
-      <form>
-        <textarea
-          placeholder={"Add todos"}
-          value={tasks.join("\n")}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-            setTasks(e.target.value.split("\n"));
-          }}
-        ></textarea>
-        <input
-          type="submit"
-          value="Submit"
-          autoFocus={true}
-          disabled={tasks.length === 0 || disabled}
-          onClick={(e: React.FormEvent<HTMLInputElement>) => {
-            e.preventDefault();
-            onSubmitTasks(tasks);
-            setTasks([]);
-          }}
-        />
-      </form>
+      <textarea
+        placeholder={"Add todos"}
+        value={tasks.join("\n")}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+          setTasks(e.target.value.split("\n"));
+        }}
+      ></textarea>
+      <input
+        type="submit"
+        value="Submit"
+        autoFocus={true}
+        disabled={tasks.length === 0 || disabled}
+        onClick={(e: React.FormEvent<HTMLInputElement>) => {
+          e.preventDefault();
+          onSubmitTasks(tasks);
+          setTasks([]);
+        }}
+      />
     </StyledInputForm>
   );
 };
