@@ -7,7 +7,7 @@ const StyledInputForm = styled.form`
 `;
 
 const TaskInput: React.VFC<{
-  onSubmitTasks: (tasks: string[]) => void;
+  onSubmitTasks: (tasks: string[]) => Promise<void>;
   disabled: boolean;
 }> = ({ onSubmitTasks, disabled }) => {
   const [tasks, setTasks] = React.useState<string[]>([]);
@@ -27,9 +27,9 @@ const TaskInput: React.VFC<{
         value="Submit"
         autoFocus={true}
         disabled={tasks.length === 0 || disabled}
-        onClick={(e: React.FormEvent<HTMLInputElement>) => {
+        onClick={async (e: React.FormEvent<HTMLInputElement>) => {
           e.preventDefault();
-          onSubmitTasks(tasks);
+          await onSubmitTasks(tasks);
           setTasks([]);
         }}
       />
