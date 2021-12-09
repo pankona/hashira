@@ -59,6 +59,7 @@ export const TaskList: React.VFC<{
   setCheckedTasks: (a: { [key: string]: boolean }) => void;
   setTasksAndPriorities: (tp: any | undefined) => void;
   mode: "move" | "select";
+  onMoveTask: (taskId: string, direction: "left" | "right") => void;
 }> = ({
   user,
   place,
@@ -67,6 +68,7 @@ export const TaskList: React.VFC<{
   setCheckedTasks,
   setTasksAndPriorities,
   mode,
+  onMoveTask,
 }) => {
   const [updatedTasks, setUpdatedTasks] = React.useState<{
     [key: string]: string;
@@ -145,8 +147,20 @@ export const TaskList: React.VFC<{
                     />
                   ) : (
                     <StyledArrow>
-                      <div style={{ cursor: "pointer" }}>👈</div>
-                      <div style={{ cursor: "pointer" }}>👉</div>
+                      <div
+                        id={taskId}
+                        style={{ cursor: "pointer" }}
+                        onClick={(e) => onMoveTask(e.currentTarget.id, "left")}
+                      >
+                        👈
+                      </div>
+                      <div
+                        id={taskId}
+                        style={{ cursor: "pointer" }}
+                        onClick={(e) => onMoveTask(e.currentTarget.id, "right")}
+                      >
+                        👉
+                      </div>
                     </StyledArrow>
                   )}
                 </>
