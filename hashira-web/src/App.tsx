@@ -109,6 +109,7 @@ const App: React.VFC = () => {
               setIsUploading(false);
             }}
           />
+          <input type="button" value={"Move"} disabled={isUploading} />
 
           {tasksAndPriorities ? (
             <div
@@ -125,7 +126,6 @@ const App: React.VFC = () => {
                 checkedTasks={checkedTasks}
                 setCheckedTasks={setCheckedTasks}
                 setTasksAndPriorities={setTasksAndPriorities}
-                setIsUploading={setIsUploading}
               />
               <TaskList
                 user={user}
@@ -134,7 +134,6 @@ const App: React.VFC = () => {
                 checkedTasks={checkedTasks}
                 setCheckedTasks={setCheckedTasks}
                 setTasksAndPriorities={setTasksAndPriorities}
-                setIsUploading={setIsUploading}
               />
               <TaskList
                 user={user}
@@ -143,7 +142,6 @@ const App: React.VFC = () => {
                 checkedTasks={checkedTasks}
                 setCheckedTasks={setCheckedTasks}
                 setTasksAndPriorities={setTasksAndPriorities}
-                setIsUploading={setIsUploading}
               />
               <TaskList
                 user={user}
@@ -152,7 +150,6 @@ const App: React.VFC = () => {
                 checkedTasks={checkedTasks}
                 setCheckedTasks={setCheckedTasks}
                 setTasksAndPriorities={setTasksAndPriorities}
-                setIsUploading={setIsUploading}
               />
             </div>
           ) : undefined}

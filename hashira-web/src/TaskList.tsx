@@ -43,7 +43,6 @@ export const TaskList: React.VFC<{
   checkedTasks: { [key: string]: boolean };
   setCheckedTasks: (a: { [key: string]: boolean }) => void;
   setTasksAndPriorities: (tp: any | undefined) => void;
-  setIsUploading: (b: boolean) => void;
 }> = ({
   user,
   place,
