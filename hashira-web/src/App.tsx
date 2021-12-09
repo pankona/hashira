@@ -19,6 +19,7 @@ const App: React.VFC = () => {
     any | undefined
   >(undefined);
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
+  const [mode, setMode] = React.useState<"move" | "select">("select");
 
   const onSubmitTasks = async (tasks: string[]) => {
     if (!user) {
@@ -109,7 +110,20 @@ const App: React.VFC = () => {
               setIsUploading(false);
             }}
           />
-          <input type="button" value={"Move"} disabled={isUploading} />
+          <input
+            type="button"
+            value={mode === "move" ? "finish move" : "move"}
+            disabled={isUploading}
+            onClick={() => {
+              setMode((prev) => {
+                if (prev === "move") {
+                  return "select";
+                }
+                setCheckedTasks({});
+                return "move";
+              });
+            }}
+          />
 
           {tasksAndPriorities ? (
             <div
@@ -126,6 +140,7 @@ const App: React.VFC = () => {
                 checkedTasks={checkedTasks}
                 setCheckedTasks={setCheckedTasks}
                 setTasksAndPriorities={setTasksAndPriorities}
+                mode={mode}
               />
               <TaskList
                 user={user}
@@ -134,6 +149,7 @@ const App: React.VFC = () => {
                 checkedTasks={checkedTasks}
                 setCheckedTasks={setCheckedTasks}
                 setTasksAndPriorities={setTasksAndPriorities}
+                mode={mode}
               />
               <TaskList
                 user={user}
@@ -142,6 +158,7 @@ const App: React.VFC = () => {
                 checkedTasks={checkedTasks}
                 setCheckedTasks={setCheckedTasks}
                 setTasksAndPriorities={setTasksAndPriorities}
+                mode={mode}
               />
               <TaskList
                 user={user}
@@ -150,6 +167,7 @@ const App: React.VFC = () => {
                 checkedTasks={checkedTasks}
                 setCheckedTasks={setCheckedTasks}
                 setTasksAndPriorities={setTasksAndPriorities}
+                mode={mode}
               />
             </div>
           ) : undefined}

@@ -15,6 +15,12 @@ const StyledList = styled.div`
 const StyledListItem = styled.div`
   display: flex;
   align-items: center;
+  position: relative;
+  min-height: 24px;
+`;
+
+const StyledCheckbox = styled.input.attrs({ type: "checkbox" })`
+  position: absolute;
 `;
 
 const StyledListContent = styled.input.attrs({ type: "text" })`
@@ -30,10 +36,19 @@ const StyledListContent = styled.input.attrs({ type: "text" })`
   ::-webkit-scrollbar {
     display: none;
   }
+  margin-left: 24px;
+  z-index: 1000;
 `;
 
-const StyledCheckbox = styled.input.attrs({ type: "checkbox" })`
-  margin-right: 8px;
+const StyledArrow = styled.div`
+  position: absolute;
+  min-width: 24px;
+  min-height: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 12px;
 `;
 
 export const TaskList: React.VFC<{
@@ -43,6 +58,7 @@ export const TaskList: React.VFC<{
   checkedTasks: { [key: string]: boolean };
   setCheckedTasks: (a: { [key: string]: boolean }) => void;
   setTasksAndPriorities: (tp: any | undefined) => void;
+  mode: "move" | "select";
 }> = ({
   user,
   place,
@@ -50,6 +66,7 @@ export const TaskList: React.VFC<{
   checkedTasks,
   setCheckedTasks,
   setTasksAndPriorities,
+  mode,
 }) => {
   const [updatedTasks, setUpdatedTasks] = React.useState<{
     [key: string]: string;
@@ -64,60 +81,75 @@ export const TaskList: React.VFC<{
             const taskName = tasksAndPriorities["Tasks"][p].Name;
             return (
               <StyledListItem key={taskId}>
-                <StyledCheckbox
-                  id={taskId}
-                  value={taskName}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setCheckedTasks({
-                      ...checkedTasks,
-                      [e.target.id]: e.target.checked,
-                    });
-                  }}
-                />
-                <StyledListContent
-                  id={taskId}
-                  key={taskId}
-                  value={
-                    updatedTasks[taskId] !== undefined
-                      ? updatedTasks[taskId]
-                      : taskName
-                  }
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setUpdatedTasks({
-                      ...updatedTasks,
-                      [e.target.id]: e.target.value,
-                    });
-                  }}
-                  onBlur={async (_e: React.ChangeEvent<HTMLInputElement>) => {
-                    const tasksToUpdate: firebase.TasksObject = {};
-                    for (const v in updatedTasks) {
-                      if (updatedTasks[v] === "") {
-                        delete updatedTasks[v];
-                        setUpdatedTasks({
-                          ...updatedTasks,
-                        });
-                        return;
+                <>
+                  <StyledListContent
+                    style={{
+                      marginRight: mode === "select" ? "0px" : "24px",
+                    }}
+                    id={taskId}
+                    key={taskId}
+                    value={
+                      updatedTasks[taskId] !== undefined
+                        ? updatedTasks[taskId]
+                        : taskName
+                    }
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setUpdatedTasks({
+                        ...updatedTasks,
+                        [e.target.id]: e.target.value,
+                      });
+                    }}
+                    onBlur={async (_e: React.ChangeEvent<HTMLInputElement>) => {
+                      const tasksToUpdate: firebase.TasksObject = {};
+                      for (const v in updatedTasks) {
+                        if (updatedTasks[v] === "") {
+                          delete updatedTasks[v];
+                          setUpdatedTasks({
+                            ...updatedTasks,
+                          });
+                          return;
+                        }
+
+                        const task = tasksAndPriorities["Tasks"][v];
+                        tasksToUpdate[v] = {
+                          ID: task.ID,
+                          IsDeleted: false,
+                          Name:
+                            updatedTasks[v] !== "" ? updatedTasks[v] : taskName,
+                          Place: task.Place,
+                        };
                       }
 
-                      const task = tasksAndPriorities["Tasks"][v];
-                      tasksToUpdate[v] = {
-                        ID: task.ID,
-                        IsDeleted: false,
-                        Name:
-                          updatedTasks[v] !== "" ? updatedTasks[v] : taskName,
-                        Place: task.Place,
-                      };
-                    }
+                      await firebase.updateTasks2(tasksToUpdate);
 
-                    await firebase.updateTasks2(tasksToUpdate);
+                      // refresh tasks and priorities
+                      const tp = await firebase.fetchTaskAndPriorities(
+                        user.uid
+                      );
+                      setTasksAndPriorities(tp);
 
-                    // refresh tasks and priorities
-                    const tp = await firebase.fetchTaskAndPriorities(user.uid);
-                    setTasksAndPriorities(tp);
+                      setUpdatedTasks({});
+                    }}
+                  />
 
-                    setUpdatedTasks({});
-                  }}
-                />
+                  {mode === "select" ? (
+                    <StyledCheckbox
+                      id={taskId}
+                      value={taskName}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setCheckedTasks({
+                          ...checkedTasks,
+                          [e.target.id]: e.target.checked,
+                        });
+                      }}
+                    />
+                  ) : (
+                    <StyledArrow>
+                      <div style={{ cursor: "pointer" }}>👈</div>
+                      <div style={{ cursor: "pointer" }}>👉</div>
+                    </StyledArrow>
+                  )}
+                </>
               </StyledListItem>
             );
           })}
