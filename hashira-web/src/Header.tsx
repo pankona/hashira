@@ -28,9 +28,10 @@ const StyledLoginLogout = styled.div`
   justify-content: end;
 `;
 
-const Header: React.VFC<{ user: firebase.User | null | undefined }> = ({
-  user,
-}) => {
+const Header: React.VFC<{
+  user: firebase.User | null | undefined;
+  isLoading: boolean;
+}> = ({ user, isLoading }) => {
   return (
     <StyledHeader>
       <div style={{ display: "flex", minWidth: "50%" }}>
@@ -51,6 +52,9 @@ const Header: React.VFC<{ user: firebase.User | null | undefined }> = ({
                 </div>
               );
             default:
+              if (isLoading) {
+                return <div></div>;
+              }
               return (
                 <div style={{ cursor: "pointer" }} onClick={firebase.logout}>
                   Logout
