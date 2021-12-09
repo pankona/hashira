@@ -6,8 +6,10 @@ import styled from "styled-components";
 const StyledHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 `;
 
 const StyledRevision = styled.div`
