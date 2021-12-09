@@ -57,69 +57,71 @@ export const TaskList: React.VFC<{
   }>({});
   return (
     <StyledList>
-      {tasksAndPriorities["Priority"][place]
-        .filter((v: any) => tasksAndPriorities["Tasks"][v])
-        .map((p: string) => {
-          const taskId = tasksAndPriorities["Tasks"][p].ID;
-          const taskName = tasksAndPriorities["Tasks"][p].Name;
-          return (
-            <StyledListItem key={taskId}>
-              <StyledCheckbox
-                id={taskId}
-                value={taskName}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setCheckedTasks({
-                    ...checkedTasks,
-                    [e.target.id]: e.target.checked,
-                  });
-                }}
-              />
-              <StyledListContent
-                id={taskId}
-                key={taskId}
-                value={
-                  updatedTasks[taskId] !== undefined
-                    ? updatedTasks[taskId]
-                    : taskName
-                }
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setUpdatedTasks({
-                    ...updatedTasks,
-                    [e.target.id]: e.target.value,
-                  });
-                }}
-                onBlur={async (_e: React.ChangeEvent<HTMLInputElement>) => {
-                  const tasksToUpdate: firebase.TasksObject = {};
-                  for (const v in updatedTasks) {
-                    if (updatedTasks[v] === "") {
-                      delete updatedTasks[v];
-                      setUpdatedTasks({
-                        ...updatedTasks,
-                      });
-                      return;
+      {tasksAndPriorities["Priority"][place] &&
+        tasksAndPriorities["Priority"][place]
+          .filter((v: any) => tasksAndPriorities["Tasks"][v])
+          .map((p: string) => {
+            const taskId = tasksAndPriorities["Tasks"][p].ID;
+            const taskName = tasksAndPriorities["Tasks"][p].Name;
+            return (
+              <StyledListItem key={taskId}>
+                <StyledCheckbox
+                  id={taskId}
+                  value={taskName}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setCheckedTasks({
+                      ...checkedTasks,
+                      [e.target.id]: e.target.checked,
+                    });
+                  }}
+                />
+                <StyledListContent
+                  id={taskId}
+                  key={taskId}
+                  value={
+                    updatedTasks[taskId] !== undefined
+                      ? updatedTasks[taskId]
+                      : taskName
+                  }
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setUpdatedTasks({
+                      ...updatedTasks,
+                      [e.target.id]: e.target.value,
+                    });
+                  }}
+                  onBlur={async (_e: React.ChangeEvent<HTMLInputElement>) => {
+                    const tasksToUpdate: firebase.TasksObject = {};
+                    for (const v in updatedTasks) {
+                      if (updatedTasks[v] === "") {
+                        delete updatedTasks[v];
+                        setUpdatedTasks({
+                          ...updatedTasks,
+                        });
+                        return;
+                      }
+
+                      const task = tasksAndPriorities["Tasks"][v];
+                      tasksToUpdate[v] = {
+                        ID: task.ID,
+                        IsDeleted: false,
+                        Name:
+                          updatedTasks[v] !== "" ? updatedTasks[v] : taskName,
+                        Place: task.Place,
+                      };
                     }
 
-                    const task = tasksAndPriorities["Tasks"][v];
-                    tasksToUpdate[v] = {
-                      ID: task.ID,
-                      IsDeleted: false,
-                      Name: updatedTasks[v] !== "" ? updatedTasks[v] : taskName,
-                      Place: task.Place,
-                    };
-                  }
+                    await firebase.updateTasks2(tasksToUpdate);
 
-                  await firebase.updateTasks2(tasksToUpdate);
+                    // refresh tasks and priorities
+                    const tp = await firebase.fetchTaskAndPriorities(user.uid);
+                    setTasksAndPriorities(tp);
 
-                  // refresh tasks and priorities
-                  const tp = await firebase.fetchTaskAndPriorities(user.uid);
-                  setTasksAndPriorities(tp);
-
-                  setUpdatedTasks({});
-                }}
-              />
-            </StyledListItem>
-          );
-        })}
+                    setUpdatedTasks({});
+                  }}
+                />
+              </StyledListItem>
+            );
+          })}
     </StyledList>
   );
 };
