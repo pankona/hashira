@@ -2290,10 +2290,10 @@ finalhandler@1.1.2, finalhandler@~1.1.1, finalhandler@~1.1.2:
     statuses "~1.5.0"
     unpipe "~1.0.0"
 
-firebase-tools@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-10.0.0.tgz#20b1d808727b27707100056e57fed8ac40dd7b54"
-  integrity sha512-2OUoI8j8u6GMHgzh+zEmvWrfN6OWT0U14HHeLBvQjrBm4+hzz/VseFLQWkLSyWec7BAQOZWf+UqQ2jm39JfYdQ==
+firebase-tools@^10.0.1:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-10.0.1.tgz#06499c85eafee3e19e4fd267ae4eb082d2423887"
+  integrity sha512-KmovP22GtPb/rLFR6J6dtByqm4Dd2BJWtJTcmqoWNP+fxIPEa0kqxRikXsQwdoYbBEm0qIGHOKpRTsl5016sWQ==
   dependencies:
     "@google-cloud/pubsub" "^2.7.0"
     "@types/archiver" "^5.1.0"
