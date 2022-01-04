@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"log/syslog"
 	"os"
@@ -39,9 +40,10 @@ func main() {
 	logger, err := syslog.New(syslog.LOG_INFO|syslog.LOG_LOCAL0, "hashira-cui")
 	if err != nil {
 		log.Printf("failed to connect to logger but continue to work: %v", err)
+		log.SetOutput(io.Discard)
+	} else {
+		log.SetOutput(logger)
 	}
-
-	log.SetOutput(logger)
 
 	db, err := initializeDB()
 	if err != nil {
