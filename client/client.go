@@ -7,6 +7,7 @@ import (
 
 	"github.com/pankona/hashira/service"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 // Client is a hashira client structure
@@ -15,7 +16,7 @@ type Client struct {
 }
 
 func (c *Client) withClient(f func(service.HashiraClient) error) error {
-	conn, err := grpc.Dial(c.Address, grpc.WithInsecure())
+	conn, err := grpc.Dial(c.Address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return errors.New("failed to Dial: " + err.Error())
 	}
