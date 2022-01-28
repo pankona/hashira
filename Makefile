@@ -48,3 +48,6 @@ test:
 
 clean:
 	rm -rf $(PB_GO_DIR)
+
+release:
+	goreleaser --rm-dist
