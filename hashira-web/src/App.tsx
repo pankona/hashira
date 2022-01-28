@@ -128,6 +128,19 @@ const App: React.VFC = () => {
     [user]
   );
 
+  const intervalMs = 1000 * 60 * 3; // 3 minutes
+
+  React.useEffect(() => {
+    firebase.ping();
+    const intervalId = setInterval(() => {
+      firebase.ping();
+    }, intervalMs);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
   React.useEffect(() => {
     if (user) {
       Promise.all([

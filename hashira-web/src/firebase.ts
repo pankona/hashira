@@ -148,7 +148,7 @@ export const uploadTasks = async (tasks: string[]) => {
   try {
     await functions.httpsCallable(
       functions.getFunctions(undefined, "asia-northeast1"),
-      "add"
+      "call?method=add"
     )({
       tasks: tasksObject,
       priority: {
@@ -191,7 +191,7 @@ export const updateTasks = async (tasksObject: TasksObject) => {
   try {
     await functions.httpsCallable(
       functions.getFunctions(undefined, "asia-northeast1"),
-      "add"
+      "call?method=add"
     )({
       tasks: tasksObject,
       priority: priorities,
@@ -212,10 +212,24 @@ export const updateTasks2 = async (tasksObject: TasksObject) => {
   try {
     await functions.httpsCallable(
       functions.getFunctions(undefined, "asia-northeast1"),
-      "add"
+      "call?method=add"
     )({
       tasks: tasksObject,
     });
+  } catch (e) {
+    // FIXME:
+    // currently cloud functions doesn't return appropriate response
+    // that fits httpsCallable protocol even if the function succeeded.
+    console.log("error:", e);
+  }
+};
+
+export const ping = async () => {
+  try {
+    await functions.httpsCallable(
+      functions.getFunctions(undefined, "asia-northeast1"),
+      "call?method=ping"
+    )();
   } catch (e) {
     // FIXME:
     // currently cloud functions doesn't return appropriate response
