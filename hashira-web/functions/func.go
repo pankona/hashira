@@ -1,11 +1,19 @@
 package functions
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/pankona/hashira/hashira-web/functions/hashira"
 	"github.com/pankona/hashira/hashira-web/functions/hashira/store"
 )
+
+func Ping(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	if _, err := w.Write([]byte("pong")); err != nil {
+		log.Printf("ping failed: %v", err)
+	}
+}
 
 func TestAccessToken(w http.ResponseWriter, r *http.Request) {
 	setHeadersForCORS(w)
