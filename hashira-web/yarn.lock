@@ -2270,10 +2270,10 @@ finalhandler@1.1.2, finalhandler@~1.1.1, finalhandler@~1.1.2:
     statuses "~1.5.0"
     unpipe "~1.0.0"
 
-firebase-tools@^10.2.0:
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-10.2.0.tgz#36d5af21a87159eeccd84a836d9684f54bc6caba"
-  integrity sha512-gp/pmL3fSGcX3eIK056s63DqKuz4mt0ppkCQLuF3mLHerIXWpz/lPiwmFo4nn8ndstV48iMCV08EcEsUhQW2NQ==
+firebase-tools@^10.2.1:
+  version "10.2.1"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-10.2.1.tgz#74008b767c7e2e611979e1836e99bbb0a170efc5"
+  integrity sha512-MBAN5fMMiP8eUfh3pNXREOPzsjp6VpOLAWxD/h2+qLGqzmS3A1S/PQA+VCx46+ebkeo8oilNaVbNLAN/+yAbLw==
   dependencies:
     "@google-cloud/pubsub" "^2.18.4"
     abort-controller "^3.0.0"
@@ -2309,7 +2309,7 @@ firebase-tools@^10.2.0:
     mime "^2.5.2"
     minimatch "^3.0.4"
     morgan "^1.10.0"
-    node-fetch "^2.6.1"
+    node-fetch "^2.6.7"
     open "^6.3.0"
     ora "^5.4.1"
     portfinder "^1.0.23"
@@ -3780,7 +3780,7 @@ node-emoji@^1.4.1:
   dependencies:
     lodash "^4.17.21"
 
-node-fetch@2.6.7, node-fetch@^2.6.1:
+node-fetch@2.6.7, node-fetch@^2.6.1, node-fetch@^2.6.7:
   version "2.6.7"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
   integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
