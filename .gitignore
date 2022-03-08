@@ -11,5 +11,6 @@ cmd/hashira-cui/github-release.sh
 cmd/hashira-cui/pkg
 .idea/
 vendor/
+dist/
 
 datastore-export-*
