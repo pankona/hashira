@@ -5,18 +5,26 @@ updates:
   schedule:
     interval: daily
   open-pull-requests-limit: 10
+  labels:
+  - automerge
 - package-ecosystem: gomod
   directory: "/hashira-web"
   schedule:
     interval: daily
   open-pull-requests-limit: 10
+  labels:
+  - automerge
 - package-ecosystem: npm
   directory: "/hashira-web"
   schedule:
     interval: daily
   open-pull-requests-limit: 10
+  labels:
+  - automerge
 - package-ecosystem: gomod
   directory: "/hashira-web/functions"
   schedule:
     interval: daily
   open-pull-requests-limit: 10
+  labels:
+  - automerge
