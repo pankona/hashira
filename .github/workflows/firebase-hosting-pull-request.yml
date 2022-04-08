@@ -23,7 +23,7 @@ jobs:
         with:
           go-version: '^1.17.1'
       - run: yarn install
-      - run: REVISION="Rev ${{ github.event.pull_request.head.sha }} Build at `date`" make build
+      - run: REVISION="Rev ${{ github.event.pull_request.head.sha }} Build at `date`" yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           entryPoint: hashira-web
