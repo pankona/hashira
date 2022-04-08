@@ -20,7 +20,7 @@ jobs:
         with:
           go-version: "^1.17.1"
       - run: yarn install
-      - run: make build
+      - run: yarn build
   typecheck:
     runs-on: ubuntu-latest
     steps:
