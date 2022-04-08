@@ -1,3 +1,3 @@
 export const revision = (): string => {
-  return process.env.REVISION || "unknown revision";
+  return import.meta.env.REVISION || "unknown revision";
 };
