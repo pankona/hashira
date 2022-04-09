@@ -1,5 +1,6 @@
 import React from "react";
 import * as firebase from "./firebase";
+import { tasksAndPrioritiesInitialValue } from "./firebase";
 
 type APIState<T> = {
   isLoading: boolean;
@@ -140,6 +141,17 @@ export const useFetchTasksAndPriorities = (): [
         firebase
           .fetchTaskAndPriorities(userId)
           .then((result) => {
+            if (!result) {
+              // in case for empty result
+              setState({
+                isLoading: false,
+                error: null,
+                data: tasksAndPrioritiesInitialValue,
+              });
+              resolve(tasksAndPrioritiesInitialValue);
+              return;
+            }
+
             setState({
               isLoading: false,
               error: null,
@@ -147,7 +159,14 @@ export const useFetchTasksAndPriorities = (): [
             });
             resolve(result);
           })
-          .catch((e) => reject(e));
+          .catch((e) => {
+            setState({
+              isLoading: false,
+              error: JSON.stringify(e),
+              data: null,
+            });
+            reject(e);
+          });
       });
     }, []),
   ];

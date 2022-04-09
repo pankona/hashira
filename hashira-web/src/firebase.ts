@@ -242,5 +242,29 @@ export const fetchTaskAndPriorities = async (uid: string) => {
   const db = getFirestore();
   const docRef = doc(db, "tasksAndPriorities", uid);
   const docSnapshot = await getDoc(docRef);
-  return docSnapshot.data();
+  return docSnapshot.data() as TasksAndPriorities;
+};
+
+export interface TasksAndPriorities {
+  Priority: {
+    [key in typeof Place[number]]: string[];
+  };
+  Tasks: {
+    [key: string]: {
+      Place: typeof Place[number];
+      Name: string;
+      ID: string;
+      IsDeleted: boolean;
+    };
+  };
+}
+
+export const tasksAndPrioritiesInitialValue: TasksAndPriorities = {
+  Priority: {
+    BACKLOG: [],
+    TODO: [],
+    DOING: [],
+    DONE: [],
+  },
+  Tasks: {},
 };
