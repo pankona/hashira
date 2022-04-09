@@ -146,7 +146,9 @@ const App: React.VFC = () => {
       Promise.all([
         fetchAccessTokens(user.uid),
         fetchTasksAndPriorities(user.uid),
-      ]);
+      ]).catch((e) => {
+        console.log("fetch error:", JSON.stringify(e));
+      });
     }
   }, [user]);
 
