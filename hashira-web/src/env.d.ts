@@ -1,5 +1,5 @@
 interface ImportMetaEnv {
-  readonly REVISION: string;
+  readonly VITE_REVISION: string;
 }
 
 interface ImportMeta {
