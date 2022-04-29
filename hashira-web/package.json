@@ -16,7 +16,7 @@
   "devDependencies": {
     "@types/babel__core": "^7.1.19",
     "@types/react": "^18.0.8",
-    "@types/react-dom": "^18.0.2",
+    "@types/react-dom": "^18.0.3",
     "@types/styled-components": "^5.1.25",
     "@types/uuid": "^8.3.4",
     "@types/ws": "^8.5.3",
