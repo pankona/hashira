@@ -53,7 +53,7 @@ const StyledArrow = styled.div`
 
 export const TaskList: React.VFC<{
   place: typeof firebase.Place[number];
-  tasksAndPriorities: any;
+  tasksAndPriorities: firebase.TasksAndPriorities;
   checkedTasks: { [key: string]: boolean };
   setCheckedTasks: (a: { [key: string]: boolean }) => void;
   onEditTasks: (tasks: firebase.TasksObject) => Promise<void>;
@@ -103,70 +103,95 @@ export const TaskList: React.VFC<{
     setUpdatedTasks({});
   };
 
+  const noItem = [
+    <StyledListItem key="noitem" style={{ opacity: "0.3" }}>
+      No item
+    </StyledListItem>,
+  ];
+
+  const convertTasksAndPrioritiesToJSXElement = (
+    tasksAndPriorities: firebase.TasksAndPriorities
+  ): JSX.Element[] => {
+    if (!tasksAndPriorities["Priority"][place]) {
+      return noItem;
+    }
+    const filteredItems = tasksAndPriorities["Priority"][place].filter(
+      (v: string) => tasksAndPriorities["Tasks"][v]
+    );
+    if (filteredItems.length === 0) {
+      return noItem;
+    }
+
+    return filteredItems.map((p: string) => {
+      const taskId = tasksAndPriorities["Tasks"][p].ID;
+      const taskName = tasksAndPriorities["Tasks"][p].Name;
+      return (
+        <StyledListItem key={taskId}>
+          <>
+            <StyledListContent
+              style={{
+                marginRight: mode === "select" ? "0px" : "24px",
+              }}
+              id={taskId}
+              key={taskId}
+              value={
+                updatedTasks[taskId] !== undefined
+                  ? updatedTasks[taskId]
+                  : taskName
+              }
+              onChange={(e) => {
+                setUpdatedTasks({
+                  ...updatedTasks,
+                  [e.target.id]: e.target.value,
+                });
+              }}
+              onBlur={() => onEditCompleted()}
+            />
+
+            {mode === "select" ? (
+              <StyledCheckbox
+                id={taskId}
+                value={taskName}
+                onChange={(e) => {
+                  setCheckedTasks({
+                    ...checkedTasks,
+                    [e.target.id]: e.target.checked,
+                  });
+                }}
+              />
+            ) : (
+              <StyledArrow>
+                <div
+                  id={taskId}
+                  style={{ cursor: "pointer" }}
+                  onClick={(e) => onMoveTask(e.currentTarget.id, "left")}
+                >
+                  👈
+                </div>
+                <div
+                  id={taskId}
+                  style={{ cursor: "pointer" }}
+                  onClick={(e) => onMoveTask(e.currentTarget.id, "right")}
+                >
+                  👉
+                </div>
+              </StyledArrow>
+            )}
+          </>
+        </StyledListItem>
+      );
+    });
+  };
+
   return (
     <StyledList>
-      {tasksAndPriorities["Priority"][place] &&
-        tasksAndPriorities["Priority"][place]
-          .filter((v: any) => tasksAndPriorities["Tasks"][v])
-          .map((p: string) => {
-            const taskId = tasksAndPriorities["Tasks"][p].ID;
-            const taskName = tasksAndPriorities["Tasks"][p].Name;
-            return (
-              <StyledListItem key={taskId}>
-                <>
-                  <StyledListContent
-                    style={{
-                      marginRight: mode === "select" ? "0px" : "24px",
-                    }}
-                    id={taskId}
-                    key={taskId}
-                    value={
-                      updatedTasks[taskId] !== undefined
-                        ? updatedTasks[taskId]
-                        : taskName
-                    }
-                    onChange={(e) => {
-                      setUpdatedTasks({
-                        ...updatedTasks,
-                        [e.target.id]: e.target.value,
-                      });
-                    }}
-                    onBlur={() => onEditCompleted()}
-                  />
-
-                  {mode === "select" ? (
-                    <StyledCheckbox
-                      id={taskId}
-                      value={taskName}
-                      onChange={(e) => {
-                        setCheckedTasks({
-                          ...checkedTasks,
-                          [e.target.id]: e.target.checked,
-                        });
-                      }}
-                    />
-                  ) : (
-                    <StyledArrow>
-                      <div
-                        id={taskId}
-                        style={{ cursor: "pointer" }}
-                        onClick={(e) => onMoveTask(e.currentTarget.id, "left")}
-                      >
-                        👈
-                      </div>
-                      <div
-                        id={taskId}
-                        style={{ cursor: "pointer" }}
-                        onClick={(e) => onMoveTask(e.currentTarget.id, "right")}
-                      >
-                        👉
-                      </div>
-                    </StyledArrow>
-                  )}
-                </>
-              </StyledListItem>
-            );
-          })}
+      <div
+        className="PlaceTitle"
+        style={{ minHeight: "24px", display: "flex", alignItems: "center" }}
+      >
+        {place}
+      </div>
+      {convertTasksAndPrioritiesToJSXElement(tasksAndPriorities)}
     </StyledList>
   );
 };
