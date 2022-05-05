@@ -2792,10 +2792,10 @@ firebase-frameworks@^0.3.0:
   dependencies:
     tslib "^2.3.1"
 
-firebase-tools@^10.7.2:
-  version "10.7.2"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-10.7.2.tgz#75073f64fa3015b020f292330b54a1d3519a8fbd"
-  integrity sha512-KU6cQ9XPBn2++gMBkR393LYbl4YEbKbHG/KsUR/JnfB2p5rhSPL/X4TntIl59QFs5527+VcLpeeeRRIB4Z9wUw==
+firebase-tools@^10.8.0:
+  version "10.8.0"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-10.8.0.tgz#54bf0ef35444927caa6f8f1e6f45b2b0d94c135f"
+  integrity sha512-A4yp73VYh9iKEBH59mBbC9BgQdIiYsr3MP28g1sD2bmGtU50NU9o7Ygdnmf5zmWvGhpIGtTue1wLjYOwvi/9+g==
   dependencies:
     "@google-cloud/pubsub" "^2.18.4"
     abort-controller "^3.0.0"
