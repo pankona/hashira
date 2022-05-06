@@ -2,6 +2,7 @@ import React from "react";
 import { revision } from "./revision";
 import * as firebase from "./firebase";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const StyledHeader = styled.div`
   display: flex;
@@ -33,6 +34,8 @@ const Header: React.VFC<{
   user: firebase.User | null | undefined;
   isLoading: boolean;
 }> = ({ user, isLoading }) => {
+  const navigate = useNavigate();
+
   return (
     <StyledHeader>
       <div style={{ display: "flex", minWidth: "50%" }}>
@@ -58,7 +61,12 @@ const Header: React.VFC<{
               }
               return (
                 <>
-                  <div onClick={() => {}} style={{ cursor: "pointer" }}>
+                  <div
+                    onClick={() => {
+                      navigate("/accesstokens");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
                     Access tokens
                   </div>
                   <div style={{ cursor: "pointer" }} onClick={firebase.logout}>

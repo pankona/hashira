@@ -19,7 +19,7 @@ const StyledBody = styled.div`
   padding-right: 8px;
 `;
 
-const App: React.VFC = () => {
+const App: React.FC = () => {
   const [checkedTokens, setCheckedTokens] = React.useState<{
     [key: string]: boolean;
   }>({});
