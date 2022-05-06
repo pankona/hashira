@@ -1,12 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  onAuthStateChanged as onFirebaseAuthStateChanged,
-  signInWithRedirect,
-  signOut,
-  User as FirebaseUser,
-} from "firebase/auth";
+import * as auth from "firebase/auth";
 import {
   addDoc,
   collection,
@@ -23,7 +16,6 @@ import {
   where,
 } from "firebase/firestore";
 import * as functions from "firebase/functions";
-
 import { v4 as uuidv4 } from "uuid";
 
 const firebaseConfig = {
@@ -39,22 +31,20 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 export const login = () => {
-  const auth = getAuth();
-  const provider = new GoogleAuthProvider();
-  signInWithRedirect(auth, provider);
+  const provider = new auth.GoogleAuthProvider();
+  auth.signInWithRedirect(auth.getAuth(), provider);
 };
 
 export const logout = () => {
-  const auth = getAuth();
-  signOut(auth);
+  auth.signOut(auth.getAuth());
+  localStorage.removeItem("user");
 };
 
 export const onAuthStateChanged = (cb: (user: User | null) => void) => {
-  const auth = getAuth();
-  onFirebaseAuthStateChanged(auth, cb);
+  auth.onAuthStateChanged(auth.getAuth(), cb);
 };
 
-export type User = FirebaseUser;
+export type User = auth.User;
 
 interface accesstoken {
   uid: string;
