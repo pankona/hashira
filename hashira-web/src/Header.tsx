@@ -32,8 +32,7 @@ const StyledLoginLogout = styled.div`
 
 const Header: React.FC<{
   user: firebase.User | null | undefined;
-  isLoading: boolean;
-}> = ({ user, isLoading }) => {
+}> = ({ user }) => {
   const navigate = useNavigate();
 
   return (
@@ -63,9 +62,6 @@ const Header: React.FC<{
                 </div>
               );
             default:
-              if (isLoading) {
-                return <div></div>;
-              }
               return (
                 <>
                   <div
