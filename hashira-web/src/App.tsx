@@ -7,11 +7,9 @@ import styled from "styled-components";
 import { StyledHorizontalSpacer, StyledVerticalSpacer } from "./styles";
 import {
   useAddTasks,
-  useFetchAccessTokens,
   useFetchTasksAndPriorities,
   useUpdateTasks,
   useUpdateTasks2,
-  useUser,
 } from "./hooks";
 
 const StyledBody = styled.div`
@@ -19,24 +17,20 @@ const StyledBody = styled.div`
   padding-right: 8px;
 `;
 
-const App: React.FC = () => {
-  const [checkedTokens, setCheckedTokens] = React.useState<{
-    [key: string]: boolean;
-  }>({});
+const App: React.FC<{ user: firebase.User | null | undefined }> = ({
+  user,
+}) => {
   const [checkedTasks, setCheckedTasks] = React.useState<{
     [key: string]: boolean;
   }>({});
   const [mode, setMode] = React.useState<"move" | "select">("select");
 
-  const user = useUser();
   const [addTasksState, addTasks] = useAddTasks();
   const [updateTasksState, updateTasks] = useUpdateTasks();
   const [updateTasks2State, updateTasks2] = useUpdateTasks2();
-  const [fetchAccessTokenState, fetchAccessTokens] = useFetchAccessTokens();
   const [fetchTasksAndPrioritiesState, fetchTasksAndPriorities] =
     useFetchTasksAndPriorities();
 
-  const accesstokens = fetchAccessTokenState.data;
   const tasksAndPriorities = fetchTasksAndPrioritiesState.data;
   const isLoading =
     addTasksState.isLoading ||
@@ -143,10 +137,7 @@ const App: React.FC = () => {
 
   React.useEffect(() => {
     if (user) {
-      Promise.all([
-        fetchAccessTokens(user.uid),
-        fetchTasksAndPriorities(user.uid),
-      ]).catch((e) => {
+      Promise.all([fetchTasksAndPriorities(user.uid)]).catch((e) => {
         console.log("fetch error:", JSON.stringify(e));
       });
     }
@@ -154,10 +145,7 @@ const App: React.FC = () => {
 
   return (
     <div>
-      <Header
-        user={user}
-        isLoading={!user || !accesstokens || !tasksAndPriorities}
-      />
+      <Header user={user} isLoading={!user || !tasksAndPriorities} />
       <StyledBody>
         {user !== null && (
           <TaskInput
@@ -171,7 +159,7 @@ const App: React.FC = () => {
             return <></>;
           }
 
-          if (!user || !accesstokens || !tasksAndPriorities) {
+          if (!user || !tasksAndPriorities) {
             return <div>Loading...</div>;
           }
 
@@ -282,55 +270,6 @@ const App: React.FC = () => {
                   />
                 </div>
               ) : undefined}
-              <button
-                onClick={async () => {
-                  await firebase.claimNewAccessToken(user.uid);
-                  await fetchAccessTokens(user.uid);
-                }}
-              >
-                Generate new access token
-              </button>
-              <button
-                disabled={((): boolean => {
-                  for (const v in checkedTokens) {
-                    if (checkedTokens[v]) {
-                      return false;
-                    }
-                  }
-                  return true;
-                })()}
-                onClick={async () => {
-                  const accesstokens: string[] = [];
-                  for (let v in checkedTokens) {
-                    accesstokens.push(v);
-                  }
-
-                  await firebase.revokeAccessTokens(user.uid, accesstokens);
-                  await fetchAccessTokens(user.uid);
-                }}
-              >
-                Revoke access token
-              </button>
-              {accesstokens.map((token: string) => {
-                return (
-                  <li key={token}>
-                    <input
-                      id={token}
-                      type="checkbox"
-                      checked={checkedTokens[token] || false}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setCheckedTokens({
-                          ...checkedTokens,
-                          [e.target.id]: e.target.checked,
-                        });
-                      }}
-                      name={token}
-                      value={token}
-                    />
-                    {token}
-                  </li>
-                );
-              })}
             </>
           );
         })()}

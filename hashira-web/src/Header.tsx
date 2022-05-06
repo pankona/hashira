@@ -30,7 +30,7 @@ const StyledLoginLogout = styled.div`
   gap: 16px;
 `;
 
-const Header: React.VFC<{
+const Header: React.FC<{
   user: firebase.User | null | undefined;
   isLoading: boolean;
 }> = ({ user, isLoading }) => {
@@ -39,7 +39,14 @@ const Header: React.VFC<{
   return (
     <StyledHeader>
       <div style={{ display: "flex", minWidth: "50%" }}>
-        <div style={{ minWidth: "fit-content", marginRight: "8px" }}>
+        <div
+          style={{
+            minWidth: "fit-content",
+            marginRight: "8px",
+            cursor: "pointer",
+          }}
+          onClick={() => navigate("/")}
+        >
           hashira web
         </div>
         <StyledRevision>{revision()}</StyledRevision>
@@ -62,9 +69,7 @@ const Header: React.VFC<{
               return (
                 <>
                   <div
-                    onClick={() => {
-                      navigate("/accesstokens");
-                    }}
+                    onClick={() => navigate("/accesstokens")}
                     style={{ cursor: "pointer" }}
                   >
                     Access tokens
