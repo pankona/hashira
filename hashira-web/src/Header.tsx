@@ -26,6 +26,7 @@ const StyledRevision = styled.div`
 const StyledLoginLogout = styled.div`
   display: flex;
   justify-content: end;
+  gap: 16px;
 `;
 
 const Header: React.VFC<{
@@ -56,9 +57,14 @@ const Header: React.VFC<{
                 return <div></div>;
               }
               return (
-                <div style={{ cursor: "pointer" }} onClick={firebase.logout}>
-                  Logout
-                </div>
+                <>
+                  <div onClick={() => {}} style={{ cursor: "pointer" }}>
+                    Access tokens
+                  </div>
+                  <div style={{ cursor: "pointer" }} onClick={firebase.logout}>
+                    Logout
+                  </div>
+                </>
               );
           }
         })()}
