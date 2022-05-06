@@ -2,6 +2,7 @@ import React from "react";
 import { revision } from "./revision";
 import * as firebase from "./firebase";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const StyledHeader = styled.div`
   display: flex;
@@ -26,16 +27,26 @@ const StyledRevision = styled.div`
 const StyledLoginLogout = styled.div`
   display: flex;
   justify-content: end;
+  gap: 16px;
 `;
 
-const Header: React.VFC<{
+const Header: React.FC<{
   user: firebase.User | null | undefined;
   isLoading: boolean;
 }> = ({ user, isLoading }) => {
+  const navigate = useNavigate();
+
   return (
     <StyledHeader>
       <div style={{ display: "flex", minWidth: "50%" }}>
-        <div style={{ minWidth: "fit-content", marginRight: "8px" }}>
+        <div
+          style={{
+            minWidth: "fit-content",
+            marginRight: "8px",
+            cursor: "pointer",
+          }}
+          onClick={() => navigate("/")}
+        >
           hashira web
         </div>
         <StyledRevision>{revision()}</StyledRevision>
@@ -56,9 +67,17 @@ const Header: React.VFC<{
                 return <div></div>;
               }
               return (
-                <div style={{ cursor: "pointer" }} onClick={firebase.logout}>
-                  Logout
-                </div>
+                <>
+                  <div
+                    onClick={() => navigate("/accesstokens")}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Access tokens
+                  </div>
+                  <div style={{ cursor: "pointer" }} onClick={firebase.logout}>
+                    Logout
+                  </div>
+                </>
               );
           }
         })()}

@@ -1,13 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Normalize } from "styled-normalize";
-
-import App from "./App";
+import Router from "./Router";
 
 const Root = () => (
   <React.Fragment>
     <Normalize />
-    <App />
+    <Router />
   </React.Fragment>
 );
 
