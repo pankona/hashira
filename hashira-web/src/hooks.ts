@@ -212,12 +212,19 @@ export const useUser = () => {
   const [state, setState] = React.useState<any | null | undefined>(undefined);
 
   React.useEffect(() => {
+    const cachedUser = localStorage.getItem("user");
+    if (cachedUser) {
+      setState(JSON.parse(cachedUser));
+    }
+
     firebase.onAuthStateChanged((user: firebase.User | null) => {
       if (!user) {
         setState(null);
+        localStorage.removeItem("user");
         return;
       }
       setState(user);
+      localStorage.setItem("user", JSON.stringify(user));
     });
   }, []);
 
