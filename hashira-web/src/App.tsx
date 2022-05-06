@@ -145,7 +145,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
 
   return (
     <div>
-      <Header user={user} isLoading={!user || !tasksAndPriorities} />
+      <Header user={user} />
       <StyledBody>
         {user !== null && (
           <TaskInput
