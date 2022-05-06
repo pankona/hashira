@@ -47,6 +47,7 @@ export const login = () => {
 export const logout = () => {
   const auth = getAuth();
   signOut(auth);
+  localStorage.removeItem("user");
 };
 
 export const onAuthStateChanged = (cb: (user: User | null) => void) => {
