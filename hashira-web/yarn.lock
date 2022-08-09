@@ -1825,17 +1825,6 @@ cli-boxes@^2.2.0, cli-boxes@^2.2.1:
   resolved "https://registry.yarnpkg.com/cli-boxes/-/cli-boxes-2.2.1.tgz#ddd5035d25094fce220e9cab40a45840a440318f"
   integrity sha512-y4coMcylgSCdVinjiDBuR8PCC2bLjyGTwEmPb9NHR/QaNU6EUOXcTY/s6VjGMD6ENSEaeQYHCY0GNGS5jfMwPw==
 
-cli-color@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/cli-color/-/cli-color-2.0.1.tgz#93e3491308691f1e46beb78b63d0fb2585e42ba6"
-  integrity sha512-eBbxZF6fqPUNnf7CLAFOersUnyYzv83tHFLSlts+OAHsNendaqv2tHCq+/MO+b3Y+9JeoUlIvobyxG/Z8GNeOg==
-  dependencies:
-    d "^1.0.1"
-    es5-ext "^0.10.53"
-    es6-iterator "^2.0.3"
-    memoizee "^0.4.15"
-    timers-ext "^0.1.7"
-
 cli-color@~2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/cli-color/-/cli-color-2.0.2.tgz#e295addbae470800def0254183c648531cdf4e3f"
@@ -1945,6 +1934,11 @@ color@^3.1.3:
   dependencies:
     color-convert "^1.9.3"
     color-string "^1.6.0"
+
+colorette@^2.0.19:
+  version "2.0.19"
+  resolved "https://registry.yarnpkg.com/colorette/-/colorette-2.0.19.tgz#cdf044f47ad41a0f4b56b3a0d5b4e6e1a2d5a798"
+  integrity sha512-3tlv/dIP7FWvj3BsbHrGLJ6l/oKh1O3TcgBqMn+yyCagOxc23fyzDS6HypQbgxWbkpDnf52p1LuR4eWDQ/K9WQ==
 
 colors@1.0.3:
   version "1.0.3"
@@ -2404,15 +2398,6 @@ err-code@^2.0.2:
   resolved "https://registry.yarnpkg.com/err-code/-/err-code-2.0.3.tgz#23c2f3b756ffdfc608d30e27c9a941024807e7f9"
   integrity sha512-2bmlRpNKBxT/CRmPOlyISQpNj+qSeYvcym/uT0Jx2bMOlKLtSy1ZmLuVxSEKKyor/N5yhvp/ZiG1oE3DEYMSFA==
 
-es5-ext@0.10.53:
-  version "0.10.53"
-  resolved "https://registry.yarnpkg.com/es5-ext/-/es5-ext-0.10.53.tgz#93c5a3acfdbef275220ad72644ad02ee18368de1"
-  integrity sha512-Xs2Stw6NiNHWypzRTY1MtaG/uJlwCk8kH81920ma8mvN8Xq1gsfhZvpkImLQArw8AHnv8MT2I45J3c0R8slE+Q==
-  dependencies:
-    es6-iterator "~2.0.3"
-    es6-symbol "~3.1.3"
-    next-tick "~1.0.0"
-
 es5-ext@^0.10.35, es5-ext@^0.10.46, es5-ext@^0.10.50, es5-ext@^0.10.53, es5-ext@^0.10.59, es5-ext@~0.10.14, es5-ext@~0.10.2, es5-ext@~0.10.46:
   version "0.10.61"
   resolved "https://registry.yarnpkg.com/es5-ext/-/es5-ext-0.10.61.tgz#311de37949ef86b6b0dcea894d1ffedb909d3269"
@@ -2422,7 +2407,7 @@ es5-ext@^0.10.35, es5-ext@^0.10.46, es5-ext@^0.10.50, es5-ext@^0.10.53, es5-ext@
     es6-symbol "^3.1.3"
     next-tick "^1.1.0"
 
-es6-iterator@^2.0.3, es6-iterator@~2.0.3:
+es6-iterator@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/es6-iterator/-/es6-iterator-2.0.3.tgz#a7de889141a05a94b0854403b2d0a0fbfa98f3b7"
   integrity sha1-p96IkUGgWpSwhUQDstCg+/qY87c=
@@ -2431,7 +2416,7 @@ es6-iterator@^2.0.3, es6-iterator@~2.0.3:
     es5-ext "^0.10.35"
     es6-symbol "^3.1.1"
 
-es6-symbol@^3.1.1, es6-symbol@^3.1.3, es6-symbol@~3.1.3:
+es6-symbol@^3.1.1, es6-symbol@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/es6-symbol/-/es6-symbol-3.1.3.tgz#bad5d3c1bcdac28269f4cb331e431c78ac705d18"
   integrity sha512-NJ6Yn3FuDinBaBRWl/q5X/s4koRHBrgKAu+yGI6JCBeiu3qrcbJhwT2GeR/EXVfylRk8dpQVJoLEFhK+Mu31NA==
@@ -2833,10 +2818,10 @@ firebase-frameworks@^0.4.2:
     semver "^7.3.7"
     tslib "^2.3.1"
 
-firebase-tools@^11.4.2:
-  version "11.4.2"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-11.4.2.tgz#8770dd563039227715f592925bb89cde1711e993"
-  integrity sha512-qNFFDwyzRe8kwJwYIOjfV1OIa2+DbJ6jXfAXEhmEx2fgQZ0EwVjkJB5kWo+K4Mt+Qc0SItLyFvz8GSYWSg+mpQ==
+firebase-tools@^11.5.0:
+  version "11.5.0"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-11.5.0.tgz#be2125943e05ea0491554de63d03e66b25bd54e3"
+  integrity sha512-FShLtkyoo9oO6kq4v8hisdnYgDHhJzZIPM3ySd8Wj3r7ipRM1Q1NOzd4LXjELjQk48ISKqrkWD1jEd79mfgb7Q==
   dependencies:
     "@google-cloud/pubsub" "^3.0.1"
     abort-controller "^3.0.0"
@@ -2845,15 +2830,14 @@ firebase-tools@^11.4.2:
     body-parser "^1.19.0"
     chokidar "^3.0.2"
     cjson "^0.3.1"
-    cli-color "2.0.1"
     cli-table "0.3.11"
+    colorette "^2.0.19"
     commander "^4.0.1"
     configstore "^5.0.1"
     cors "^2.8.5"
     cross-env "^5.1.3"
     cross-spawn "^7.0.1"
     csv-parse "^5.0.4"
-    es5-ext "0.10.53"
     exegesis "^4.1.0"
     exegesis-express "^4.0.0"
     express "^4.16.4"
@@ -2886,6 +2870,7 @@ firebase-tools@^11.4.2:
     semver "^5.7.1"
     stream-chain "^2.2.4"
     stream-json "^1.7.3"
+    strip-ansi "^6.0.1"
     superstatic "^8.0.0"
     tar "^6.1.11"
     tcp-port-used "^1.0.2"
@@ -4375,11 +4360,6 @@ next-tick@1, next-tick@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.1.0.tgz#1836ee30ad56d67ef281b22bd199f709449b35eb"
   integrity sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==
-
-next-tick@~1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
-  integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
 nice-try@^1.0.4:
   version "1.0.5"
