@@ -2,7 +2,7 @@ package hashira
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 )
@@ -22,7 +22,7 @@ func (h *Hashira) Add(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	buf, err := ioutil.ReadAll(r.Body)
+	buf, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Printf("failed to read body: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
