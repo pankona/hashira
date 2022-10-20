@@ -3,13 +3,12 @@ package database
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"testing"
 )
 
 func setup(filename *string) (func(), error) {
-	f, err := ioutil.TempFile("", "")
+	f, err := os.CreateTemp("", "")
 	if err != nil {
 		return nil, errors.New("fatal. failed to create tempfile")
 	}

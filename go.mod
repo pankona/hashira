@@ -1,7 +1,7 @@
 module github.com/pankona/hashira
 
 require (
-	github.com/gofrs/uuid v4.2.0+incompatible
+	github.com/gofrs/uuid v4.3.0+incompatible
 	github.com/mattn/go-runewidth v0.0.13
 	github.com/pankona/gocui v0.3.1-0.20190107094646-a6233010013f
 	github.com/pankona/orderedmap v0.0.0-20190220081458-0d2a73efbdac
@@ -30,4 +30,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-go 1.17
+go 1.19
