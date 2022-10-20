@@ -2,7 +2,7 @@ module github.com/pankona/hashira
 
 require (
 	github.com/gofrs/uuid v4.3.0+incompatible
-	github.com/mattn/go-runewidth v0.0.13
+	github.com/mattn/go-runewidth v0.0.14
 	github.com/pankona/gocui v0.3.1-0.20190107094646-a6233010013f
 	github.com/pankona/orderedmap v0.0.0-20190220081458-0d2a73efbdac
 	github.com/pkg/errors v0.9.1
@@ -21,7 +21,7 @@ require (
 	github.com/jesseduffield/termbox-go v0.0.0-20200823212418-a2289ed6aafe // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/rivo/uniseg v0.2.0 // indirect
+	github.com/rivo/uniseg v0.4.2 // indirect
 	golang.org/x/net v0.0.0-20210924054057-cf34111cab4d // indirect
 	golang.org/x/sys v0.0.0-20210923061019-b8560ed6a9b7 // indirect
 	golang.org/x/text v0.3.7 // indirect
