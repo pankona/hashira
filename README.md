@@ -3,6 +3,8 @@
 Application to manage **today's** tasks. Establish a Hashira for the day.  
 design documents are available at [here](https://pankona.github.io/hashira/)
 
+hashira on web is available here (alpha version) https://hashira-web.web.app
+
 ## Concepts
 
 - Makes tasks clear for the day and concentrate to eliminate them.
