@@ -24,7 +24,7 @@
     "ansi-regex": "6.0.1",
     "firebase-tools": "^11.18.0",
     "prettier": "^2.8.0",
-    "react-router-dom": "^6.4.5",
+    "react-router-dom": "^6.6.1",
     "reload": "^3.2.0",
     "styled-components": "^5.3.6",
     "styled-normalize": "^8.0.7",
