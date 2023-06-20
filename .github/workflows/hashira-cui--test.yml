@@ -5,6 +5,8 @@ on:
     paths:
       - '**'
       - '!hashira-web/**'
+      - '!.github/workflows/**'
+      - '.github/workflows/hashira-cui--test.yml'
 jobs:
   build:
     runs-on: ubuntu-latest
