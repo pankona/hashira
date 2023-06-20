@@ -18,7 +18,7 @@
     "@types/react": "^18.0.38",
     "@types/react-dom": "^18.2.5",
     "@types/styled-components": "^5.1.26",
-    "@types/uuid": "^9.0.1",
+    "@types/uuid": "^9.0.2",
     "@types/ws": "^8.5.3",
     "@vitejs/plugin-react": "^4.0.0",
     "ansi-regex": "6.0.1",
