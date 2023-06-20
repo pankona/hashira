@@ -14,6 +14,7 @@ defaults:
 
 jobs:
   build_and_deploy:
+    if: github.triggering_actor == 'pankona'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
