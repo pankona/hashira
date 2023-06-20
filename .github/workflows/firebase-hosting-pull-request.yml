@@ -19,7 +19,7 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'ok to test')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-go@v4
         with:
           go-version-file: 'hashira-web/functions/go.mod'
