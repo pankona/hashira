@@ -20,10 +20,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-node@v3
         with:
-          go-version-file: 'hashira-web/functions/go.mod'
-          cache-dependency-path: 'hashira-web/functions/go.sum'
+          node-version-file: "hashira-web/.tool-versions"
+          cache: "yarn"
+          cache-dependency-path: "hashira-web/yarn.lock"
       - run: yarn install --frozen-lockfile
       - run: VITE_REVISION="Rev ${{ github.event.pull_request.head.sha }} Build at `date`" yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
