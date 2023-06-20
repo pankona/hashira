@@ -16,9 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-node@v3
         with:
-          go-version: "^1.17.8"
+          node-version-file: "hashira-web/.tool-versions"
+          cache: "yarn"
+          cache-dependency-path: "hashira-web/yarn.lock"
       - run: yarn install
       - run: yarn build
   typecheck:
