@@ -21,6 +21,9 @@ updates:
   open-pull-requests-limit: 10
   labels:
   - automerge
+  ignore:
+    - dependency-name: '@types/node'
+      update-types: ['version-update:semver-major']
 - package-ecosystem: gomod
   directory: "/hashira-web/functions"
   schedule:
