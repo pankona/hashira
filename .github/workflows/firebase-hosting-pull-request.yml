@@ -7,6 +7,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, labeled]
     paths:
+      - '.github/workflows/firebase-hosting-pull-request.yml'
       - 'hashira-web/**'
 
 defaults:
