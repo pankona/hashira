@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 
+	"github.com/alecthomas/kingpin/v2"
 	"github.com/pankona/hashira/client"
-	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 const (

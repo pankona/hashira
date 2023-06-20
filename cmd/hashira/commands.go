@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/alecthomas/kingpin/v2"
 	"github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/service"
-	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 func addNewCmd(ctx context.Context, c *client.Client) {
