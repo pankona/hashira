@@ -1,4 +1,4 @@
-name: hashira-cui
+name: hashira-cui - release
 on:
   push:
     tags:
