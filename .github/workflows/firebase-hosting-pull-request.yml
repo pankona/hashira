@@ -7,6 +7,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, labeled]
     paths:
+      - '.github/workflows/firebase-hosting-pull-request.yml'
       - 'hashira-web/**'
 
 defaults:
@@ -19,9 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v4
         with:
-          go-version: '^1.17.8'
+          go-version-file: 'hashira-web/functions/go.mod'
+          cache-dependency-path: 'hashira-web/functions/go.sum'
       - run: yarn install
       - run: VITE_REVISION="Rev ${{ github.event.pull_request.head.sha }} Build at `date`" yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
