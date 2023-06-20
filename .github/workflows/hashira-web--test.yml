@@ -20,6 +20,7 @@ jobs:
         with:
           node-version-file: "hashira-web/.tool-versions"
           cache: "yarn"
+          cache-dependency-path: "hashira-web/yarn.lock"
       - run: yarn install --frozen-lockfile
       - run: yarn build
   typecheck:
@@ -30,5 +31,6 @@ jobs:
         with:
           node-version-file: "hashira-web/.tool-versions"
           cache: "yarn"
+          cache-dependency-path: "hashira-web/yarn.lock"
       - run: yarn install --frozen-lockfile
       - run: yarn typecheck
