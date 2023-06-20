@@ -10,26 +10,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v4
         with:
-          go-version: '^1.19.1'
+          go-version-file: 'go.mod'
+          cache-dependency-path: 'go.sum'
       - run: make
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v4
         with:
-          go-version: '^1.19.1'
+          go-version-file: 'go.mod'
+          cache-dependency-path: 'go.sum'
       - run: make test
   lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v4
         with:
-          go-version: '^1.19.1'
+          go-version-file: 'go.mod'
+          cache-dependency-path: 'go.sum'
       - uses: golangci/golangci-lint-action@v3
         with:
-          version: v1.49.0
+          version: v1.53.3
 
