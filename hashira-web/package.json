@@ -16,6 +16,7 @@
   "devDependencies": {
     "@tsconfig/node18": "^2.0.1",
     "@tsconfig/strictest": "^2.0.1",
+    "@tsconfig/vite-react": "^2.0.0",
     "@types/babel__core": "^7.20.1",
     "@types/react": "^18.2.13",
     "@types/react-dom": "^18.2.6",
