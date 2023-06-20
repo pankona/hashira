@@ -21,7 +21,7 @@ jobs:
           node-version-file: "hashira-web/.tool-versions"
           cache: "yarn"
           cache-dependency-path: "hashira-web/yarn.lock"
-      - run: yarn install
+      - run: yarn install --frozen-lockfile --ignore-scripts
       - run: yarn build
   typecheck:
     runs-on: ubuntu-latest
@@ -32,5 +32,5 @@ jobs:
           node-version-file: "hashira-web/.tool-versions"
           cache: "yarn"
           cache-dependency-path: "hashira-web/yarn.lock"
-      - run: yarn install
+      - run: yarn install --frozen-lockfile --ignore-scripts
       - run: yarn typecheck

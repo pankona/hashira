@@ -22,7 +22,7 @@ jobs:
         with:
           go-version-file: 'hashira-web/functions/go.mod'
           cache-dependency-path: 'hashira-web/functions/go.sum'
-      - run: yarn install
+      - run: yarn install --frozen-lockfile --ignore-scripts
       - run: VITE_REVISION="Rev ${{ github.sha }} Build at `date`" yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
