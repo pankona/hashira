@@ -16,7 +16,7 @@ defaults:
 
 jobs:
   build_and_preview:
-    if: contains(github.event.pull_request.labels.*.name, 'ok to test')
+    if: contains(github.event.pull_request.labels.*.name, 'ok to test') && (github.triggering_actor == 'pankona')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
