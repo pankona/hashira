@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES2015",
     "module": "ES2022",
     "moduleResolution": "Node",
     "esModuleInterop": true,
@@ -10,7 +10,7 @@
   },
   "ts-node": {
     "compilerOptions": {
-      "target": "ES2022",
+      "target": "ES2015",
       "module": "CommonJS"
     }
   }
