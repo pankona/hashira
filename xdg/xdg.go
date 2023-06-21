@@ -13,12 +13,8 @@ type Xdg struct {
 func (x *Xdg) DataHome() string {
 	fromEnv := os.Getenv("XDG_DATA_HOME")
 	if fromEnv == "" {
-		return x.DefaultDataHome()
+		return filepath.Join(x.User.HomeDir, ".local", "share")
 	}
 
 	return fromEnv
-}
-
-func (x *Xdg) DefaultDataHome() string {
-	return filepath.Join(x.User.HomeDir, ".local", "share")
 }
