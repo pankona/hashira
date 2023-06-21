@@ -157,11 +157,8 @@ func initializeDB() (database.Databaser, error) {
 	legacyDataDir := filepath.Join(usr.HomeDir, ".config", "hashira")
 	dataDir := legacyDataDir
 	if legacyInfo, err := os.Stat(legacyDataDir); err != nil || !legacyInfo.IsDir() {
-		dataHome, err := xdg.DataHome()
-		if err != nil {
-			log.Panicln(err)
-		}
-		dataDir = filepath.Join(dataHome, "hashira")
+		x := &xdg.Xdg{User: *usr}
+		dataDir = filepath.Join(x.DataHome(), "hashira")
 		err = os.MkdirAll(dataDir, 0700)
 		if err != nil {
 			return nil, errors.New("failed to create data directory: " + err.Error())

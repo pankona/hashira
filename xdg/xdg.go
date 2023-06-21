@@ -2,22 +2,23 @@ package xdg
 
 import (
 	"os"
+	"os/user"
 	"path/filepath"
 )
 
-func DataHome() (string, error) {
-	fromEnv := os.Getenv("XDG_DATA_HOME")
-	if fromEnv == "" {
-		return DefaultDataHome()
-	}
-
-	return fromEnv, nil
+type Xdg struct {
+	User user.User
 }
 
-func DefaultDataHome() (string, error) {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return "", err
+func (x *Xdg) DataHome() string {
+	fromEnv := os.Getenv("XDG_DATA_HOME")
+	if fromEnv == "" {
+		return x.DefaultDataHome()
 	}
-	return filepath.Join(home, ".local", "share"), nil
+
+	return fromEnv
+}
+
+func (x *Xdg) DefaultDataHome() string {
+	return filepath.Join(x.User.HomeDir, ".local", "share")
 }
