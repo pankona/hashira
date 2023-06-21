@@ -1,7 +1,6 @@
 module github.com/pankona/hashira
 
 require (
-	github.com/adrg/xdg v0.4.0
 	github.com/alecthomas/kingpin/v2 v2.3.2
 	github.com/gofrs/uuid v4.4.0+incompatible
 	github.com/mattn/go-runewidth v0.0.14

@@ -13,12 +13,12 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/adrg/xdg"
 	"github.com/pankona/gocui"
 	hashirac "github.com/pankona/hashira/client"
 	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
 	"github.com/pankona/hashira/sync/syncutil"
+	"github.com/pankona/hashira/xdg"
 )
 
 var (
@@ -157,7 +157,11 @@ func initializeDB() (database.Databaser, error) {
 	legacyDataDir := filepath.Join(usr.HomeDir, ".config", "hashira")
 	dataDir := legacyDataDir
 	if legacyInfo, err := os.Stat(legacyDataDir); err != nil || !legacyInfo.IsDir() {
-		dataDir = filepath.Join(xdg.DataHome, "hashira")
+		dataHome, err := xdg.DataHome()
+		if err != nil {
+			log.Panicln(err)
+		}
+		dataDir = filepath.Join(dataHome, "hashira")
 		err = os.MkdirAll(dataDir, 0700)
 		if err != nil {
 			return nil, errors.New("failed to create data directory: " + err.Error())
