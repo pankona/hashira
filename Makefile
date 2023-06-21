@@ -41,6 +41,7 @@ update-dependencies:
 	cd $(CURDIR)/cmd/hashira-web-client  && $(UPDATE_DEPENDENCIES_CMD)
 
 lint:
+	dprint check
 	golangci-lint run ./...
 
 test:
