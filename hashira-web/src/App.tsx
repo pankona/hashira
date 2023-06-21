@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import * as firebase from "./firebase";
 import Header from "./Header";
@@ -52,10 +52,12 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
     [user],
   );
 
+  const isMoveTaskProcessing = useRef(false);
+
   const onMoveTask = React.useCallback(
     (taskId: string, direction: "left" | "right") => {
       return new Promise<void>(async (resolve, reject) => {
-        if (!user) {
+        if (!user || isMoveTaskProcessing.current) {
           resolve();
           return;
         }
@@ -84,11 +86,14 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
         };
 
         try {
+          isMoveTaskProcessing.current = true;
           await updateTasks(tasksToMove);
           await fetchTasksAndPriorities(user.uid);
           resolve();
         } catch (e) {
           reject(e);
+        } finally {
+          isMoveTaskProcessing.current = false;
         }
       });
     },
