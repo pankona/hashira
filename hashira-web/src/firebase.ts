@@ -20,7 +20,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMkM3qb_CUokFQDSFemLhPOqXJrR-rVbo",
-  authDomain: "hashira-web.firebaseapp.com",
+  authDomain: "hashira-web.web.app",
   projectId: "hashira-web",
   storageBucket: "hashira-web.appspot.com",
   messagingSenderId: "150558268935",
