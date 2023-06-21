@@ -21,7 +21,8 @@ const TaskInput: React.VFC<{
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
           setTasks(e.target.value.split("\n"));
         }}
-      ></textarea>
+      >
+      </textarea>
       <StyledHorizontalSpacer />
       <input
         type="submit"

@@ -23,9 +23,7 @@ const AccessToken: React.FC<{ user: firebase.User | null | undefined }> = ({
   return (
     <div>
       <Header user={user} />
-      {!user || !accesstokens ? (
-        <div>Loading...</div>
-      ) : (
+      {!user || !accesstokens ? <div>Loading...</div> : (
         <>
           <button
             onClick={async () => {

@@ -65,7 +65,7 @@ export const claimNewAccessToken = async (uid: string) => {
 export const fetchAccessTokens = async (uid: string): Promise<string[]> => {
   const db = getFirestore();
   const querySnapshot = await getDocs(
-    query(collection(db, "accesstokens"), where("uid", "==", uid))
+    query(collection(db, "accesstokens"), where("uid", "==", uid)),
   );
   const ret: accesstoken[] = [];
   querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
@@ -90,7 +90,7 @@ export const fetchAccessTokens = async (uid: string): Promise<string[]> => {
 
 export const revokeAccessTokens = async (
   uid: string,
-  accesstokens: string[]
+  accesstokens: string[],
 ) => {
   const db = getFirestore();
 
@@ -99,8 +99,8 @@ export const revokeAccessTokens = async (
       query(
         collection(db, "accesstokens"),
         where("uid", "==", uid),
-        where("accesstoken", "==", accesstoken)
-      )
+        where("accesstoken", "==", accesstoken),
+      ),
     );
 
     for (const doc of querySnapshot.docs) {
@@ -138,7 +138,7 @@ export const uploadTasks = async (tasks: string[]) => {
   try {
     await functions.httpsCallable(
       functions.getFunctions(undefined, "asia-northeast1"),
-      "call?method=add"
+      "call?method=add",
     )({
       tasks: tasksObject,
       priority: {
@@ -181,7 +181,7 @@ export const updateTasks = async (tasksObject: TasksObject) => {
   try {
     await functions.httpsCallable(
       functions.getFunctions(undefined, "asia-northeast1"),
-      "call?method=add"
+      "call?method=add",
     )({
       tasks: tasksObject,
       priority: priorities,
@@ -202,7 +202,7 @@ export const updateTasks2 = async (tasksObject: TasksObject) => {
   try {
     await functions.httpsCallable(
       functions.getFunctions(undefined, "asia-northeast1"),
-      "call?method=add"
+      "call?method=add",
     )({
       tasks: tasksObject,
     });
@@ -218,7 +218,7 @@ export const ping = async () => {
   try {
     await functions.httpsCallable(
       functions.getFunctions(undefined, "asia-northeast1"),
-      "call?method=ping"
+      "call?method=ping",
     )();
   } catch (e) {
     // FIXME:
