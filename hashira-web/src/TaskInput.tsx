@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { StyledHorizontalSpacer } from "./styles";
+import { normalizeTasks } from "./task";
 
 const StyledInputForm = styled.form`
   display: flex;
@@ -26,7 +27,7 @@ const TaskInput: React.VFC<{
         type="submit"
         value="Submit"
         autoFocus={true}
-        disabled={tasks.length === 0 || disabled}
+        disabled={normalizeTasks(tasks).length === 0 || disabled}
         onClick={async (e: React.FormEvent<HTMLInputElement>) => {
           e.preventDefault();
           await onSubmitTasks(tasks);

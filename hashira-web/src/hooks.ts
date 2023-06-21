@@ -1,6 +1,7 @@
 import React from "react";
 import * as firebase from "./firebase";
 import { tasksAndPrioritiesInitialValue } from "./firebase";
+import { normalizeTasks } from "./task";
 
 type APIState<T> = {
   isLoading: boolean;
@@ -29,7 +30,7 @@ export const useAddTasks = (): [
         });
 
         firebase
-          .uploadTasks(tasksToAdd)
+          .uploadTasks(normalizeTasks(tasksToAdd))
           .then(() => {
             setState({
               isLoading: false,
