@@ -1,8 +1,9 @@
 name: dprint
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
+
 jobs:
   check:
     timeout-minutes: 15
