@@ -40,9 +40,11 @@ func TestDataHome(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		setup(t, tc.env)
-		if got := x.DataHome(); got != tc.want {
-			t.Fatalf("xdg returned wrong DataHome when %s. [got] %s [want] %s", tc.description, got, tc.want)
-		}
+		t.Run(tc.description, func(t *testing.T) {
+			setup(t, tc.env)
+			if got := x.DataHome(); got != tc.want {
+				t.Fatalf("xdg returned wrong DataHome. [got] %s [want] %s", got, tc.want)
+			}
+		})
 	}
 }
