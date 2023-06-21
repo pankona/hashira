@@ -1,32 +1,32 @@
 version: 2
 updates:
-- package-ecosystem: gomod
-  directory: "/"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
-  labels:
-  - automerge
-- package-ecosystem: npm
-  directory: "/hashira-web"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
-  labels:
-  - automerge
-  ignore:
-    - dependency-name: '@types/node'
-      update-types: ['version-update:semver-major']
-- package-ecosystem: gomod
-  directory: "/hashira-web/functions"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
-  labels:
-  - automerge
-- package-ecosystem: 'github-actions'
-  directory: '/'
-  schedule:
-    interval: 'daily'
-  labels:
-  - automerge
+  - package-ecosystem: gomod
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    labels:
+      - automerge
+  - package-ecosystem: npm
+    directory: "/hashira-web"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    labels:
+      - automerge
+    ignore:
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: gomod
+    directory: "/hashira-web/functions"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    labels:
+      - automerge
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    labels:
+      - automerge
