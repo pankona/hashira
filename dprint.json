@@ -11,6 +11,7 @@
   "excludes": [
     "**/node_modules",
     "**/*-lock.json",
+    "dist",
     "docs",
     "docsrc"
   ],
