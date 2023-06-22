@@ -174,8 +174,8 @@ export const updateTasks = async (tasksObject: TasksObject) => {
     priorities[place] = [];
   });
 
-  for (const key in tasksObject) {
-    priorities[tasksObject[key].Place].push(tasksObject[key].ID);
+  for (const task of Object.values(tasksObject)) {
+    priorities[task.Place].push(task.ID);
   }
 
   try {
