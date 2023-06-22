@@ -48,12 +48,6 @@ func Call(w http.ResponseWriter, r *http.Request) {
 	case "test-access-token":
 		h.TestAccessToken(w, r)
 
-	case "upload":
-		h.Upload(w, r)
-
-	case "download":
-		h.Download(w, r)
-
 	case "add":
 		h.Add(w, r)
 
