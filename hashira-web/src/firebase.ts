@@ -162,10 +162,7 @@ export interface TasksObject {
   };
 }
 
-// updateTasks
-// task の状態を変えるために用いる。変更があった task はそれぞれのレーンの一番上に積まれる。
-// もっぱら、タスクの状態を変更する (横移動する) ために用いる。
-export const updateTasks = async (tasksObject: TasksObject) => {
+const newPriorities = (tasksObject: TasksObject) => {
   const priorities: {
     [key in typeof Places[number]]: string[];
   } = {
@@ -179,33 +176,24 @@ export const updateTasks = async (tasksObject: TasksObject) => {
     priorities[task.Place].push(task.ID);
   }
 
-  try {
-    await functions.httpsCallable(
-      functions.getFunctions(undefined, "asia-northeast1"),
-      "call?method=add",
-    )({
-      tasks: tasksObject,
-      priority: priorities,
-    });
-  } catch (e) {
-    // FIXME:
-    // currently cloud functions doesn't return appropriate response
-    // that fits httpsCallable protocol even if the function succeeded.
-    console.log("error:", e);
-  }
+  return priorities;
 };
 
-// updateTasks2
-// task の状態を変更するために用いる。変更があった task の場所はそのまま維持される。
-// もっぱら、task の中身を編集するときに用いられる。
-// FIXME: 名前がひどいので直すこと
-export const updateTasks2 = async (tasksObject: TasksObject) => {
+// updateTasks
+//
+// @param updatePosition - Stack the updated tasks on top of each lane if true
+export const updateTasks = async (tasksObject: TasksObject, updatePosition: boolean) => {
+  const appendix = updatePosition
+    ? { priority: newPriorities(tasksObject) }
+    : {};
+
   try {
     await functions.httpsCallable(
       functions.getFunctions(undefined, "asia-northeast1"),
       "call?method=add",
     )({
       tasks: tasksObject,
+      ...appendix,
     });
   } catch (e) {
     // FIXME:

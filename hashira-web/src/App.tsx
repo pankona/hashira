@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import * as firebase from "./firebase";
 import Header from "./Header";
-import { useAddTasks, useFetchTasksAndPriorities, useUpdateTasks, useUpdateTasks2 } from "./hooks";
+import { useAddTasks, useFetchTasksAndPriorities, useUpdateTasks } from "./hooks";
 import { StyledHorizontalSpacer, StyledVerticalSpacer } from "./styles";
 import TaskInput from "./TaskInput";
 import { TaskList } from "./TaskList";
@@ -22,13 +22,11 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
 
   const [addTasksState, addTasks] = useAddTasks();
   const [updateTasksState, updateTasks] = useUpdateTasks();
-  const [updateTasks2State, updateTasks2] = useUpdateTasks2();
   const [fetchTasksAndPrioritiesState, fetchTasksAndPriorities] = useFetchTasksAndPriorities();
 
   const tasksAndPriorities = fetchTasksAndPrioritiesState.data;
   const isLoading = addTasksState.isLoading
     || updateTasksState.isLoading
-    || updateTasks2State.isLoading
     || fetchTasksAndPrioritiesState.isLoading;
 
   const onSubmitTasks = React.useCallback(
@@ -87,7 +85,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
 
         try {
           isMoveTaskProcessing.current = true;
-          await updateTasks(tasksToMove);
+          await updateTasks(tasksToMove, true);
           await fetchTasksAndPriorities(user.uid);
           resolve();
         } catch (e) {
@@ -108,7 +106,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
           return;
         }
         try {
-          await updateTasks2(tasks);
+          await updateTasks(tasks, false);
           // refresh tasks and priorities
           await fetchTasksAndPriorities(user.uid);
           resolve();
@@ -196,7 +194,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                       }
                     }
 
-                    await updateTasks(tasksToMarkAsDone);
+                    await updateTasks(tasksToMarkAsDone, true);
                     // refresh tasks and priorities
                     await fetchTasksAndPriorities(user.uid);
                     setCheckedTasks({});

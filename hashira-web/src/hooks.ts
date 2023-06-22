@@ -47,7 +47,7 @@ export const useAddTasks = (): [
 
 export const useUpdateTasks = (): [
   APIState<void>,
-  (tasks: firebase.TasksObject) => Promise<void>,
+  (tasks: firebase.TasksObject, updatePosition: boolean) => Promise<void>,
 ] => {
   const [state, setState] = React.useState<APIState<void>>({
     isLoading: false,
@@ -57,7 +57,7 @@ export const useUpdateTasks = (): [
 
   return [
     state,
-    React.useCallback((tasks: firebase.TasksObject): Promise<void> => {
+    React.useCallback((tasks: firebase.TasksObject, updatePosition: boolean): Promise<void> => {
       return new Promise<void>((resolve, reject) => {
         setState({
           isLoading: true,
@@ -66,43 +66,7 @@ export const useUpdateTasks = (): [
         });
 
         firebase
-          .updateTasks(tasks)
-          .then((result) => {
-            setState({
-              isLoading: false,
-              error: null,
-              data: result,
-            });
-            resolve(result);
-          })
-          .catch((e) => reject(e));
-      });
-    }, []),
-  ];
-};
-
-export const useUpdateTasks2 = (): [
-  APIState<void>,
-  (tasks: firebase.TasksObject) => Promise<void>,
-] => {
-  const [state, setState] = React.useState<APIState<void>>({
-    isLoading: false,
-    error: null,
-    data: null,
-  });
-
-  return [
-    state,
-    React.useCallback((tasks: firebase.TasksObject): Promise<void> => {
-      return new Promise<void>((resolve, reject) => {
-        setState({
-          isLoading: true,
-          error: null,
-          data: null,
-        });
-
-        firebase
-          .updateTasks2(tasks)
+          .updateTasks(tasks, updatePosition)
           .then((result) => {
             setState({
               isLoading: false,
