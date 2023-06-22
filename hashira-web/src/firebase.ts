@@ -137,7 +137,7 @@ export const uploadTasks = async (tasks: string[]) => {
 
   try {
     await functions.httpsCallable(
-      functions.getFunctions(undefined, "asia-northeast1"),
+      functions.getFunctions(app, "asia-northeast1"),
       "call?method=add",
     )({
       tasks: tasksObject,
@@ -189,7 +189,7 @@ export const updateTasks = async (tasksObject: TasksObject, updatePosition: bool
 
   try {
     await functions.httpsCallable(
-      functions.getFunctions(undefined, "asia-northeast1"),
+      functions.getFunctions(app, "asia-northeast1"),
       "call?method=add",
     )({
       tasks: tasksObject,
@@ -206,7 +206,7 @@ export const updateTasks = async (tasksObject: TasksObject, updatePosition: bool
 export const ping = async () => {
   try {
     await functions.httpsCallable(
-      functions.getFunctions(undefined, "asia-northeast1"),
+      functions.getFunctions(app, "asia-northeast1"),
       "call?method=ping",
     )();
   } catch (e) {
