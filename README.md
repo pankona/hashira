@@ -70,7 +70,7 @@ $ go get github.com/pankona/hashira/cmd/hashira-cui
 
 ## Notes
 
-- hashira generates its configuration file under `$HOME/.config/hashira`
+- hashira generates its datastore under `$XDG_DATA_HOME/hashira`
   - Remove them for re-initializing hashira or leaving from using hashira...
 
 ## LICENSE
