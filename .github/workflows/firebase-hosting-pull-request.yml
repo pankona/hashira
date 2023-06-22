@@ -26,7 +26,7 @@ jobs:
           cache: "yarn"
           cache-dependency-path: "hashira-web/yarn.lock"
       - run: yarn install --frozen-lockfile
-      - run: VITE_REVISION="Rev ${{ github.event.pull_request.head.sha }} Build at `date`" yarn build
+      - run: VITE_REVISION="Rev ${{ github.event.pull_request.head.sha }} Build at $(date)" yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           entryPoint: hashira-web
