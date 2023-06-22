@@ -63,6 +63,64 @@ func Call(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// deprecated. use Call instead.
+func Ping(w http.ResponseWriter, r *http.Request) {
+	setHeadersForCORS(w)
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err := w.Write([]byte("pong")); err != nil {
+		log.Printf("ping failed: %v", err)
+	}
+}
+
+// deprecated. use Call instead.
+func TestAccessToken(w http.ResponseWriter, r *http.Request) {
+	setHeadersForCORS(w)
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+	h := hashira.New(store.NewAccessTokenStore(), store.NewTaskAndPriorityStore())
+	h.TestAccessToken(w, r)
+}
+
+// deprecated. use Call instead.
+func Upload(w http.ResponseWriter, r *http.Request) {
+	setHeadersForCORS(w)
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+	h := hashira.New(store.NewAccessTokenStore(), store.NewTaskAndPriorityStore())
+	h.Upload(w, r)
+}
+
+// deprecated. use Call instead.
+func Download(w http.ResponseWriter, r *http.Request) {
+	setHeadersForCORS(w)
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+	h := hashira.New(store.NewAccessTokenStore(), store.NewTaskAndPriorityStore())
+	h.Download(w, r)
+}
+
+// deprecated. use Call instead.
+func Add(w http.ResponseWriter, r *http.Request) {
+	setHeadersForCORS(w)
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+	h := hashira.New(store.NewAccessTokenStore(), store.NewTaskAndPriorityStore())
+	h.Add(w, r)
+}
+
 func setHeadersForCORS(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST")
