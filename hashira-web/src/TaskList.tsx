@@ -126,7 +126,7 @@ export const TaskList: React.VFC<{
       const taskId = tasksAndPriorities["Tasks"][p].ID;
       const taskName = tasksAndPriorities["Tasks"][p].Name;
       return (
-        <StyledListItem key={taskId} data-taskId={taskId}>
+        <StyledListItem key={taskId} data-tasktoken={taskId}>
           <>
             <StyledListContent
               style={{
