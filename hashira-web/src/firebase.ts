@@ -224,7 +224,7 @@ export const ping = async () => {
     // FIXME:
     // currently cloud functions doesn't return appropriate response
     // that fits httpsCallable protocol even if the function succeeded.
-    console.log("error:", e);
+    console.log("Known Bug - #877:", e, "See https://github.com/pankona/hashira/issues/877 for further detail.");
   }
 };
 
