@@ -25,7 +25,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Upload artifact
-        if: github.event.sender.login == 'pankona'
         uses: actions/upload-pages-artifact@v1
         with:
           path: ./docs
