@@ -126,13 +126,12 @@ export const TaskList: React.VFC<{
       const taskId = tasksAndPriorities["Tasks"][p].ID;
       const taskName = tasksAndPriorities["Tasks"][p].Name;
       return (
-        <StyledListItem key={taskId}>
+        <StyledListItem key={taskId} data-tasktoken={taskId}>
           <>
             <StyledListContent
               style={{
                 marginRight: mode === "select" ? "0px" : "24px",
               }}
-              id={taskId}
               key={taskId}
               value={updatedTasks[taskId] !== undefined
                 ? updatedTasks[taskId]
@@ -140,7 +139,7 @@ export const TaskList: React.VFC<{
               onChange={(e) => {
                 setUpdatedTasks({
                   ...updatedTasks,
-                  [e.target.id]: e.target.value,
+                  [taskId]: e.target.value,
                 });
               }}
               onBlur={() => onEditCompleted()}
@@ -149,12 +148,11 @@ export const TaskList: React.VFC<{
             {mode === "select"
               ? (
                 <StyledCheckbox
-                  id={taskId}
                   value={taskName}
                   onChange={(e) => {
                     setCheckedTasks({
                       ...checkedTasks,
-                      [e.target.id]: e.target.checked,
+                      [taskId]: e.target.checked,
                     });
                   }}
                 />
@@ -162,16 +160,14 @@ export const TaskList: React.VFC<{
               : (
                 <StyledArrow>
                   <div
-                    id={taskId}
                     style={{ cursor: "pointer" }}
-                    onClick={(e) => onMoveTask(e.currentTarget.id, "left")}
+                    onClick={(e) => onMoveTask(taskId, "left")}
                   >
                     👈
                   </div>
                   <div
-                    id={taskId}
                     style={{ cursor: "pointer" }}
-                    onClick={(e) => onMoveTask(e.currentTarget.id, "right")}
+                    onClick={(e) => onMoveTask(taskId, "right")}
                   >
                     👉
                   </div>
