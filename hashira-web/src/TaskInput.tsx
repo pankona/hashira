@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import styled from "styled-components";
 import { StyledHorizontalSpacer } from "./styles";
 import { normalizeTasks } from "./task";
@@ -17,6 +17,7 @@ const TaskInput: React.VFC<{
     <StyledInputForm>
       <textarea
         placeholder={"Add todos"}
+        id={useId()}
         value={tasks.join("\n")}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
           setTasks(e.target.value.split("\n"));
