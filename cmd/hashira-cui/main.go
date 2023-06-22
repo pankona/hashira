@@ -18,6 +18,7 @@ import (
 	"github.com/pankona/hashira/daemon"
 	"github.com/pankona/hashira/database"
 	"github.com/pankona/hashira/sync/syncutil"
+	"github.com/pankona/hashira/xdg"
 )
 
 var (
@@ -153,13 +154,25 @@ func initializeDB() (database.Databaser, error) {
 		return nil, errors.New("failed to current user: " + err.Error())
 	}
 
-	configDir := filepath.Join(usr.HomeDir, ".config", "hashira")
-	err = os.MkdirAll(configDir, 0700)
-	if err != nil {
-		return nil, errors.New("failed to create config directory: " + err.Error())
+	legacyDataDir := filepath.Join(usr.HomeDir, ".config", "hashira")
+	isLegacyDataDirExist := func() bool {
+		legacyInfo, err := os.Stat(legacyDataDir)
+		if err != nil && os.IsNotExist(err) {
+			return false
+		}
+		return legacyInfo.IsDir()
+	}
+	dataDir := legacyDataDir
+	if !isLegacyDataDirExist() {
+		x := &xdg.Xdg{User: *usr}
+		dataDir = filepath.Join(x.DataHome(), "hashira")
+		err = os.MkdirAll(dataDir, 0700)
+		if err != nil {
+			return nil, errors.New("failed to create data directory: " + err.Error())
+		}
 	}
 
-	err = db.Initialize(filepath.Join(configDir, "db"))
+	err = db.Initialize(filepath.Join(dataDir, "db"))
 	if err != nil {
 		return nil, errors.New("failed to initialize db: " + err.Error())
 	}
