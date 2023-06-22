@@ -111,8 +111,9 @@ export const revokeAccessTokens = async (
 
 export const Places = ["BACKLOG", "TODO", "DOING", "DONE"] as const;
 
+// uploadTasks
 // 複数の task を受け取って、全部 BACKLOG の一番上に積む
-export const addTasks = async (tasks: string[]) => {
+export const uploadTasks = async (tasks: string[]) => {
   const tasksObject: {
     [key: string]: {
       ID: string;
