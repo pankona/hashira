@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { FirebaseOptions, initializeApp } from "firebase/app";
 import * as auth from "firebase/auth";
 import {
   addDoc,
@@ -18,7 +18,7 @@ import {
 import * as functions from "firebase/functions";
 import { v4 as uuidv4 } from "uuid";
 
-const firebaseConfig = {
+const firebaseConfig: FirebaseOptions = {
   apiKey: "AIzaSyDMkM3qb_CUokFQDSFemLhPOqXJrR-rVbo",
   authDomain: "hashira-web.web.app",
   projectId: "hashira-web",
@@ -28,7 +28,7 @@ const firebaseConfig = {
   measurementId: "G-EEZ5MJJ6XL",
 };
 
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 export const login = () => {
   const provider = new auth.GoogleAuthProvider();
@@ -53,7 +53,7 @@ interface accesstoken {
 }
 
 export const claimNewAccessToken = async (uid: string) => {
-  const db = getFirestore();
+  const db = getFirestore(app);
   const data: accesstoken = {
     uid: uid,
     accesstoken: uuidv4(),
@@ -63,7 +63,7 @@ export const claimNewAccessToken = async (uid: string) => {
 };
 
 export const fetchAccessTokens = async (uid: string): Promise<string[]> => {
-  const db = getFirestore();
+  const db = getFirestore(app);
   const querySnapshot = await getDocs(
     query(collection(db, "accesstokens"), where("uid", "==", uid)),
   );
@@ -92,7 +92,7 @@ export const revokeAccessTokens = async (
   uid: string,
   accesstokens: string[],
 ) => {
-  const db = getFirestore();
+  const db = getFirestore(app);
 
   for (const accesstoken of accesstokens) {
     const querySnapshot = await getDocs(
@@ -218,7 +218,7 @@ export const ping = async () => {
 };
 
 export const fetchTaskAndPriorities = async (uid: string) => {
-  const db = getFirestore();
+  const db = getFirestore(app);
   const docRef = doc(db, "tasksAndPriorities", uid);
   const docSnapshot = await getDoc(docRef);
   return docSnapshot.data() as TasksAndPriorities;
