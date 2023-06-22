@@ -5,7 +5,7 @@ on:
     paths:
       - ".github/workflows/hashira-web--test.yml"
       - "hashira-web/**"
-      - '!hashira-web/functions/**'
+      - "!hashira-web/functions/**"
 
 defaults:
   run:

@@ -1,16 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
+import styled from "styled-components";
 import * as firebase from "./firebase";
 import Header from "./Header";
-import { TaskList } from "./TaskList";
-import TaskInput from "./TaskInput";
-import styled from "styled-components";
+import { useAddTasks, useFetchTasksAndPriorities, useUpdateTasks, useUpdateTasks2 } from "./hooks";
 import { StyledHorizontalSpacer, StyledVerticalSpacer } from "./styles";
-import {
-  useAddTasks,
-  useFetchTasksAndPriorities,
-  useUpdateTasks,
-  useUpdateTasks2,
-} from "./hooks";
+import TaskInput from "./TaskInput";
+import { TaskList } from "./TaskList";
 
 const StyledBody = styled.div`
   padding-left: 8px;
@@ -28,15 +23,13 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
   const [addTasksState, addTasks] = useAddTasks();
   const [updateTasksState, updateTasks] = useUpdateTasks();
   const [updateTasks2State, updateTasks2] = useUpdateTasks2();
-  const [fetchTasksAndPrioritiesState, fetchTasksAndPriorities] =
-    useFetchTasksAndPriorities();
+  const [fetchTasksAndPrioritiesState, fetchTasksAndPriorities] = useFetchTasksAndPriorities();
 
   const tasksAndPriorities = fetchTasksAndPrioritiesState.data;
-  const isLoading =
-    addTasksState.isLoading ||
-    updateTasksState.isLoading ||
-    updateTasks2State.isLoading ||
-    fetchTasksAndPrioritiesState.isLoading;
+  const isLoading = addTasksState.isLoading
+    || updateTasksState.isLoading
+    || updateTasks2State.isLoading
+    || fetchTasksAndPrioritiesState.isLoading;
 
   const onSubmitTasks = React.useCallback(
     (tasks: string[]) => {
@@ -56,13 +49,15 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
         }
       });
     },
-    [user]
+    [user],
   );
+
+  const isMoveTaskProcessing = useRef(false);
 
   const onMoveTask = React.useCallback(
     (taskId: string, direction: "left" | "right") => {
       return new Promise<void>(async (resolve, reject) => {
-        if (!user) {
+        if (!user || isMoveTaskProcessing.current) {
           resolve();
           return;
         }
@@ -91,15 +86,18 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
         };
 
         try {
+          isMoveTaskProcessing.current = true;
           await updateTasks(tasksToMove);
           await fetchTasksAndPriorities(user.uid);
           resolve();
         } catch (e) {
           reject(e);
+        } finally {
+          isMoveTaskProcessing.current = false;
         }
       });
     },
-    [user, tasksAndPriorities]
+    [user, tasksAndPriorities],
   );
 
   const onEditTasks = React.useCallback(
@@ -119,7 +117,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
         }
       });
     },
-    [user]
+    [user],
   );
 
   const intervalMs = 1000 * 60 * 3; // 3 minutes
@@ -170,17 +168,15 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                   type="button"
                   value={"Mark as Done"}
                   style={{ minWidth: "128px" }}
-                  disabled={
-                    isLoading ||
-                    ((): boolean => {
+                  disabled={isLoading
+                    || ((): boolean => {
                       for (const v in checkedTasks) {
                         if (checkedTasks[v]) {
                           return false;
                         }
                       }
                       return true;
-                    })()
-                  }
+                    })()}
                   onClick={async (e: React.FormEvent<HTMLInputElement>) => {
                     e.preventDefault();
                     if (!user) {
@@ -224,52 +220,54 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                 />
               </div>
               <StyledVerticalSpacer />
-              {tasksAndPriorities ? (
-                <div
-                  className="TaskAndPriorities"
-                  style={{
-                    display: "flex",
-                    overflow: "auto",
-                  }}
-                >
-                  <TaskList
-                    place={"BACKLOG"}
-                    tasksAndPriorities={tasksAndPriorities}
-                    checkedTasks={checkedTasks}
-                    setCheckedTasks={setCheckedTasks}
-                    onEditTasks={onEditTasks}
-                    mode={mode}
-                    onMoveTask={onMoveTask}
-                  />
-                  <TaskList
-                    place={"TODO"}
-                    tasksAndPriorities={tasksAndPriorities}
-                    checkedTasks={checkedTasks}
-                    setCheckedTasks={setCheckedTasks}
-                    onEditTasks={onEditTasks}
-                    mode={mode}
-                    onMoveTask={onMoveTask}
-                  />
-                  <TaskList
-                    place={"DOING"}
-                    tasksAndPriorities={tasksAndPriorities}
-                    checkedTasks={checkedTasks}
-                    setCheckedTasks={setCheckedTasks}
-                    onEditTasks={onEditTasks}
-                    mode={mode}
-                    onMoveTask={onMoveTask}
-                  />
-                  <TaskList
-                    place={"DONE"}
-                    tasksAndPriorities={tasksAndPriorities}
-                    checkedTasks={checkedTasks}
-                    setCheckedTasks={setCheckedTasks}
-                    onEditTasks={onEditTasks}
-                    mode={mode}
-                    onMoveTask={onMoveTask}
-                  />
-                </div>
-              ) : undefined}
+              {tasksAndPriorities
+                ? (
+                  <div
+                    className="TaskAndPriorities"
+                    style={{
+                      display: "flex",
+                      overflow: "auto",
+                    }}
+                  >
+                    <TaskList
+                      place={"BACKLOG"}
+                      tasksAndPriorities={tasksAndPriorities}
+                      checkedTasks={checkedTasks}
+                      setCheckedTasks={setCheckedTasks}
+                      onEditTasks={onEditTasks}
+                      mode={mode}
+                      onMoveTask={onMoveTask}
+                    />
+                    <TaskList
+                      place={"TODO"}
+                      tasksAndPriorities={tasksAndPriorities}
+                      checkedTasks={checkedTasks}
+                      setCheckedTasks={setCheckedTasks}
+                      onEditTasks={onEditTasks}
+                      mode={mode}
+                      onMoveTask={onMoveTask}
+                    />
+                    <TaskList
+                      place={"DOING"}
+                      tasksAndPriorities={tasksAndPriorities}
+                      checkedTasks={checkedTasks}
+                      setCheckedTasks={setCheckedTasks}
+                      onEditTasks={onEditTasks}
+                      mode={mode}
+                      onMoveTask={onMoveTask}
+                    />
+                    <TaskList
+                      place={"DONE"}
+                      tasksAndPriorities={tasksAndPriorities}
+                      checkedTasks={checkedTasks}
+                      setCheckedTasks={setCheckedTasks}
+                      onEditTasks={onEditTasks}
+                      mode={mode}
+                      onMoveTask={onMoveTask}
+                    />
+                  </div>
+                )
+                : undefined}
             </>
           );
         })()}

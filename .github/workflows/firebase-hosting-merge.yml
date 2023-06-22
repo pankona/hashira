@@ -27,7 +27,7 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           entryPoint: hashira-web
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_HASHIRA_WEB }}'
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_HASHIRA_WEB }}"
           channelId: live
           projectId: hashira-web

@@ -17,6 +17,6 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v4
         with:
-          go-version-file: 'hashira-web/functions/go.mod'
-          cache-dependency-path: 'hashira-web/functions/go.sum'
+          go-version-file: "hashira-web/functions/go.mod"
+          cache-dependency-path: "hashira-web/functions/go.sum"
       - run: go test ./...

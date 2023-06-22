@@ -1,6 +1,7 @@
 import React from "react";
 import * as firebase from "./firebase";
 import { tasksAndPrioritiesInitialValue } from "./firebase";
+import { normalizeTasks } from "./task";
 
 type APIState<T> = {
   isLoading: boolean;
@@ -10,7 +11,7 @@ type APIState<T> = {
 
 export const useAddTasks = (): [
   APIState<void>,
-  (tasksToAdd: string[]) => Promise<void>
+  (tasksToAdd: string[]) => Promise<void>,
 ] => {
   const [state, setState] = React.useState<APIState<void>>({
     isLoading: false,
@@ -29,7 +30,7 @@ export const useAddTasks = (): [
         });
 
         firebase
-          .uploadTasks(tasksToAdd)
+          .uploadTasks(normalizeTasks(tasksToAdd))
           .then(() => {
             setState({
               isLoading: false,
@@ -46,7 +47,7 @@ export const useAddTasks = (): [
 
 export const useUpdateTasks = (): [
   APIState<void>,
-  (tasks: firebase.TasksObject) => Promise<void>
+  (tasks: firebase.TasksObject) => Promise<void>,
 ] => {
   const [state, setState] = React.useState<APIState<void>>({
     isLoading: false,
@@ -82,7 +83,7 @@ export const useUpdateTasks = (): [
 
 export const useUpdateTasks2 = (): [
   APIState<void>,
-  (tasks: firebase.TasksObject) => Promise<void>
+  (tasks: firebase.TasksObject) => Promise<void>,
 ] => {
   const [state, setState] = React.useState<APIState<void>>({
     isLoading: false,
@@ -118,7 +119,7 @@ export const useUpdateTasks2 = (): [
 
 export const useFetchTasksAndPriorities = (): [
   APIState<any>,
-  (userId: string) => Promise<any>
+  (userId: string) => Promise<any>,
 ] => {
   const [state, setState] = React.useState<APIState<any>>({
     isLoading: false,
@@ -174,7 +175,7 @@ export const useFetchTasksAndPriorities = (): [
 
 export const useFetchAccessTokens = (): [
   APIState<string[]>,
-  (userId: string) => Promise<string[]>
+  (userId: string) => Promise<string[]>,
 ] => {
   const [state, setState] = React.useState<APIState<string[]>>({
     isLoading: false,

@@ -1,0 +1,13 @@
+name: dprint
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  check:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dprint/check@v2.2

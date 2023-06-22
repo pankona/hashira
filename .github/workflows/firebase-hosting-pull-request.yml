@@ -7,8 +7,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, labeled]
     paths:
-      - '.github/workflows/firebase-hosting-pull-request.yml'
-      - 'hashira-web/**'
+      - ".github/workflows/firebase-hosting-pull-request.yml"
+      - "hashira-web/**"
 
 defaults:
   run:
@@ -30,6 +30,6 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           entryPoint: hashira-web
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_HASHIRA_WEB }}'
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_HASHIRA_WEB }}"
           projectId: hashira-web
