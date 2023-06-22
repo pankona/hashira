@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import styled from "styled-components";
 import * as firebase from "./firebase";
 
@@ -132,6 +132,7 @@ export const TaskList: React.VFC<{
               style={{
                 marginRight: mode === "select" ? "0px" : "24px",
               }}
+              id={`listContent-${taskId}`}
               key={taskId}
               value={updatedTasks[taskId] !== undefined
                 ? updatedTasks[taskId]
@@ -148,6 +149,7 @@ export const TaskList: React.VFC<{
             {mode === "select"
               ? (
                 <StyledCheckbox
+                  id={`check-${taskId}`}
                   value={taskName}
                   onChange={(e) => {
                     setCheckedTasks({
@@ -158,7 +160,7 @@ export const TaskList: React.VFC<{
                 />
               )
               : (
-                <StyledArrow>
+                <StyledArrow id={`arrow-${taskId}`}>
                   <div
                     style={{ cursor: "pointer" }}
                     onClick={(e) => onMoveTask(taskId, "left")}
