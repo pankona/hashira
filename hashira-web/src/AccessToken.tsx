@@ -58,13 +58,12 @@ const AccessToken: React.FC<{ user: firebase.User | null | undefined }> = ({
             return (
               <li key={token}>
                 <input
-                  id={token}
                   type="checkbox"
                   checked={checkedTokens[token] || false}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setCheckedTokens({
                       ...checkedTokens,
-                      [e.target.id]: e.target.checked,
+                      [token]: e.target.checked,
                     });
                   }}
                   name={token}
