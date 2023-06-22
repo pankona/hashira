@@ -155,8 +155,15 @@ func initializeDB() (database.Databaser, error) {
 	}
 
 	legacyDataDir := filepath.Join(usr.HomeDir, ".config", "hashira")
+	isLegacyDataDirExist := func() bool {
+		legacyInfo, err := os.Stat(legacyDataDir)
+		if err != nil && os.IsNotExist(err) {
+			return false
+		}
+		return legacyInfo.IsDir()
+	}
 	dataDir := legacyDataDir
-	if legacyInfo, err := os.Stat(legacyDataDir); err != nil || !legacyInfo.IsDir() {
+	if !isLegacyDataDirExist() {
 		x := &xdg.Xdg{User: *usr}
 		dataDir = filepath.Join(x.DataHome(), "hashira")
 		err = os.MkdirAll(dataDir, 0700)

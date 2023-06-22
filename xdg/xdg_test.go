@@ -13,9 +13,7 @@ func setup(t *testing.T, envs map[string]string) {
 
 func TestDataHome(t *testing.T) {
 	usr := user.User{HomeDir: "/home/hashirafan"}
-	x := Xdg{
-		User: usr,
-	}
+	x := Xdg{User: usr}
 	testCases := []struct {
 		description string
 		want        string
