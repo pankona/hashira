@@ -52,7 +52,7 @@ const StyledArrow = styled.div`
 `;
 
 export const TaskList: React.VFC<{
-  place: typeof firebase.Place[number];
+  place: typeof firebase.Places[number];
   tasksAndPriorities: firebase.TasksAndPriorities;
   checkedTasks: { [key: string]: boolean };
   setCheckedTasks: (a: { [key: string]: boolean }) => void;

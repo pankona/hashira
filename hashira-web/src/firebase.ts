@@ -109,7 +109,7 @@ export const revokeAccessTokens = async (
   }
 };
 
-export const Place = ["BACKLOG", "TODO", "DOING", "DONE"] as const;
+export const Places = ["BACKLOG", "TODO", "DOING", "DONE"] as const;
 
 // uploadTasks
 // 複数の task を受け取って、全部 BACKLOG の一番上に積む
@@ -119,7 +119,7 @@ export const uploadTasks = async (tasks: string[]) => {
       ID: string;
       IsDeleted: boolean;
       Name: string;
-      Place: typeof Place[number];
+      Place: typeof Places[number];
     };
   } = {};
   const priorities: string[] = [];
@@ -158,7 +158,7 @@ export interface TasksObject {
     ID: string;
     IsDeleted: boolean;
     Name: string;
-    Place: typeof Place[number];
+    Place: typeof Places[number];
   };
 }
 
@@ -170,12 +170,12 @@ export const updateTasks = async (tasksObject: TasksObject) => {
     [key: string]: string[];
   } = {};
 
-  Place.forEach((v) => {
-    priorities[v] = [];
+  Places.forEach((place) => {
+    priorities[place] = [];
   });
 
-  for (const v in tasksObject) {
-    priorities[tasksObject[v].Place].push(tasksObject[v].ID);
+  for (const key in tasksObject) {
+    priorities[tasksObject[key].Place].push(tasksObject[key].ID);
   }
 
   try {
@@ -237,11 +237,11 @@ export const fetchTaskAndPriorities = async (uid: string) => {
 
 export interface TasksAndPriorities {
   Priority: {
-    [key in typeof Place[number]]: string[];
+    [key in typeof Places[number]]: string[];
   };
   Tasks: {
     [key: string]: {
-      Place: typeof Place[number];
+      Place: typeof Places[number];
       Name: string;
       ID: string;
       IsDeleted: boolean;

@@ -63,16 +63,16 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
         }
         const tasksToMove: firebase.TasksObject = {};
         const task = tasksAndPriorities["Tasks"][taskId];
-        const currentIndex = firebase.Place.indexOf(task.Place);
+        const currentIndex = firebase.Places.indexOf(task.Place);
         const nextIndex = ((): number => {
           if (direction === "left") {
             if (currentIndex === 0) {
-              return firebase.Place.length - 1;
+              return firebase.Places.length - 1;
             }
             return currentIndex - 1;
           }
 
-          if (currentIndex === firebase.Place.length - 1) {
+          if (currentIndex === firebase.Places.length - 1) {
             return 0;
           }
           return currentIndex + 1;
@@ -82,7 +82,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
           ID: task.ID,
           IsDeleted: false,
           Name: task.Name,
-          Place: firebase.Place[nextIndex],
+          Place: firebase.Places[nextIndex],
         };
 
         try {
