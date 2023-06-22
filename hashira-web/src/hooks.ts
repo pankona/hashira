@@ -30,7 +30,7 @@ export const useAddTasks = (): [
         });
 
         firebase
-          .uploadTasks(normalizeTasks(tasksToAdd))
+          .addTasks(normalizeTasks(tasksToAdd))
           .then(() => {
             setState({
               isLoading: false,
