@@ -1,0 +1,27 @@
+{
+  "folders": [
+	{
+		"name": "TUI and Root",
+		"path": "."
+	},
+	{
+		"name": "Web front-end",
+		"path": "hashira-web"
+	},
+	{
+		"name": "Cloud Functions",
+		"path": "hashira-web/functions"
+	},
+	{
+		"name": "Documents",
+		"path": "docsrc"
+	}
+],
+  "settings": {
+	},
+	"extensions": {
+		"recommendations": [
+			"streetsidesoftware.code-spell-checker"
+		]
+	}
+}
