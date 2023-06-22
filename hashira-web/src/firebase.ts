@@ -167,12 +167,13 @@ export interface TasksObject {
 // もっぱら、タスクの状態を変更する (横移動する) ために用いる。
 export const updateTasks = async (tasksObject: TasksObject) => {
   const priorities: {
-    [key: string]: string[];
-  } = {};
-
-  Places.forEach((place) => {
-    priorities[place] = [];
-  });
+    [key in typeof Places[number]]: string[];
+  } = {
+    BACKLOG: [],
+    TODO: [],
+    DOING: [],
+    DONE: [],
+  };
 
   for (const task of Object.values(tasksObject)) {
     priorities[task.Place].push(task.ID);
