@@ -7,7 +7,6 @@
   },
   "prettier": {
   },
-  "includes": ["**/*.{ts,tsx,js,jsx,cjs,mjs,json,md,html,css,yml}"],
   "excludes": [
     "**/node_modules",
     "**/*-lock.json",
