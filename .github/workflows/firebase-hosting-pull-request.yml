@@ -19,7 +19,7 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'ok to test') && (github.triggering_actor == 'pankona')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version-file: "hashira-web/.tool-versions"
