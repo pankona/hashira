@@ -14,7 +14,7 @@
     "deploy-firebase-rules": "firebase deploy --only firestore:rules"
   },
   "devDependencies": {
-    "@types/babel__core": "^7.20.1",
+    "@types/babel__core": "^7.20.2",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@types/styled-components": "^5.1.26",
