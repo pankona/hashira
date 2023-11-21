@@ -17,7 +17,7 @@
     "@types/babel__core": "^7.20.3",
     "@types/react": "^18.2.38",
     "@types/react-dom": "^18.2.15",
-    "@types/styled-components": "^5.1.30",
+    "@types/styled-components": "^5.1.31",
     "@types/uuid": "^9.0.7",
     "@vitejs/plugin-react": "^4.2.0",
     "ansi-regex": "6.0.1",
