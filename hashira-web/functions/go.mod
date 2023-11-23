@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	cloud.google.com/go/firestore v1.14.0
-	firebase.google.com/go/v4 v4.12.1
+	firebase.google.com/go/v4 v4.13.0
 	github.com/google/go-cmp v0.6.0
 	google.golang.org/grpc v1.59.0
 )
