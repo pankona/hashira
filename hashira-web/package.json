@@ -31,7 +31,7 @@
     "vite": "^5.0.10"
   },
   "dependencies": {
-    "@types/node": "^18.19.3",
+    "@types/node": "^18.19.4",
     "firebase": "^10.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
