@@ -4937,10 +4937,10 @@ strip-json-comments@~2.0.1:
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
   integrity sha1-PFMZQukIwml8DsNEhYwobHygpgo=
 
-styled-components@^6.1.7:
-  version "6.1.7"
-  resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-6.1.7.tgz#8db83e5165026511cac7f7e11696413359fec949"
-  integrity sha512-d8LumygXGnb+MVc36gi4o25emEDYOPtj9UpHsTZYU4gxLKSUzRddlERXSPSK6SkTMFAVpSo3LmaXES0YGrddMg==
+styled-components@^6.1.8:
+  version "6.1.8"
+  resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-6.1.8.tgz#c109d36aeea52d8f049e12de2f3be39a6fc86201"
+  integrity sha512-PQ6Dn+QxlWyEGCKDS71NGsXoVLKfE1c3vApkvDYS5KAK+V8fNWGhbSUEo9Gg2iaID2tjLXegEW3bZDUGpofRWw==
   dependencies:
     "@emotion/is-prop-valid" "1.2.1"
     "@emotion/unitless" "0.8.0"
