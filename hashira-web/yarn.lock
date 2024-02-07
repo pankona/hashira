@@ -2633,10 +2633,10 @@ finalhandler@1.2.0, finalhandler@~1.2.0:
     statuses "2.0.1"
     unpipe "~1.0.0"
 
-firebase-tools@^13.0.3:
-  version "13.0.3"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-13.0.3.tgz#51498142c2677b63d6f8208705a4c1e60011d888"
-  integrity sha512-tGkKQxcN5fH8uFGXtO+6YSHHKT6G7/AAqtOkHQ5bj3jrNi2gGpzUxb7aVzhbr4C7N5gxuifY4R5bcgRriyeNKw==
+firebase-tools@^13.2.0:
+  version "13.2.0"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-13.2.0.tgz#86ae9bdff6d759c97d65ad110e74eb1df6869492"
+  integrity sha512-TaOJSVE7Io48wixH7uyADYn1IBeCTpAyL1qKxuSJFEzM+gyaFdZepummEWPj6DF1XMsKjmRPc9q/2W7gXvFz6g==
   dependencies:
     "@google-cloud/pubsub" "^3.0.1"
     abort-controller "^3.0.0"
