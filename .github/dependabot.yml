@@ -3,14 +3,14 @@ updates:
   - package-ecosystem: gomod
     directory: "/"
     schedule:
-      interval: daily
+      interval: monthly
     open-pull-requests-limit: 10
     labels:
       - automerge
   - package-ecosystem: npm
     directory: "/hashira-web"
     schedule:
-      interval: daily
+      interval: monthly
     open-pull-requests-limit: 10
     labels:
       - automerge
@@ -20,13 +20,13 @@ updates:
   - package-ecosystem: gomod
     directory: "/hashira-web/functions"
     schedule:
-      interval: daily
+      interval: monthly
     open-pull-requests-limit: 10
     labels:
       - automerge
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     labels:
       - automerge
