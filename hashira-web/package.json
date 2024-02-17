@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@types/babel__core": "^7.20.3",
+    "@types/node": "~18.18.14",
     "@types/react": "^18.2.51",
     "@types/react-dom": "^18.2.19",
     "@types/styled-components": "^5.1.34",
@@ -24,14 +25,13 @@
     "firebase-tools": "^13.2.1",
     "react-router-dom": "^6.21.3",
     "reload": "^3.2.1",
-    "styled-components": "^6.1.8",
+    "styled-components": "^5.3.11",
     "styled-normalize": "^8.1.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.3",
-    "vite": "^5.1.2"
+    "vite": "^4.5.1"
   },
   "dependencies": {
-    "@types/node": "^18.19.17",
     "firebase": "^10.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

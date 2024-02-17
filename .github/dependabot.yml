@@ -5,28 +5,29 @@ updates:
     schedule:
       interval: daily
     open-pull-requests-limit: 10
-    labels:
-      - automerge
   - package-ecosystem: npm
     directory: "/hashira-web"
     schedule:
       interval: daily
     open-pull-requests-limit: 10
-    labels:
-      - automerge
     ignore:
       - dependency-name: "@types/node"
+        # https://github.com/vitejs/vite/issues/15714#issuecomment-1949236530
+        # https://github.com/DefinitelyTyped/DefinitelyTyped/pull/68300
+        update-types:
+          ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "styled-components"
+        # https://github.com/pankona/hashira/issues/1162#issuecomment-1950253823
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "vite"
+        # https://github.com/pankona/hashira/issues/1162#issuecomment-1950257529
         update-types: ["version-update:semver-major"]
   - package-ecosystem: gomod
     directory: "/hashira-web/functions"
     schedule:
       interval: daily
     open-pull-requests-limit: 10
-    labels:
-      - automerge
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
-    labels:
-      - automerge
