@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@types/babel__core": "^7.20.3",
+    "@types/node": "~18.18.14",
     "@types/react": "^18.2.51",
     "@types/react-dom": "^18.2.19",
     "@types/styled-components": "^5.1.34",
@@ -31,7 +32,6 @@
     "vite": "^4.4.12"
   },
   "dependencies": {
-    "@types/node": "^18.19.17",
     "firebase": "^10.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
