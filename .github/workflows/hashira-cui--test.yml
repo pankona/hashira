@@ -1,6 +1,13 @@
 name: hashira-cui - CI
 
 on:
+  push:
+    branches: [master]
+    paths:
+      - "**"
+      - "!hashira-web/**"
+      - "!.github/workflows/**"
+      - ".github/workflows/hashira-cui--test.yml"
   pull_request:
     paths:
       - "**"

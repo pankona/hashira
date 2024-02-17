@@ -1,6 +1,12 @@
 name: hashira-web
 
 on:
+  push:
+    branches: [master]
+    paths:
+      - ".github/workflows/hashira-web--test.yml"
+      - "hashira-web/**"
+      - "!hashira-web/functions/**"
   pull_request:
     paths:
       - ".github/workflows/hashira-web--test.yml"
