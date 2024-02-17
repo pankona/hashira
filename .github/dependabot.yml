@@ -3,12 +3,12 @@ updates:
   - package-ecosystem: gomod
     directory: "/"
     schedule:
-      interval: daily
+      interval: monthly
     open-pull-requests-limit: 10
   - package-ecosystem: npm
     directory: "/hashira-web"
     schedule:
-      interval: daily
+      interval: monthly
     open-pull-requests-limit: 10
     ignore:
       - dependency-name: "@types/node"
@@ -25,9 +25,9 @@ updates:
   - package-ecosystem: gomod
     directory: "/hashira-web/functions"
     schedule:
-      interval: daily
+      interval: monthly
     open-pull-requests-limit: 10
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
