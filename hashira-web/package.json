@@ -27,7 +27,7 @@
     "reload": "^3.2.1",
     "styled-components": "^5.3.11",
     "styled-normalize": "^8.1.1",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
     "vite": "^4.5.1"
   },
