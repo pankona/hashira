@@ -22,7 +22,7 @@
     "@types/uuid": "^9.0.8",
     "@vitejs/plugin-react": "^4.2.1",
     "ansi-regex": "6.0.1",
-    "firebase-tools": "^13.3.0",
+    "firebase-tools": "^13.4.0",
     "react-router-dom": "^6.21.3",
     "reload": "^3.2.1",
     "styled-components": "^5.3.11",
