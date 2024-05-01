@@ -16,7 +16,7 @@ jobs:
         uses: dependabot/fetch-metadata@v2
       - name: Wait other jobs
         # if: ${{steps.metadata.outputs.update-type != 'version-update:semver-major'}}
-        uses: kachick/wait-other-jobs@v2
+        uses: kachick/wait-other-jobs@v3
         timeout-minutes: 15
       - name: Approve and merge
         # if: ${{steps.metadata.outputs.update-type != 'version-update:semver-major'}}
