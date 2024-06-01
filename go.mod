@@ -8,7 +8,7 @@ require (
 	github.com/pankona/orderedmap v0.0.0-20190220081458-0d2a73efbdac
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.9.0
-	go.etcd.io/bbolt v1.3.9
+	go.etcd.io/bbolt v1.3.10
 	google.golang.org/grpc v1.63.2
 	google.golang.org/protobuf v1.34.1
 )
