@@ -16,7 +16,7 @@ type Client struct {
 }
 
 func (c *Client) withClient(f func(service.HashiraClient) error) error {
-	conn, err := grpc.Dial(c.Address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(c.Address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return errors.New("failed to Dial: " + err.Error())
 	}
