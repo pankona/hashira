@@ -1,0 +1,612 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>hashira&#x27;s design document</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="overview.html"><strong aria-hidden="true">2.</strong> Overview</a></li><li class="chapter-item expanded "><a href="communication/overview.html"><strong aria-hidden="true">3.</strong> Communication</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="communication/front2daemon.html"><strong aria-hidden="true">3.1.</strong> Front to daemon</a></li><li class="chapter-item expanded "><a href="communication/daemon2datastore.html"><strong aria-hidden="true">3.2.</strong> Daemon to database</a></li></ol></li><li class="chapter-item expanded "><a href="daemon/overview.html"><strong aria-hidden="true">4.</strong> Daemon</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="daemon/entity.html"><strong aria-hidden="true">4.1.</strong> Entity</a></li></ol></li><li class="chapter-item expanded "><a href="tables.html"><strong aria-hidden="true">5.</strong> DB tables</a></li><li class="chapter-item expanded "><a href="prototype.html"><strong aria-hidden="true">6.</strong> Prototype</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">hashira&#x27;s design document</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="table-of-contents"><a class="header" href="#table-of-contents">Table of contents</a></h1>
+<h1 id="summary"><a class="header" href="#summary">Summary</a></h1>
+<ul>
+<li><a href="README.html">Introduction</a></li>
+<li><a href="./overview.html">Overview</a></li>
+<li><a href="./communication/overview.html">Communication</a>
+<ul>
+<li><a href="./communication/front2daemon.html">Front to daemon</a></li>
+<li><a href="./communication/daemon2datastore.html">Daemon to database</a></li>
+</ul>
+</li>
+<li><a href="./daemon/overview.html">Daemon</a>
+<ul>
+<li><a href="./daemon/entity.html">Entity</a></li>
+</ul>
+</li>
+<li><a href="./tables.html">DB tables</a></li>
+<li><a href="./prototype.html">Prototype</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hashira-design-overview"><a class="header" href="#hashira-design-overview">hashira Design overview</a></h1>
+<h2 id="functions-of-hashira-on-pc"><a class="header" href="#functions-of-hashira-on-pc">Functions of hashira on PC</a></h2>
+<h3 id="cli-and-gui"><a class="header" href="#cli-and-gui">CLI and GUI</a></h3>
+<ul>
+<li>Add a new task and place it on Backlog</li>
+<li>Change status of tasks to ToDo, Doing, and Done</li>
+<li>Add interrupter task, place it on Doing directory</li>
+<li>Show list of tasks on each status</li>
+</ul>
+<h3 id="gui-specific"><a class="header" href="#gui-specific">GUI specific</a></h3>
+<ul>
+<li>Show chart to indicate how long time spent to current task</li>
+</ul>
+<h2 id="functions-of-hashira-on-android"><a class="header" href="#functions-of-hashira-on-android">Functions of hashira on Android</a></h2>
+<h3 id="application"><a class="header" href="#application">Application</a></h3>
+<ul>
+<li>Add a new task and place it on Backlog</li>
+<li>Change status of tasks to ToDo, Doing, and Done</li>
+<li>Add interrupter task, place it on Doing directory</li>
+<li>Show list of tasks on each status</li>
+</ul>
+<h3 id="widget"><a class="header" href="#widget">Widget</a></h3>
+<ul>
+<li>Add a new task and place it on Backlog</li>
+<li>Show list of tasks on Backlog</li>
+<li>Show current task and how long time spent to the task</li>
+</ul>
+<h2 id="functions-of-daemon"><a class="header" href="#functions-of-daemon">Functions of Daemon</a></h2>
+<ul>
+<li>It is for making hashira work even there's no network</li>
+<li>Daemon has database to cache the tasks and "commands"
+<ul>
+<li>"commands" means a unit of modifications to tasks.
+e.g) Add new task, move task to ToDo, and so on</li>
+<li>"commands" are used to sync with datastore</li>
+</ul>
+</li>
+<li>If network is available, then sync registered or changed tasks with cloud</li>
+</ul>
+<h2 id="functions-of-datastore"><a class="header" href="#functions-of-datastore">Functions of datastore</a></h2>
+<ul>
+<li>It is assumed to place on cloud. it is for syncing data between devices</li>
+<li>It accepts "commands" to add or modify tasks</li>
+<li>Daemon can retrieve chunk of commands with from-to query to reflect datastore's update to local database</li>
+</ul>
+<h2 id="modules"><a class="header" href="#modules">Modules</a></h2>
+<p><img src="mdbook-plantuml-img/b356288d94cf36c2c956a9219d6b5a174a0679ba.svg" alt="" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="communication"><a class="header" href="#communication">Communication</a></h1>
+<ul>
+<li>Use GRPC for communication between front and daemon</li>
+<li>Use GRPC for communication between daemon and datastore</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="communication-between-front-to-daemon"><a class="header" href="#communication-between-front-to-daemon">Communication between front to daemon</a></h1>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<ul>
+<li>hashira uses GRPC for communication between front and daemon</li>
+</ul>
+<h2 id="pc"><a class="header" href="#pc">PC</a></h2>
+<h3 id="cli-and-daemon"><a class="header" href="#cli-and-daemon">CLI and Daemon</a></h3>
+<ul>
+<li>CLI to Daemon
+<ul>
+<li>Add a new task to Backlog</li>
+<li>Change task's status</li>
+<li>Show task list</li>
+</ul>
+</li>
+<li>Daemon to CLI
+<ul>
+<li>None</li>
+</ul>
+</li>
+</ul>
+<h3 id="gui-and-daemon"><a class="header" href="#gui-and-daemon">GUI and Daemon</a></h3>
+<ul>
+<li>
+<p>Assume to use Electron</p>
+</li>
+<li>
+<p>GUI to daemon</p>
+<ul>
+<li>Add a new task to Backlog, ToDo, Doing, Done</li>
+<li>Change task's status</li>
+<li>Show task list on each status</li>
+<li>Show consume of each task</li>
+</ul>
+</li>
+<li>
+<p>Daemon to GUI</p>
+<ul>
+<li>notify any update of tasks</li>
+</ul>
+</li>
+<li>
+<p>TODO: Show GUI picture</p>
+</li>
+</ul>
+<h2 id="android"><a class="header" href="#android">Android</a></h2>
+<h3 id="application-and-daemon"><a class="header" href="#application-and-daemon">application and daemon</a></h3>
+<ul>
+<li>
+<p>GUI to Daemon</p>
+<ul>
+<li>Add a new task to Backlog, ToDo, Doing, Done</li>
+<li>Change task's status</li>
+<li>Show task list on each status</li>
+<li>Show consume of each task</li>
+</ul>
+</li>
+<li>
+<p>Daemon to GUI</p>
+<ul>
+<li>Notify any update of tasks</li>
+</ul>
+</li>
+<li>
+<p>TODO: Show GUI picture</p>
+</li>
+</ul>
+<h3 id="widget-and-daemon"><a class="header" href="#widget-and-daemon">Widget and Daemon</a></h3>
+<ul>
+<li>
+<p>Widget to Daemon</p>
+<ul>
+<li>Add a new task to Backlog</li>
+<li>Change task's status to Done</li>
+<li>Show task list</li>
+</ul>
+</li>
+<li>
+<p>Daemon to widget</p>
+<ul>
+<li>Notify any update of tasks</li>
+</ul>
+</li>
+<li>
+<p>TODO: Show GUI picture</p>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="communication-between-daemon-to-datastore"><a class="header" href="#communication-between-daemon-to-datastore">Communication between daemon to datastore</a></h1>
+<h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
+<ul>
+<li>Use GRPC for communication between daemon and datastore
+<ul>
+<li>Daemon send array of command, and datastore will apply them</li>
+<li>Daemon retrieves updates from datastore periodically for syncing</li>
+</ul>
+</li>
+</ul>
+<h2 id="grpc-apis"><a class="header" href="#grpc-apis">GRPC APIs</a></h2>
+<ul>
+<li>Use Hashira service. See <a href="communication/../daemon/overview.html">daemon overview</a>.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="overview-of-daemons-functionality"><a class="header" href="#overview-of-daemons-functionality">Overview of Daemon's functionality</a></h1>
+<ul>
+<li>Daemon has responsibility for
+<ul>
+<li>Receive requests from front end.</li>
+<li>Caches commands and reflect them to local document store for working without network.</li>
+<li>Send chunk of commands to datastore for syncing.</li>
+<li>Receive chunk of data to sync with datastore.</li>
+</ul>
+</li>
+</ul>
+<h2 id="caches-data-entities-on-local-document-store"><a class="header" href="#caches-data-entities-on-local-document-store">Caches data entities on local document store</a></h2>
+<ul>
+<li>Caches commands and reflect them to local document store for working without network.
+<ul>
+<li><a href="daemon/./entity.html">here</a> is data entities for local document store</li>
+</ul>
+</li>
+</ul>
+<h2 id="sync-with-datastore"><a class="header" href="#sync-with-datastore">Sync with datastore</a></h2>
+<ul>
+<li>Daemon has a document store to cache commands from front end, and store data from datastore.</li>
+<li>Periodically, daemon tries to perform syncing local data with datastore.
+<ul>
+<li>Send local commands, that are "not synced yet", to datastore.</li>
+<li>Retrieve chunk of data. They are JSON formatted and represent "1 week of data", for example.</li>
+<li>Daemon stores 10 weeks of data in local document store.</li>
+</ul>
+</li>
+</ul>
+<p><img src="daemon/../mdbook-plantuml-img/b9d8843abdb2735cbc2ef31cdf6cc5be7035e15f.svg" alt="" /></p>
+<h2 id="grpc-api"><a class="header" href="#grpc-api">GRPC API</a></h2>
+<ul>
+<li>
+<p>Hashira Service</p>
+<ul>
+<li>send(array of command)
+<ul>
+<li>sends specified commands.</li>
+</ul>
+</li>
+<li>retrieve(from, to (number of weeks)) array of task
+<ul>
+<li>returns array of task with specified term.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>command and related enumeration</p>
+</li>
+</ul>
+<p>what (enum)</p>
+<div class="table-wrapper"><table><thead><tr><th>enum</th><th>remarks</th></tr></thead><tbody>
+<tr><td>new</td><td>create a new task</td></tr>
+<tr><td>update</td><td>update state of a task</td></tr>
+</tbody></table>
+</div>
+<p>command (structure)</p>
+<div class="table-wrapper"><table><thead><tr><th>field</th><th>type</th><th>remarks</th></tr></thead><tbody>
+<tr><td>what</td><td>enum of what</td><td>new, update, etc.</td></tr>
+<tr><td>payload</td><td>string</td><td>JSON formatted string how to treat what.</td></tr>
+</tbody></table>
+</div>
+<h2 id="command-handling"><a class="header" href="#command-handling">Command handling</a></h2>
+<ul>
+<li>
+<p>When daemon receives commands, cache them and return ok immediately.</p>
+</li>
+<li>
+<p>If daemon is online, send cached commands to datastore.</p>
+</li>
+<li>
+<p>When datastore receives commands and succeed to apply them, datastore sends notification to daemon.</p>
+</li>
+<li>
+<p>At daemon receiving notification, retrieve chunk of data from datastore for syncing.</p>
+</li>
+<li>
+<p>When daemon succeed to apply them, daemon sends notification to front end.</p>
+</li>
+<li>
+<p>At front end receiving notification, retrieve chunk of data from daemon.</p>
+</li>
+<li>
+<p>When front end succeed to retrieve chunk of data, render them.</p>
+</li>
+<li>
+<p>If daemon is offline, postpone to send commands to datastore.</p>
+<ul>
+<li>Instead, daemon applies the cached commands to local document store,
+and send notification to front end as same as written above.</li>
+</ul>
+</li>
+</ul>
+<p><img src="daemon/../mdbook-plantuml-img/f3586f2bf96d39cc9734911942cc03d4b4137c1e.svg" alt="" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="data-entities-for-local-document-store"><a class="header" href="#data-entities-for-local-document-store">Data entities for local document store</a></h1>
+<ul>
+<li>
+<p>Two data entities are declared for local document store.</p>
+<ul>
+<li>Tasks</li>
+<li>Priorities</li>
+</ul>
+</li>
+<li>
+<p>Refer <a href="https://github.com/pankona/hashira/blob/master/proto/hashira.proto">proto file</a> for latest data entity declaration.</p>
+</li>
+</ul>
+<h2 id="tasks"><a class="header" href="#tasks">Tasks</a></h2>
+<ul>
+<li>Tasks represents each ToDo items.</li>
+</ul>
+<pre><code>message Task {
+    string id        = 1;
+    string name      = 2;
+    Place  place     = 3;
+    bool   isDeleted = 4;
+}
+</code></pre>
+<h2 id="priorities"><a class="header" href="#priorities">Priorities</a></h2>
+<ul>
+<li>Priorities represents priority of each task.
+<ul>
+<li>Priorities are represented as its place and array of task ID.</li>
+<li>The ID placed on lower index means higher priority.</li>
+</ul>
+</li>
+</ul>
+<pre><code>message Priority {
+    Place place         = 1;
+    repeated string ids = 2;
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="database-tables"><a class="header" href="#database-tables">Database tables</a></h1>
+<h2 id="user"><a class="header" href="#user">User</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>column</th><th>type</th><th>remarks</th></tr></thead><tbody>
+<tr><td>user_id</td><td>number</td><td>primary key, non-null, unique</td></tr>
+<tr><td>user_name</td><td>string</td><td>non-null, unique</td></tr>
+<tr><td>password</td><td>string</td><td>non-null</td></tr>
+</tbody></table>
+</div>
+<h2 id="task"><a class="header" href="#task">Task</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>column</th><th>type</th><th>remarks</th></tr></thead><tbody>
+<tr><td>task_id</td><td>number</td><td>primary key, non-null, unique</td></tr>
+<tr><td>task_name</td><td>string</td><td>non-null</td></tr>
+<tr><td>user_id</td><td>number</td><td>non-null</td></tr>
+<tr><td>status_id</td><td>number</td><td>non-null</td></tr>
+<tr><td>label_id</td><td>number</td><td>non-null</td></tr>
+<tr><td>done_at</td><td>time</td><td>non-null</td></tr>
+</tbody></table>
+</div>
+<ul>
+<li>task represents tasks and its status.</li>
+</ul>
+<h2 id="status"><a class="header" href="#status">Status</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>column</th><th>type</th><th>remarks</th></tr></thead><tbody>
+<tr><td>status_id</td><td>number</td><td>primary key, non-null, unique</td></tr>
+<tr><td>status_name</td><td>string</td><td>non-null, unique</td></tr>
+</tbody></table>
+</div>
+<ul>
+<li>status represents task's status. like "Backlog", "ToDo", "Doing" and "Done" will be inserted here.</li>
+</ul>
+<h2 id="consume"><a class="header" href="#consume">Consume</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>column</th><th>type</th><th>remarks</th></tr></thead><tbody>
+<tr><td>consume_id</td><td>number</td><td>primary key, non-null, unique</td></tr>
+<tr><td>task_id</td><td>number</td><td>non-null</td></tr>
+<tr><td>started_at</td><td>time</td><td>non-null</td></tr>
+<tr><td>finished_at</td><td>time</td><td>non-null</td></tr>
+<tr><td>consumed</td><td>time</td><td>non-null</td></tr>
+</tbody></table>
+</div>
+<ul>
+<li>consume represents how many times are consumed for specified task.</li>
+</ul>
+<h2 id="label"><a class="header" href="#label">Label</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>column</th><th>type</th><th>remarks</th></tr></thead><tbody>
+<tr><td>label_id</td><td>number</td><td>primary key, non-null, unique</td></tr>
+<tr><td>label_name</td><td>string</td><td>non-null</td></tr>
+</tbody></table>
+</div>
+<ul>
+<li>label represents task's label. this is used to task classification.</li>
+</ul>
+<h2 id="er-diagram"><a class="header" href="#er-diagram">ER diagram</a></h2>
+<p><img src="mdbook-plantuml-img/318b7e10f89ecde5b196f1d82d952bd7629d460b.svg" alt="" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="prototype"><a class="header" href="#prototype">Prototype</a></h1>
+<p>Here's design memorandum of hashira prototyping, for checking usability.</p>
+<h2 id="feature-notice-of-prototype-version"><a class="header" href="#feature-notice-of-prototype-version">Feature notice of prototype version</a></h2>
+<ul>
+<li>No performance/resource consideration</li>
+<li>front end is for linux PC only
+<ul>
+<li>CUI and GUI (may use astilectron)</li>
+</ul>
+</li>
+<li>No cloud syncing</li>
+<li>No "Doing" time calculation</li>
+<li>Daemon uses MySQL as DB</li>
+</ul>
+<h2 id="sequence-of-tweaking-tasks"><a class="header" href="#sequence-of-tweaking-tasks">Sequence of tweaking tasks</a></h2>
+<p><img src="mdbook-plantuml-img/35fa4c1648d5063cde4624ce5a91d67b790c002f.svg" alt="" /></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
