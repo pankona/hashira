@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - "docs/**"
+      - "docs/book"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -27,7 +27,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./docs
+          path: ./docs/book
   deploy:
     permissions:
       pages: write
