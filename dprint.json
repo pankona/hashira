@@ -11,8 +11,7 @@
     "**/node_modules",
     "**/*-lock.json",
     "dist",
-    "docs",
-    "docsrc"
+    "docs/book"
   ],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.85.1.wasm",
