@@ -932,12 +932,12 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@google-cloud/cloud-sql-connector@^1.2.3":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@google-cloud/cloud-sql-connector/-/cloud-sql-connector-1.3.0.tgz#ffab9e6f1f155d009e6d179a04a09aea7fcb38a3"
-  integrity sha512-PPJgqTliwkpdC3iMWgG/rjh17VGL/UEYLyvcMtfWCUtFQ+DQFr7UV8gxrDKM7H0d0yEjai32uBkd4fMuijPKjQ==
+"@google-cloud/cloud-sql-connector@^1.3.3":
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/@google-cloud/cloud-sql-connector/-/cloud-sql-connector-1.3.3.tgz#ba87617ae4db37120c642c14e97ccddcfdc7e121"
+  integrity sha512-Z/6haHca3bnaf1I2t/lmRgU5pCzGQTK6u9hMnD6a6sCL46QB4JRiBvRI5QMSPjnG8VYr1R7Wp1ZawvQJodEY6g==
   dependencies:
-    "@googleapis/sqladmin" "^16.0.0"
+    "@googleapis/sqladmin" "^19.0.0"
     gaxios "^6.1.1"
     google-auth-library "^9.2.0"
     p-throttle "^5.1.0"
@@ -965,16 +965,16 @@
   resolved "https://registry.yarnpkg.com/@google-cloud/promisify/-/promisify-4.0.0.tgz#a906e533ebdd0f754dca2509933334ce58b8c8b1"
   integrity sha512-Orxzlfb9c67A15cq2JQEyVc7wEsmFBmHjZWZYQMUyJ1qivXyMwdyNOs9odi79hze+2zqdTtu1E19IM/FtqZ10g==
 
-"@google-cloud/pubsub@^4.4.0":
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/@google-cloud/pubsub/-/pubsub-4.4.1.tgz#f5b065e7276677c98c5187c2159e5e22b6a1d016"
-  integrity sha512-OsNsadtM+/EhHijc8pIgf+GaqWIZIaizhq6p2mzK+lB7BRziV66ByMDO6EEtyqcdmqYh6MbQ39RZMEQocZsxPQ==
+"@google-cloud/pubsub@^4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@google-cloud/pubsub/-/pubsub-4.5.0.tgz#0c163038f4f00d40df1c21bfe1c1db87011a997e"
+  integrity sha512-ptRLLDrAp1rStD1n3ZrG8FdAfpccqI6M5rCaceF6PL7DU3hqJbvQ2Y91G8MKG7c7zK+jiWv655Qf5r2IvjTzwA==
   dependencies:
     "@google-cloud/paginator" "^5.0.0"
     "@google-cloud/precise-date" "^4.0.0"
     "@google-cloud/projectify" "^4.0.0"
     "@google-cloud/promisify" "^4.0.0"
-    "@opentelemetry/api" "^1.6.0"
+    "@opentelemetry/api" "~1.8.0"
     "@opentelemetry/semantic-conventions" "~1.21.0"
     arrify "^2.0.0"
     extend "^3.0.2"
@@ -985,10 +985,10 @@
     lodash.snakecase "^4.1.1"
     p-defer "^3.0.0"
 
-"@googleapis/sqladmin@^16.0.0":
-  version "16.1.0"
-  resolved "https://registry.yarnpkg.com/@googleapis/sqladmin/-/sqladmin-16.1.0.tgz#970f0ff3a699b06470744c163a2ccf81b387c2df"
-  integrity sha512-88Y0pvkuLfiEAPu5NwTi4tkbdWwzmKR9bdlM4p9MTRIQ+tYt6H39qDoXTRlnBp1eO2xnQ5NRXofZFNycK7D08w==
+"@googleapis/sqladmin@^19.0.0":
+  version "19.0.0"
+  resolved "https://registry.yarnpkg.com/@googleapis/sqladmin/-/sqladmin-19.0.0.tgz#fd8064fb7270060f4b62f6a0fb2f0fd85b29311b"
+  integrity sha512-65zgEpQLhpTZqUic+pm4BbdDByN9NsHkphfCIwzpx3fccHPc6OuKsW0XexYCq9oTUtTC4QRjFisBDLV9fChRtg==
   dependencies:
     googleapis-common "^7.0.0"
 
@@ -1166,7 +1166,7 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@opentelemetry/api@^1.6.0":
+"@opentelemetry/api@~1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/api/-/api-1.8.0.tgz#5aa7abb48f23f693068ed2999ae627d2f7d902ec"
   integrity sha512-I/s6F7yKUDdtMsoBWXJe8Qz40Tui5vsuKCWJEWVL+5q9sSWRzzx6v2KeNsOBEwd94j0eWkpWCH4yB6rZg9Mf0w==
@@ -1647,10 +1647,10 @@ ast-types@^0.13.2:
   dependencies:
     tslib "^2.0.1"
 
-async-lock@1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/async-lock/-/async-lock-1.3.2.tgz#56668613f91c1c55432b4db73e65c9ced664e789"
-  integrity sha512-phnXdS3RP7PPcmP6NWWzWMU0sLTeyvtZCxBPpZdkYE3seGLKSQZs9FrmVO/qwypq98FUtWWUEYxziLkdGk5nnA==
+async-lock@1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/async-lock/-/async-lock-1.4.1.tgz#56b8718915a9b68b10fce2f2a9a3dddf765ef53f"
+  integrity sha512-Az2ZTpuytrtqENulXwO3GGv1Bztugx6TT37NIo7imr/Qo0gsYiGtSdBa2B6fsXhTpVZDNfu1Qn3pk531e3q+nQ==
 
 async@^2.6.4:
   version "2.6.4"
@@ -1944,10 +1944,10 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
-chokidar@^3.0.2:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.2.tgz#dba3976fcadb016f66fd365021d91600d01c1e75"
-  integrity sha512-ekGhOnNVPgT77r4K/U3GDhu+FQ2S8TnK/s2KbIGXi0SZWuwkZ2QNyfWdZW+TVfn84DpEP7rLeCt2UI6bJ8GwbQ==
+chokidar@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.6.0.tgz#197c6cc669ef2a8dc5e7b4d97ee4e092c3eb0d5b"
+  integrity sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==
   dependencies:
     anymatch "~3.1.2"
     braces "~3.0.2"
@@ -2724,7 +2724,7 @@ exegesis-express@^4.0.0:
   dependencies:
     exegesis "^4.1.0"
 
-exegesis@^4.1.0, exegesis@^4.1.2:
+exegesis@^4.1.0, exegesis@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/exegesis/-/exegesis-4.2.0.tgz#2d248542b3c58a3c51f33fe9f05be1da1d908b4a"
   integrity sha512-MOzRyqhvl+hTA4+W4p0saWRIPlu0grIx4ykjMEYgGLiqr/z9NCIlwSq2jF0gyxNjPZD3xyHgmkW6BSaLVUdctg==
@@ -2894,19 +2894,19 @@ finalhandler@1.2.0, finalhandler@~1.2.0:
     statuses "2.0.1"
     unpipe "~1.0.0"
 
-firebase-tools@^13.12.0:
-  version "13.12.0"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-13.12.0.tgz#7b1ae1925367d932617839bde71af916c20b35fb"
-  integrity sha512-hr3rqrWeeiNshVzmVSeQkCOSGUSKMxZs+ztairg4r6wteGUOVz56DrYsDMTUxjqH5zPxz5pxK9cvJi4M4ER13g==
+firebase-tools@^13.14.2:
+  version "13.14.2"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-13.14.2.tgz#bd7dbd72c239da1fccda8ad3916af456d777541f"
+  integrity sha512-JK8oJdVnBQDFh2UfA1qA3ULDKD6vwIFvVDXvkQXpxLG1wqnBU55Y+KgKpRwWNcE7lYEYohsXFIney3wMgOkszw==
   dependencies:
-    "@google-cloud/cloud-sql-connector" "^1.2.3"
-    "@google-cloud/pubsub" "^4.4.0"
+    "@google-cloud/cloud-sql-connector" "^1.3.3"
+    "@google-cloud/pubsub" "^4.5.0"
     abort-controller "^3.0.0"
     ajv "^6.12.6"
     archiver "^7.0.0"
-    async-lock "1.3.2"
+    async-lock "1.4.1"
     body-parser "^1.19.0"
-    chokidar "^3.0.2"
+    chokidar "^3.6.0"
     cjson "^0.3.1"
     cli-table "0.3.11"
     colorette "^2.0.19"
@@ -2917,16 +2917,16 @@ firebase-tools@^13.12.0:
     cross-spawn "^7.0.3"
     csv-parse "^5.0.4"
     deep-equal-in-any-order "^2.0.6"
-    exegesis "^4.1.2"
+    exegesis "^4.2.0"
     exegesis-express "^4.0.0"
     express "^4.16.4"
     filesize "^6.1.0"
     form-data "^4.0.0"
     fs-extra "^10.1.0"
     fuzzy "^0.1.3"
-    gaxios "^6.1.1"
+    gaxios "^6.7.0"
     glob "^10.4.1"
-    google-auth-library "^9.7.0"
+    google-auth-library "^9.11.0"
     inquirer "^8.2.6"
     inquirer-autocomplete-prompt "^2.0.1"
     jsonwebtoken "^9.0.0"
@@ -3104,16 +3104,16 @@ gauge@^4.0.3:
     strip-ansi "^6.0.1"
     wide-align "^1.1.5"
 
-gaxios@^6.0.0, gaxios@^6.0.3, gaxios@^6.1.1:
-  version "6.6.0"
-  resolved "https://registry.yarnpkg.com/gaxios/-/gaxios-6.6.0.tgz#af8242fff0bbb82a682840d5feaa91b6a1c58be4"
-  integrity sha512-bpOZVQV5gthH/jVCSuYuokRo2bTKOcuBiVWpjmTn6C5Agl5zclGfTljuGsQZxwwDBkli+YhZhP4TdlqTnhOezQ==
+gaxios@^6.0.0, gaxios@^6.0.3, gaxios@^6.1.1, gaxios@^6.7.0:
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/gaxios/-/gaxios-6.7.0.tgz#37b7c5961cb67d8d4b0ae8110dcd83cc6791eb6d"
+  integrity sha512-DSrkyMTfAnAm4ks9Go20QGOcXEyW/NmZhvTYBU2rb4afBB393WIMQPWPEDMl/k8xqiNN9HYq2zao3oWXsdl2Tg==
   dependencies:
     extend "^3.0.2"
     https-proxy-agent "^7.0.1"
     is-stream "^2.0.0"
     node-fetch "^2.6.9"
-    uuid "^9.0.1"
+    uuid "^10.0.0"
 
 gcp-metadata@^6.1.0:
   version "6.1.0"
@@ -3236,10 +3236,10 @@ globals@^11.1.0:
   resolved "https://registry.yarnpkg.com/globals/-/globals-11.12.0.tgz#ab8795338868a0babd8525758018c2a7eb95c42e"
   integrity sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==
 
-google-auth-library@^9.2.0, google-auth-library@^9.3.0, google-auth-library@^9.7.0:
-  version "9.10.0"
-  resolved "https://registry.yarnpkg.com/google-auth-library/-/google-auth-library-9.10.0.tgz#c9fb940923f7ff2569d61982ee1748578c0bbfd4"
-  integrity sha512-ol+oSa5NbcGdDqA+gZ3G3mev59OHBZksBTxY/tYwjtcp1H/scAFwJfSQU9/1RALoyZ7FslNbke8j4i3ipwlyuQ==
+google-auth-library@^9.11.0, google-auth-library@^9.2.0, google-auth-library@^9.3.0, google-auth-library@^9.7.0:
+  version "9.13.0"
+  resolved "https://registry.yarnpkg.com/google-auth-library/-/google-auth-library-9.13.0.tgz#0735ecdc33d350699dbf3ff48601a856911bbcff"
+  integrity sha512-p9Y03Uzp/Igcs36zAaB0XTSwZ8Y0/tpYiz5KIde5By+H9DCVUSYtDWZu6aFXsWTqENMb8BD/pDT3hR8NVrPkfA==
   dependencies:
     base64-js "^1.3.0"
     ecdsa-sig-formatter "^1.0.11"
