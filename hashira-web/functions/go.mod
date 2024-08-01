@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/firestore v1.16.0
 	firebase.google.com/go/v4 v4.14.1
 	github.com/google/go-cmp v0.6.0
-	google.golang.org/grpc v1.64.1
+	google.golang.org/grpc v1.65.0
 )
 
 require (
