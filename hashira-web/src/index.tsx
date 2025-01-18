@@ -1,14 +1,19 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { Normalize } from "styled-normalize";
+import { createGlobalStyle } from "styled-components";
+import { normalize } from "styled-normalize";
 import Router from "./Router";
 import { assertIsDefined } from "./types";
+
+const GlobalStyle = createGlobalStyle`
+  ${normalize}
+`;
 
 const rootElement = document.getElementById("app");
 assertIsDefined(rootElement);
 createRoot(rootElement).render(
   <React.StrictMode>
-    <Normalize />
+    <GlobalStyle />
     <Router />
   </React.StrictMode>,
 );
