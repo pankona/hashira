@@ -51,7 +51,7 @@ const StyledArrow = styled.div`
   font-size: 12px;
 `;
 
-export const TaskList: React.VFC<{
+export const TaskList: React.FC<{
   place: typeof firebase.Places[number];
   tasksAndPriorities: firebase.TasksAndPriorities;
   checkedTasks: { [key: string]: boolean };
@@ -111,7 +111,7 @@ export const TaskList: React.VFC<{
 
   const convertTasksAndPrioritiesToJSXElement = (
     tasksAndPriorities: firebase.TasksAndPriorities,
-  ): JSX.Element[] => {
+  ): React.ReactElement[] => {
     if (!tasksAndPriorities["Priority"][place]) {
       return noItem;
     }

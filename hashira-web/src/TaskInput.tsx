@@ -7,7 +7,7 @@ const StyledInputForm = styled.form`
   display: flex;
 `;
 
-const TaskInput: React.VFC<{
+const TaskInput: React.FC<{
   onSubmitTasks: (tasks: string[]) => Promise<void>;
   disabled: boolean;
 }> = ({ onSubmitTasks, disabled }) => {
