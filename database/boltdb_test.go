@@ -34,7 +34,7 @@ func TestBoltDBInitialize(t *testing.T) {
 	var filename string
 	teardown, err := setup(&filename)
 	if err != nil {
-		t.Fatalf("setup failed: " + err.Error())
+		t.Fatalf("setup failed: %v", err)
 	}
 	defer teardown()
 
@@ -57,7 +57,7 @@ func TestBoltDBSaveLoad(t *testing.T) {
 	var filename string
 	teardown, err := setup(&filename)
 	if err != nil {
-		t.Fatalf("setup failed: " + err.Error())
+		t.Fatalf("setup failed: %v", err)
 	}
 	defer teardown()
 
@@ -86,7 +86,7 @@ func TestBoltDBSaveLoadWithoutID(t *testing.T) {
 	var filename string
 	teardown, err := setup(&filename)
 	if err != nil {
-		t.Fatalf("setup failed: " + err.Error())
+		t.Fatalf("setup failed: %v", err)
 	}
 	defer teardown()
 

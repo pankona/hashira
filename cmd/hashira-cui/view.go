@@ -361,7 +361,7 @@ func (v *View) showInput(g *gocui.Gui) error {
 			input.Title = "New task?"
 		} else {
 			input.Title = "Update task?"
-			_, err = fmt.Fprintf(input, v.editingTask.Name)
+			_, err = fmt.Fprintf(input, "%s", v.editingTask.Name)
 			if err != nil {
 				return fmt.Errorf("failed to write on input view for update: %s", err)
 			}
