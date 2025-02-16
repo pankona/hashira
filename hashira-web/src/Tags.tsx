@@ -1,10 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import * as firebase from "./firebase";
 import Header from "./Header";
 import { useFetchTasksAndPriorities, useUpdateTasks } from "./hooks";
 import { StyledVerticalSpacer } from "./styles";
-import { useNavigate } from "react-router-dom";
 
 const StyledTagList = styled.div`
   padding: 16px;
@@ -151,7 +151,7 @@ const Tags: React.FC<{ user: firebase.User | null | undefined }> = ({
 
     const tasksToUpdate: firebase.TasksObject = {};
     const tagInfo = extractTags.find((t) => t.name === oldTag);
-    
+
     if (!tagInfo) return;
 
     tagInfo.tasks.forEach(({ id, text }) => {
@@ -213,60 +213,62 @@ const Tags: React.FC<{ user: firebase.User | null | undefined }> = ({
       <StyledTagList>
         <h2>Tags</h2>
         <StyledVerticalSpacer />
-        {extractTags.length === 0 ? (
-          <div>No tags found. Add tags to your tasks by including #tag in the task text.</div>
-        ) : (
-          extractTags.map((tag) => (
-            <StyledTagItem key={tag.name}>
-              {editingTag === tag.name ? (
-                <StyledEditForm>
-                  <span style={{ color: "#666" }}>{getHashPrefix(tag.name)}</span>
-                  <StyledInput
-                    type="text"
-                    value={newTagName}
-                    onChange={(e) => {
-                      setNewTagName(e.target.value);
-                    }}
-                    autoFocus
-                  />
-                  <StyledButton
-                    onClick={() => handleTagEdit(tag.name, newTagName)}
-                    disabled={!newTagName || ("#" + newTagName === tag.name)}
-                    title="Save"
-                  >
-                    ✓
-                  </StyledButton>
-                  <StyledButton
-                    onClick={() => {
-                      setEditingTag(null);
-                      setNewTagName("");
-                    }}
-                    title="Cancel"
-                  >
-                    ✕
-                  </StyledButton>
-                </StyledEditForm>
-              ) : (
-                <>
-                  <StyledTagName onClick={() => handleTagClick(tag.name)}>{tag.name}</StyledTagName>
-                  <StyledTaskCount>({tag.taskCount} tasks)</StyledTaskCount>
-                  <StyledButton
-                    onClick={() => {
-                      setEditingTag(tag.name);
-                      setNewTagName(removeHashPrefix(tag.name));
-                    }}
-                    title="Edit tag"
-                  >
-                    ✎
-                  </StyledButton>
-                </>
-              )}
-            </StyledTagItem>
-          ))
-        )}
+        {extractTags.length === 0
+          ? <div>No tags found. Add tags to your tasks by including #tag in the task text.</div>
+          : (
+            extractTags.map((tag) => (
+              <StyledTagItem key={tag.name}>
+                {editingTag === tag.name
+                  ? (
+                    <StyledEditForm>
+                      <span style={{ color: "#666" }}>{getHashPrefix(tag.name)}</span>
+                      <StyledInput
+                        type="text"
+                        value={newTagName}
+                        onChange={(e) => {
+                          setNewTagName(e.target.value);
+                        }}
+                        autoFocus
+                      />
+                      <StyledButton
+                        onClick={() => handleTagEdit(tag.name, newTagName)}
+                        disabled={!newTagName || ("#" + newTagName === tag.name)}
+                        title="Save"
+                      >
+                        ✓
+                      </StyledButton>
+                      <StyledButton
+                        onClick={() => {
+                          setEditingTag(null);
+                          setNewTagName("");
+                        }}
+                        title="Cancel"
+                      >
+                        ✕
+                      </StyledButton>
+                    </StyledEditForm>
+                  )
+                  : (
+                    <>
+                      <StyledTagName onClick={() => handleTagClick(tag.name)}>{tag.name}</StyledTagName>
+                      <StyledTaskCount>({tag.taskCount} tasks)</StyledTaskCount>
+                      <StyledButton
+                        onClick={() => {
+                          setEditingTag(tag.name);
+                          setNewTagName(removeHashPrefix(tag.name));
+                        }}
+                        title="Edit tag"
+                      >
+                        ✎
+                      </StyledButton>
+                    </>
+                  )}
+              </StyledTagItem>
+            ))
+          )}
       </StyledTagList>
     </div>
   );
 };
 
-export default Tags; 
+export default Tags;
