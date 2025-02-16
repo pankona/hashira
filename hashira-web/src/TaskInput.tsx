@@ -10,8 +10,10 @@ const StyledInputForm = styled.form`
 const TaskInput: React.FC<{
   onSubmitTasks: (tasks: string[]) => Promise<void>;
   disabled: boolean;
-}> = ({ onSubmitTasks, disabled }) => {
+  onFilterChange: (filter: string) => void;
+}> = ({ onSubmitTasks, disabled, onFilterChange }) => {
   const [tasks, setTasks] = React.useState<string[]>([]);
+  const [filter, setFilter] = React.useState<string>("");
 
   return (
     <StyledInputForm>
@@ -34,6 +36,16 @@ const TaskInput: React.FC<{
           e.preventDefault();
           await onSubmitTasks(tasks);
           setTasks([]);
+        }}
+      />
+      <StyledHorizontalSpacer />
+      <input
+        type="text"
+        placeholder="Filter tasks"
+        value={filter}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          setFilter(e.target.value);
+          onFilterChange(e.target.value);
         }}
       />
     </StyledInputForm>
