@@ -6,6 +6,7 @@ import { useAddTasks, useFetchTasksAndPriorities, useUpdateTasks } from "./hooks
 import { StyledHorizontalSpacer, StyledVerticalSpacer } from "./styles";
 import TaskInput from "./TaskInput";
 import { TaskList } from "./TaskList";
+import SearchBar from "./SearchBar"; // Import the SearchBar component
 
 const StyledBody = styled.div`
   padding-left: 8px;
@@ -19,6 +20,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
     [key: string]: boolean;
   }>({});
   const [mode, setMode] = React.useState<"move" | "select">("select");
+  const [searchKeyword, setSearchKeyword] = React.useState<string>(""); // State to store the search keyword
 
   const [addTasksState, addTasks] = useAddTasks();
   const [updateTasksState, updateTasks] = useUpdateTasks();
@@ -144,10 +146,14 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
       <Header user={user} />
       <StyledBody>
         {user !== null && (
-          <TaskInput
-            onSubmitTasks={onSubmitTasks}
-            disabled={isLoading || !user}
-          />
+          <>
+            <SearchBar onSearch={setSearchKeyword} /> {/* Add the SearchBar component */}
+            <StyledVerticalSpacer />
+            <TaskInput
+              onSubmitTasks={onSubmitTasks}
+              disabled={isLoading || !user}
+            />
+          </>
         )}
         <StyledVerticalSpacer />
         {(() => {
@@ -235,6 +241,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                       onEditTasks={onEditTasks}
                       mode={mode}
                       onMoveTask={onMoveTask}
+                      searchKeyword={searchKeyword} // Pass the search keyword to TaskList
                     />
                     <TaskList
                       place={"TODO"}
@@ -244,6 +251,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                       onEditTasks={onEditTasks}
                       mode={mode}
                       onMoveTask={onMoveTask}
+                      searchKeyword={searchKeyword} // Pass the search keyword to TaskList
                     />
                     <TaskList
                       place={"DOING"}
@@ -253,6 +261,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                       onEditTasks={onEditTasks}
                       mode={mode}
                       onMoveTask={onMoveTask}
+                      searchKeyword={searchKeyword} // Pass the search keyword to TaskList
                     />
                     <TaskList
                       place={"DONE"}
@@ -262,6 +271,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                       onEditTasks={onEditTasks}
                       mode={mode}
                       onMoveTask={onMoveTask}
+                      searchKeyword={searchKeyword} // Pass the search keyword to TaskList
                     />
                   </div>
                 )

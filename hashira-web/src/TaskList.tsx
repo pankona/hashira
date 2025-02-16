@@ -59,6 +59,7 @@ export const TaskList: React.FC<{
   onEditTasks: (tasks: firebase.TasksObject) => Promise<void>;
   mode: "move" | "select";
   onMoveTask: (taskId: string, direction: "left" | "right") => Promise<void>;
+  searchKeyword: string; // Accept search keyword as a prop
 }> = ({
   place,
   tasksAndPriorities,
@@ -67,6 +68,7 @@ export const TaskList: React.FC<{
   onEditTasks,
   mode,
   onMoveTask,
+  searchKeyword, // Destructure search keyword prop
 }) => {
   const [updatedTasks, setUpdatedTasks] = React.useState<{
     [key: string]: string;
@@ -122,7 +124,20 @@ export const TaskList: React.FC<{
       return noItem;
     }
 
-    return filteredItems.map((p: string) => {
+    // Split the search keyword by spaces and use AND condition to filter tasks
+    const searchKeywords = searchKeyword.split(" ").filter(Boolean);
+    const filteredTasks = filteredItems.filter((taskId) => {
+      const taskName = tasksAndPriorities["Tasks"][taskId].Name.toLowerCase();
+      return searchKeywords.every((keyword) =>
+        taskName.includes(keyword.toLowerCase())
+      );
+    });
+
+    if (filteredTasks.length === 0) {
+      return noItem;
+    }
+
+    return filteredTasks.map((p: string) => {
       const taskId = tasksAndPriorities["Tasks"][p].ID;
       const taskName = tasksAndPriorities["Tasks"][p].Name;
       return (
