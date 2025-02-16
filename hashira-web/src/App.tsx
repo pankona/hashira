@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import * as firebase from "./firebase";
 import Header from "./Header";
-import { useAddTasks, useFetchTasksAndPriorities, useUpdateTasks } from "./hooks";
+import { useAddTasks, useFetchTasksAndPriorities, useUpdateTasks, useFilteredTasks } from "./hooks";
 import { StyledHorizontalSpacer, StyledVerticalSpacer } from "./styles";
 import TaskInput from "./TaskInput";
 import { TaskList } from "./TaskList";
@@ -19,6 +19,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
     [key: string]: boolean;
   }>({});
   const [mode, setMode] = React.useState<"move" | "select">("select");
+  const [filter, setFilter] = React.useState<string>("");
 
   const [addTasksState, addTasks] = useAddTasks();
   const [updateTasksState, updateTasks] = useUpdateTasks();
@@ -28,6 +29,8 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
   const isLoading = addTasksState.isLoading
     || updateTasksState.isLoading
     || fetchTasksAndPrioritiesState.isLoading;
+
+  const filteredTasks = useFilteredTasks(tasksAndPriorities ? tasksAndPriorities.Tasks : [], filter);
 
   const onSubmitTasks = React.useCallback(
     (tasks: string[]) => {
@@ -218,6 +221,13 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                 />
               </div>
               <StyledVerticalSpacer />
+              <input
+                type="text"
+                placeholder="Filter tasks"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+              />
+              <StyledVerticalSpacer />
               {tasksAndPriorities
                 ? (
                   <div
@@ -229,7 +239,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                   >
                     <TaskList
                       place={"BACKLOG"}
-                      tasksAndPriorities={tasksAndPriorities}
+                      tasksAndPriorities={{ ...tasksAndPriorities, Tasks: filteredTasks }}
                       checkedTasks={checkedTasks}
                       setCheckedTasks={setCheckedTasks}
                       onEditTasks={onEditTasks}
@@ -238,7 +248,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                     />
                     <TaskList
                       place={"TODO"}
-                      tasksAndPriorities={tasksAndPriorities}
+                      tasksAndPriorities={{ ...tasksAndPriorities, Tasks: filteredTasks }}
                       checkedTasks={checkedTasks}
                       setCheckedTasks={setCheckedTasks}
                       onEditTasks={onEditTasks}
@@ -247,7 +257,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                     />
                     <TaskList
                       place={"DOING"}
-                      tasksAndPriorities={tasksAndPriorities}
+                      tasksAndPriorities={{ ...tasksAndPriorities, Tasks: filteredTasks }}
                       checkedTasks={checkedTasks}
                       setCheckedTasks={setCheckedTasks}
                       onEditTasks={onEditTasks}
@@ -256,7 +266,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                     />
                     <TaskList
                       place={"DONE"}
-                      tasksAndPriorities={tasksAndPriorities}
+                      tasksAndPriorities={{ ...tasksAndPriorities, Tasks: filteredTasks }}
                       checkedTasks={checkedTasks}
                       setCheckedTasks={setCheckedTasks}
                       onEditTasks={onEditTasks}
