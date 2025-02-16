@@ -59,6 +59,7 @@ export const TaskList: React.FC<{
   onEditTasks: (tasks: firebase.TasksObject) => Promise<void>;
   mode: "move" | "select";
   onMoveTask: (taskId: string, direction: "left" | "right") => Promise<void>;
+  filterText: string;
 }> = ({
   place,
   tasksAndPriorities,
@@ -67,6 +68,7 @@ export const TaskList: React.FC<{
   onEditTasks,
   mode,
   onMoveTask,
+  filterText,
 }) => {
   const [updatedTasks, setUpdatedTasks] = React.useState<{
     [key: string]: string;
@@ -115,9 +117,16 @@ export const TaskList: React.FC<{
     if (!tasksAndPriorities["Priority"][place]) {
       return noItem;
     }
-    const filteredItems = tasksAndPriorities["Priority"][place].filter(
-      (v: string) => tasksAndPriorities["Tasks"][v],
-    );
+    const filteredItems = tasksAndPriorities["Priority"][place]
+      .filter((v: string) => tasksAndPriorities["Tasks"][v])
+      .filter((v: string) => {
+        if (!filterText) return true;
+        const taskName = tasksAndPriorities["Tasks"][v].Name.toLowerCase();
+        return filterText.toLowerCase().split(" ").every(word => 
+          taskName.includes(word.trim())
+        );
+      });
+
     if (filteredItems.length === 0) {
       return noItem;
     }
