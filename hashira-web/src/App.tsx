@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import * as firebase from "./firebase";
 import Header from "./Header";
-import { useAddTasks, useFetchTasksAndPriorities, useUpdateTasks, useFilteredTasks } from "./hooks";
+import { useAddTasks, useFetchTasksAndPriorities, useFilteredTasks, useUpdateTasks } from "./hooks";
 import { StyledHorizontalSpacer, StyledVerticalSpacer } from "./styles";
 import TaskInput from "./TaskInput";
 import { TaskList } from "./TaskList";
@@ -150,6 +150,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
           <TaskInput
             onSubmitTasks={onSubmitTasks}
             disabled={isLoading || !user}
+            onFilterChange={setFilter}
           />
         )}
         <StyledVerticalSpacer />
@@ -220,13 +221,6 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                   }}
                 />
               </div>
-              <StyledVerticalSpacer />
-              <input
-                type="text"
-                placeholder="Filter tasks"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-              />
               <StyledVerticalSpacer />
               {tasksAndPriorities
                 ? (
