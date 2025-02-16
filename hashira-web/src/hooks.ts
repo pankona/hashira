@@ -195,15 +195,3 @@ export const useUser = () => {
 
   return state;
 };
-
-export const useFilteredTasks = (tasks: any, filter: string): any => {
-  return React.useMemo(() => {
-    if (!filter) return tasks;
-
-    const filterWords = filter.split(" ").map(word => word.toLowerCase());
-
-    return tasks.filter((task: any) => {
-      return filterWords.every(word => task.name.toLowerCase().includes(word));
-    });
-  }, [tasks, filter]);
-};
