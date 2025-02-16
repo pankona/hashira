@@ -195,3 +195,11 @@ export const useUser = () => {
 
   return state;
 };
+
+export const useSearchKeyword = (): [
+  string,
+  React.Dispatch<React.SetStateAction<string>>,
+] => {
+  const [searchKeyword, setSearchKeyword] = React.useState<string>("");
+  return [searchKeyword, setSearchKeyword];
+};

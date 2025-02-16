@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AccessToken from "./AccessToken";
 import App from "./App";
 import { useUser } from "./hooks";
+import SearchBar from "./SearchBar"; // Import the SearchBar component
 
 const Router: React.FC = () => {
   const user = useUser();
@@ -25,6 +26,7 @@ const Router: React.FC = () => {
       <Routes>
         <Route path="/" element={<App user={user} />} />
         <Route path="/accesstokens" element={<AccessToken user={user} />} />
+        <Route path="/search" element={<SearchBar onSearch={() => {}} />} /> {/* Add a route for the SearchBar component */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
