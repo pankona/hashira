@@ -146,7 +146,7 @@ const Tags: React.FC<{ user: firebase.User | null | undefined }> = ({
     if (!user || !tasksAndPriorities) return;
 
     // 新しいタグ名に # を付与
-    const newTagWithHash = '#' + newTag;
+    const newTagWithHash = "#" + newTag;
     if (oldTag === newTagWithHash) return;
 
     const tasksToUpdate: firebase.TasksObject = {};
@@ -159,7 +159,7 @@ const Tags: React.FC<{ user: firebase.User | null | undefined }> = ({
       // タグをそのまま置換（# の数を含めて置換）
       tasksToUpdate[id] = {
         ...task,
-        Name: text.replace(new RegExp(oldTag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), "g"), newTagWithHash),
+        Name: text.replace(new RegExp(oldTag.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"), newTagWithHash),
       };
     });
 
@@ -176,12 +176,12 @@ const Tags: React.FC<{ user: firebase.User | null | undefined }> = ({
   // タグ名から # プレフィックスを取得
   const getHashPrefix = (tagName: string) => {
     const match = tagName.match(/^#+/);
-    return match ? match[0] : '#';
+    return match ? match[0] : "#";
   };
 
   // タグ名から # プレフィックスを除去
   const removeHashPrefix = (tagName: string) => {
-    return tagName.replace(/^#+/, '');
+    return tagName.replace(/^#+/, "");
   };
 
   const handleTagClick = (tagName: string) => {
@@ -231,7 +231,7 @@ const Tags: React.FC<{ user: firebase.User | null | undefined }> = ({
                   />
                   <StyledButton
                     onClick={() => handleTagEdit(tag.name, newTagName)}
-                    disabled={!newTagName || ('#' + newTagName === tag.name)}
+                    disabled={!newTagName || ("#" + newTagName === tag.name)}
                     title="Save"
                   >
                     ✓
