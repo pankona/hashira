@@ -122,9 +122,7 @@ export const TaskList: React.FC<{
       .filter((v: string) => {
         if (!filterText) return true;
         const taskName = tasksAndPriorities["Tasks"][v].Name.toLowerCase();
-        return filterText.toLowerCase().split(" ").every(word => 
-          taskName.includes(word.trim())
-        );
+        return filterText.toLowerCase().split(" ").every(word => taskName.includes(word.trim()));
       });
 
     if (filteredItems.length === 0) {
