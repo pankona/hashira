@@ -19,6 +19,15 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
     [key: string]: boolean;
   }>({});
   const [mode, setMode] = React.useState<"move" | "select">("select");
+  const [filterText, setFilterText] = React.useState<string>(() => {
+    const savedFilter = localStorage.getItem("hashira-filter-text");
+    return savedFilter || "";
+  });
+
+  // フィルターテキストが変更されたときにローカルストレージに保存
+  React.useEffect(() => {
+    localStorage.setItem("hashira-filter-text", filterText);
+  }, [filterText]);
 
   const [addTasksState, addTasks] = useAddTasks();
   const [updateTasksState, updateTasks] = useUpdateTasks();
@@ -144,10 +153,23 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
       <Header user={user} />
       <StyledBody>
         {user !== null && (
-          <TaskInput
-            onSubmitTasks={onSubmitTasks}
-            disabled={isLoading || !user}
-          />
+          <>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <TaskInput
+                onSubmitTasks={onSubmitTasks}
+                disabled={isLoading || !user}
+              />
+              <StyledHorizontalSpacer />
+              <input
+                type="text"
+                placeholder="Filter tasks..."
+                value={filterText}
+                onChange={(e) => setFilterText(e.target.value)}
+                style={{ minWidth: "200px", height: "24px" }}
+              />
+            </div>
+            <StyledVerticalSpacer />
+          </>
         )}
         <StyledVerticalSpacer />
         {(() => {
@@ -235,6 +257,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                       onEditTasks={onEditTasks}
                       mode={mode}
                       onMoveTask={onMoveTask}
+                      filterText={filterText}
                     />
                     <TaskList
                       place={"TODO"}
@@ -244,6 +267,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                       onEditTasks={onEditTasks}
                       mode={mode}
                       onMoveTask={onMoveTask}
+                      filterText={filterText}
                     />
                     <TaskList
                       place={"DOING"}
@@ -253,6 +277,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                       onEditTasks={onEditTasks}
                       mode={mode}
                       onMoveTask={onMoveTask}
+                      filterText={filterText}
                     />
                     <TaskList
                       place={"DONE"}
@@ -262,6 +287,7 @@ const App: React.FC<{ user: firebase.User | null | undefined }> = ({
                       onEditTasks={onEditTasks}
                       mode={mode}
                       onMoveTask={onMoveTask}
+                      filterText={filterText}
                     />
                   </div>
                 )
