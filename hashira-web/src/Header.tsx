@@ -65,6 +65,12 @@ const Header: React.FC<{
               return (
                 <>
                   <div
+                    onClick={() => navigate("/tags")}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Tags
+                  </div>
+                  <div
                     onClick={() => navigate("/accesstokens")}
                     style={{ cursor: "pointer" }}
                   >
