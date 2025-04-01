@@ -2574,10 +2574,10 @@ finalhandler@~1.2.0:
     statuses "2.0.1"
     unpipe "~1.0.0"
 
-firebase-tools@^13.32.0:
-  version "13.32.0"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-13.32.0.tgz#c85a3e0abdf24922bc3dd95425932ff4be085353"
-  integrity sha512-KkrZ4+Mlj4aV81cJsgXmabWfbanmYSiSONv2B0m/bVpMcVhKCcT0DupBYcD7WOTyNA6f6M8m6E8yPOO/acwchA==
+firebase-tools@^14.0.1:
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-14.0.1.tgz#a9ddbdf9c804ca6532d671880e6d86582f255c94"
+  integrity sha512-iSo0Af+pHT2iGDEJIcAzIv0tN4WDn9IjVECY9EoT/SgqLfUbF0kKQ4JdRJc8npswPH9EtU5+1gIJ/ZyzCodw+w==
   dependencies:
     "@electric-sql/pglite" "^0.2.16"
     "@google-cloud/cloud-sql-connector" "^1.3.3"
