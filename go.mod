@@ -30,4 +30,3 @@ require (
 )
 
 go 1.23.5
-toolchain go1.24.1
