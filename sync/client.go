@@ -36,7 +36,7 @@ func (c *Client) TestAccessToken(accesstoken string) error {
 	}()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("This accesstoken is not valid. Please check HASHIRA_ACCESS_TOKEN is correct and try again [%d].", resp.StatusCode)
+		return fmt.Errorf("this accesstoken is not valid. Please check HASHIRA_ACCESS_TOKEN is correct and try again [%d]", resp.StatusCode)
 	}
 
 	return nil
