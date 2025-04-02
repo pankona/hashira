@@ -1,3 +1,4 @@
-skip-dirs:
-  - service
-  - hashira-web/
+issues:
+  exclude-dirs:
+    - service
+    - hashira-web/
