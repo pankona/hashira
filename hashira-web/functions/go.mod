@@ -1,6 +1,8 @@
 module github.com/pankona/hashira/hashira-web/functions
 
-go 1.20
+go 1.23.0
+
+toolchain go1.23.7
 
 require (
 	cloud.google.com/go/firestore v1.16.0
