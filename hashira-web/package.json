@@ -18,7 +18,7 @@
     "@types/node": "~22.13.17",
     "@types/styled-components": "^5.1.34",
     "@types/uuid": "^10.0.0",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react": "^4.4.1",
     "ansi-regex": "6.1.0",
     "firebase-tools": "^14.0.1",
     "react-router-dom": "^7.4.1",
