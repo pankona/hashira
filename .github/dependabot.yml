@@ -10,6 +10,10 @@ updates:
     schedule:
       interval: monthly
     open-pull-requests-limit: 10
+    groups:
+      react-dependencies: # See #1352 for details
+        patterns:
+          - '*react*'
     ignore:
       - dependency-name: "@types/node"
         # https://github.com/vitejs/vite/issues/15714#issuecomment-1949236530
