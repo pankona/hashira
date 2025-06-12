@@ -40,9 +40,15 @@ update-dependencies:
 	cd $(CURDIR)/cmd/hashira-cui         && $(UPDATE_DEPENDENCIES_CMD)
 	cd $(CURDIR)/cmd/hashira-web-client  && $(UPDATE_DEPENDENCIES_CMD)
 
-lint:
-	dprint check
+lint: install-dprint install-golangci-lint
+	@PATH="$$HOME/.dprint/bin:$$PATH" dprint check
 	golangci-lint run ./...
+
+install-dprint:
+	@which dprint > /dev/null || PATH="$$HOME/.dprint/bin:$$PATH" which dprint > /dev/null || (echo "Installing dprint..." && curl -fsSL https://dprint.dev/install.sh | sh)
+
+install-golangci-lint:
+	@which golangci-lint > /dev/null || (echo "Installing golangci-lint..." && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin)
 
 test:
 	go test -race ./...
