@@ -14,7 +14,7 @@ const (
 
 func main() {
 	c := &client.Client{
-		Address: "localhost:50056",
+		Address: "localhost:50057",
 	}
 	ctx := context.Background()
 

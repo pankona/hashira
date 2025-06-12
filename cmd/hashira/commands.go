@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strconv"
+	"strings"
 
 	"github.com/alecthomas/kingpin/v2"
 	"github.com/pankona/hashira/client"
@@ -28,8 +28,12 @@ func addListCmd(ctx context.Context, c *client.Client) {
 	listCmd := kingpin.Command(
 		"list",
 		"show list of tasks")
+	filter := listCmd.Flag(
+		"filter",
+		"filter tasks by name (case-insensitive substring match)").
+		String()
 	_ = listCmd.Action(func(pc *kingpin.ParseContext) error {
-		return list(ctx, c)
+		return list(ctx, c, *filter)
 	})
 }
 
@@ -45,17 +49,33 @@ func create(ctx context.Context, c *client.Client, name string) error {
 	return nil
 }
 
-func list(ctx context.Context, c *client.Client) error {
+func list(ctx context.Context, c *client.Client, filter string) error {
 	tasks, err := c.Retrieve(ctx)
 	if err != nil {
-		return errors.New("failed to create a new task: " + err.Error())
+		return fmt.Errorf("failed to retrieve tasks: %v", err)
 	}
-	for _, v := range tasks {
-		id, err := strconv.Atoi(v.Id)
-		if err != nil {
-			continue
+	
+	// Normalize filter once before the loop for better performance
+	normalizedFilter := strings.ToLower(filter)
+	
+	filteredTasks := make(map[string]*service.Task)
+	for k, v := range tasks {
+		if normalizedFilter == "" || strings.Contains(strings.ToLower(v.Name), normalizedFilter) {
+			filteredTasks[k] = v
 		}
-		fmt.Printf("[%04d]\t%s\t%v\t%v\n", id, v.Name, v.Place, v.IsDeleted)
+	}
+	
+	if len(filteredTasks) == 0 {
+		if filter != "" {
+			fmt.Printf("No tasks found matching filter: %s\n", filter)
+		} else {
+			fmt.Println("No tasks found.")
+		}
+		return nil
+	}
+	
+	for _, v := range filteredTasks {
+		fmt.Printf("[%s]\t%s\t%v\t%v\n", v.Id, v.Name, v.Place, v.IsDeleted)
 	}
 	return nil
 }
