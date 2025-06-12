@@ -40,8 +40,9 @@ update-dependencies:
 	cd $(CURDIR)/cmd/hashira-cui         && $(UPDATE_DEPENDENCIES_CMD)
 	cd $(CURDIR)/cmd/hashira-web-client  && $(UPDATE_DEPENDENCIES_CMD)
 
-lint: install-dprint install-golangci-lint
+lint: install-dprint install-golangci-lint install-goimports
 	@PATH="$$HOME/.dprint/bin:$$PATH" dprint check
+	goimports -w .
 	golangci-lint run ./...
 
 install-dprint:
@@ -49,6 +50,9 @@ install-dprint:
 
 install-golangci-lint:
 	@which golangci-lint > /dev/null || (echo "Installing golangci-lint..." && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin)
+
+install-goimports:
+	@which goimports > /dev/null || (echo "Installing goimports..." && go install golang.org/x/tools/cmd/goimports@latest)
 
 test:
 	go test -race ./...
