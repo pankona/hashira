@@ -17,7 +17,7 @@ func NewClient() *Client {
 func (c *Client) TestAccessToken(accesstoken string) error {
 	req, err := http.NewRequest(
 		http.MethodGet,
-		"https://asia-northeast1-hashira-web.cloudfunctions.net/test-access-token", nil)
+		"https://asia-northeast1-hashira-web.cloudfunctions.net/call?method=test-access-token", nil)
 	if err != nil {
 		return fmt.Errorf("failed to create new request: %w", err)
 	}
@@ -66,7 +66,7 @@ func (c *Client) Upload(accesstoken string, ur UploadRequest) error {
 
 	req, err := http.NewRequest(
 		http.MethodPost,
-		"https://asia-northeast1-hashira-web.cloudfunctions.net/upload",
+		"https://asia-northeast1-hashira-web.cloudfunctions.net/call?method=upload",
 		bytes.NewBuffer(body))
 	if err != nil {
 		return fmt.Errorf("failed to create new request: %w", err)
@@ -89,7 +89,7 @@ type DownloadResult UploadRequest
 func (c *Client) Download(accesstoken string) (DownloadResult, error) {
 	req, err := http.NewRequest(
 		http.MethodGet,
-		"https://asia-northeast1-hashira-web.cloudfunctions.net/download", nil)
+		"https://asia-northeast1-hashira-web.cloudfunctions.net/call?method=download", nil)
 	if err != nil {
 		return DownloadResult{}, fmt.Errorf("failed to prepare request: %w", err)
 	}
