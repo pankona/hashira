@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/alecthomas/kingpin/v2"
@@ -11,7 +12,7 @@ import (
 	"github.com/pankona/hashira/service"
 )
 
-func addNewCmd(ctx context.Context, c *client.Client) {
+func addNewCmd(ctx context.Context, c *client.Client, address string) {
 	newCmd := kingpin.Command(
 		"new",
 		"add new task with specified task name")
@@ -20,11 +21,15 @@ func addNewCmd(ctx context.Context, c *client.Client) {
 		"name of task which is newly added").
 		Required().String()
 	_ = newCmd.Action(func(pc *kingpin.ParseContext) error {
+		if err := ensureDaemonRunning(address); err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
+		}
 		return create(ctx, c, *name)
 	})
 }
 
-func addListCmd(ctx context.Context, c *client.Client) {
+func addListCmd(ctx context.Context, c *client.Client, address string) {
 	listCmd := kingpin.Command(
 		"list",
 		"show list of tasks")
@@ -33,6 +38,10 @@ func addListCmd(ctx context.Context, c *client.Client) {
 		"filter tasks by name (case-insensitive substring match)").
 		String()
 	_ = listCmd.Action(func(pc *kingpin.ParseContext) error {
+		if err := ensureDaemonRunning(address); err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
+		}
 		return list(ctx, c, *filter)
 	})
 }
