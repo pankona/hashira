@@ -40,9 +40,12 @@ update-dependencies:
 	cd $(CURDIR)/cmd/hashira-cui         && $(UPDATE_DEPENDENCIES_CMD)
 	cd $(CURDIR)/cmd/hashira-web-client  && $(UPDATE_DEPENDENCIES_CMD)
 
-lint: install-dprint install-golangci-lint install-goimports
-	@PATH="$$HOME/.dprint/bin:$$PATH" dprint check
+format: install-dprint install-goimports
+	@PATH="$$HOME/.dprint/bin:$$PATH" dprint fmt
 	goimports -w .
+
+lint: install-dprint install-golangci-lint
+	@PATH="$$HOME/.dprint/bin:$$PATH" dprint check
 	golangci-lint run ./...
 
 install-dprint:
