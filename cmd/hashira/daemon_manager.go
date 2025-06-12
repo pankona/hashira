@@ -69,7 +69,7 @@ func startDaemon() error {
 
 	// Wait a bit for daemon to start up
 	time.Sleep(2 * time.Second)
-	
+
 	return nil
 }
 
@@ -80,13 +80,13 @@ func ensureDaemonRunning(address string) error {
 		fmt.Println("Daemon is already running.")
 		return nil
 	}
-	
+
 	fmt.Println("Hashira daemon is not running. Starting daemon...")
-	
+
 	if err := startDaemon(); err != nil {
 		return fmt.Errorf("failed to start daemon: %v", err)
 	}
-	
+
 	fmt.Println("Waiting for daemon to start...")
 	// Verify daemon started successfully
 	maxRetries := 10
@@ -98,6 +98,6 @@ func ensureDaemonRunning(address string) error {
 		fmt.Printf("Waiting... (%d/%d)\n", i+1, maxRetries)
 		time.Sleep(1 * time.Second)
 	}
-	
-return fmt.Errorf("daemon failed to start after %d retry attempts (polling for %d seconds)", maxRetries, maxRetries)
+
+	return fmt.Errorf("daemon failed to start after %d retry attempts (polling for %d seconds)", maxRetries, maxRetries)
 }
