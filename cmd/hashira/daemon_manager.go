@@ -1,13 +1,10 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"net"
 	"os/exec"
 	"time"
-
-	"github.com/pankona/hashira/client"
 )
 
 // isDaemonRunning checks if the hashira daemon is running on the specified address
@@ -33,7 +30,7 @@ func startDaemon() error {
 	
 	// Detach from the process so it continues running
 	go func() {
-		cmd.Wait()
+		_ = cmd.Wait() // Ignore error as this is a background process
 	}()
 	
 	// Wait a bit for daemon to start up
@@ -71,11 +68,3 @@ func ensureDaemonRunning(address string) error {
 	return fmt.Errorf("daemon failed to start within %d seconds", maxRetries)
 }
 
-// testConnection tests if we can successfully connect to the daemon
-func testConnection(c *client.Client) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	
-	_, err := c.Retrieve(ctx)
-	return err
-}
