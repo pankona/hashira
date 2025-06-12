@@ -13,13 +13,14 @@ const (
 )
 
 func main() {
+	address := "localhost:50057"
 	c := &client.Client{
-		Address: "localhost:50057",
+		Address: address,
 	}
 	ctx := context.Background()
 
-	addNewCmd(ctx, c)
-	addListCmd(ctx, c)
+	addNewCmd(ctx, c, address)
+	addListCmd(ctx, c, address)
 
 	kingpin.Version(program + " " + version)
 	_ = kingpin.Parse()
