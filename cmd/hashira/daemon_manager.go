@@ -1,11 +1,42 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net"
-	"os/exec"
+	"os"
+	"os/user"
+	"path/filepath"
 	"time"
+
+	"github.com/pankona/hashira/daemon"
+	"github.com/pankona/hashira/database"
 )
+
+// daemonInstance holds the daemon instance for lifecycle management
+var daemonInstance *daemon.Daemon
+
+// initializeDB initializes the database for the daemon
+func initializeDB() (database.Databaser, error) {
+	db := &database.BoltDB{}
+	usr, err := user.Current()
+	if err != nil {
+		return nil, errors.New("failed to get current user: " + err.Error())
+	}
+
+	configDir := filepath.Join(usr.HomeDir, ".config", "hashira")
+	err = os.MkdirAll(configDir, 0700)
+	if err != nil {
+		return nil, errors.New("failed to create config directory: " + err.Error())
+	}
+
+	err = db.Initialize(filepath.Join(configDir, "db"))
+	if err != nil {
+		return nil, errors.New("failed to initialize db: " + err.Error())
+	}
+
+	return db, nil
+}
 
 // isDaemonRunning checks if the hashira daemon is running on the specified address
 func isDaemonRunning(address string) bool {
@@ -17,24 +48,27 @@ func isDaemonRunning(address string) bool {
 	return true
 }
 
-// startDaemon starts the hashira daemon in background
+// startDaemon starts the hashira daemon in background using daemon package directly
 func startDaemon() error {
-	cmd := exec.Command("go", "run", "cmd/hashirad/main.go")
-	cmd.Dir = "."
-	
-	// Start daemon in background
-	err := cmd.Start()
+	db, err := initializeDB()
 	if err != nil {
-		return fmt.Errorf("failed to start daemon: %v", err)
+		return fmt.Errorf("failed to initialize DB: %v", err)
 	}
-	
-	// Detach from the process so it continues running
+
+	daemonInstance = &daemon.Daemon{
+		Port: 50057,
+		DB:   db,
+	}
+
+	// Start daemon in background goroutine
 	go func() {
-		_ = cmd.Wait() // Ignore error as this is a background process
+		if err := daemonInstance.Run(); err != nil {
+			fmt.Printf("daemon stopped with error: %v\n", err)
+		}
 	}()
-	
+
 	// Wait a bit for daemon to start up
-	time.Sleep(5 * time.Second)
+	time.Sleep(2 * time.Second)
 	
 	return nil
 }
@@ -66,5 +100,13 @@ func ensureDaemonRunning(address string) error {
 	}
 	
 	return fmt.Errorf("daemon failed to start within %d seconds", maxRetries)
+}
+
+// stopDaemon stops the daemon if it's running
+func stopDaemon() {
+	if daemonInstance != nil {
+		daemonInstance.Stop()
+		daemonInstance = nil
+	}
 }
 
