@@ -16,7 +16,3 @@ dist/
 datastore-export-*
 
 .vscode/
-
-# Build artifacts
-hashira
-main
