@@ -55,9 +55,12 @@ func list(ctx context.Context, c *client.Client, filter string) error {
 		return fmt.Errorf("failed to retrieve tasks: %v", err)
 	}
 	
+	// Normalize filter once before the loop for better performance
+	normalizedFilter := strings.ToLower(filter)
+	
 	filteredTasks := make(map[string]*service.Task)
 	for k, v := range tasks {
-		if filter == "" || strings.Contains(strings.ToLower(v.Name), strings.ToLower(filter)) {
+		if normalizedFilter == "" || strings.Contains(strings.ToLower(v.Name), normalizedFilter) {
 			filteredTasks[k] = v
 		}
 	}
