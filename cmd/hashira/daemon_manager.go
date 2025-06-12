@@ -99,7 +99,7 @@ func ensureDaemonRunning(address string) error {
 		time.Sleep(1 * time.Second)
 	}
 	
-	return fmt.Errorf("daemon failed to start within %d seconds", maxRetries)
+return fmt.Errorf("daemon failed to start after %d retry attempts (polling for %d seconds)", maxRetries, maxRetries)
 }
 
 // stopDaemon stops the daemon if it's running
