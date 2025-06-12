@@ -101,12 +101,3 @@ func ensureDaemonRunning(address string) error {
 	
 return fmt.Errorf("daemon failed to start after %d retry attempts (polling for %d seconds)", maxRetries, maxRetries)
 }
-
-// stopDaemon stops the daemon if it's running
-func stopDaemon() {
-	if daemonInstance != nil {
-		daemonInstance.Stop()
-		daemonInstance = nil
-	}
-}
-
