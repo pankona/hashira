@@ -25,7 +25,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./docs/book
   deploy:
