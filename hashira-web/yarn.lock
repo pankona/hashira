@@ -3062,10 +3062,10 @@ finalhandler@~1.2.0:
     statuses "2.0.1"
     unpipe "~1.0.0"
 
-firebase-tools@^14.9.0:
-  version "14.9.0"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-14.9.0.tgz#7093435b49a93a649ac68e36891816ef7684647c"
-  integrity sha512-8si+bTK9WJ82zr/wiwbfqlMeuqIQgRfwFOzGE+9OA+m9pRnN7fuFvMiE1UEfQmsbmLrVsD9Tv22AFsU6vaBUVA==
+firebase-tools@^14.17.0:
+  version "14.17.0"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-14.17.0.tgz#0c9e7624b28399114cc4dca136353fe1deecaf4b"
+  integrity sha512-BWOfB9kokuRZbfRpr1AJrMiJHzyp8TjTNmYlgmHnGcBOAwtDinaeceqiKwLyZ6SucnOWj6Ca73DubqbAj+DmKw==
   dependencies:
     "@electric-sql/pglite" "^0.3.3"
     "@electric-sql/pglite-tools" "^0.2.8"
