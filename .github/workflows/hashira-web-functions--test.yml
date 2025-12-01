@@ -19,7 +19,7 @@ jobs:
   functions-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v5
         with:
           go-version-file: "hashira-web/functions/go.mod"
