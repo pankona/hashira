@@ -26,8 +26,8 @@ github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORN
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0 h1:45sCR5RtlFHMR4UwH9sdQ5TC8v0qDQCHnXt+kaKSTVE=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
-github.com/mattn/go-runewidth v0.0.19 h1:v++JhqYnZuu5jSKrk9RbgF5v4CGUjqRfBm05byFGLdw=
-github.com/mattn/go-runewidth v0.0.19/go.mod h1:XBkDxAl56ILZc9knddidhrOlY5R/pDhgLpndooCuJAs=
+github.com/mattn/go-runewidth v0.0.20 h1:WcT52H91ZUAwy8+HUkdM3THM6gXqXuLJi9O3rjcQQaQ=
+github.com/mattn/go-runewidth v0.0.20/go.mod h1:XBkDxAl56ILZc9knddidhrOlY5R/pDhgLpndooCuJAs=
 github.com/pankona/gocui v0.3.1-0.20190107094646-a6233010013f h1:ZwehUafR4jFo7qao6Hu8LTclXew2lBb+2J9aSpEgf9A=
 github.com/pankona/gocui v0.3.1-0.20190107094646-a6233010013f/go.mod h1:YbpnnaXew8rp90mxIrWZhP7FNJoXGaiChttkzIiVRB0=
 github.com/pankona/orderedmap v0.0.0-20190220081458-0d2a73efbdac h1:Zlmj1OVbpfO6YBT0+j9JArbMkCJaGr9jA+5dKnY6Byg=
