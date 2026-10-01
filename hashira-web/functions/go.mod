@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	cloud.google.com/go/firestore v1.26.0
-	firebase.google.com/go/v4 v4.21.0
+	firebase.google.com/go/v4 v4.22.0
 	github.com/google/go-cmp v0.7.0
 	google.golang.org/grpc v1.84.0
 )
