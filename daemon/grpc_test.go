@@ -140,3 +140,159 @@ func TestEndPointRetrieve(t *testing.T) {
 		t.Errorf("unexpected result. [got] %d [want] %d", len(tasks), len(tcs))
 	}
 }
+
+func TestRemove(t *testing.T) {
+	tests := []struct {
+		name string
+		ids  []string
+		id   string
+		want []string
+	}{
+		{
+			name: "remove middle element",
+			ids:  []string{"a", "b", "c"},
+			id:   "b",
+			want: []string{"a", "c"},
+		},
+		{
+			name: "remove first element",
+			ids:  []string{"a", "b", "c"},
+			id:   "a",
+			want: []string{"b", "c"},
+		},
+		{
+			name: "remove last element",
+			ids:  []string{"a", "b", "c"},
+			id:   "c",
+			want: []string{"a", "b"},
+		},
+		{
+			name: "remove nonexistent element",
+			ids:  []string{"a", "b", "c"},
+			id:   "z",
+			want: []string{"a", "b", "c"},
+		},
+		{
+			name: "remove from empty slice",
+			ids:  []string{},
+			id:   "a",
+			want: []string{},
+		},
+		{
+			name: "remove only element",
+			ids:  []string{"a"},
+			id:   "a",
+			want: []string{},
+		},
+		{
+			name: "remove all duplicates",
+			ids:  []string{"a", "a", "b"},
+			id:   "a",
+			want: []string{"b"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := remove(tt.ids, tt.id)
+			require.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func TestRepair(t *testing.T) {
+	mkTasks := func(ids ...string) map[string]*service.Task {
+		m := make(map[string]*service.Task)
+		for _, id := range ids {
+			m[id] = &service.Task{Id: id}
+		}
+		return m
+	}
+	tests := []struct {
+		name  string
+		dst   []string
+		tasks map[string]*service.Task
+		want  []string
+	}{
+		{
+			name:  "dst matches tasks exactly",
+			dst:   []string{"a", "b"},
+			tasks: mkTasks("a", "b"),
+			want:  []string{"a", "b"},
+		},
+		{
+			name:  "dst shorter than tasks adds missing",
+			dst:   []string{"a"},
+			tasks: mkTasks("a", "b", "c"),
+			want:  []string{"a", "b", "c"},
+		},
+		{
+			name:  "dst longer than tasks removes extras",
+			dst:   []string{"a", "b", "c", "d"},
+			tasks: mkTasks("a", "b"),
+			want:  []string{"a", "b"},
+		},
+		{
+			name:  "empty dst adds all tasks",
+			dst:   []string{},
+			tasks: mkTasks("a", "b"),
+			want:  []string{"a", "b"},
+		},
+		{
+			name:  "empty tasks removes all dst",
+			dst:   []string{"a", "b"},
+			tasks: mkTasks(),
+			want:  []string{},
+		},
+		{
+			name:  "dst has stale ids interspersed",
+			dst:   []string{"x", "a", "y", "b"},
+			tasks: mkTasks("a", "b"),
+			want:  []string{"a", "b"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := repair(tt.dst, tt.tasks)
+			require.ElementsMatch(t, tt.want, got)
+		})
+	}
+}
+
+func TestLookupTaskByID(t *testing.T) {
+	tasks := map[string]map[string]*service.Task{
+		"BACKLOG": {
+			"1": &service.Task{Id: "1"},
+			"2": &service.Task{Id: "2"},
+		},
+		"TODO": {
+			"3": &service.Task{Id: "3"},
+		},
+	}
+	tests := []struct {
+		name string
+		id   string
+		want *service.Task
+	}{
+		{
+			name: "found in first pane",
+			id:   "1",
+			want: &service.Task{Id: "1"},
+		},
+		{
+			name: "found in second pane",
+			id:   "3",
+			want: &service.Task{Id: "3"},
+		},
+		{
+			name: "not found",
+			id:   "99",
+			want: nil,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := lookupTaskByID(tasks, tt.id)
+			require.Equal(t, tt.want, got)
+		})
+	}
+}
