@@ -947,10 +947,10 @@
     protobufjs "^7.5.3"
     yargs "^17.7.2"
 
-"@hono/node-server@^1.19.9":
-  version "1.19.17"
-  resolved "https://registry.yarnpkg.com/@hono/node-server/-/node-server-1.19.17.tgz#99bd8625cdbae82652a135c71363cd6322fae483"
-  integrity sha512-dSneS5qhiauZWGDCeK4o695Xd9nUNjviSZCMQrj10eetr8Uln1ucn6bbphOM6UynAMMtNIzZNSpL9vnASJwrPQ==
+"@hono/node-server@^1.19.9 || ^2.0.5":
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/@hono/node-server/-/node-server-2.1.5.tgz#273db93e8bfb44ef361e55f3d00048013668aa09"
+  integrity sha512-MgP/I06GdvsilDspMk/qmRzpk8LOUStP6jFAbSRi40W09DhoyUn+Mj7eyKICPqeYKybOjVFLVIAQzvu1bfIa7Q==
 
 "@inquirer/ansi@^1.0.2":
   version "1.0.2"
@@ -1196,11 +1196,11 @@
   integrity sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==
 
 "@modelcontextprotocol/sdk@^1.24.0":
-  version "1.26.0"
-  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/sdk/-/sdk-1.26.0.tgz#5b35d73062125f126cc70b0be83cbab53bcdde74"
-  integrity sha512-Y5RmPncpiDtTXDbLKswIJzTqu2hyBKxTNsgKqKclDbhIgg1wgtf1fRuvxgTnRfcnxtvvgbIEcqUOzZrJ6iSReg==
+  version "1.32.1"
+  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/sdk/-/sdk-1.32.1.tgz#853286b3240b6d8143f5f8e6d58af85c77d475ab"
+  integrity sha512-2DdE+SJDtzLEEWzY1ZjY7Q+VcPhcV1KisD3zI4u0XZyktsjHum1mwbMI+JaulUBi2OZk+KJAi2uPXzxichPkdw==
   dependencies:
-    "@hono/node-server" "^1.19.9"
+    "@hono/node-server" "^1.19.9 || ^2.0.5"
     ajv "^8.17.1"
     ajv-formats "^3.0.1"
     content-type "^1.0.5"
